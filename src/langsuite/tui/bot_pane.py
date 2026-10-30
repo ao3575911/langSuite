@@ -1,6 +1,6 @@
 """Account section, M5e part: the Telegram bot's status and a local chat simulator.
 
-Handles, badges and usage arrive with M5g/M5i; this pane is honest about that.
+Handles, badges and settings live in the Account tab next to it (account_pane.py).
 """
 
 from __future__ import annotations
@@ -19,8 +19,10 @@ from langsuite.tui.sections import Section
 class BotPane(Vertical):
     """Try any bot command here; replies are exactly what Telegram would show."""
 
-    def __init__(self, section: Section, bot: Bot | None = None) -> None:
-        super().__init__(id=f"pane-{section.id}", classes="pane botpane")
+    def __init__(
+        self, section: Section, bot: Bot | None = None, pane_id: str | None = None
+    ) -> None:
+        super().__init__(id=pane_id or f"pane-{section.id}", classes="pane botpane")
         self.section = section
         self.bot = bot or Bot()
         self.last: Reply | None = None
@@ -29,7 +31,7 @@ class BotPane(Vertical):
         yield Static("Telegram bot", classes="pane-title")
         yield Static(
             f"{tg.TOKEN_ENV}: {tg.token_status()} · run with `langsuite bot run` · "
-            "handles, badges and usage: planned (M5g, M5i)",
+            "handles, badges and settings: Account tab",
             id="bot-status",
             markup=False,
         )

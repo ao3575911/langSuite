@@ -10,14 +10,14 @@ A research knowledge base of programming languages: how they work, how they rela
 | Capability | Status |
 |---|---|
 | CLI: grouped help, one alias per command, `--json` / `--plain`, exit codes | Built (M0) |
-| Textual app shell: header with handle and mode, 7 panes, command palette, `g`+alias keys, themes incl. high-contrast, plain mode, browser via `ui --serve` | Built (M0b) |
+| Textual app shell: header with handle and mode, 8 panes, command palette, `g`+alias keys, themes incl. high-contrast, plain mode, browser via `ui --serve` | Built (M0b) |
 | Licence-separated data packs, enforced in CI | Built (M0) |
 | Knowledge base of 5,000+ languages (PLDB + Linguist) with sourced evidence: `base build/status`, `lang list/show --evidence`, `feature list/show`, Explore pane with live search | Built (M1) |
 | Structured `query` DSL and feature `similar` with a shuffled-feature baseline (z-scores); Query pane and Similar tab | Built (M2) |
-| Code similarity, clusters, scores and grades | Built (M5, M5b, M5c): `similar --by code`, `like`, `diff`, `cluster`, `dashboard`, `influence`, `rank`, `compare`; Dashboard and Analyse panes |
+| Code similarity, clusters, scores and grades | Built (M5, M5b, M5c): `similar --by code`, `like`, `diff`, `cluster`, `dashboard` (renames kept across base upgrades), `influence`, `rank`, `compare`, `settings profile` for a custom score; Dashboard and Analyse panes |
 | Verified snippets: `verify` runs code in a digest-pinned, offline Docker sandbox (20 toolchains); `snippet` shows attributed Rosetta Code solutions marked verified only when they ran; Write pane | Built (M4) |
 | Cited answers that abstain when the base cannot support them (`ask`), `guide <lang>`; `extract` keeps citations | Built (M5d), template-based (no LLM) |
-| `docs search/quote/ingest` (verbatim quotes with link, version and anchor; short excerpts for UNKNOWN licences), `inclusion` and dead-link archiving; signed snapshots (`base publish`, `base pull` refuses unsigned or tampered ones; cosign-compatible), `base changelog`, weekly data CI with a score-jump gate | Built (M5f); signing key not yet issued |
+| `docs search/quote/ingest` (verbatim quotes with link, version and anchor; short excerpts for UNKNOWN licences), `inclusion` and dead-link archiving; signed snapshots (`base publish`, `base pull` refuses unsigned or tampered ones; cosign-compatible), `base changelog`, weekly data CI with a score-jump gate; Docs pane | Built (M5f); signing key not yet issued |
 | Workspaces: findings re-runnable bit-for-bit on their pinned snapshot, notes, saved queries, own-data overlay (custom languages), `base pin`; Workspace pane with `Ctrl+S` to save | Built (M3) |
 | Telegram bot (`langsuite bot run`): same commands and aliases as the CLI, a workspace per chat, admin/contributor/viewer roles, findings with authors, rate limits, code runs off unless an admin enables them; `bot try` and the Account pane simulate it offline | Built (M5e) |
 | Bot `/ask`, `/guide`, `/mode`, `/digest` schedules, inline mode; signed outbound `webhook`s; `mcp` stdio server for agents | Built (M5d, M5h) |

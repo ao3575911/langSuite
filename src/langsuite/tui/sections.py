@@ -24,6 +24,7 @@ SECTIONS: tuple[Section, ...] = (
     Section("workspace", "Workspace", "5", "M3", "Findings, notes and saved queries."),
     Section("write", "Write", "6", "M4", "Verified snippets and guides."),
     Section("account", "Account", "7", "M5g", "Handle, usage, badges and settings."),
+    Section("docs", "Docs", "8", "M5f", "Official docs quotes and inclusion checks."),
 )
 
 _PANEL_TO_SECTION = {
@@ -41,6 +42,8 @@ _OVERRIDES = {
     "mode": "",
     "ui": "",
     "mcp": "account",
+    "docs": "docs",
+    "inclusion": "docs",
 }
 
 

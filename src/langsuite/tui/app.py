@@ -161,8 +161,12 @@ class LangsuiteApp(App[None]):
             self.query_one("#query-input").focus()
         if target == "workspace":
             self.query_one("#ws-findings").focus()
-        if target == "account" and cmd.name == "bot":
-            self.query_one("#bot-input").focus()
+        if target == "account":
+            tab = "tab-bot" if cmd.name == "bot" else "tab-account"
+            self.query_one("#account-tabs", TabbedContent).active = tab
+            self.query_one("#bot-input" if cmd.name == "bot" else "#account-input").focus()
+        if target == "docs":
+            self.query_one("#docs-input").focus()
         if target == "write":
             tab = "tab-verify" if cmd.name == "verify" else "tab-snippet"
             self.query_one("#write-tabs", TabbedContent).active = tab

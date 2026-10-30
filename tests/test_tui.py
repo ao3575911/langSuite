@@ -106,7 +106,7 @@ async def test_theme_cycle_and_plain_toggle() -> None:
 def test_bindings_do_not_collide_and_cover_aliases() -> None:
     keys = [b.key for b in LangsuiteApp.BINDINGS if isinstance(b, Binding)]
     assert len(keys) == len(set(keys))
-    assert {s.key for s in SECTIONS} == {str(i) for i in range(1, 8)}
+    assert {s.key for s in SECTIONS} == {str(i) for i in range(1, 9)}
     assert all(section_for(c) in {s.id for s in SECTIONS} | {""} for c in COMMANDS)
 
 

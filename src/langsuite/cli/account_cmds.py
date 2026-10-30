@@ -253,3 +253,38 @@ def settings_gamification(
         raise UsageError("Use `on` or `off`.")
     data = settings.save({"gamification": value == "on"})
     _say(ctx, "settings", data, f"Gamification {value}.")
+
+
+@settings_app.command("profile")
+def settings_profile(
+    ctx: typer.Context,
+    weights: Annotated[list[str] | None, typer.Argument(help="criterion=weight pairs.")] = None,
+    clear: Annotated[bool, typer.Option("--clear", help="Remove the profile.")] = False,
+) -> None:
+    """Set this workspace's scoring profile; it changes only the custom score.
+
+    Example: langsuite settings profile safety=2 popularity=0.5
+    """
+    from langsuite.core.analysis import criteria
+
+    known = set(criteria()["criteria"])
+    ws = Workspace.open()
+    if clear:
+        ws._set_meta(profile=None)
+        _say(ctx, "settings", {"profile": None}, "Profile cleared.")
+        return
+    prof: dict[str, float] = dict(ws.meta.get("profile") or {})
+    for pair in weights or []:
+        key, _, val = pair.partition("=")
+        if key not in known:
+            raise UsageError(
+                f"Unknown criterion `{key}`.", hint="Known: " + ", ".join(sorted(known))
+            )
+        try:
+            prof[key] = float(val)
+        except ValueError:
+            raise UsageError(f"`{pair}` needs a number, like {key}=1.5.") from None
+    if weights:
+        ws._set_meta(profile=prof)
+    text = ", ".join(f"{k}={v:g}" for k, v in sorted(prof.items())) or "(none)"
+    _say(ctx, "settings", {"profile": prof}, f"Scoring profile: {text}")
