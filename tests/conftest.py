@@ -42,3 +42,10 @@ def snap_compare(snapshot: Any, request: pytest.FixtureRequest) -> Callable[...,
         return ok
 
     return compare
+
+
+@pytest.fixture(autouse=True)
+def _colour_env(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Snapshots are rendered in full colour whatever the developer's terminal says."""
+    monkeypatch.delenv("NO_COLOR", raising=False)
+    monkeypatch.delenv("TEXTUAL_COLOR_SYSTEM", raising=False)
