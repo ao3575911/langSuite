@@ -26,6 +26,17 @@ from langsuite.tui.widgets import HeaderBar, ModeChip
 MODES: tuple[str, ...] = tuple(m.value for m in Mode)
 
 
+def _default_handle() -> str:
+    """`$langsuite/guest/<active workspace>` until accounts land (M5g)."""
+    from langsuite.core.errors import LangsuiteError
+    from langsuite.core.workspace import active_slug
+
+    try:
+        return f"$langsuite/guest/{active_slug()}"
+    except LangsuiteError:
+        return "$langsuite/guest/default"
+
+
 def base_label() -> str:
     """`base <id> · <age>d`, or `base: none` before the first build."""
     manifest = read_manifest()
@@ -78,12 +89,12 @@ class LangsuiteApp(App[None]):
         self,
         plain: bool = False,
         mode: str = "default",
-        handle: str = "$langsuite/guest/default",
+        handle: str | None = None,
     ) -> None:
         super().__init__()
         self.plain = plain
         self.mode_name = mode if mode in MODES else "default"
-        self.handle = handle
+        self.handle = handle or _default_handle()
         self._themes = [t.name for t in THEMES]
         for theme in THEMES:
             self.register_theme(theme)
@@ -148,6 +159,8 @@ class LangsuiteApp(App[None]):
                 self.query_one("#explore-tabs", TabbedContent).active = "tab-similar"
         if target == "query":
             self.query_one("#query-input").focus()
+        if target == "workspace":
+            self.query_one("#ws-findings").focus()
         if target not in BUILT_SECTIONS:
             from langsuite.cli.implemented import GROUP_APPS
 

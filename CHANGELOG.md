@@ -2,6 +2,11 @@
 
 ## Unreleased
 ### Added
+- M3: workspaces (`workspace init|use|list|show|import|export|forget-data`; `sync` planned M5i). Findings (`finding save|list|show|verify|export|remove`, `extract last|<id>`) record command, snapshot, own-data copy, evidence ids and a result SHA-256; `--verify` re-runs bit-for-bit on the original snapshot. Notes (`note add|list|remove`, optionally `--on` a finding or language). Saved queries (`query --save/--saved`).
+- M3: own-data overlay: import custom languages, traits and influence edges from YAML/JSON (`examples/own-data.yml`); they appear in `lang`, `query`, `similar` and the app for that workspace only, with validation against the base and the feature vocabulary.
+- M3: snapshot retention: every build keeps its snapshot under `base/snapshots/`; the newest five plus any pinned or cited by a finding are kept. `base pin [ID] [--clear]` and `base snapshots`.
+- M3: Workspace pane (findings table, Finding · Notes · Saved queries · Own data tabs, `v` verify, `Del` remove, Enter runs a saved query) and `Ctrl+S` "save finding" in Explore and Query.
+- `ls`, `sh`, `rm` sub-command aliases now work on every group (`f ls`, `l sh haskell`).
 - M2: `query` DSL (`and`/`or`/`not`, brackets, fields with `= != >= <= > < ~`, feature `=yes|no|unknown`, `key=value` feature shorthand, `sort=[-]field`, `top=N`); errors point at the exact column with a hint; planned fields (`score`, `grade`, `paradigm`) name their milestone.
 - M2: `similar <lang> [--k] [--min-traits] [--vs <lang>]`: rarity-weighted Jaccard over sourced traits with shared/only-in lists, and a seeded shuffled-feature baseline (z-score) per pair; deterministic output; `--by code|both` planned for M5.
 - M2: Query pane (validated as you type, sortable columns) and Similar tab in Explore; `g q` focuses the query, `g s` opens Similar.

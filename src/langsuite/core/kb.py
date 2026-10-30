@@ -7,6 +7,7 @@ runs: builds swap the file in atomically.
 from __future__ import annotations
 
 import difflib
+import hashlib
 import json
 import re
 from dataclasses import asdict, dataclass, field
@@ -138,6 +139,12 @@ class Assertion:
     def to_json(self) -> dict[str, Any]:
         return asdict(self)
 
+    @property
+    def evidence_id(self) -> str:
+        """Stable id for citing this assertion from a finding."""
+        key = "\x1f".join((self.lang_id, self.feature_id, self.value, self.source, self.source_url))
+        return "ev-" + hashlib.sha1(key.encode("utf-8"), usedforsecurity=False).hexdigest()[:12]
+
 
 @dataclass(frozen=True)
 class Edge:
@@ -149,6 +156,92 @@ class Edge:
 
     def to_json(self) -> dict[str, Any]:
         return asdict(self)
+
+
+@dataclass(frozen=True)
+class Overlay:
+    """A workspace's own data, layered over the shared base (SPEC §6, §10 M3)."""
+
+    languages: tuple[Language, ...] = ()
+    assertions: tuple[Assertion, ...] = ()
+    edges: tuple[Edge, ...] = ()
+
+    def __bool__(self) -> bool:
+        return bool(self.languages or self.assertions or self.edges)
+
+    def to_json(self) -> dict[str, Any]:
+        return {
+            "languages": [x.to_json() for x in self.languages],
+            "assertions": [x.to_json() for x in self.assertions],
+            "edges": [x.to_json() for x in self.edges],
+        }
+
+    @classmethod
+    def from_json(cls, data: dict[str, Any]) -> Overlay:
+        def lang(d: dict[str, Any]) -> Language:
+            for key in ("aliases", "extensions", "sources"):
+                d = {**d, key: tuple(d.get(key) or ())}
+            return Language(**d)
+
+        return cls(
+            languages=tuple(lang(d) for d in data.get("languages", [])),
+            assertions=tuple(Assertion(**d) for d in data.get("assertions", [])),
+            edges=tuple(Edge(**d) for d in data.get("edges", [])),
+        )
+
+
+def snapshots_dir(home: Path | None = None) -> Path:
+    return base_dir(home) / "snapshots"
+
+
+def kept_snapshots(home: Path | None = None) -> list[Manifest]:
+    """Snapshots kept on this machine, newest first."""
+    out: list[Manifest] = []
+    folder = snapshots_dir(home)
+    if not folder.is_dir():
+        return out
+    for path in folder.iterdir():
+        try:
+            out.append(
+                Manifest.from_json(json.loads((path / MANIFEST_NAME).read_text(encoding="utf-8")))
+            )
+        except (OSError, ValueError, KeyError, TypeError):
+            continue
+    return sorted(out, key=lambda m: (m.built_at, m.snapshot_id), reverse=True)
+
+
+def retain_snapshot(home: Path | None, manifest: Manifest) -> None:
+    """Keep an immutable copy of the current snapshot so old findings stay reproducible."""
+    import os
+    import shutil
+
+    folder = snapshots_dir(home) / manifest.snapshot_id
+    folder.mkdir(parents=True, exist_ok=True)
+    target = folder / DB_NAME
+    if not target.is_file():
+        source = base_dir(home) / DB_NAME
+        try:
+            os.link(source, target)
+        except OSError:
+            shutil.copyfile(source, target)
+    (folder / MANIFEST_NAME).write_text(
+        json.dumps(manifest.to_json(), indent=2, sort_keys=True), encoding="utf-8"
+    )
+
+
+def prune_snapshots(home: Path | None, keep: int, pinned: set[str]) -> list[str]:
+    """Drop old unpinned snapshots beyond the newest `keep`. Returns the dropped ids."""
+    import shutil
+
+    current = read_manifest(home)
+    dropped: list[str] = []
+    for n, m in enumerate(kept_snapshots(home)):
+        sid = m.snapshot_id
+        if n < keep or sid in pinned or (current and sid == current.snapshot_id):
+            continue
+        shutil.rmtree(snapshots_dir(home) / sid, ignore_errors=True)
+        dropped.append(sid)
+    return dropped
 
 
 def no_base_error() -> DataError:
@@ -179,14 +272,30 @@ def _subsequence(needle: str, hay: str) -> bool:
 class KnowledgeBase:
     """A read-only view of the current snapshot."""
 
-    def __init__(self, home: Path | None = None) -> None:
+    def __init__(
+        self,
+        home: Path | None = None,
+        *,
+        snapshot: str | None = None,
+        overlay: Overlay | None = None,
+    ) -> None:
         import duckdb
 
         self._trait_matrix: TraitMatrix | None = None
+        self.overlay = overlay or Overlay()
         folder = base_dir(home)
         db = folder / DB_NAME
         if not db.is_file():
             raise no_base_error()
+        if snapshot is not None:
+            current = read_manifest(home)
+            if current is None or current.snapshot_id != snapshot:
+                db = snapshots_dir(home) / snapshot / DB_NAME
+                if not db.is_file():
+                    raise DataError(
+                        f"Snapshot {snapshot} is not kept on this machine.",
+                        hint="See `langsuite base snapshots`; pinned snapshots are never pruned.",
+                    )
         try:
             self._con = duckdb.connect(str(db), read_only=True)
             row = self._con.execute("SELECT value FROM meta WHERE key = 'manifest'").fetchone()
@@ -215,6 +324,9 @@ class KnowledgeBase:
 
     @cached_property
     def languages(self) -> list[Language]:
+        return self._base_languages() + sorted(self.overlay.languages, key=lambda x: x.name)
+
+    def _base_languages(self) -> list[Language]:
         rows = self._rows(
             "SELECT id, name, kind, appeared, website, creators, rank, aliases, extensions, "
             "sources FROM languages ORDER BY rank NULLS LAST, name"
@@ -353,7 +465,9 @@ class KnowledgeBase:
         rows = self._rows(
             "SELECT * FROM assertions WHERE lang_id = ? ORDER BY feature_id, source", [lang_id]
         )
-        return [Assertion(*r) for r in rows]
+        extra = [a for a in self.overlay.assertions if a.lang_id == lang_id]
+        out = [Assertion(*r) for r in rows] + extra
+        return sorted(out, key=lambda a: (a.feature_id, a.source)) if extra else out
 
     def feature_counts(self) -> dict[str, dict[str, int]]:
         counts: dict[str, dict[str, int]] = {}
@@ -362,7 +476,21 @@ class KnowledgeBase:
             "WHERE value IN ('yes', 'no') GROUP BY ALL"
         ):
             counts.setdefault(fid, {})[value] = n
+        seen = {(a.lang_id, a.feature_id, a.value) for a in self.overlay.assertions}
+        for lang, fid, value in sorted(seen):
+            if value in ("yes", "no") and not self._base_has(lang, fid, value):
+                bucket = counts.setdefault(fid, {})
+                bucket[value] = bucket.get(value, 0) + 1
         return counts
+
+    def _base_has(self, lang: str, fid: str, value: str) -> bool:
+        return bool(
+            self._rows(
+                "SELECT 1 FROM assertions WHERE lang_id = ? AND feature_id = ? AND value = ? "
+                "LIMIT 1",
+                [lang, fid, value],
+            )
+        )
 
     def languages_with(self, feature_id: str, value: str = "yes") -> list[Language]:
         ids = {
@@ -371,6 +499,11 @@ class KnowledgeBase:
                 "SELECT DISTINCT lang_id FROM assertions WHERE feature_id = ? AND value = ?",
                 [feature_id, value],
             )
+        }
+        ids |= {
+            a.lang_id
+            for a in self.overlay.assertions
+            if a.feature_id == feature_id and a.value == value
         }
         return [lang for lang in self.languages if lang.id in ids]
 
@@ -382,6 +515,7 @@ class KnowledgeBase:
                 "SELECT * FROM edges WHERE src = ? OR dst = ? ORDER BY src, dst", [lang_id, lang_id]
             )
         ]
+        rows += [e for e in self.overlay.edges if lang_id in (e.src, e.dst)]
         return [e for e in rows if e.dst == lang_id], [e for e in rows if e.src == lang_id]
 
     # ----- similarity inputs (M2) ---------------------------------------------
@@ -393,7 +527,18 @@ class KnowledgeBase:
             "JOIN features f ON f.id = a.feature_id "
             "WHERE f.kind = 'trait' AND a.value = 'yes' ORDER BY 1, 2"
         )
-        return [(str(r[0]), str(r[1])) for r in rows]
+        pairs = {(str(r[0]), str(r[1])) for r in rows}
+        traits = self._trait_ids
+        pairs |= {
+            (a.lang_id, a.feature_id)
+            for a in self.overlay.assertions
+            if a.value == "yes" and a.feature_id in traits
+        }
+        return sorted(pairs)
+
+    @cached_property
+    def _trait_ids(self) -> frozenset[str]:
+        return frozenset(f.id for f in self.features if f.kind == "trait")
 
     @cached_property
     def _trait_values(self) -> dict[str, dict[str, str]]:
@@ -407,7 +552,12 @@ class KnowledgeBase:
             # any source saying "yes" wins; conflicts stay visible in the evidence
             if feats.get(str(fid)) != "yes":
                 feats[str(fid)] = str(value)
-        return out
+        for a in self.overlay.assertions:
+            if a.feature_id in self._trait_ids and a.value in ("yes", "no"):
+                feats = out.setdefault(a.lang_id, {})
+                if feats.get(a.feature_id) != "yes":
+                    feats[a.feature_id] = a.value
+        return dict(sorted(out.items()))
 
     def trait_values(self) -> dict[str, dict[str, str]]:
         """language → trait → "yes" | "no" (absent = unknown)."""

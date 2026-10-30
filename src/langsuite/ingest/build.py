@@ -81,6 +81,9 @@ def _get(
     return got
 
 
+KEEP_SNAPSHOTS = 5
+
+
 def build(
     *,
     home: Path | None = None,
@@ -97,6 +100,19 @@ def build(
     ling = parse_linguist(ling_raw.data, **({} if strict else {"min_records": 1}))
     note(f"parsed {len(pldb)} PLDB and {len(ling)} Linguist records")
     return _write(home, pldb_raw, pldb, ling_raw, ling, note)
+
+
+def _keep(home: Path, manifest: kb.Manifest, note: Progress) -> None:
+    """Keep this snapshot; prune old ones nothing pins (SPEC §10 M3 reproducibility)."""
+    from langsuite.core.workspace import pinned_snapshots
+
+    try:
+        kb.retain_snapshot(home, manifest)
+        dropped = kb.prune_snapshots(home, KEEP_SNAPSHOTS, pinned_snapshots(home))
+    except OSError as err:
+        raise DataError(f"Could not keep snapshot {manifest.snapshot_id}: {err}.") from err
+    if dropped:
+        note(f"pruned unpinned snapshots: {', '.join(dropped)}")
 
 
 def _merge(
@@ -290,6 +306,7 @@ def _write(
     finally:
         tmp.unlink(missing_ok=True)
         Path(f"{tmp}.wal").unlink(missing_ok=True)
+    _keep(home, manifest, note)
     note(
         f"wrote {manifest.snapshot_id}: {len(langs)} languages, "
         f"{len(assertions)} assertions, {len(edges)} influence edges"

@@ -48,3 +48,9 @@ class NotBuiltYetError(NoResultError):
             f"`{command}` is not built yet (milestone {milestone}).",
             hint="See docs/SPEC.md §10 for the roadmap.",
         )
+
+
+class UsageError(LangsuiteError):
+    """Bad input the user can fix; exits 2 like other usage errors."""
+
+    exit_code = ExitCode.NO_RESULT

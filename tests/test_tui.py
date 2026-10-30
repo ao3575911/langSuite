@@ -8,10 +8,11 @@ from typing import Any
 import pytest
 from textual.binding import Binding
 from textual.coordinate import Coordinate
-from textual.widgets import ContentSwitcher, DataTable, TabbedContent
+from textual.widgets import ContentSwitcher, DataTable, Input, TabbedContent
 
 from langsuite.cli.aliases import COMMANDS
 from langsuite.tui.app import LangsuiteApp
+from langsuite.tui.explore import ExplorePane
 from langsuite.tui.leader import LeaderScreen
 from langsuite.tui.query_pane import QueryPane
 from langsuite.tui.sections import SECTIONS, section_for
@@ -337,5 +338,174 @@ def test_similar_tab_snapshot(snap_compare: Any, kb_home: Any) -> None:
             await pilot.app.workers.wait_for_complete()
         pilot.app.query_one("#explore-tabs").active = "tab-similar"
         await pilot.pause(0.2)
+
+    assert snap_compare(app, terminal_size=(120, 40), run_before=setup)
+
+
+# ----- M3 Workspace pane ---------------------------------------------------------------
+
+
+async def _settle(pilot: Any) -> None:
+    for _ in range(3):
+        await pilot.pause(0.3)
+        await pilot.app.workers.wait_for_complete()
+    await pilot.pause()
+
+
+async def test_extract_from_explore_and_query(kb_home: Any) -> None:
+    from langsuite.core.workspace import Workspace
+
+    app = LangsuiteApp()
+    async with app.run_test(size=(120, 40)) as pilot:
+        await _explore_ready(pilot)
+        search = app.query_one("#explore-search")
+        search.focus()
+        await pilot.press(*"scheme")
+        await _settle(pilot)
+        await pilot.press("ctrl+s")
+        await _settle(pilot)
+        app.query_one("#explore-tabs", TabbedContent).active = "tab-similar"
+        await pilot.pause()
+        await pilot.press("ctrl+s")
+        await _settle(pilot)
+        await _query_ready(pilot)
+        await _type_query(pilot, "homoiconicity")
+        await pilot.press("ctrl+s")
+        await _settle(pilot)
+        found = Workspace.open().findings()
+        assert [f.kind for f in found] == ["lang", "similar", "query"]
+        assert found[0].args == {"lang": "scheme"}
+        await pilot.press("ctrl+s")  # nothing typed problem-free: saves again
+        await _settle(pilot)
+        app.set_focus(None)
+        await pilot.press("5")
+        await pilot.pause()
+        table = app.query_one("#ws-findings", DataTable)
+        assert table.row_count == 4
+        status = str(app.query_one("#ws-status").render())
+        assert "4 findings" in status
+
+
+async def test_extract_needs_something(kb_home: Any) -> None:
+    app = LangsuiteApp()
+    async with app.run_test(size=(120, 40)) as pilot:
+        await pilot.press("3")
+        pane = app.query_one(QueryPane)
+        pane.result = None
+        pane.action_extract()
+        await pilot.press("2")
+        explore = app.query_one(ExplorePane)
+        explore._shown = None
+        explore.action_extract()
+        await pilot.pause()
+        from langsuite.core.workspace import Workspace
+
+        assert Workspace.open().findings() == []
+
+
+async def test_workspace_pane_verify_notes_and_saved_query(kb_home: Any) -> None:
+    from langsuite.core.workspace import Workspace
+
+    ws = Workspace.open()
+    ws.save_finding("lang", {"lang": "haskell"})
+    ws.save_finding("similar", {"lang": "scheme", "k": 3, "min_traits": 5, "baseline": True})
+    ws.save_query("lisps", "homoiconicity")
+    ws.import_data({"languages": [{"id": "quill", "name": "Quill", "traits": {"macros": "yes"}}]})
+    app = LangsuiteApp()
+    async with app.run_test(size=(120, 40)) as pilot:
+        await pilot.press("g", "w")
+        await pilot.pause(0.6)
+        assert app.query_one("#main", ContentSwitcher).current == "pane-workspace"
+        table = app.query_one("#ws-findings", DataTable)
+        assert table.row_count == 2
+        assert "Haskell profile" in str(app.query_one("#ws-detail").render())
+        table.focus()
+        await pilot.press("down")
+        await pilot.pause()
+        assert "Most like Scheme" in str(app.query_one("#ws-detail").render())
+        await pilot.press("v")
+        await _settle(pilot)
+        assert "Reproducible on base-" in str(app.query_one("#ws-detail").render())
+        assert "Quill" in str(app.query_one("#ws-own").render())
+        tabs = app.query_one("#ws-tabs", TabbedContent)
+        tabs.active = "tab-notes"
+        await pilot.pause()
+        note = app.query_one("#ws-note")
+        note.focus()
+        await pilot.press(*"check hygiene", "enter")
+        await pilot.pause()
+        assert [n.on for n in ws.notes()] == ["f2"]
+        assert "check hygiene" in str(app.query_one("#ws-notes").render())
+        await pilot.press("enter")  # empty: ignored
+        tabs.active = "tab-saved"
+        await pilot.pause()
+        queries = app.query_one("#ws-queries", DataTable)
+        queries.focus()
+        await pilot.press("enter")
+        await pilot.pause(0.3)
+        assert app.query_one("#main", ContentSwitcher).current == "pane-query"
+        assert app.query_one("#query-input", Input).value == "homoiconicity"
+        await pilot.press("5")
+        table.focus()
+        await pilot.press("delete")
+        await pilot.pause()
+        assert table.row_count == 1
+        await pilot.press("r")
+        await pilot.pause()
+
+
+async def test_workspace_pane_reports_verify_failure(kb_home: Any) -> None:
+    import json
+
+    from langsuite.core.workspace import Workspace
+
+    ws = Workspace.open()
+    f = ws.save_finding("lang", {"lang": "c"})
+    path = ws.path / "findings" / f"{f.id}.json"
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    raw["result_sha256"] = "0" * 64
+    path.write_text(json.dumps(raw), encoding="utf-8")
+    app = LangsuiteApp()
+    async with app.run_test(size=(120, 40)) as pilot:
+        await pilot.press("5")
+        app.query_one("#ws-findings").focus()
+        await pilot.press("v")
+        await _settle(pilot)
+        assert "Changed" in str(app.query_one("#ws-detail").render())
+        assert "CHANGED" in str(app.query_one("#ws-status").render())
+
+
+async def test_workspace_pane_damaged_workspace(kb_home: Any) -> None:
+    from langsuite.core.workspace import Workspace
+
+    ws = Workspace.open()
+    (ws.path / "queries.json").write_text("{", encoding="utf-8")
+    app = LangsuiteApp()
+    async with app.run_test(size=(120, 40)) as pilot:
+        await pilot.press("5")
+        await pilot.pause()
+        assert "unreadable" in str(app.query_one("#ws-status").render())
+
+
+@pytest.mark.parametrize("theme", ["langsuite", "langsuite-high-contrast"])
+def test_workspace_snapshot(
+    snap_compare: Any, kb_home: Any, theme: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from langsuite.core import workspace as wsmod
+
+    monkeypatch.setattr(wsmod, "_now", lambda: "2026-10-30T04:00:00Z")
+    ws = wsmod.Workspace.open()
+    ws.save_finding("query", {"text": "homoiconicity sort=year", "top": None}, title="Lisps")
+    ws.save_finding("similar", {"lang": "scheme", "k": 3, "min_traits": 5, "baseline": True})
+    ws.add_note("Racket keeps Scheme's macros", on="f2")
+    ws.save_query("lisps", "homoiconicity sort=year")
+    app = LangsuiteApp()
+
+    async def setup(pilot: Any) -> None:
+        pilot.app.theme = theme
+        await pilot.press("5")
+        pilot.app.query_one("#ws-findings").focus()
+        await pilot.press("down")
+        await _settle(pilot)
 
     assert snap_compare(app, terminal_size=(120, 40), run_before=setup)

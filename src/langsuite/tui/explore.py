@@ -4,10 +4,12 @@ from __future__ import annotations
 
 from collections import defaultdict
 from pathlib import Path
+from typing import ClassVar
 
 from rich.markup import escape
 from textual import on, work
 from textual.app import ComposeResult
+from textual.binding import Binding, BindingType
 from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.timer import Timer
 from textual.widgets import DataTable, Input, Static, TabbedContent, TabPane
@@ -15,6 +17,7 @@ from textual.widgets import DataTable, Input, Static, TabbedContent, TabPane
 from langsuite.core.errors import LangsuiteError
 from langsuite.core.kb import KnowledgeBase, Language
 from langsuite.core.similarity import BASELINE_METHOD, similar
+from langsuite.core.workspace import open_kb
 from langsuite.tui.sections import Section
 
 DEBOUNCE_S = 0.12
@@ -24,6 +27,8 @@ PLANNED_TABS = (("Docs", "M5e"), ("Score", "M5c"), ("Snippets", "M4"))
 
 class ExplorePane(Vertical):
     """Search on the left, details on the right. Loads the base in a worker thread."""
+
+    BINDINGS: ClassVar[list[BindingType]] = [Binding("ctrl+s", "extract", "Save finding")]
 
     def __init__(self, section: Section, home: Path | None = None) -> None:
         super().__init__(id=f"pane-{section.id}", classes="pane explore")
@@ -61,7 +66,7 @@ class ExplorePane(Vertical):
     @work(thread=True, exclusive=True, group="kb")
     def _load(self) -> None:
         try:
-            kb = KnowledgeBase(self.home)
+            kb = open_kb(self.home)
             _ = kb.languages  # warm the cache off the UI thread
         except LangsuiteError as err:
             msg = err.message + (f"\n{err.hint}" if err.hint else "")
@@ -200,3 +205,16 @@ class ExplorePane(Vertical):
             )
         lines += ["", f"[dim]{result.method}; z vs {BASELINE_METHOD}. z≥3 is strong.[/]"]
         return "\n".join(lines)
+
+    def action_extract(self) -> None:
+        """Save what is on screen: the Similar list if that tab is open, else the profile."""
+        from langsuite.tui.workspace_pane import save_finding_in_background
+
+        if self._shown is None:
+            self.notify("Pick a language first.", timeout=2)
+            return
+        if self.query_one("#explore-tabs", TabbedContent).active == "tab-similar":
+            args = {"lang": self._shown, "k": 10, "min_traits": 5, "baseline": True}
+            save_finding_in_background(self, "similar", args)
+        else:
+            save_finding_in_background(self, "lang", {"lang": self._shown})

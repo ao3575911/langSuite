@@ -30,3 +30,11 @@ HeaderBar > Static { width: auto; padding: 0 1; }
 #query-status.-error { color: $warning; }
 #query-table { height: 1fr; }
 #query-help { color: $text-muted; height: auto; padding: 0 1; }
+.workspacepane { padding: 0 1; }
+#ws-status { color: $text-muted; height: auto; padding: 0 1; }
+#ws-status.-error { color: $warning; }
+#ws-body { height: 1fr; }
+#ws-findings { width: 50%; max-width: 50; }
+#ws-tabs { width: 3fr; }
+#ws-tabs Static { padding: 0 1; }
+#ws-help { color: $text-muted; height: auto; padding: 0 1; }
