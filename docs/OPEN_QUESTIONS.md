@@ -10,3 +10,7 @@
 | 6 | M0b | Mode switch key is `F2`, not `ctrl+m`: terminals send `ctrl+m` as Enter. Clicking the mode chip also cycles. | Deviation |
 | 7 | M0b | Start-up test bound is 1.5 s in CI (headless, includes test harness); spec target 600 ms is for interactive start on a dev machine. | Deviation |
 | 8 | M0b | Handle shows `$langsuite/guest/default` until accounts land (M5g); base age shows `base: none` until M1. | Logged |
+| 9 | M1 | `base build` added (spec lists `base pull/status/pin/changelog`, M5f): until signed snapshots are published, users build locally. `pull`, `pin`, `changelog` stay stubs (M5f). | Deviation, logged |
+| 10 | M1 | Feature vocabulary v1 is PLDB's `has*`/`is*` traits, auto-categorised, plus Linguist/PLDB facts. The spec's higher-level facets (evaluation strategy, syntax family, model) are derived in M2 with `query`. PLDB trait coverage is sparse (~950 languages have any). | Logged |
+| 11 | M1 | `confidence` is 1.0 for values stated verbatim by a source; derived values (M2+) get lower values. | Logged |
+| 12 | M1 | Inclusion criteria (§2a) are not yet applied: every PLDB/Linguist entry is stored; liveness checks arrive with data CI. | Logged |

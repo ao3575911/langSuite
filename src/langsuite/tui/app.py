@@ -15,6 +15,7 @@ from textual.screen import Screen
 from textual.widgets import ContentSwitcher, Footer, Label, ListItem, ListView
 
 from langsuite.cli.aliases import COMMANDS, Command
+from langsuite.core.kb import read_manifest
 from langsuite.core.modes import Mode
 from langsuite.tui.leader import LeaderScreen
 from langsuite.tui.panes import BUILT_SECTIONS, make_pane
@@ -23,6 +24,15 @@ from langsuite.tui.themes import PLAIN_THEME, THEMES
 from langsuite.tui.widgets import HeaderBar, ModeChip
 
 MODES: tuple[str, ...] = tuple(m.value for m in Mode)
+
+
+def base_label() -> str:
+    """`base <id> · <age>d`, or `base: none` before the first build."""
+    manifest = read_manifest()
+    if manifest is None:
+        return "base: none"
+    stale = " stale" if manifest.stale else ""
+    return f"{manifest.snapshot_id} · {manifest.age_days()}d{stale}"
 
 
 class CommandsProvider(Provider):
@@ -83,6 +93,7 @@ class LangsuiteApp(App[None]):
         header = HeaderBar(id="header")
         header.handle = self.handle
         header.mode = self.mode_name
+        header.base = base_label()
         yield header
         with Horizontal(id="body"):
             yield ListView(
@@ -131,8 +142,18 @@ class LangsuiteApp(App[None]):
             return
         target = section_for(cmd)
         self.action_show(target)
+        if target == "explore":
+            self.query_one("#explore-search").focus()
         if target not in BUILT_SECTIONS:
-            self.notify(f"{cmd.name}: planned ({cmd.milestone})", timeout=3)
+            from langsuite.cli.implemented import GROUP_APPS
+
+            if cmd.name in GROUP_APPS:
+                self.notify(
+                    f"`langsuite {cmd.name}` works in the terminal; pane planned ({cmd.milestone})",
+                    timeout=3,
+                )
+            else:
+                self.notify(f"{cmd.name}: planned ({cmd.milestone})", timeout=3)
 
     # leader keys
     def action_leader(self) -> None:

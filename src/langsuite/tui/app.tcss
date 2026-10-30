@@ -16,3 +16,11 @@ HeaderBar > Static { width: auto; padding: 0 1; }
 #leader.-active { display: block; }
 .-plain #nav { border-right: none; }
 .-plain DataTable, .-plain Input, .-plain TabbedContent { border: none; }
+.explore { padding: 0 1; }
+#explore-search { margin: 0 0 0 0; }
+#explore-status { color: $text-muted; height: auto; padding: 0 1; }
+#explore-status.-error { color: $warning; }
+#explore-body { height: 1fr; }
+#explore-table { width: 50%; max-width: 62; }
+#explore-tabs { width: 3fr; }
+#explore-tabs Static { padding: 0 1; }

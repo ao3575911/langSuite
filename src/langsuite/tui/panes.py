@@ -37,3 +37,13 @@ BUILT_SECTIONS: set[str] = set()
 def make_pane(section: Section) -> Widget:
     factory = PANE_FACTORIES.get(section.id)
     return factory(section) if factory else StubPane(section)
+
+
+def _register_built() -> None:
+    from langsuite.tui.explore import ExplorePane
+
+    PANE_FACTORIES["explore"] = ExplorePane
+    BUILT_SECTIONS.add("explore")
+
+
+_register_built()

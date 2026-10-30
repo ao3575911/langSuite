@@ -49,3 +49,29 @@ def _colour_env(monkeypatch: pytest.MonkeyPatch) -> None:
     """Snapshots are rendered in full colour whatever the developer's terminal says."""
     monkeypatch.delenv("NO_COLOR", raising=False)
     monkeypatch.delenv("TEXTUAL_COLOR_SYSTEM", raising=False)
+
+
+FIXTURES = Path(__file__).parent / "fixtures" / "kb"
+
+
+@pytest.fixture(autouse=True)
+def _isolated_home(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    """Every test gets an empty LANGSUITE_HOME so a developer's real base never leaks in."""
+    home = tmp_path / "home"
+    monkeypatch.setenv("LANGSUITE_HOME", str(home))
+    return home
+
+
+@pytest.fixture(scope="session")
+def built_home(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    from langsuite.ingest.build import build
+
+    home = tmp_path_factory.mktemp("kb")
+    build(home=home, from_dir=FIXTURES)
+    return home
+
+
+@pytest.fixture
+def kb_home(built_home: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    monkeypatch.setenv("LANGSUITE_HOME", str(built_home))
+    return built_home
