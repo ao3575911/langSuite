@@ -8,6 +8,7 @@ from typer.testing import CliRunner
 
 from langsuite.cli.aliases import COMMANDS, PANELS, SUB_ALIASES, help_line
 from langsuite.cli.app import app, main
+from langsuite.cli.implemented import COMMAND_FUNCS, GROUP_APPS
 from langsuite.core.errors import ExitCode
 
 runner = CliRunner()
@@ -54,7 +55,7 @@ def test_spec_alias_table() -> None:
         "usage": "u",
         "login": "li",
         "logout": "lo",
-        "tui": "t",
+        "ui": "t",
         "mode": "m",
     }
     assert {c.name: c.alias for c in COMMANDS} == expected
@@ -77,7 +78,10 @@ def test_help_lists_names_aliases_and_groups() -> None:
         assert f"({c.alias})" in out, c.alias
 
 
-@pytest.mark.parametrize("cmd", COMMANDS, ids=lambda c: c.name)
+STUBS = [c for c in COMMANDS if c.name not in COMMAND_FUNCS and c.name not in GROUP_APPS]
+
+
+@pytest.mark.parametrize("cmd", STUBS, ids=lambda c: c.name)
 def test_stub_and_alias_exit_no_result(cmd: object, capsys: pytest.CaptureFixture[str]) -> None:
     from langsuite.cli.aliases import Command
 
@@ -115,3 +119,24 @@ def test_version_and_usage_error(capsys: pytest.CaptureFixture[str]) -> None:
     with pytest.raises(SystemExit) as ex:
         main(["no-such-command"])
     assert ex.value.code == 2
+
+
+def test_no_args_non_tty_prints_help(capsys: pytest.CaptureFixture[str]) -> None:
+    with pytest.raises(SystemExit) as ex:
+        main([])
+    assert ex.value.code in (0, 2)
+    assert "Usage" in capsys.readouterr().out
+
+
+def test_ui_needs_tty(capsys: pytest.CaptureFixture[str]) -> None:
+    with pytest.raises(SystemExit) as ex:
+        main(["--plain", "ui"])
+    assert ex.value.code == ExitCode.DATA
+    assert "interactive terminal" in capsys.readouterr().err
+
+
+def test_ui_serve_command_line() -> None:
+    from langsuite.cli.ui_cmd import serve_command
+
+    cmd = serve_command(plain=True, mode="concise")
+    assert cmd.endswith("-m langsuite --mode concise --plain ui")
