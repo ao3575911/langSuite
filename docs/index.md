@@ -1,6 +1,6 @@
 # langsuite
 
-[![PyPI](https://img.shields.io/pypi/v/langsuite)](https://pypi.org/project/langsuite/) [![CI](https://github.com/ao3575911/langsuite/actions/workflows/ci.yml/badge.svg)](https://github.com/ao3575911/langsuite/actions/workflows/ci.yml) [![Docs](https://img.shields.io/badge/docs-pages-blue)](https://ao3575911.github.io/langsuite/)
+[![PyPI](https://img.shields.io/pypi/v/langsuite?label=PyPI&color=blue&cacheSeconds=3600)](https://pypi.org/project/langsuite/) [![Python](https://img.shields.io/pypi/pyversions/langsuite)](https://pypi.org/project/langsuite/) [![CI](https://github.com/ao3575911/langsuite/actions/workflows/ci.yml/badge.svg)](https://github.com/ao3575911/langsuite/actions/workflows/ci.yml) [![Docs](https://img.shields.io/badge/docs-pages-blue)](https://ao3575911.github.io/langsuite/)
 
 A research knowledge base of programming languages, with a CLI, a Textual app and a Telegram bot. Every fact links to its source.
 
@@ -42,7 +42,7 @@ Every command in this table runs as written once `base build` has finished.
 
 ## Status
 
-**1.0.0 release candidate.** Milestones M0 to M5i are built, with M5i on the client side only. The hosted service (tenants, sync, backups) is not deployed. Not yet published to PyPI: publishing runs from a signed `v*` tag ([docs/RELEASING.md](RELEASING.md)).
+**1.0.0 is released on [PyPI](https://pypi.org/project/langsuite/)** (`pipx install langsuite`). Milestones M0 to M5i are built, with M5i on the client side only. The hosted service (tenants, sync, backups) is not deployed. Releases are published from signed `v*` tags ([docs/RELEASING.md](RELEASING.md)).
 
 Not done yet: [open questions](OPEN_QUESTIONS.md) and [issues](https://github.com/ao3575911/langsuite/issues).
 
