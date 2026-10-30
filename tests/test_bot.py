@@ -86,7 +86,7 @@ def test_parse_strips_bot_name_and_keeps_code() -> None:
     assert _bot().handle("hello", ME) is None  # privacy mode: commands only
     assert "could not read" in _bot().handle('/q "unclosed', ME).plain  # type: ignore[union-attr]
     assert "unknown command" in _bot().handle("/nope", ME).plain  # type: ignore[union-attr]
-    assert "/similar (/s)" in _bot().handle("/start", ME).plain  # type: ignore[union-attr]
+    assert "/similar (/s)" in _bot().handle("/help", ME).plain  # type: ignore[union-attr]
 
 
 # ----- real CLI path -------------------------------------------------------------------
@@ -195,7 +195,7 @@ def test_build_application_offline() -> None:
 
     application = tg.build_application("123456:TEST-not-a-real-token", _bot(runner=FakeRunner()))
     assert isinstance(application, Application)
-    assert len(application.handlers[0]) == 1
+    assert len(application.handlers[0]) == 2  # commands and suggestion buttons
     names = [n for n, _ in tg.menu()]
     assert "similar" in names and "role" in names and all(len(h) <= 60 for _, h in tg.menu())
 
@@ -212,8 +212,9 @@ class FakeMessage:
         self.reply_to_message = SimpleNamespace(from_user=reply_from) if reply_from else None
         self.sent: list[tuple[str, Any]] = []
 
-    async def reply_text(self, text: str, parse_mode: Any = None) -> None:
+    async def reply_text(self, text: str, parse_mode: Any = None, reply_markup: Any = None) -> None:
         self.sent.append(("text", (text, parse_mode)))
+        self.markup = reply_markup
 
     async def reply_document(self, doc: Any) -> None:
         self.sent.append(("doc", doc))
@@ -323,3 +324,75 @@ async def test_bot_pane_simulator(kb_home: Any) -> None:
         await pilot.press("enter")
         await pilot.pause()
         assert app_.query_one("#bot-input", Input).value == "/lang "
+
+
+# ----- onboarding ------------------------------------------------------------------------
+
+
+def test_onboarding_private_handle_and_workspace(kb_home: Any) -> None:
+    from langsuite.bot.onboarding import Registry, skeleton
+
+    bot = _bot()
+    ada = Chat(1, 42, "Ada Lovelace", username="ada_l")
+    start = bot.handle("/start", ada)
+    assert start is not None and len(start.buttons) == 3
+    assert start.buttons[0] == ("ada_l", "/handle ada_l")
+    assert bot.handle("/space", ada).plain.startswith("Pick a handle first")  # type: ignore[union-attr]
+    for bad, why in [("ab", "3-20"), ("admin", "reserved"), ("l4ngsuite", "reserved"),
+                     ("langsuíte", "3-20")]:  # fmt: skip
+        assert why in bot.handle(f"/handle {bad}", ada).plain  # type: ignore[union-attr]
+    claimed = bot.handle("/handle ada_l", ada)
+    assert claimed is not None and claimed.buttons[0] == ("main", "/space main")
+    other = Chat(2, 43, "Eve", username="ADA_L")
+    assert "taken" in bot.handle("/handle Ada_1", other).plain  # type: ignore[union-attr]
+    assert "ada_l" not in [p for p, _ in bot.handle("/start", other).buttons]  # type: ignore[union-attr]
+    made = bot.handle("/space research", ada)
+    assert made is not None and "Created and switched to $langsuite/ada_l/research" in made.plain
+    q = bot.handle("/q kind=pl top=1", ada)
+    assert q is not None and q.plain.startswith("$langsuite/ada_l/research")
+    assert bot.workspace(ada) == "tg-u42-research"
+    assert "Switched to $langsuite/ada_l/main" in bot.handle("/space main", ada).plain  # type: ignore[union-attr]
+    assert "Welcome back" in bot.handle("/start", ada).plain  # type: ignore[union-attr]
+    renamed = bot.handle("/handle lovelace", ada)
+    assert renamed is not None and "changed from ada_l to lovelace" in renamed.plain
+    assert "not a valid" in bot.handle("/space Bad_Name", ada).plain  # type: ignore[union-attr]
+    assert skeleton("L0vel4ce") == skeleton("lovelace")
+    assert Registry(kb_home / "nope.json").get("u1").display is None
+
+
+def test_onboarding_group_needs_admin(kb_home: Any) -> None:
+    bot = _bot()
+    alice = Chat(-100, 7, "Alice", group=True, telegram_admin=True, title="PL Reading Group")
+    bob = Chat(-100, 8, "Bob", group=True, title="PL Reading Group")
+    assert "admin can run /start" in bot.handle("/start", bob).plain  # type: ignore[union-attr]
+    assert bot.handle("/handle bobs", bob).plain.startswith("Not allowed")  # type: ignore[union-attr]
+    start = bot.handle("/start", alice)
+    assert start is not None and start.buttons[0][0] == "pl_reading_group"
+    bot.handle("/handle pl_reading_group", alice)
+    done = bot.handle("/space main", alice)
+    assert done is not None and "$langsuite/pl_reading_group/main" in done.plain
+    assert "Welcome back" in bot.handle("/start", bob).plain  # type: ignore[union-attr]
+    assert bot.handle("/space x", bob).plain.startswith("Not allowed")  # type: ignore[union-attr]
+    assert "$langsuite/pl_reading_group/main" in bot.handle("/settings", bob).plain  # type: ignore[union-attr]
+
+
+def test_button_tap_runs_command_as_tapper() -> None:
+    runner = FakeRunner()
+    handler = tg.make_button_handler(_bot(runner=runner))
+    msg = FakeMessage("Pick a handle")
+    answered: list[bool] = []
+
+    async def answer() -> None:
+        answered.append(True)
+
+    upd = SimpleNamespace(
+        callback_query=SimpleNamespace(data="/handle ada_x", message=msg, answer=answer),
+        effective_message=msg,
+        effective_user=SimpleNamespace(id=42, full_name="Ada", username="ada"),
+        effective_chat=SimpleNamespace(id=42, type="private", title=None),
+    )
+    asyncio.run(handler(upd, SimpleNamespace(bot=FakeTgBot("member"))))
+    assert answered and "Handle ada_x is yours" in msg.sent[0][1][0].replace("\\", "")
+    assert msg.markup is not None
+    empty = SimpleNamespace(callback_query=None)
+    asyncio.run(handler(empty, SimpleNamespace(bot=FakeTgBot("member"))))

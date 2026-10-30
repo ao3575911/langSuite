@@ -24,6 +24,7 @@ from enum import StrEnum
 from pathlib import Path
 from typing import Any
 
+from langsuite.bot.onboarding import DEFAULT_WS, Registry, internal_workspace
 from langsuite.core.paths import data_home
 
 MAX_MESSAGE = 3800  # Telegram allows 4096; leave room for the header and escapes
@@ -66,6 +67,12 @@ class Chat:
     group: bool = False
     telegram_admin: bool = False  # Telegram group admins are langsuite admins by default
     reply_to: tuple[int, str] | None = None  # (user id, name) of a replied-to message
+    username: str = ""  # Telegram @username, used to suggest handles
+    title: str = ""  # group title, used to suggest group handles
+
+    @property
+    def owner_key(self) -> str:
+        return f"g{abs(self.chat_id)}" if self.group else f"u{self.user_id}"
 
     @property
     def workspace(self) -> str:
@@ -78,6 +85,7 @@ class Reply:
     document: tuple[str, bytes] | None = None  # (filename, content) when too long
     plain: str = ""  # the same reply without markup, for logs, tests and the app
     failed: bool = False  # the command ran and exited non-zero
+    buttons: list[tuple[str, str]] = field(default_factory=list)  # (label, command to run)
 
     @property
     def ok(self) -> bool:
@@ -130,7 +138,9 @@ NOT_IN_BOT: dict[str, str] = {
     "workspace": "each chat has exactly one workspace; /settings shows it",
 }
 BOT_ONLY = {
-    "start": "welcome and help",
+    "start": "set up: pick a handle and a workspace",
+    "handle": "claim or change your handle: /handle ada_l",
+    "space": "create or switch workspace: /space notes",
     "help": "commands",
     "role": "admins: reply to someone with /role contributor",
     "settings": "chat settings: /settings coderuns on|off (admins)",
@@ -315,6 +325,17 @@ class Bot:
         self.runner = runner or run_cli
         self.limiter = limiter or RateLimiter()
 
+    @property
+    def registry(self) -> Registry:
+        return Registry(bot_dir(self.home) / "handles.json")
+
+    def workspace(self, chat: Chat) -> str:
+        return internal_workspace(chat.workspace, self.registry.get(chat.owner_key).workspace)
+
+    def where(self, chat: Chat) -> str:
+        owner = self.registry.get(chat.owner_key)
+        return owner.display or self.workspace(chat)
+
     def handle(self, text: str, chat: Chat) -> Reply | None:
         if not text.startswith("/"):
             return None  # privacy mode: commands only
@@ -326,8 +347,10 @@ class Bot:
             return _text_reply(f"error: could not read that command ({err}).")
         state = load_state(chat.chat_id, self.home)
         role = role_of(chat, state)
-        if name in ("start", "help"):
+        if name == "help":
             return _reply(help_text(), code_block=False)
+        if name in ("start", "handle", "space"):
+            return self._onboard(name, args, chat, role)
         if name == "role":
             return self._role(chat, state, role, args)
         if name == "settings":
@@ -336,6 +359,58 @@ class Bot:
         if cmd is None:
             return _text_reply(f"error: unknown command /{name}. Try /help.")
         return self._run(cmd, args, rest, chat, state, role)
+
+    # -- onboarding
+
+    def _onboard(self, name: str, args: list[str], chat: Chat, role: Role) -> Reply:
+        reg = self.registry
+        key = chat.owner_key
+        owner = reg.get(key)
+        whose = "this group's" if chat.group else "your"
+        if chat.group and role is not Role.ADMIN and (name != "start" or owner.handle is None):
+            if name == "start":
+                return _text_reply("This group is not set up yet. A group admin can run /start.")
+            return _text_reply("Not allowed: only group admins can change the group's handle "
+                               "or workspace.")  # fmt: skip
+        if name == "start" and owner.handle:
+            return _reply(f"Welcome back. You are in {owner.display}.\n\n{help_text()}",
+                          code_block=False)  # fmt: skip
+        if name == "start" or (name == "handle" and not args):
+            seeds = [chat.title] if chat.group else [chat.username, chat.user_name]
+            picks = reg.suggest(key, seeds)
+            msg = (f"Welcome to langsuite. Pick {whose} handle (tap one), or type "
+                   "/handle yourname to choose your own.")  # fmt: skip
+            reply = _text_reply(msg + "\n\nSuggestions: " + ", ".join(picks))
+            reply.buttons = [(p, f"/handle {p}") for p in picks]
+            return reply
+        if name == "handle":
+            want = args[0].lstrip("@$").lower()
+            why = reg.claim(key, want)
+            if why:
+                return _text_reply(f"Sorry, {want} is not available: {why}.")
+            if owner.handle and owner.handle != want:
+                note = f"Handle changed from {owner.handle} to {want}."
+                return _text_reply(f"{note} You are in {reg.get(key).display}.")
+            reply = _text_reply(f"Handle {want} is yours. Now pick {whose} first workspace "
+                                "(tap one), or type /space name.")  # fmt: skip
+            reply.buttons = [(w, f"/space {w}") for w in (DEFAULT_WS, "research", "notes")]
+            return reply
+        # space
+        if owner.handle is None:
+            return _text_reply("Pick a handle first: /start.")
+        if not args:
+            spaces = ", ".join(owner.workspaces) or DEFAULT_WS
+            return _text_reply(f"You are in {owner.display}. Workspaces: {spaces}.")
+        want = args[0].lower()
+        why = reg.use(key, want)
+        if why:
+            return _text_reply(f"Sorry, {want} is not a valid workspace name: {why}.")
+        code, out = self.runner(["workspace", "show"], self.workspace(chat), None)
+        if code != 0:
+            return _text_reply(f"error: could not create the workspace ({out[:200]}).")
+        new = want not in owner.workspaces
+        verb = "Created and switched to" if new else "Switched to"
+        return _text_reply(f"{verb} {reg.get(key).display}. Try /q homoiconicity or /help.")
 
     # -- admin commands
 
@@ -373,7 +448,7 @@ class Bot:
             return _text_reply("error: try /settings coderuns on|off.")
         runs = "on" if state.code_runs else "off"
         return _reply(
-            f"workspace: {chat.workspace}\nyour role: {role.value}\ncode runs: {runs}",
+            f"workspace: {self.where(chat)}\nyour role: {role.value}\ncode runs: {runs}",
             code_block=False,
         )
 
@@ -420,8 +495,8 @@ class Bot:
         if cmd.needs_code:
             code, out = self._run_code(cli, rest, chat, author)
         else:
-            code, out = self.runner(cli, chat.workspace, author)
-        header = f"{chat.workspace} · /{cmd.alias} {' '.join(cli[1:])}".strip()
+            code, out = self.runner(cli, self.workspace(chat), author)
+        header = f"{self.where(chat)} · /{cmd.alias} {' '.join(cli[1:])}".strip()
         reply = _reply(out or ("done" if code == 0 else f"exit {code}"), header)
         reply.failed = code != 0
         return reply
@@ -434,6 +509,6 @@ class Bot:
         path = tmp / f"{uuid.uuid4().hex}.src"
         path.write_text(code_text, encoding="utf-8")
         try:
-            return self.runner(["verify", str(path), *cli[2:]], chat.workspace, author)
+            return self.runner(["verify", str(path), *cli[2:]], self.workspace(chat), author)
         finally:
             path.unlink(missing_ok=True)
