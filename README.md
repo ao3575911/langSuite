@@ -17,7 +17,7 @@ A research knowledge base of programming languages: how they work, how they rela
 | Code similarity, clusters, scores and grades | Built (M5, M5b, M5c): `similar --by code`, `like`, `diff`, `cluster`, `dashboard`, `influence`, `rank`, `compare`; Dashboard and Analyse panes |
 | Verified snippets: `verify` runs code in a digest-pinned, offline Docker sandbox (20 toolchains); `snippet` shows attributed Rosetta Code solutions marked verified only when they ran; Write pane | Built (M4) |
 | Cited answers that abstain when the base cannot support them (`ask`), `guide <lang>`; `extract` keeps citations | Built (M5d), template-based (no LLM) |
-| Signed snapshots: `base pull`, `base changelog`, data CI | Planned (M5f) |
+| `docs search/quote/ingest` (verbatim quotes with link, version and anchor; short excerpts for UNKNOWN licences), `inclusion` and dead-link archiving; signed snapshots (`base publish`, `base pull` refuses unsigned or tampered ones; cosign-compatible), `base changelog`, weekly data CI with a score-jump gate | Built (M5f); signing key not yet issued |
 | Workspaces: findings re-runnable bit-for-bit on their pinned snapshot, notes, saved queries, own-data overlay (custom languages), `base pin`; Workspace pane with `Ctrl+S` to save | Built (M3) |
 | Telegram bot (`langsuite bot run`): same commands and aliases as the CLI, a workspace per chat, admin/contributor/viewer roles, findings with authors, rate limits, code runs off unless an admin enables them; `bot try` and the Account pane simulate it offline | Built (M5e) |
 | Bot `/ask`, `/guide`, `/mode`, `/digest` schedules, inline mode; signed outbound `webhook`s; `mcp` stdio server for agents | Built (M5d, M5h) |
@@ -27,7 +27,7 @@ A research knowledge base of programming languages: how they work, how they rela
 | Release prep: 1.0.0, release notes, PyPI trusted-publishing workflow (tag-triggered; nothing tagged or published yet) | Built (M6, release prep) |
 | xAI explanations with citations, hosted `serve`, a11y audit, sync bundle, GIFs | Planned (M6, after 1.0.0) |
 
-> **Status: 1.0.0 release candidate, built through M5h and M5g; M5f and M5i are in progress. Published to PyPI from signed tags ([`docs/RELEASING.md`](docs/RELEASING.md)).** Release notes: [`docs/RELEASE_NOTES_1.0.0.md`](docs/RELEASE_NOTES_1.0.0.md). Planned commands are listed and say which milestone brings them. Spec: [`docs/SPEC.md`](docs/SPEC.md).
+> **Status: 1.0.0 release candidate, built through M5h, M5g and M5f; M5i is in progress. Published to PyPI from signed tags ([`docs/RELEASING.md`](docs/RELEASING.md)).** Release notes: [`docs/RELEASE_NOTES_1.0.0.md`](docs/RELEASE_NOTES_1.0.0.md). Planned commands are listed and say which milestone brings them. Spec: [`docs/SPEC.md`](docs/SPEC.md).
 
 ## Install
 

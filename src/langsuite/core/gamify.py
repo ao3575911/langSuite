@@ -25,8 +25,13 @@ class Badge:
     progress: str
 
     def to_json(self) -> dict[str, Any]:
-        return {"id": self.id, "name": self.name, "rule": self.rule,
-                "earned": self.earned, "progress": self.progress}  # fmt: skip
+        return {
+            "id": self.id,
+            "name": self.name,
+            "rule": self.rule,
+            "earned": self.earned,
+            "progress": self.progress,
+        }
 
 
 def events(ws_path: Path) -> list[dict[str, Any]]:
@@ -62,8 +67,12 @@ def streak(rows: list[dict[str, Any]], today: date | None = None) -> dict[str, A
         run = run + 1 if prev and d - prev == timedelta(days=1) else 1
         best = max(best, run)
         prev = d
-    return {"current": current, "best": best, "active_days": len(days),
-            "last": days[-1].isoformat() if days else None}  # fmt: skip
+    return {
+        "current": current,
+        "best": best,
+        "active_days": len(days),
+        "last": days[-1].isoformat() if days else None,
+    }
 
 
 RULES: list[tuple[str, str, str, str, int]] = [

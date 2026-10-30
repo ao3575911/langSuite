@@ -188,6 +188,7 @@ def build_application(token: str, core: Bot | None = None) -> Any:
         logging.getLogger("langsuite.bot").warning("langsuite bot started as @%s", me.username)
 
     logging.getLogger("httpx").setLevel(logging.WARNING)
+    logging.getLogger("apscheduler").setLevel(logging.WARNING)  # one line a minute otherwise
     logging.getLogger("httpx").addFilter(_Redact(token))
     core_ = core or Bot()
     app = Application.builder().token(token).post_init(post_init).build()

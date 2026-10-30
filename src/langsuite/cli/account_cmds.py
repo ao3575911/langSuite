@@ -46,9 +46,14 @@ def display(home: Path | None = None) -> str:
 
 def _owner_json(home: Path | None = None) -> dict[str, Any]:
     owner = registry(home).get(local_key(home))
-    return {"key": owner.key, "handle": owner.handle, "display": display(home),
-            "private": owner.private, "linked": list(owner.linked),
-            "gamification": settings.load()["gamification"]}  # fmt: skip
+    return {
+        "key": owner.key,
+        "handle": owner.handle,
+        "display": display(home),
+        "private": owner.private,
+        "linked": list(owner.linked),
+        "gamification": settings.load()["gamification"],
+    }
 
 
 def _say(ctx: typer.Context, kind: str, data: dict[str, Any], text: str) -> None:
@@ -68,9 +73,13 @@ def account(ctx: typer.Context) -> None:
         return
     d = _owner_json()
     linked = ", ".join(d["linked"]) or "none"
-    _say(ctx, "account", d,
-         f"[b]{escape(d['display'])}[/]\nhandle: {d['handle'] or '(none: account claim NAME)'}"
-         f"\nprivate: {'yes' if d['private'] else 'no'}\nlinked chats: {linked}")  # fmt: skip
+    _say(
+        ctx,
+        "account",
+        d,
+        f"[b]{escape(d['display'])}[/]\nhandle: {d['handle'] or '(none: account claim NAME)'}"
+        f"\nprivate: {'yes' if d['private'] else 'no'}\nlinked chats: {linked}",
+    )
 
 
 @account_app.command("suggest")
@@ -83,8 +92,11 @@ def account_suggest(
 
     Example: langsuite account suggest --name "Ada Lovelace" --languages ocaml,lisp
     """
-    profile = {"username": getpass.getuser() if not name else "", "name": name,
-               "languages": [x.strip() for x in languages.split(",") if x.strip()]}  # fmt: skip
+    profile = {
+        "username": getpass.getuser() if not name else "",
+        "name": name,
+        "languages": [x.strip() for x in languages.split(",") if x.strip()],
+    }
     picks = registry().nominate(local_key(), profile)
     _say(ctx, "suggestions", {"suggestions": picks}, "\n".join(picks))
 
@@ -143,8 +155,12 @@ def account_link(ctx: typer.Context) -> None:
     Example: langsuite account link
     """
     code = registry().link_code(local_key())
-    _say(ctx, "link", {"code": code, "expires_in": 600},
-         f"Send this to @langsuite_bot within 10 minutes:\n\n  /link {code}")  # fmt: skip
+    _say(
+        ctx,
+        "link",
+        {"code": code, "expires_in": 600},
+        f"Send this to @langsuite_bot within 10 minutes:\n\n  /link {code}",
+    )
 
 
 @account_app.command("lookup")
@@ -157,8 +173,12 @@ def account_lookup(ctx: typer.Context, handle: Annotated[str, typer.Argument()])
     if owner is None:
         raise NoResultError(f"No visible handle `{handle}`.")
     asked = handle.lstrip("$@")
-    data = {"handle": owner.handle, "requested": asked,
-            "redirected": owner.handle != asked, "workspace": owner.workspace}  # fmt: skip
+    data = {
+        "handle": owner.handle,
+        "requested": asked,
+        "redirected": owner.handle != asked,
+        "workspace": owner.workspace,
+    }
     _say(ctx, "lookup", data, f"$langsuite/{owner.handle}/{owner.workspace}")
 
 
@@ -199,8 +219,13 @@ def streak(ctx: typer.Context) -> None:
     if not _gamified(ctx):
         return
     s = gamify.streak(gamify.events(Workspace.open().path))
-    _say(ctx, "streak", s,
-         f"Current streak: {s['current']} day(s). Best: {s['best']}. Active days: {s['active_days']}.")  # noqa: E501  # fmt: skip
+    _say(
+        ctx,
+        "streak",
+        s,
+        f"Current streak: {s['current']} day(s). Best: {s['best']}. "
+        f"Active days: {s['active_days']}.",
+    )
 
 
 @settings_app.callback()

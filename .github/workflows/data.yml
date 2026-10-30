@@ -1,0 +1,82 @@
+name: Data CI
+# Weekly: rebuild the base, diff it against last week's, block publishing on score jumps.
+on:
+  schedule:
+    - cron: "17 2 * * 1"
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+concurrency:
+  group: data-ci
+  cancel-in-progress: false
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    env:
+      LANGSUITE_HOME: ${{ github.workspace }}/.lshome
+      HAS_SIGNING_KEY: ${{ secrets.SNAPSHOT_SIGNING_KEY != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --locked
+      - name: Restore last week's base
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ github.workspace }}/.lshome
+          key: data-base-${{ github.run_id }}
+          restore-keys: data-base-
+      - name: Rebuild from PLDB and Linguist
+        run: uv run langsuite --plain base build
+      - name: Check docs links (flag, then archive after 14 days)
+        run: uv run langsuite --plain inclusion check || true
+      - name: Changelog and score-jump gate
+        id: gate
+        run: |
+          set +e
+          uv run langsuite --json base changelog --check > changelog.json
+          code=$?
+          set -e
+          cat changelog.json | head -c 4000
+          if [ "$code" = "3" ] && grep -q '"jumps"' changelog.json; then
+            echo "blocked=true" >> "$GITHUB_OUTPUT"
+          elif [ "$code" != "0" ] && ! grep -q "Need two snapshots" changelog.json; then
+            exit "$code"
+          fi
+      - name: Open an issue when publishing is blocked
+        if: steps.gate.outputs.blocked == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          uv run python - <<'PY' > issue.md
+          import json, sys
+          from langsuite.core.snapshots import Changelog, issue_body
+          d = json.loads(open("changelog.json").readline())["data"]
+          log = Changelog(d["old"], d["new"], scores=d["scores"])
+          print(issue_body(log))
+          PY
+          gh issue create --title "Data CI: score jumps block publishing" --label data --body-file issue.md
+          exit 1
+      - name: Sign the snapshot (only when a signing key is configured)
+        if: steps.gate.outputs.blocked != 'true' && env.HAS_SIGNING_KEY == 'true'
+        env:
+          SNAPSHOT_KEY: ${{ secrets.SNAPSHOT_SIGNING_KEY }}
+        run: |
+          umask 077
+          printf '%s\n' "$SNAPSHOT_KEY" > "$RUNNER_TEMP/cosign.key"
+          uv run langsuite --plain base publish dist/snapshot --key "$RUNNER_TEMP/cosign.key"
+          rm -f "$RUNNER_TEMP/cosign.key"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: data-ci-${{ github.run_id }}
+          path: |
+            changelog.json
+            dist/snapshot
+          if-no-files-found: ignore
+      - name: Save this week's base
+        if: steps.gate.outputs.blocked != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ github.workspace }}/.lshome
+          key: data-base-${{ github.run_id }}

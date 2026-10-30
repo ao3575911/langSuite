@@ -20,6 +20,7 @@ from langsuite.cli.analyse_cmds import (
 from langsuite.cli.ask_cmds import ask, guide
 from langsuite.cli.bot_cmds import bot_app
 from langsuite.cli.discover_cmds import query, similar
+from langsuite.cli.docs_cmds import docs_app, inclusion_app
 from langsuite.cli.kb_cmds import base_app, feature_app, lang_app
 from langsuite.cli.mcp_server import mcp
 from langsuite.cli.system_cmds import mode, webhook_app
@@ -59,4 +60,6 @@ GROUP_APPS: dict[str, typer.Typer] = {
     "webhook": webhook_app,
     "account": account_app,
     "settings": settings_app,
+    "docs": docs_app,
+    "inclusion": inclusion_app,
 }
