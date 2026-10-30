@@ -93,4 +93,4 @@ jobs:
       - name: Live acceptance test
         env:
           LANGSUITE_LIVE: "1"
-        run: uv run pytest tests/test_kb.py -k live --no-cov
+        run: uv run pytest tests/test_kb.py tests/test_discover.py -k live --no-cov

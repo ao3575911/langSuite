@@ -24,3 +24,9 @@ HeaderBar > Static { width: auto; padding: 0 1; }
 #explore-table { width: 50%; max-width: 62; }
 #explore-tabs { width: 3fr; }
 #explore-tabs Static { padding: 0 1; }
+.querypane { padding: 0 1; }
+#query-input.-invalid { border: tall $error; }
+#query-status { color: $text-muted; height: auto; padding: 0 1; }
+#query-status.-error { color: $warning; }
+#query-table { height: 1fr; }
+#query-help { color: $text-muted; height: auto; padding: 0 1; }

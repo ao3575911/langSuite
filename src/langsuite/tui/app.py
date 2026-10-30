@@ -12,7 +12,7 @@ from textual.binding import Binding, BindingType
 from textual.command import Hit, Hits, Provider
 from textual.containers import Horizontal
 from textual.screen import Screen
-from textual.widgets import ContentSwitcher, Footer, Label, ListItem, ListView
+from textual.widgets import ContentSwitcher, Footer, Label, ListItem, ListView, TabbedContent
 
 from langsuite.cli.aliases import COMMANDS, Command
 from langsuite.core.kb import read_manifest
@@ -144,6 +144,10 @@ class LangsuiteApp(App[None]):
         self.action_show(target)
         if target == "explore":
             self.query_one("#explore-search").focus()
+            if cmd.name == "similar":
+                self.query_one("#explore-tabs", TabbedContent).active = "tab-similar"
+        if target == "query":
+            self.query_one("#query-input").focus()
         if target not in BUILT_SECTIONS:
             from langsuite.cli.implemented import GROUP_APPS
 

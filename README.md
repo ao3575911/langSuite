@@ -11,7 +11,8 @@ A research knowledge base of programming languages: how they work, how they rela
 | Textual app shell: header with handle and mode, 7 panes, command palette, `g`+alias keys, themes incl. high-contrast, plain mode, browser via `ui --serve` | Built (M0b) |
 | Licence-separated data packs, enforced in CI | Built (M0) |
 | Knowledge base of 5,000+ languages (PLDB + Linguist) with sourced evidence: `base build/status`, `lang list/show --evidence`, `feature list/show`, Explore pane with live search | Built (M1) |
-| Query, similarity, clusters, scores and grades | Planned (M2–M5c) |
+| Structured `query` DSL and feature `similar` with a shuffled-feature baseline (z-scores); Query pane and Similar tab | Built (M2) |
+| Code similarity, clusters, scores and grades | Planned (M5–M5c) |
 | Verified snippets, cited answers, how/when guides | Planned (M4, M5d) |
 | Workspace: findings, notes, `extract` | Planned (M3) |
 | Telegram bot with group workspaces | Planned (M5e) |
@@ -53,6 +54,19 @@ langsuite base status                 # snapshot id, sources, licences, age
 ```
 
 Sources: [PLDB](https://pldb.io) (public domain) and [GitHub Linguist](https://github.com/github-linguist/linguist) (MIT). Wikipedia-derived PLDB fields (CC BY-SA) are never ingested. Builds are atomic: a failed download or bad upstream data leaves the current base untouched, and `--offline` rebuilds from the cache. In the app, press `2` (Explore) to search live.
+
+## Query and similarity
+
+```sh
+langsuite query "homoiconicity year<1990 sort=year"         # bare name = has feature
+langsuite q "(macros or pattern-matching) static-typing top=10"
+langsuite q "eval=lazy"                    # key=value shorthand finds lazy-evaluation
+langsuite q "monads=unknown kind=pl"       # yes | no | unknown (no source says)
+langsuite similar scheme --k 5             # shared traits + z vs shuffled baseline
+langsuite s scheme --vs racket             # one pair, with the baseline spelled out
+```
+
+Fields: `name id kind year rank traits ext alias creator source website`; operators `= != >= <= > < ~`; `and`, `or`, `not`, brackets; `sort=[-]field`, `top=N`. Similarity is a rarity-weighted Jaccard over sourced traits (`features-idf-jaccard/1`); each score comes with a z-score against 1,000 seeded shuffles that keep each language's trait count and each trait's frequency (`shuffled-features/2`). z ≥ 3 is strong. Unknown is never treated as "no". In the app, press `3` for the Query pane (validated as you type, click a column to sort) or open the Similar tab in Explore.
 
 ## Use
 
