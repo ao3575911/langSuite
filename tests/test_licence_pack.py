@@ -45,7 +45,7 @@ def test_clean_wheel_passes(tmp_path: Path) -> None:
 @pytest.mark.skipif(shutil.which("uv") is None, reason="uv needed to build wheels")
 def test_planted_gfdl_fails(tmp_path: Path) -> None:
     repo = _copy(tmp_path)
-    (repo / "src" / "langwish" / "planted.txt").write_text(
+    (repo / "src" / "langsuite" / "planted.txt").write_text(
         "Permission is granted to copy under the GNU Free Documentation License 1.2\n"
     )
     res = _check(_build(repo, tmp_path / "dist"))

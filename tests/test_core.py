@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import json
 
-from langwish.cli.output import THEME, make_console, plain_wanted, to_json
-from langwish.core.errors import AuthError, DataError, ExitCode, QuotaError
-from langwish.core.modes import Mode, resolve_mode
+from langsuite.cli.output import THEME, make_console, plain_wanted, to_json
+from langsuite.core.errors import AuthError, DataError, ExitCode, QuotaError
+from langsuite.core.modes import Mode, resolve_mode
 
 
 def test_mode_precedence() -> None:

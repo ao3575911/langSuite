@@ -1,4 +1,4 @@
-"""Rich theme `langwish` and plain/JSON fallbacks (SPEC §6c). Stub for M0."""
+"""Rich theme `langsuite` and plain/JSON fallbacks (SPEC §6c). Stub for M0."""
 
 from __future__ import annotations
 

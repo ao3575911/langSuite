@@ -433,7 +433,7 @@ wheels = [
 ]
 
 [[package]]
-name = "langwish"
+name = "langsuite"
 version = "0.0.0"
 source = { editable = "." }
 dependencies = [

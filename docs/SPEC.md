@@ -1,4 +1,4 @@
-# langwish — build spec (no code)
+# langsuite — build spec (no code)
 
 **Tagline:** A research knowledge base of programming languages: how they work, how they relate, with evidence.
 
@@ -9,7 +9,7 @@ Everything in this spec serves one of five pillars. Every answer carries evidenc
 
 _Example outputs below are illustrative; numbers, citations and section refs are not real results._
 
-**Distinct from:** langSuite measures natural-language text; glossa is a corpus workbench. langwish studies programming languages.
+**Distinct from:** semdrift (formerly langSuite) measures natural-language text; glossa is a corpus workbench. langsuite studies programming languages.
 
 ## Five pillars
 | # | Pillar | Commands | Dashboard view | Telegram |
@@ -22,13 +22,13 @@ _Example outputs below are illustrative; numbers, citations and section refs are
 
 **Pillar examples:**
 ```
-$ langwish cluster labels --top 3      # C12 lazy · pure · functional (7 langs, support 0.91)
-$ langwish ask "Tail calls guaranteed by spec?"   # Scheme, Lua [R7RS §3.5] [Lua 5.4 §3.4.10] conf 0.82
-$ langwish ask "Does Zig have closures?"          # abstains, shows closest sources
-$ langwish rank --by score --desc --filter paradigm=functional --top 3
-$ langwish compare rust go --criteria all ; langwish diff "binary search" --lang ocaml,haskell
-$ langwish extract last --title "Lazy functional cluster"   # saved F-0012 (base-2026.11, 9 evidence ids)
-$ langwish snippet "read a CSV and sum a column" --lang rust,python   # python verified ✓ [Python docs csv]
+$ langsuite cluster labels --top 3      # C12 lazy · pure · functional (7 langs, support 0.91)
+$ langsuite ask "Tail calls guaranteed by spec?"   # Scheme, Lua [R7RS §3.5] [Lua 5.4 §3.4.10] conf 0.82
+$ langsuite ask "Does Zig have closures?"          # abstains, shows closest sources
+$ langsuite rank --by score --desc --filter paradigm=functional --top 3
+$ langsuite compare rust go --criteria all ; langsuite diff "binary search" --lang ocaml,haskell
+$ langsuite extract last --title "Lazy functional cluster"   # saved F-0012 (base-2026.11, 9 evidence ids)
+$ langsuite snippet "read a CSV and sum a column" --lang rust,python   # python verified ✓ [Python docs csv]
 ```
 **Anti-hallucination (Q&A, guides, explanations):** retrieval-only from KB assertions, docs excerpts and verified evidence; every sentence cites ids, uncited ones removed; below coverage threshold → **abstain** with nearest sources; syntax claims run in the Docker verifier, failures dropped/flagged; levels: simple (lookup, no LLM) / advanced (multi-hop + xAI drafting, same rules); confidence + snapshot hash shown. `extract` saves any result with provenance; guides built from cited assertions, scores and verified snippets.
 
@@ -83,10 +83,10 @@ A language is in the database only if **all three** are publicly reachable on th
 Licence unknown means the strict row. Licences are found from the docs footer or repo licence file and stored with their source URL; per-language licences are UNKNOWN until checked.
 
 ## 2c. Data CI
-Scheduled GitHub Actions in a separate `langwish-data` repo (nightly liveness, weekly full run, manual trigger):
+Scheduled GitHub Actions in a separate `langsuite-data` repo (nightly liveness, weekly full run, manual trigger):
 1. **Liveness** → status. 2. **Change detection:** releases (GitHub tags, PyPI/npm/crates.io…), docs via ETag/Last-Modified → hash → diff. 3. **Re-ingest** changes only. 4. **Re-verify** affected snippets. 5. **Recompute** scores, clusters.
 6. **Gates (block publish):** any score moves > 15 points; > 5% of languages flip status; verified-run rate drops > 10 points overall; > 20% of a language's docs chunks vanish; cluster label churn > 30%. Thresholds are starting values. A blocked run opens an issue for review.
-7. **Publish** a versioned base snapshot (`base-YYYY.MM.DD`), signed (Sigstore/cosign), as a GitHub release; subscribers `langwish base pull` and verify the signature.
+7. **Publish** a versioned base snapshot (`base-YYYY.MM.DD`), signed (Sigstore/cosign), as a GitHub release; subscribers `langsuite base pull` and verify the signature.
 8. **Data changelog:** added/flagged/archived languages, new versions, docs changes, score and cluster changes with reasons.
 
 **Cost and rate limits:** conditional requests (ETag) first; per-host concurrency 1–2 and backoff; respect robots.txt; authenticated GitHub API with request budget per run (limits per GitHub docs, not re-checked); cache all fetches; Docker runs only for changed snippets; shard the weekly run across jobs. Actions minutes on a public repo: free per GitHub's policy (not re-checked; UNKNOWN for private).
@@ -129,7 +129,7 @@ Scheduled GitHub Actions in a separate `langwish-data` repo (nightly liveness, w
 
 **User renames:** stored in the workspace as an overlay (cluster id + snapshot → custom title). The auto label stays visible underneath. When the base updates, clusters are matched by member overlap (Jaccard ≥0.7) and renames carry over; anything below that is flagged for review.
 
-CLI: `langwish dashboard`, `langwish cluster labels [--explain <id>]`, `langwish cluster rename <id> "<title>"`.
+CLI: `langsuite dashboard`, `langsuite cluster labels [--explain <id>]`, `langsuite cluster rename <id> "<title>"`.
 
 ## 4b. Language score and grade
 **What it means:** the score measures how well-supported and well-evidenced a language is *in this knowledge base*. It does not say which language is "best" for anything.
@@ -157,16 +157,16 @@ Weights sum to 100.
 
 **Rank and sort:**
 ```
-langwish rank --by score|<criterion> [--desc|--asc] [--filter grade>=B paradigm=functional] [--top N] [--profile <name>] [--json]
+langsuite rank --by score|<criterion> [--desc|--asc] [--filter grade>=B paradigm=functional] [--top N] [--profile <name>] [--json]
 ```
 Ties broken by confidence, then name. The dashboard sorts clusters and members by score, grade or any criterion.
 
 ## 5. Architecture
 ```
-Data CI (langwish-data, scheduled): liveness → change detect → re-ingest → re-verify/recompute → gates → signed release + changelog | issue
+Data CI (langsuite-data, scheduled): liveness → change detect → re-ingest → re-verify/recompute → gates → signed release + changelog | issue
 Shared base (read-only snapshots): PLDB, Linguist, Rosetta (GFDL pack), HOPL/Wikipedia, licence-gated docs → ingest → KB (DuckDB+Parquet)
                                    Verifier (Docker per toolchain) → Evidence (verified solutions, ASTs, embeddings)
-Front ends: CLI · TUI · Telegram bot · HTTP API + MCP → langwish.core → query engine (base snapshot + tenant overlay)
+Front ends: CLI · TUI · Telegram bot · HTTP API + MCP → langsuite.core → query engine (base snapshot + tenant overlay)
             → discovery (similarity, clustering, influence, mechanism) → xAI explainer (cited) → finding → workspace → export (CSV/Parquet/JSON/MD/BibTeX)
             core → outbound webhooks → other bots/tools → API
 ```
@@ -187,7 +187,7 @@ Front ends: CLI · TUI · Telegram bot · HTTP API + MCP → langwish.core → q
 | Personal data | Only username, Telegram link, settings, events; `account delete` erases (export on request) |
 
 ## 6. SaaS (decided: v1 is hosted; CLI, TUI and Telegram are clients)
-- **Topology:** `api.langwish.<tld>` (domain TBD) runs core, verifier queue, xAI calls. Clients call it over HTTPS with a device-code login. **Optional local mode** (`langwish --local`, Could): same core against a pulled signed base + local DuckDB workspace, no billing, no Telegram; kept only because core is already client-agnostic.
+- **Topology:** `api.langsuite.<tld>` (domain TBD) runs core, verifier queue, xAI calls. Clients call it over HTTPS with a device-code login. **Optional local mode** (`langsuite --local`, Could): same core against a pulled signed base + local DuckDB workspace, no billing, no Telegram; kept only because core is already client-agnostic.
 - **Tenancy:** one tenant = user or team. Shared base read-only (DuckDB/Parquet snapshot per region). Tenant data in Postgres, schema per tenant + row-level security keyed by `tenant_id`; verifier jobs labelled with tenant, no shared scratch; object storage prefixes per tenant; per-tenant encryption keys for exports. Overlay never edits the base; findings pin snapshot hash.
 - **Auth:** OIDC (provider TBD, e.g. Auth0/Clerk) for web; device-code flow for CLI/TUI; Telegram via `/start` link code (§6b). Sessions short-lived, refresh tokens revocable; team roles admin/contributor/viewer (same as §6a).
 - **Billing:** Stripe Checkout + Customer Portal + webhooks (signature-verified, idempotent by event id). Entitlements cached in core; downgrade keeps data read-only, never deletes.
@@ -200,17 +200,17 @@ Front ends: CLI · TUI · Telegram bot · HTTP API + MCP → langwish.core → q
 | Team | $30/seat/mo* | 5,000/seat pooled | 3,000/seat | unlimited | 20 | Roles, digests, webhooks, MCP, SSO |
 | Enterprise | contact* | custom | custom | custom | custom | Region pinning, DPA, SLA credits |
 \*placeholder.
-- **Quotas and metering:** every core op emits a usage event (tenant, op, units, cost estimate); per-plan hard caps + per-minute rate limits; 80% and 100% warnings; overage off by default. `langwish usage` shows it.
+- **Quotas and metering:** every core op emits a usage event (tenant, op, units, cost estimate); per-plan hard caps + per-minute rate limits; 80% and 100% warnings; overage off by default. `langsuite usage` shows it.
 - **SLOs:** API availability 99.5% monthly (Pro/Team), 99.9% Enterprise; p95 latency: lookup/query ≤ 300 ms, `ask` concise ≤ 4 s, thorough ≤ 12 s, verifier ≤ 30 s; error budget policy freezes feature deploys when spent. Status page.
 - **Ops:** containerised, IaC, staged deploys, daily Postgres backups (PITR, 30-day retention), restore drill monthly.
 - **Privacy/terms:** Privacy Policy, Terms, DPA (Team+), sub-processor list (xAI, Stripe, host, auth provider). Data minimisation per §5a; tenant data not used to train models; xAI zero-retention setting if offered (UNKNOWN). Export + delete within 30 days of request. Legal review before launch.
-- **Licensing:** client + core code MIT (anyone can self-host; competitors too, accepted). Hosted service is the product. Rosetta (GFDL 1.2) and CC BY-SA content stay in separate attributed data packs, served with attribution; GFDL does not reach MIT code, and hosted serving of share-alike content keeps its licence notice. Brand/trademark "langwish" kept by Adam.
+- **Licensing:** client + core code MIT (anyone can self-host; competitors too, accepted). Hosted service is the product. Rosetta (GFDL 1.2) and CC BY-SA content stay in separate attributed data packs, served with attribution; GFDL does not reach MIT code, and hosted serving of share-alike content keeps its licence notice. Brand/trademark "langsuite" kept by Adam.
 
 ## 6a. Interfaces and the Telegram bot
-**One core, three front ends.** `langwish.core` is a service layer (typed request/response objects, e.g. `ask(Query, Ctx) -> Answer`). CLI (Typer), TUI (Textual) and bot are thin adapters over it; a parity test checks every core operation is reachable from all three (except where Telegram can't render, which falls back to a file).
+**One core, three front ends.** `langsuite.core` is a service layer (typed request/response objects, e.g. `ask(Query, Ctx) -> Answer`). CLI (Typer), TUI (Textual) and bot are thin adapters over it; a parity test checks every core operation is reachable from all three (except where Telegram can't render, which falls back to a file).
 - **Library (checked on PyPI 30 Oct 2026):** python-telegram-bot 22.8 (12 Jun 2026, Python ≥3.10); aiogram 3.31.0 (26 Aug 2026, Python ≥3.10,<3.15). **Recommend python-telegram-bot:** mature, broad docs, built-in job queue for digests, rate limiter, webhook and polling. aiogram is a fine async-first alternative; its upper Python pin is a mild risk.
 - **Commands (by pillar):** /explore /similar /cluster · /ask /q /saved · /rank /compare /diff · /extract /finding /note /digest · /snippet /how /when · /workspace /role /help.
-- Inline mode: `@langwish_bot similar haskell` in any chat returns cards.
+- Inline mode: `@langsuite_bot similar haskell` in any chat returns cards.
 - Inline buttons: "Evidence", "Sources", "Next ▸ / ◂ Prev", "Save to workspace".
 - Output: Telegram MarkdownV2 with escaping done centrally; long output paginated, or sent as .md/.json file. Charts (cluster map, score bars) rendered to PNG with matplotlib.
 
@@ -222,31 +222,31 @@ Front ends: CLI · TUI · Telegram bot · HTTP API + MCP → langwish.core → q
 **Integrating other bots.** Telegram's FAQ says: "bots will not be able to see messages from other bots regardless of mode" ([Bots FAQ](https://core.telegram.org/bots/faq), checked 30 Oct 2026). Any newer Bot API exception for bot-to-bot messaging: UNKNOWN. So integration goes around the chat:
 - **Outbound webhooks:** a group can register URLs; events (finding saved, digest ready) POST signed JSON (HMAC).
 - **HTTP API:** the core's operations over HTTP (FastAPI), token per workspace, scoped read/write.
-- **MCP server:** the same operations as MCP tools so other agents can query langwish.
-- **Optional relay:** a small service that forwards another bot's output into langwish via the API and posts results back to the chat.
+- **MCP server:** the same operations as MCP tools so other agents can query langsuite.
+- **Optional relay:** a small service that forwards another bot's output into langsuite via the API and posts results back to the chat.
 
 **Advanced querying in chat:**
-- DSL: `/q eval=lazy typing=static score>=70 sort=-score top=5`; same grammar as `langwish query`.
+- DSL: `/q eval=lazy typing=static score>=70 sort=-score top=5`; same grammar as `langsuite query`.
 - Saved queries: `/saved add name <dsl>`, `/saved run name`.
 - Scheduled digests: `/digest weekly mon 09:00 <saved>` posts results (new findings, changed scores after base update), in the group's set timezone.
 - **Deployment:** one `docker compose` with `core` (API + workers), `bot`, `verifier` (Docker-in-Docker or a socket proxy restricted to the run image), and a volume for DuckDB/Parquet. Polling for a laptop or home server (no public URL); webhook behind HTTPS for a server. Cost: Telegram Bot API is free; a small VPS (UNKNOWN price; check provider) plus xAI usage per question (UNKNOWN; depends on plan).
-- **Bot hosting:** one official hosted `@langwish_bot` (SaaS); group workspaces belong to the tenant of the admin who adds it. Self-hosted bot only in local mode.
+- **Bot hosting:** one official hosted `@langsuite_bot` (SaaS); group workspaces belong to the tenant of the admin who adds it. Self-hosted bot only in local mode.
 
 ## 6b. Usernames, handles and gamification
-**Handle.** At onboarding each user picks a unique `username`; each workspace gets a `slug`. The handle `$langwish/<username>/<workspace>` (e.g. `$langwish/lazyfox/haskell-notes`) is the input placeholder in the CLI/TUI prompt, the app input and header, and Telegram inline input (`@langwish_bot` placeholder set per user where the Bot API allows; otherwise shown in the reply header). Purpose: identity, show and retention, not security.
+**Handle.** At onboarding each user picks a unique `username`; each workspace gets a `slug`. The handle `$langsuite/<username>/<workspace>` (e.g. `$langsuite/lazyfox/haskell-notes`) is the input placeholder in the CLI/TUI prompt, the app input and header, and Telegram inline input (`@langsuite_bot` placeholder set per user where the Bot API allows; otherwise shown in the reply header). Purpose: identity, show and retention, not security.
 - **Nominated usernames.** The system proposes 3 by default, user can edit or pick one. Built from the user's stated interests or top explored languages (e.g. `lispwright`, `ocamlo`, `lazyfox`), 4–12 chars, pronounceable, no digits unless needed, availability-checked before display. Deterministic generator + word lists (no LLM needed; xAI optional for flavour, output still filtered).
-- **Validation.** `^[a-z][a-z0-9_-]{2,23}$` (3–24 chars, lowercase ASCII, stored case-folded); no `--`/`__`, no trailing `-`/`_`. Workspace slug: same charset, 1–32 chars, unique per user. Reserved list: `langwish`, `admin`, `root`, `api`, `bot`, `help`, `support`, `official`, `staff`, `system`, `null`, command names, language names marked official (e.g. `python`, `rust` reserved for future verified orgs). Impersonation: Unicode confusables (UTS #39 skeleton) and edit distance ≤1 against reserved and existing handles. Profanity: multilingual block list + leetspeak normalisation; borderline goes to a manual review queue.
+- **Validation.** `^[a-z][a-z0-9_-]{2,23}$` (3–24 chars, lowercase ASCII, stored case-folded); no `--`/`__`, no trailing `-`/`_`. Workspace slug: same charset, 1–32 chars, unique per user. Reserved list: `langsuite`, `admin`, `root`, `api`, `bot`, `help`, `support`, `official`, `staff`, `system`, `null`, command names, language names marked official (e.g. `python`, `rust` reserved for future verified orgs). Impersonation: Unicode confusables (UTS #39 skeleton) and edit distance ≤1 against reserved and existing handles. Profanity: multilingual block list + leetspeak normalisation; borderline goes to a manual review queue.
 - **Uniqueness scope.** Global, one table with a unique index on `username_folded` (SaaS). Local mode: per install.
 - **Rename.** Allowed once per 30 days. Old handle redirects for 180 days, then is held 90 more days (not claimable by others) before release. Findings, exports and Telegram links keep the stable `user_id`; handles are display only, so renames never break references.
-- **Telegram mapping.** `TelegramLink(telegram_user_id → user_id)`, created by `/start` (new user onboards there) or `langwish account link` (one-time code). Group workspace handle: `$langwish/<group-slug>/<workspace>`, group slug chosen by an admin with the same rules; group namespace and user namespace share one uniqueness pool.
+- **Telegram mapping.** `TelegramLink(telegram_user_id → user_id)`, created by `/start` (new user onboards there) or `langsuite account link` (one-time code). Group workspace handle: `$langsuite/<group-slug>/<workspace>`, group slug chosen by an admin with the same rules; group namespace and user namespace share one uniqueness pool.
 - **Privacy.** Handles are private by default (only visible to you and workspaces you share). Public profile (handle, badges, public findings) is opt-in per user; group members see each other's handles in that group only. Telegram display names are never published. Delete account frees the handle after the hold period and erases badges.
 - **Gamification (light, opt-out).** Streaks (days with an explore/query/extract action; one free freeze per week), badges (languages explored 10/50/200, clusters visited, findings extracted, verified snippets, first cited answer saved), and a profile level from those counts. No leaderboards by default (group admin can enable a group-only board), no notifications pushing streaks unless opted in, no loss-framed nags, no paid boosts, no rewards for volume of LLM calls. `settings gamification off` hides everything and stops tracking.
 - **Data model.** `User(user_id uuid, username, username_folded, created_at, public bool, gamification bool)`, `UsernameHistory(user_id, old, new, changed_at, redirect_until, hold_until)`, `Workspace(+ slug, owner_id|group_id)`, `TelegramLink(telegram_user_id, user_id, linked_at)`, `Group(chat_id, slug)`, `Event(user_id, kind, at, ref)` (append-only; badges and streaks derived from it, so rules can change and recompute), `Badge(user_id, code, awarded_at, rule_version)`.
 
 ## 6c. Install, help, output and modes
-**Install (one command):** `pipx install langwish && langwish login` (or `uv tool install langwish`; `curl -fsSL https://get.langwish.<tld> | sh` wraps pipx and verifies a checksum). First run: login → username → workspace in < 60 s. README has a detailed Install section: prerequisites (Python 3.12+), pipx/uv/curl paths, login, Telegram `/start`, local mode (Docker), upgrade, uninstall, troubleshooting, each as exact copy-paste commands. Publishing to PyPI needs Adam's OK.
+**Install (one command):** `pipx install langsuite && langsuite login` (or `uv tool install langsuite`; `curl -fsSL https://get.langsuite.<tld> | sh` wraps pipx and verifies a checksum). First run: login → username → workspace in < 60 s. README has a detailed Install section: prerequisites (Python 3.12+), pipx/uv/curl paths, login, Telegram `/start`, local mode (Docker), upgrade, uninstall, troubleshooting, each as exact copy-paste commands. Publishing to PyPI needs Adam's OK.
 
-**Help:** `langwish --help` lists every command, grouped by pillar (Explore · Query · Analyse · Workspace · Write · Account · System), one line each, ≤ 60 chars, alias shown beside the name; `langwish <cmd> --help` shows usage + 1 example. Typer + Rich help panels.
+**Help:** `langsuite --help` lists every command, grouped by pillar (Explore · Query · Analyse · Workspace · Write · Account · System), one line each, ≤ 60 chars, alias shown beside the name; `langsuite <cmd> --help` shows usage + 1 example. Typer + Rich help panels.
 
 **Aliases (every command; collision-free, unique prefixes not relied on):**
 
@@ -265,9 +265,9 @@ Front ends: CLI · TUI · Telegram bot · HTTP API + MCP → langwish.core → q
 | mode | m | | | | |
 Subcommands keep their names (`f ls` = `finding list`; `ls`, `sh`, `rm` are universal sub-aliases). A test asserts every command has exactly one alias, no alias equals another command or alias, and `--help` lists both. Telegram uses the same aliases (`/a`, `/q`, `/s`…).
 
-**Output:** Rich theme `langwish` (one palette, 256-colour + truecolour): tables with aligned numbers, grade chips, syntax-highlighted code (Pygments, language-tagged), citation footnotes `[1]`, evidence panel, spinners for > 300 ms. Plain fallback when not a TTY, `NO_COLOR` set or `--plain`: no ANSI, ASCII borders, same content. `--json` (stable schema, versioned) on every command. Telegram: MarkdownV2 tables as monospace, code as fenced blocks. Snapshot tests per command for rich, plain and JSON.
+**Output:** Rich theme `langsuite` (one palette, 256-colour + truecolour): tables with aligned numbers, grade chips, syntax-highlighted code (Pygments, language-tagged), citation footnotes `[1]`, evidence panel, spinners for > 300 ms. Plain fallback when not a TTY, `NO_COLOR` set or `--plain`: no ANSI, ASCII borders, same content. `--json` (stable schema, versioned) on every command. Telegram: MarkdownV2 tables as monospace, code as fenced blocks. Snapshot tests per command for rich, plain and JSON.
 
-**Modes:** `default` (direct + clear), `concise`, `thorough`. Precedence: `-m/--mode` flag > workspace setting > global setting (`langwish mode set concise [--workspace]`) > default. Telegram: `/mode`.
+**Modes:** `default` (direct + clear), `concise`, `thorough`. Precedence: `-m/--mode` flag > workspace setting > global setting (`langsuite mode set concise [--workspace]`) > default. Telegram: `/mode`.
 
 | Mode | Length bound (prose) | Always includes | Never includes |
 |---|---|---|---|
@@ -287,29 +287,29 @@ Beats: generic LLM CLIs (aichat, sgpt, llm, Copilot CLI: no citations, no verifi
 
 ## 7. CLI
 ```
-langwish lang list|show <lang> [--evidence]
-langwish feature list|show <feature>
-langwish query "<filter>"            # e.g. "eval=lazy and model=term-rewriting"
-langwish similar <lang> [--by features|code|both] [--k 10]
-langwish cluster [--method ward] [--bootstrap 200]
-langwish influence <lang> [--depth 2]
-langwish like "<mechanism>" --as <lang>     # "do X the way Y does"
-langwish snippet "<task>" --lang a,b        # [5] verified, cited
-langwish ask "<question>" [--level simple|advanced]   # [2]
-langwish compare <a> <b> | diff "<task>" --lang a,b  # [3]
-langwish extract <last|id> [--title]        # [4]
-langwish guide how <lang> | when <a> vs <b> # [5]
-langwish verify <file> --lang <lang>
-langwish finding save|list|show|export
-langwish note add|list
-langwish workspace init|import|export|sync
-langwish base pull|status|pin <snapshot>|changelog
-langwish docs search "<q>" [--lang] [--version] | docs quote <lang> <anchor>
-langwish inclusion check <lang> | inclusion list --status flagged|archived
-langwish account init [--username u] | suggest [--n 5] | rename <new> | show | privacy public|private | link telegram | delete
-langwish workspace rename <slug> ; langwish badges|streak [--json] ; langwish settings gamification on|off
-langwish login|logout ; langwish usage ; langwish mode show|set <m> [--workspace]
-langwish tui
+langsuite lang list|show <lang> [--evidence]
+langsuite feature list|show <feature>
+langsuite query "<filter>"            # e.g. "eval=lazy and model=term-rewriting"
+langsuite similar <lang> [--by features|code|both] [--k 10]
+langsuite cluster [--method ward] [--bootstrap 200]
+langsuite influence <lang> [--depth 2]
+langsuite like "<mechanism>" --as <lang>     # "do X the way Y does"
+langsuite snippet "<task>" --lang a,b        # [5] verified, cited
+langsuite ask "<question>" [--level simple|advanced]   # [2]
+langsuite compare <a> <b> | diff "<task>" --lang a,b  # [3]
+langsuite extract <last|id> [--title]        # [4]
+langsuite guide how <lang> | when <a> vs <b> # [5]
+langsuite verify <file> --lang <lang>
+langsuite finding save|list|show|export
+langsuite note add|list
+langsuite workspace init|import|export|sync
+langsuite base pull|status|pin <snapshot>|changelog
+langsuite docs search "<q>" [--lang] [--version] | docs quote <lang> <anchor>
+langsuite inclusion check <lang> | inclusion list --status flagged|archived
+langsuite account init [--username u] | suggest [--n 5] | rename <new> | show | privacy public|private | link telegram | delete
+langsuite workspace rename <slug> ; langsuite badges|streak [--json] ; langsuite settings gamification on|off
+langsuite login|logout ; langsuite usage ; langsuite mode show|set <m> [--workspace]
+langsuite tui
 ```
 Every command: `-m <mode>`, `--json`, `--plain`, `--local` (local mode), exit codes 0 ok / 2 no result / 3 data error / 4 auth / 5 quota.
 
@@ -335,7 +335,7 @@ Use Python 3.12+ (uv, Typer, Textual, DuckDB, tree-sitter bindings, scikit-learn
 - **M5d** Q&A and guides. *Test:* 50-question golden set (25 simple, 25 advanced): every answer sentence has a citation; ≥90% correct on answered; out-of-KB questions abstain (≥95%); a deliberately wrong syntax claim is caught by the verifier; `extract` of an answer keeps its citations.
 - **M5e** Telegram bot. *Test:* parity test passes for all core operations; in a test group, /ask returns a cited answer with Evidence and paging buttons; MarkdownV2 escaping fuzz test sends without errors; group and personal workspaces are isolated; a viewer cannot save, a contributor can, an admin can change roles; findings show the author; /q DSL gives the same result as the CLI; a scheduled digest fires on time; user code is refused unless an admin enabled it; rate limit returns a polite message; a signed webhook arrives and verifies; the MCP server answers `similar`.
 - **M5f** Inclusion, docs and data CI. *Test:* a fixture language with a dead docs URL is flagged, then archived after the threshold, and still readable; a docs page change (new ETag/hash) re-ingests only that page; a docs answer quotes verbatim with link, version and anchor; an UNKNOWN-licence doc serves only a short excerpt + link; a fixture score jump > 15 blocks publish and opens an issue; a published snapshot verifies with cosign and `base pull` rejects a tampered one; changelog lists every change in the run; stale fields are marked.
-- **M5g** Accounts, handles, gamification. *Test:* onboarding offers 3 available nominations derived from a fixture profile; `Lazy`/`lazy` collide; `l4ngwish`, `langwísh` (confusable) and a profane fixture are rejected; reserved words rejected; rename redirects old handle for 180 days and blocks reclaim during hold; a second rename within 30 days is refused; findings keep `user_id` after rename; CLI prompt, TUI header and Telegram reply header show `$langwish/<u>/<ws>`; Telegram `/start` creates a link and a group slug resolves; private handle not visible to a non-member; streak/badge counts recompute identically from `Event` log; `gamification off` hides badges and records no new events.
+- **M5g** Accounts, handles, gamification. *Test:* onboarding offers 3 available nominations derived from a fixture profile; `Lazy`/`lazy` collide; `l4ngsuite`, `langsuíte` (confusable) and a profane fixture are rejected; reserved words rejected; rename redirects old handle for 180 days and blocks reclaim during hold; a second rename within 30 days is refused; findings keep `user_id` after rename; CLI prompt, TUI header and Telegram reply header show `$langsuite/<u>/<ws>`; Telegram `/start` creates a link and a group slug resolves; private handle not visible to a non-member; streak/badge counts recompute identically from `Event` log; `gamification off` hides badges and records no new events.
 - **M5h** CLI UX: help, aliases, output, modes. *Test:* alias table test (unique, complete, in help); `--help` groups match spec and each line ≤ 60 chars; snapshot tests rich/plain/JSON; `NO_COLOR` and pipe give no ANSI; mode precedence flag > workspace > global; on a 60-prompt mode set (20 per mode, incl. live xAI in nightly), 100% outputs within bounds after validation and ≥ 90% before trimming; how-to questions contain code in all modes; abstain identical across modes.
 - **M5i** SaaS. *Test:* tenant A cannot read B (API, SQL with RLS, object store, verifier) in an isolation suite; device-code login works from CLI; Stripe test-mode checkout upgrades entitlement, cancel downgrades to read-only; replayed Stripe webhook is ignored; quota reaches 100% → exit 5 with polite message; usage events sum to the invoice preview; restore from backup into staging passes smoke tests; load test meets p95 SLOs; account delete removes tenant data within the window.
 - **M6** xAI explanations with citations, TUI, exports, sync bundle, release candidate (no tag without Adam's OK), GIFs. *Test:* uncited sentences stripped; an injected instruction in a fixture doc does not change the answer; local mode passes all non-LLM tests; one-command install works in fresh Linux/macOS containers (PyPI publish only after Adam's OK); webhook to 127.0.0.1 refused.
@@ -377,7 +377,7 @@ Use Python 3.12+ (uv, Typer, Textual, DuckDB, tree-sitter bindings, scikit-learn
 | Prompt injection via docs | Quoted-data prompts, no model tools, citation filter, injection fixture test |
 | Webhook SSRF / replay | Private IPs blocked, HMAC + timestamp |
 | Toolchain image supply chain | Digest pinning, CI rebuild, signature check |
-| Overlap with langSuite/glossa | Scope rule: programming languages only, no NL corpora |
+| Overlap with semdrift/glossa | Scope rule: programming languages only, no NL corpora |
 
 ## 12. Decisions and open items
 **Decided:** SaaS hosted v1 (local mode optional) · Python 3.12+ (by default; Adam may revise) · global usernames · MIT code, separate GFDL/CC BY-SA packs · xAI · Docker verifier.
