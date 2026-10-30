@@ -15,6 +15,7 @@ import os
 import re
 import uuid
 from collections.abc import Iterator
+from contextvars import ContextVar
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
@@ -140,6 +141,7 @@ class Finding:
     overlay: dict[str, Any] | None = None
     tags: list[str] = field(default_factory=list)
     schema: int = SCHEMA
+    author: dict[str, Any] | None = None  # front ends that know who saved it (Telegram)
 
     def to_json(self) -> dict[str, Any]:
         return asdict(self)
@@ -281,6 +283,10 @@ def _evidence(kb: KnowledgeBase, lang_ids: list[str], features: set[str]) -> lis
 
 
 # ----- the workspace ------------------------------------------------------------
+
+
+# Set by front ends (the Telegram bot) around a command so saved findings record who.
+CURRENT_AUTHOR: ContextVar[dict[str, Any] | None] = ContextVar("langsuite_author", default=None)
 
 
 class Workspace:
@@ -470,6 +476,7 @@ class Workspace:
             created_at=_now(),
             overlay=overlay.to_json() if overlay else None,
             tags=sorted(set(tags or [])),
+            author=CURRENT_AUTHOR.get(),
         )
         _write(path, finding.to_json())
         self._retain(snapshot)

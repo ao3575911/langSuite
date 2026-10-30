@@ -7,6 +7,7 @@ from typing import Any
 
 import typer
 
+from langsuite.cli.bot_cmds import bot_app
 from langsuite.cli.discover_cmds import query, similar
 from langsuite.cli.kb_cmds import base_app, feature_app, lang_app
 from langsuite.cli.ui_cmd import ui
@@ -25,6 +26,7 @@ GROUP_APPS: dict[str, typer.Typer] = {
     "lang": lang_app,
     "feature": feature_app,
     "base": base_app,
+    "bot": bot_app,
     "finding": finding_app,
     "note": note_app,
     "workspace": workspace_app,

@@ -2,6 +2,8 @@
 
 ## Unreleased
 ### Added
+- M5e: Telegram bot on python-telegram-bot 22.8: `bot run` (token from `LANGSUITE_TELEGRAM_TOKEN`, redacted from logs), `bot try` (offline), `bot commands`. Commands mirror the CLI and its aliases (`/q`, `/s`, `/l`, `/ft`, `/sn`, `/v`, `/f`, `/x`, `/n`, `/b`) and run the same code path, so `/q` prints what `langsuite q` prints. Per-chat workspaces; admin/contributor/viewer roles (`/role`), `/settings coderuns on|off`; findings store their author; token-bucket rate limits with a polite reply; central MarkdownV2 escaping; long output as a file; risky options (`-o`, `--fetch`, `--from`, `--debug`) refused.
+- M5e: Account pane shows the bot: token status, commands, and a local chat simulator.
 - M4: `verify [FILE|-] --lang --expect --stdin --timeout`: runs code in a Docker sandbox (no network, read-only root, uid 65534, no capabilities, no-new-privileges, 256 MB, 64 pids, 1 CPU, file-size and timeout caps, 64 KB output). 20 toolchains pinned by image digest (`verify --toolchains`); tag/digest mismatch is refused. Results cached by code hash with evidence ids (`vr-…`).
 - M4: `snippet TASK --lang a,b`: Rosetta Code solutions (up to 5 variants per language, tried in order), each verified in the sandbox; fixed-output tasks are checked against an oracle; attribution and licence on every snippet; unverified when Docker is absent. `snippet --tasks`, `snippet --fetch`. Findings: `finding save snippet|verify`.
 - M4: Write pane (Snippet and Verify tabs).

@@ -56,6 +56,7 @@ def test_spec_alias_table() -> None:
         "login": "li",
         "logout": "lo",
         "ui": "t",
+        "bot": "bt",
         "mode": "m",
     }
     assert {c.name: c.alias for c in COMMANDS} == expected
