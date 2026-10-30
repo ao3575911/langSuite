@@ -12,6 +12,7 @@ from rich.syntax import Syntax
 from rich.table import Table
 
 from langsuite.cli.kb_cmds import _console, _emit, _json, _mode
+from langsuite.core import saas
 from langsuite.core.errors import DataError, ExitCode, UsageError
 from langsuite.core.modes import Mode
 from langsuite.core.workspace import open_kb, remember
@@ -145,6 +146,7 @@ def verify(
             "Give a file to verify, --task, or --toolchains.",
             hint="e.g. langsuite verify main.py, or langsuite verify --toolchains",
         )
+    saas.meter("verify")
     if file == "-":
         code = sys.stdin.read()
     else:
