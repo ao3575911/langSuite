@@ -22,8 +22,8 @@ class CommandPane(Vertical):
     PRESETS: tuple[tuple[str, str], ...] = ()
     START = ""
 
-    def __init__(self, section: Section) -> None:
-        super().__init__(id=f"pane-{section.id}", classes="pane cmdpane")
+    def __init__(self, section: Section, pane_id: str | None = None) -> None:
+        super().__init__(id=pane_id or f"pane-{section.id}", classes="pane cmdpane")
         self.section = section
         self.last_code = 0
 
@@ -95,4 +95,27 @@ class AnalysePane(CommandPane):
         ("Compare", "compare haskell ocaml"),
         ("Diff", "diff fizzbuzz --lang python,ruby"),
         ("Like", "like fizzbuzz --as haskell --in python"),
+    )
+
+
+class DocsPane(CommandPane):
+    TITLE = "Docs and inclusion"
+    START = 'docs search "list comprehension"'
+    PRESETS = (
+        ("Search", 'docs search "list comprehension"'),
+        ("Quote", "docs quote python"),
+        ("Inclusion", "inclusion haskell"),
+        ("Archived", "inclusion list --status archived"),
+    )
+
+
+class AccountCommands(CommandPane):
+    TITLE = "Account"
+    START = "account"
+    PRESETS = (
+        ("Account", "account"),
+        ("Badges", "badges"),
+        ("Streak", "streak"),
+        ("Settings", "settings"),
+        ("Link code", "account link"),
     )

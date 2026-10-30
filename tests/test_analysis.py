@@ -166,3 +166,29 @@ async def test_dashboard_and_analyse_panes(kb_home: Path) -> None:
         await app_.workers.wait_for_complete()
         await pilot.pause()
         assert "Influenced by" in str(app_.query_one("#dashboard-output", Static).render())
+
+
+def test_cluster_rename_survives_base_upgrade(kb_home: Path) -> None:
+    from langsuite.ingest.build import build
+
+    fixtures = Path(__file__).parent / "fixtures" / "kb"
+    args = ["--json", "dashboard", "--langs", ",".join(LISPS + MLS), "--k", "2", "--bootstrap", "5"]
+    medoid = json.loads(_cli(*args).stdout)["data"]["clusters"][0]["medoid"]
+    assert _cli("workspace", "init", "w2").exit_code == 0
+    assert _cli("dashboard", "rename", medoid, "Kept").exit_code == 0
+    build(home=kb_home, from_dir=fixtures)  # a new base snapshot
+    assert json.loads(_cli(*args).stdout)["data"]["clusters"][0]["title"] == "Kept"
+
+
+def test_settings_profile_changes_only_custom(kb_home: Path) -> None:
+    assert _cli("workspace", "init", "w3").exit_code == 0
+    assert _cli("settings", "profile", "nope=1").exit_code != 0
+    assert _cli("settings", "profile", "safety=2").exit_code == 0
+    plain = json.loads(_cli("--json", "rank", "--top", "50", "--min-criteria", "1").stdout)["data"]
+    cust = json.loads(
+        _cli("--json", "rank", "--by", "custom", "--top", "50", "--min-criteria", "1").stdout
+    )["data"]
+    totals = {r["lang"]: r["total"] for r in plain["rows"]}
+    assert {r["lang"]: r["total"] for r in cust["rows"]}.items() <= totals.items()
+    assert any(r.get("custom") is not None for r in cust["rows"])
+    assert _cli("settings", "profile", "--clear").exit_code == 0
