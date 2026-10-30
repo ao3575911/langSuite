@@ -23,7 +23,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
 
-from langsuite.core.errors import LangsuiteError, NoResultError, NotBuiltYetError
+from langsuite.core.errors import LangsuiteError, NoResultError
 from langsuite.core.kb import Feature, KnowledgeBase, Language
 
 QUERY_VERSION = 1
@@ -39,7 +39,7 @@ MULTI = {
     "source": "sources",
 }
 SORTABLE = ("rank", "name", "year", "traits", "id", "kind")
-PLANNED_FIELDS = {"score": "M5c", "grade": "M5c", "paradigm": "M5b"}
+RANK_FIELDS = ("score", "grade", "paradigm")
 FEATURE_VALUES = {"yes": "yes", "true": "yes", "no": "no", "false": "no", "unknown": "unknown"}
 MAX_QUERY_LEN = 2000
 
@@ -174,8 +174,13 @@ class _Parser:
                 name = val.value.lower()
                 self.desc = name.startswith("-")
                 name = name.lstrip("-+")
-                if name in PLANNED_FIELDS:
-                    raise NotBuiltYetError(f"sort={name}", PLANNED_FIELDS[name])
+                if name in RANK_FIELDS:
+                    raise QueryError(
+                        f"Can't sort a query by `{name}`.",
+                        val.pos,
+                        self.text,
+                        hint="Rank by score with `langsuite rank`.",
+                    )
                 if name not in SORTABLE and name != "appeared":
                     raise QueryError(
                         f"Can't sort by `{name}`.",
@@ -339,8 +344,12 @@ class _Compiler:
 
     def cond(self, c: Cond) -> tuple[Pred, str]:
         key, op, val = c.key, c.op, c.value
-        if key in PLANNED_FIELDS:
-            raise NotBuiltYetError(f"query field {key}", PLANNED_FIELDS[key])
+        if key in RANK_FIELDS:
+            raise self._err(
+                f"`{key}` is a score field, not a query field.",
+                c,
+                hint=f'Use `langsuite rank --filter "{key}{op or "="}{val or "..."}"`.',
+            )
         if op is None:
             feat = self.feature(key, c)
             return self.feature_pred(feat.id, "yes"), feat.id

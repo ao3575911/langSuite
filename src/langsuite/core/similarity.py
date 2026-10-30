@@ -16,19 +16,23 @@ many standard deviations the real score sits above the shuffled mean.
 
 from __future__ import annotations
 
+import json
+import os
 from dataclasses import asdict, dataclass, field
+from pathlib import Path
 from typing import Any
 
 import numpy as np
 from numpy.typing import NDArray
 
+from langsuite.core import defaults
 from langsuite.core.errors import NoResultError
 from langsuite.core.kb import KnowledgeBase, Language
 
 METHOD = "features-idf-jaccard/1"
 BASELINE_METHOD = "shuffled-features/2"
 DEFAULT_K = 10
-DEFAULT_MIN_TRAITS = 5
+DEFAULT_MIN_TRAITS = defaults.SIM_MIN_TRAITS
 DEFAULT_ROUNDS = 1000
 DEFAULT_SEED = 1729
 
@@ -196,6 +200,44 @@ def _require(tm: TraitMatrix, lang: Language) -> int:
     return i
 
 
+def _baseline_cache_file(kb: KnowledgeBase) -> Path | None:
+    """Per-snapshot baseline cache; skipped when an overlay changes the matrix."""
+    if kb.overlay:
+        return None
+    from langsuite.core.paths import data_home
+
+    home = kb.home or data_home()
+    return home / "cache" / "baselines" / f"{kb.manifest.snapshot_id}.json"
+
+
+def _baseline(
+    kb: KnowledgeBase, tm: TraitMatrix, i: int, j: int, rounds: int, seed: int
+) -> Baseline:
+    """`tm.baseline`, memoised on disk: deterministic per snapshot, pair, rounds and seed."""
+    path = _baseline_cache_file(kb)
+    key = f"{BASELINE_METHOD}|{tm.langs[i]}|{tm.langs[j]}|{rounds}|{seed}"
+    cache: dict[str, list[float]] = {}
+    if path is not None:
+        try:
+            cache = json.loads(path.read_text())
+        except (OSError, ValueError):
+            cache = {}
+        hit = cache.get(key)
+        if isinstance(hit, list) and len(hit) == 3:
+            return Baseline(BASELINE_METHOD, rounds, seed, hit[0], hit[1], hit[2])
+    b = tm.baseline(i, j, rounds, seed)
+    if path is not None:
+        cache[key] = [b.mean, b.sd, b.z]
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            tmp = path.with_suffix(f".{os.getpid()}.tmp")
+            tmp.write_text(json.dumps(cache, sort_keys=True))
+            os.replace(tmp, path)
+        except OSError:
+            pass
+    return b
+
+
 def similar(
     kb: KnowledgeBase,
     query: str,
@@ -227,7 +269,7 @@ def similar(
                 shared=tuple(sorted(mine & theirs)),
                 only_query=tuple(sorted(mine - theirs)),
                 only_other=tuple(sorted(theirs - mine)),
-                baseline=tm.baseline(i, j, rounds, seed) if baseline else None,
+                baseline=_baseline(kb, tm, i, j, rounds, seed) if baseline else None,
             )
         )
     return SimilarResult(
@@ -260,5 +302,5 @@ def compare_pair(
         shared=tuple(sorted(ta & tb)),
         only_query=tuple(sorted(ta - tb)),
         only_other=tuple(sorted(tb - ta)),
-        baseline=tm.baseline(i, j, rounds, seed),
+        baseline=_baseline(kb, tm, i, j, rounds, seed),
     )

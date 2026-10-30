@@ -6,7 +6,6 @@ from typing import Annotated
 
 import typer
 from rich.markup import escape
-from rich.syntax import Syntax
 
 from langsuite.cli.kb_cmds import _console, _emit, _json, _mode
 from langsuite.core import ask as qa
@@ -24,6 +23,8 @@ def _show(ctx: typer.Context, ans: qa.Answer) -> None:
         marks = "".join(f"[{n}]" for n in s["cites"])
         con.print(f"{escape(s['text'])} [lw.muted]{escape(marks)}[/]")
     if ans.code:
+        from rich.syntax import Syntax
+
         con.print(Syntax(ans.code, ans.code_lang or "text", word_wrap=True))
     if data["citations"]:
         con.print("[b]Sources[/]")

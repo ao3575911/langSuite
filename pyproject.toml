@@ -1,6 +1,6 @@
 [project]
 name = "langsuite"
-version = "1.0.0"
+version = "1.0.1"
 description = "A research knowledge base of programming languages: how they work, how they relate, with evidence."
 readme = "README.md"
 license = "MIT"

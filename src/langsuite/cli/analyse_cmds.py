@@ -2,19 +2,28 @@
 
 from __future__ import annotations
 
-from typing import Annotated, Any
+from typing import TYPE_CHECKING, Annotated, Any
 
 import typer
 from rich.markup import escape
 from rich.table import Table
 
 from langsuite.cli.kb_cmds import _console, _emit, _json, _mode
-from langsuite.core import analysis as an
-from langsuite.core import similarity as sim
+from langsuite.core import defaults
 from langsuite.core.errors import NoResultError, UsageError
+from langsuite.core.lazy import lazy
 from langsuite.core.modes import Mode
 from langsuite.core.workspace import Workspace, _read, _write, open_kb, remember
-from langsuite.verify import rosetta
+
+if TYPE_CHECKING:
+    from langsuite.core import analysis as an
+    from langsuite.core import similarity as sim
+    from langsuite.verify import rosetta
+else:
+    an = lazy("langsuite.core.analysis")
+    sim = lazy("langsuite.core.similarity")
+    rosetta = lazy("langsuite.verify.rosetta")
+
 
 # ----- cluster labels kept in the workspace (M5b) ------------------------------------------
 
@@ -106,14 +115,14 @@ def cluster(
     ] = None,
     top: Annotated[
         int, typer.Option("--top", min=3, help="Use the top-N ranked languages.")
-    ] = an.DEFAULT_TOP,
+    ] = defaults.ANALYSIS_TOP,
     min_traits: Annotated[
         int, typer.Option("--min-traits", min=1, help="Skip sparse languages.")
     ] = 10,
     rounds: Annotated[
         int, typer.Option("--bootstrap", min=0, help="Bootstrap rounds.")
-    ] = an.DEFAULT_BOOT,
-    seed: Annotated[int, typer.Option("--seed", help="Bootstrap seed.")] = an.DEFAULT_SEED,
+    ] = defaults.ANALYSIS_BOOT,
+    seed: Annotated[int, typer.Option("--seed", help="Bootstrap seed.")] = defaults.ANALYSIS_SEED,
     langs: Annotated[
         str | None, typer.Option("--langs", help="Cluster only these, comma-separated.")
     ] = None,
@@ -141,10 +150,10 @@ def dashboard(
     k: Annotated[int | None, typer.Option("--k", "-k", min=1, help="Clusters.")] = None,
     top: Annotated[
         int, typer.Option("--top", min=3, help="Top-N ranked languages.")
-    ] = an.DEFAULT_TOP,
+    ] = defaults.ANALYSIS_TOP,
     rounds: Annotated[
         int, typer.Option("--bootstrap", min=0, help="Bootstrap rounds.")
-    ] = an.DEFAULT_BOOT,
+    ] = defaults.ANALYSIS_BOOT,
     langs: Annotated[
         str | None, typer.Option("--langs", help="Only these, comma-separated.")
     ] = None,
@@ -175,6 +184,11 @@ def dashboard_rename(
 
     Example: langsuite dashboard rename haskell "ML family"
     """
+    if medoid.isdigit():
+        raise UsageError(
+            f"`{medoid}` is a cluster number; rename takes the cluster's medoid language.",
+            hint="Run `langsuite cluster` and use a medoid name.",
+        )
     with open_kb() as kb:
         lang = kb.resolve(medoid)
     names = cluster_names()

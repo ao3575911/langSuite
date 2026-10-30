@@ -13,5 +13,6 @@ nav:
   - Open questions: OPEN_QUESTIONS.md
   - Releasing: RELEASING.md
   - Release notes 1.0.0: RELEASE_NOTES_1.0.0.md
+  - Release notes 1.0.1: RELEASE_NOTES_1.0.1.md
 exclude_docs: |
   BUILD_PROMPT.md

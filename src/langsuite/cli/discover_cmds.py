@@ -3,18 +3,24 @@
 from __future__ import annotations
 
 from enum import StrEnum
-from typing import Annotated, Any
+from typing import TYPE_CHECKING, Annotated, Any
 
 import typer
 from rich.markup import escape
 from rich.table import Table
 
 from langsuite.cli.kb_cmds import _console, _emit, _json, _mode, _year
+from langsuite.core import defaults
 from langsuite.core import query as q
-from langsuite.core import similarity as sim
 from langsuite.core.errors import NoResultError
+from langsuite.core.lazy import lazy
 from langsuite.core.modes import Mode
 from langsuite.core.workspace import Workspace, open_kb, remember
+
+if TYPE_CHECKING:
+    from langsuite.core import similarity as sim
+else:
+    sim = lazy("langsuite.core.similarity")
 
 
 class By(StrEnum):
@@ -88,7 +94,7 @@ def similar(
     min_traits: Annotated[
         int,
         typer.Option("--min-traits", min=1, help="Skip languages with fewer known traits."),
-    ] = sim.DEFAULT_MIN_TRAITS,
+    ] = defaults.SIM_MIN_TRAITS,
     baseline: Annotated[
         bool,
         typer.Option("--baseline/--no-baseline", help="z-score vs shuffled features."),

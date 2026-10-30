@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def test_version_is_consistent() -> None:
     meta = tomllib.loads((ROOT / "pyproject.toml").read_text())["project"]
-    assert meta["version"] == __version__ == "1.0.0"
+    assert meta["version"] == __version__ == "1.0.1"
     assert "Changelog" in meta["urls"]
     assert f"## {__version__}" in (ROOT / "CHANGELOG.md").read_text()
     assert (ROOT / "docs" / f"RELEASE_NOTES_{__version__}.md").exists()
