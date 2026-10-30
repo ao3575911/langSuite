@@ -167,3 +167,11 @@ def test_changelog_cli_lists_every_change(kb_home: Path, tmp_path: Path) -> None
     assert res.exit_code == 0, res.stdout
     data = json.loads(res.stdout)["data"]
     assert {"lang": row[0], "feature": row[1], "old": row[2], "new": "changed"} in data["changes"]
+
+
+def test_inclusion_subcommands_not_swallowed_by_lang(kb_home: Path) -> None:
+    r = CliRunner()
+    assert r.invoke(app, ["--plain", "inclusion", "list"]).exit_code == 0
+    assert r.invoke(app, ["--plain", "inclusion", "list", "--status", "archived"]).exit_code == 0
+    out = r.invoke(app, ["--plain", "inclusion", "haskell"])
+    assert out.exit_code == 0 and "Haskell" in out.stdout

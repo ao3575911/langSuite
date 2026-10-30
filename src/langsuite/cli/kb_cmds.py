@@ -66,7 +66,7 @@ def lang_list(
 ) -> None:
     """List languages, most notable first.
 
-    Example: langsuite lang list lisp --feature macros
+    Example: langsuite lang list scheme --feature macros
     """
     with open_kb() as kb:
         hits = kb.search(query, limit=None)

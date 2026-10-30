@@ -6,6 +6,7 @@ from typing import Annotated, Any
 
 import typer
 from rich.markup import escape
+from typer.core import TyperGroup
 
 from langsuite.cli.kb_cmds import _console, _emit, _json
 from langsuite.core import docs as d
@@ -13,7 +14,20 @@ from langsuite.core.errors import NoResultError
 from langsuite.core.workspace import open_kb, remember
 
 docs_app = typer.Typer(help="Search or quote official docs.", no_args_is_help=True)
-inclusion_app = typer.Typer(help="Inclusion status and checks.", invoke_without_command=True)
+
+
+class _ShowByDefault(TyperGroup):
+    """`inclusion rust` means `inclusion show rust`; `inclusion check`/`list` stay subcommands."""
+
+    def resolve_command(self, ctx: Any, args: list[str]) -> Any:
+        if args and args[0] not in self.commands and not args[0].startswith("-"):
+            args.insert(0, "show")
+        return super().resolve_command(ctx, args)
+
+
+inclusion_app = typer.Typer(
+    help="Inclusion status and checks.", invoke_without_command=True, cls=_ShowByDefault
+)
 
 
 def _lang_key(lang: str | None) -> str | None:
@@ -137,16 +151,28 @@ def _inclusion_row(kb: Any, lang_id: str) -> dict[str, Any]:
 
 
 @inclusion_app.callback()
-def inclusion(
-    ctx: typer.Context,
-    lang: Annotated[str | None, typer.Argument(help="Language (default: those with docs).")] = None,
-) -> None:
+def inclusion(ctx: typer.Context) -> None:
     """Why a language is in the base, and whether its official docs links still work.
 
     Example: langsuite inclusion rust
     """
-    if ctx.invoked_subcommand:
-        return
+    if not ctx.invoked_subcommand:
+        _inclusion_show(ctx, None)
+
+
+@inclusion_app.command("show")
+def inclusion_show(
+    ctx: typer.Context,
+    lang: Annotated[str | None, typer.Argument(help="Language (default: those with docs).")] = None,
+) -> None:
+    """Show one language's inclusion checks (same as `inclusion LANG`).
+
+    Example: langsuite inclusion show rust
+    """
+    _inclusion_show(ctx, lang)
+
+
+def _inclusion_show(ctx: typer.Context, lang: str | None) -> None:
     with open_kb() as kb:
         ids = [kb.resolve(lang).id] if lang else sorted(d.sources())
         rows = [_inclusion_row(kb, i) for i in ids]

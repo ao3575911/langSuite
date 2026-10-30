@@ -52,7 +52,7 @@ Keys: `1`–`8` sections · `g` + a CLI alias (e.g. `g s` = similar) · `ctrl+p`
 
 ```sh
 langsuite base build                  # downloads PLDB + Linguist (~11 MB), builds in ~1 s
-langsuite lang list lisp -f macros    # search by name, alias or .ext; filter by feature
+langsuite lang list scheme -f macros   # search by name, alias or .ext; filter by feature
 langsuite lang show haskell --evidence  # every fact with its source, URL and retrieval time
 langsuite feature show type-inference # which languages have it
 langsuite base status                 # snapshot id, sources, licences, age

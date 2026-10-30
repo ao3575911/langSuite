@@ -1,0 +1,37 @@
+name: Data correction
+description: A fact about a language is wrong or missing.
+title: "data: "
+labels: [data]
+body:
+  - type: markdown
+    attributes:
+      value: Every fact needs a source. Check `langsuite lang show <lang> --evidence` first to see where the current value comes from.
+  - type: input
+    id: language
+    attributes:
+      label: Language
+      description: The id from `langsuite lang list`.
+      placeholder: haskell
+    validations:
+      required: true
+  - type: input
+    id: field
+    attributes:
+      label: Field or feature
+      placeholder: year, creator, pattern-matching …
+    validations:
+      required: true
+  - type: textarea
+    id: values
+    attributes:
+      label: Current and correct value
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Source URL
+      description: An authoritative public source for the correct value.
+      placeholder: https://
+    validations:
+      required: true

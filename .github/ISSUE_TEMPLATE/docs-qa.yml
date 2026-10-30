@@ -1,0 +1,31 @@
+name: Docs Q&A problem
+description: A `docs search`/`docs quote` answer or `/dc` reply is wrong, missing or links to a dead page.
+title: "docs: "
+labels: [documentation, docs-qa]
+body:
+  - type: input
+    id: command
+    attributes:
+      label: Command or bot message
+      placeholder: langsuite docs quote python for loops
+    validations:
+      required: true
+  - type: dropdown
+    id: problem
+    attributes:
+      label: Problem
+      options: [Wrong section quoted, No result, Dead or moved link, Quote cut off, Language not covered, Other]
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Output you got
+      render: text
+    validations:
+      required: true
+  - type: input
+    id: expected
+    attributes:
+      label: Page you expected
+      placeholder: https://
