@@ -7,7 +7,8 @@ from typing import Any
 
 import pytest
 from textual.binding import Binding
-from textual.widgets import ContentSwitcher
+from textual.coordinate import Coordinate
+from textual.widgets import ContentSwitcher, DataTable
 
 from langsuite.cli.aliases import COMMANDS
 from langsuite.tui.app import LangsuiteApp
@@ -127,3 +128,75 @@ def test_snapshot(snap_compare: Any, section: Any, theme: str, size: tuple[int, 
         await pilot.press(section.key)
 
     assert snap_compare(app, terminal_size=size, run_before=setup)
+
+
+# ----- Explore pane (M1) ---------------------------------------------------------
+
+
+async def _explore_ready(pilot: Any) -> None:
+    await pilot.press("2")
+    await pilot.app.workers.wait_for_complete()
+    await pilot.pause()
+
+
+async def test_explore_without_base_explains() -> None:
+    app = LangsuiteApp()
+    async with app.run_test(size=(120, 40)) as pilot:
+        await _explore_ready(pilot)
+        status = str(app.query_one("#explore-status").render())
+        assert "No knowledge base yet" in status
+        assert "langsuite base build" in status
+
+
+async def test_explore_live_search_and_detail(kb_home: Any) -> None:
+    app = LangsuiteApp()
+    async with app.run_test(size=(120, 40)) as pilot:
+        await _explore_ready(pilot)
+        assert "base-" in str(app.query_one("#base").render())
+        search = app.query_one("#explore-search")
+        search.focus()
+        await pilot.press(*"hask")
+        await pilot.pause(0.3)
+        table = app.query_one("#explore-table", DataTable)
+        assert table.row_count >= 1
+        assert table.coordinate_to_cell_key(Coordinate(0, 0)).row_key.value == "haskell"
+        features = str(app.query_one("#detail-features").render())
+        assert "Haskell" in features and "Type inference" in features
+        assert "miranda" in str(app.query_one("#detail-lineage").render())
+        assert "pldb.io/concepts/haskell" in str(app.query_one("#detail-evidence").render())
+        await pilot.press("enter")
+        assert app.focused is table
+        await pilot.press("down")
+        await pilot.pause()
+
+
+async def test_explore_no_match(kb_home: Any) -> None:
+    app = LangsuiteApp()
+    async with app.run_test(size=(120, 40)) as pilot:
+        await _explore_ready(pilot)
+        app.query_one("#explore-search").focus()
+        await pilot.press(*"zzzz")
+        await pilot.pause(0.3)
+        assert "No match" in str(app.query_one("#explore-status").render())
+
+
+async def test_leader_lang_focuses_search(kb_home: Any) -> None:
+    app = LangsuiteApp()
+    async with app.run_test(size=(120, 40)) as pilot:
+        await pilot.press("g", "l", "enter")
+        await pilot.pause()
+        assert app.focused is app.query_one("#explore-search")
+
+
+@pytest.mark.parametrize("theme", ["langsuite", "langsuite-high-contrast"])
+def test_explore_snapshot(snap_compare: Any, kb_home: Any, theme: str) -> None:
+    app = LangsuiteApp()
+
+    async def setup(pilot: Any) -> None:
+        pilot.app.theme = theme
+        await _explore_ready(pilot)
+        pilot.app.query_one("#explore-search").focus()
+        await pilot.press(*"haskell")
+        await pilot.pause(0.3)
+
+    assert snap_compare(app, terminal_size=(120, 40), run_before=setup)

@@ -1,0 +1,211 @@
+C:
+  extensions:
+  - .c
+  - .cats
+  - .h
+  - .h.in
+  - .idc
+  interpreters:
+  - tcc
+  language_id: 41
+  type: programming
+Haskell:
+  extensions:
+  - .hs
+  - .hs-boot
+  - .hsc
+  interpreters:
+  - runghc
+  - runhaskell
+  - runhugs
+  language_id: 157
+  type: programming
+Nix:
+  aliases:
+  - nixos
+  extensions:
+  - .nix
+  language_id: 252
+  type: programming
+Python:
+  aliases:
+  - py
+  - py3
+  - python3
+  - rusthon
+  extensions:
+  - .py
+  - .cgi
+  - .fcgi
+  - .gyp
+  - .gypi
+  - .lmi
+  - .py3
+  - .pyde
+  - .pyi
+  - .pyp
+  - .pyt
+  - .pyw
+  - .rpy
+  - .spec
+  - .tac
+  - .wsgi
+  - .xpy
+  interpreters:
+  - python
+  - python2
+  - python3
+  - py
+  - pypy
+  - pypy3
+  - uv
+  language_id: 303
+  type: programming
+Racket:
+  extensions:
+  - .rkt
+  - .rktd
+  - .rktl
+  - .scrbl
+  interpreters:
+  - racket
+  language_id: 316
+  type: programming
+Scheme:
+  extensions:
+  - .scm
+  - .sch
+  - .sld
+  - .sls
+  - .sps
+  - .ss
+  interpreters:
+  - scheme
+  - guile
+  - bigloo
+  - chicken
+  - csi
+  - gosh
+  - r6rs
+  language_id: 343
+  type: programming
+XML:
+  aliases:
+  - rss
+  - xsd
+  - wsdl
+  extensions:
+  - .xml
+  - .adml
+  - .admx
+  - .ant
+  - .axaml
+  - .axml
+  - .builds
+  - .ccproj
+  - .ccxml
+  - .clixml
+  - .cproject
+  - .cscfg
+  - .csdef
+  - .csl
+  - .csproj
+  - .ct
+  - .depproj
+  - .dita
+  - .ditamap
+  - .ditaval
+  - .dll.config
+  - .dotsettings
+  - .filters
+  - .fsproj
+  - .fxml
+  - .glade
+  - .gml
+  - .gmx
+  - .gpx
+  - .grxml
+  - .gst
+  - .hzp
+  - .icls
+  - .iml
+  - .ivy
+  - .jelly
+  - .jsproj
+  - .kml
+  - .launch
+  - .mdpolicy
+  - .meta4
+  - .mjml
+  - .mm
+  - .mod
+  - .mojo
+  - .mxml
+  - .natvis
+  - .ncl
+  - .ndproj
+  - .nproj
+  - .nuspec
+  - .odd
+  - .osm
+  - .pkgproj
+  - .pluginspec
+  - .proj
+  - .props
+  - .ps1xml
+  - .psc1
+  - .pt
+  - .pubxml
+  - .qhelp
+  - .rbxmx
+  - .rdf
+  - .res
+  - .resx
+  - .rs
+  - .rss
+  - .sch
+  - .scxml
+  - .sfproj
+  - .shproj
+  - .slnx
+  - .srdf
+  - .storyboard
+  - .sublime-snippet
+  - .sw
+  - .targets
+  - .tml
+  - .ts
+  - .tsx
+  - .typ
+  - .ui
+  - .urdf
+  - .ux
+  - .vbproj
+  - .vcxproj
+  - .vsixmanifest
+  - .vssettings
+  - .vstemplate
+  - .vxml
+  - .wixproj
+  - .workflow
+  - .wsdl
+  - .wsf
+  - .wxi
+  - .wxl
+  - .wxs
+  - .x3d
+  - .xacro
+  - .xaml
+  - .xib
+  - .xlf
+  - .xliff
+  - .xmi
+  - .xml.dist
+  - .xmp
+  - .xproj
+  - .xsd
+  - .xspec
+  - .xul
+  - .zcml
+  language_id: 399
+  type: data

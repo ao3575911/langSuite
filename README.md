@@ -10,7 +10,7 @@ A research knowledge base of programming languages: how they work, how they rela
 | CLI: grouped help, one alias per command, `--json` / `--plain`, exit codes | Built (M0) |
 | Textual app shell: header with handle and mode, 7 panes, command palette, `g`+alias keys, themes incl. high-contrast, plain mode, browser via `ui --serve` | Built (M0b) |
 | Licence-separated data packs, enforced in CI | Built (M0) |
-| Knowledge base of 800+ languages with sourced evidence | Planned (M1) |
+| Knowledge base of 5,000+ languages (PLDB + Linguist) with sourced evidence: `base build/status`, `lang list/show --evidence`, `feature list/show`, Explore pane with live search | Built (M1) |
 | Query, similarity, clusters, scores and grades | Planned (M2–M5c) |
 | Verified snippets, cited answers, how/when guides | Planned (M4, M5d) |
 | Workspace: findings, notes, `extract` | Planned (M3) |
@@ -41,6 +41,18 @@ langsuite --plain ui      # screen-reader friendly: no borders, terminal colours
 ```
 
 Keys: `1`–`7` sections · `g` + a CLI alias (e.g. `g s` = similar) · `ctrl+p` palette · `F2` mode · `F3` theme · `ctrl+q` quit. Mouse works everywhere.
+
+## Knowledge base
+
+```sh
+langsuite base build                  # downloads PLDB + Linguist (~11 MB), builds in ~1 s
+langsuite lang list lisp -f macros    # search by name, alias or .ext; filter by feature
+langsuite lang show haskell --evidence  # every fact with its source, URL and retrieval time
+langsuite feature show type-inference # which languages have it
+langsuite base status                 # snapshot id, sources, licences, age
+```
+
+Sources: [PLDB](https://pldb.io) (public domain) and [GitHub Linguist](https://github.com/github-linguist/linguist) (MIT). Wikipedia-derived PLDB fields (CC BY-SA) are never ingested. Builds are atomic: a failed download or bad upstream data leaves the current base untouched, and `--offline` rebuilds from the cache. In the app, press `2` (Explore) to search live.
 
 ## Use
 

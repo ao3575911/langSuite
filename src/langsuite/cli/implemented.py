@@ -7,7 +7,8 @@ from typing import Any
 
 import typer
 
+from langsuite.cli.kb_cmds import base_app, feature_app, lang_app
 from langsuite.cli.ui_cmd import ui
 
 COMMAND_FUNCS: dict[str, Callable[..., Any]] = {"ui": ui}
-GROUP_APPS: dict[str, typer.Typer] = {}
+GROUP_APPS: dict[str, typer.Typer] = {"lang": lang_app, "feature": feature_app, "base": base_app}
