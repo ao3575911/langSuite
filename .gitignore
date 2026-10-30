@@ -8,3 +8,4 @@ __pycache__/
 snapshot_report.html
 snapshot_failures/
 .lshome/
+site/

@@ -1,0 +1,17 @@
+site_name: langsuite
+site_url: https://ao3575911.github.io/langsuite/
+repo_url: https://github.com/ao3575911/langsuite
+docs_dir: docs
+theme:
+  name: material
+  palette:
+    scheme: slate
+nav:
+  - Home: index.md
+  - Guide: guide.md
+  - Spec: SPEC.md
+  - Open questions: OPEN_QUESTIONS.md
+  - Releasing: RELEASING.md
+  - Release notes 1.0.0: RELEASE_NOTES_1.0.0.md
+exclude_docs: |
+  BUILD_PROMPT.md
