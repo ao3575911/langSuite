@@ -63,3 +63,8 @@ HeaderBar > Static { width: auto; padding: 0 1; }
 #bot-group { width: auto; }
 #bot-replies { height: 1fr; border: round $primary 40%; padding: 0 1; }
 #bot-output.-error { color: $error; }
+
+.cmdpane .cmd-presets { height: auto; margin-bottom: 1; }
+.cmdpane .cmd-presets Button { margin-right: 1; }
+.cmdpane .cmd-scroll { height: 1fr; border: round $panel; padding: 0 1; }
+.cmdpane .-error { color: $error; }

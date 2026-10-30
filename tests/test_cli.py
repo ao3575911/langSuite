@@ -109,7 +109,7 @@ def test_debug_reraises() -> None:
     from langsuite.core.errors import NotBuiltYetError
 
     with pytest.raises(NotBuiltYetError):
-        main(["--debug", "cluster"])
+        main(["--debug", "badges"])
 
 
 def test_version_and_usage_error(capsys: pytest.CaptureFixture[str]) -> None:

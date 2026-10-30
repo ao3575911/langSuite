@@ -1,0 +1,29 @@
+# Scoring criteria (SPEC §10 M5c). Method id: criteria/1.
+# Each trait criterion scores only the traits a source states for a language;
+# a criterion with no stated trait is missing: it lowers N and confidence and adds no zero.
+method: criteria/1
+grades: [[85, A], [70, B], [55, C], [40, D], [0, E]]
+criteria:
+  safety:
+    label: Safety
+    plus: [static-typing, type-inference, garbage-collection, pattern-matching, run-time-guards, assert-statements, typed-holes]
+    minus: [manual-memory-management, gotos, pointers]
+  expressiveness:
+    label: Expressiveness
+    plus: [macros, pattern-matching, function-composition, type-classes, generators, destructuring, operator-overloading, map-functions, monads, iterators, variadic-functions, named-arguments, multiline-strings]
+  modularity:
+    label: Modularity
+    plus: [modules, imports, standard-library, classes, type-classes, structs, enums, inheritance, mixins]
+  popularity:
+    label: Popularity
+    note: PLDB rank, log scale
+    rank: true
+  maturity:
+    label: Maturity
+    note: years since first appearance; 25 years = 100
+    age: 25
+paradigms:
+  functional: [function-composition, map-functions, monads, type-classes, pattern-matching, zippers]
+  object-oriented: [classes, inheritance, mixins, multiple-inheritance, constructors, single-dispatch]
+  lisp-like: [homoiconicity, macros, prefix-notation]
+  systems: [pointers, manual-memory-management, structs, bit-wise-operators]

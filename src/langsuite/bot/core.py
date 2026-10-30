@@ -127,6 +127,18 @@ BOT_COMMANDS: tuple[BotCommand, ...] = (
                {"list": READ, "ls": READ, "add": WRITE, "remove": WRITE, "rm": WRITE}, "list"),
     BotCommand("base", "b", "knowledge base: /b status",
                {"status": READ, "snapshots": READ}, "status"),
+    BotCommand("cluster", "c", "language families: /c --langs scheme,racket,ml --k 2",
+               {"": READ}),
+    BotCommand("dashboard", "db", "clusters, labels and evidence: /db --top 60",
+               {"": READ, "rename": WRITE}, ""),
+    BotCommand("influence", "i", "influence graph: /i lisp -d 1", {"": READ}),
+    BotCommand("rank", "r", "scores and grades: /r --filter grade>=B", {"": READ}),
+    BotCommand("compare", "cp", "two languages side by side: /cp haskell ocaml",
+               {"": READ}),
+    BotCommand("diff", "df", "one task across languages: /df fizzbuzz --lang python,ruby",
+               {"": READ}),
+    BotCommand("like", "lk", "do X the Y way: /lk fizzbuzz --as haskell --in python",
+               {"": READ}),
 )  # fmt: skip
 BY_NAME: dict[str, BotCommand] = {}
 for _c in BOT_COMMANDS:

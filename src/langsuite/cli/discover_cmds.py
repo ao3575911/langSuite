@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from enum import StrEnum
-from typing import Annotated
+from typing import Annotated, Any
 
 import typer
 from rich.markup import escape
@@ -12,7 +12,7 @@ from rich.table import Table
 from langsuite.cli.kb_cmds import _console, _emit, _json, _mode, _year
 from langsuite.core import query as q
 from langsuite.core import similarity as sim
-from langsuite.core.errors import NoResultError, NotBuiltYetError
+from langsuite.core.errors import NoResultError
 from langsuite.core.modes import Mode
 from langsuite.core.workspace import Workspace, open_kb, remember
 
@@ -102,7 +102,8 @@ def similar(
     Example: langsuite similar scheme --k 5
     """
     if by is not By.FEATURES:
-        raise NotBuiltYetError(f"similar --by {by.value}", "M5")
+        _similar_code(ctx, lang, by, k)
+        return
     with open_kb() as kb:
         if against:
             pair = sim.compare_pair(kb, lang, against)
@@ -159,6 +160,60 @@ def similar(
         if baseline:
             foot += f" · z vs {sim.BASELINE_METHOD} ({sim.DEFAULT_ROUNDS} rounds); z≥3 is strong"
         con.print(f"[lw.muted]{foot}[/]")
+
+
+def _similar_code(ctx: typer.Context, lang: str, by: By, k: int) -> None:
+    from langsuite.core import analysis as an
+    from langsuite.verify import rosetta
+
+    tasks = rosetta.load_tasks()
+    with open_kb() as kb:
+        q_lang = kb.resolve(lang)
+        code = an.code_similar(tasks, q_lang.id, k=200 if by is By.BOTH else k)
+        rows: list[dict[str, Any]] = [
+            {"id": c.id, "code": round(c.score, 4), "tasks": c.tasks} for c in code
+        ]
+        if by is By.BOTH:
+            tm = kb.trait_matrix()
+            if q_lang.id not in tm.index:
+                raise NoResultError(f"{q_lang.name} has no known traits to compare by features.")
+            qi = tm.index[q_lang.id]
+            for r in rows:
+                r["features"] = (
+                    round(tm.pair_score(qi, tm.index[r["id"]]), 4) if r["id"] in tm.index else None
+                )
+            rows = [r for r in rows if r["features"] is not None]
+            for r in rows:
+                r["both"] = round((r["code"] + r["features"]) / 2, 4)
+            rows.sort(key=lambda r: (-r["both"], r["id"]))
+            rows = rows[:k]
+    remember("similar", {"lang": q_lang.id, "k": k, "by": by.value})
+    if _json(ctx):
+        _emit(
+            "similar",
+            {"method": an.CODE_METHOD, "by": by.value, "query": q_lang.id, "neighbours": rows},
+        )
+        return
+    con = _console(ctx)
+    con.print(
+        f"[lw.title]Most like {escape(q_lang.name)} by {by.value}[/] "
+        f"[lw.muted](Rosetta Code token shingles, {len(tasks)} tasks)[/]"
+    )
+    table = Table(box=None, header_style="lw.title", pad_edge=False)
+    table.add_column("#", justify="right", style="lw.muted")
+    table.add_column("id", style="lw.accent", no_wrap=True)
+    table.add_column("code", justify="right")
+    if by is By.BOTH:
+        table.add_column("features", justify="right")
+        table.add_column("both", justify="right")
+    table.add_column("tasks", justify="right", style="lw.muted")
+    for n, r in enumerate(rows, 1):
+        cells = [str(n), escape(r["id"]), f"{r['code']:.3f}"]
+        if by is By.BOTH:
+            cells += [f"{r['features']:.3f}", f"{r['both']:.3f}"]
+        table.add_row(*cells, str(r["tasks"]))
+    con.print(table)
+    con.print(f"[lw.muted]{an.CODE_METHOD} · mean per-task Jaccard of 3-token shingles[/]")
 
 
 def _print_pair(ctx: typer.Context, query_name: str, pair: sim.Neighbour) -> None:

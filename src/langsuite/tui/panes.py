@@ -41,6 +41,7 @@ def make_pane(section: Section) -> Widget:
 
 def _register_built() -> None:
     from langsuite.tui.bot_pane import BotPane
+    from langsuite.tui.command_pane import AnalysePane, DashboardPane
     from langsuite.tui.explore import ExplorePane
     from langsuite.tui.query_pane import QueryPane
     from langsuite.tui.workspace_pane import WorkspacePane
@@ -51,7 +52,11 @@ def _register_built() -> None:
     PANE_FACTORIES["workspace"] = WorkspacePane
     PANE_FACTORIES["write"] = WritePane
     PANE_FACTORIES["account"] = BotPane
-    BUILT_SECTIONS.update({"explore", "query", "workspace", "write", "account"})
+    PANE_FACTORIES["dashboard"] = DashboardPane
+    PANE_FACTORIES["analyse"] = AnalysePane
+    BUILT_SECTIONS.update(
+        {"dashboard", "analyse", "explore", "query", "workspace", "write", "account"}
+    )
 
 
 _register_built()
