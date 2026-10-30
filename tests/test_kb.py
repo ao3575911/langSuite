@@ -254,7 +254,7 @@ def test_cli_base_build_and_status(capsys: pytest.CaptureFixture[str]) -> None:
     assert json.loads(out)["data"]["age_days"] == 0
     code, out, _ = run(["--json", "base", "build", "--from", str(FIXTURES)], capsys)
     assert json.loads(out)["data"]["log"]
-    code, _, err = run(["--plain", "base", "pull"], capsys)
+    code, _, _ = run(["--plain", "base", "pull"], capsys)
     assert code == 2  # SOURCE is now a required argument
 
 
