@@ -13,7 +13,7 @@ from rich.panel import Panel
 from rich.table import Table
 
 from langsuite.cli.output import make_console, to_json
-from langsuite.core.errors import NoResultError, NotBuiltYetError
+from langsuite.core.errors import NoResultError
 from langsuite.core.kb import Assertion, Language, kept_snapshots, read_manifest
 from langsuite.core.modes import Mode
 from langsuite.core.workspace import Workspace, open_kb, remember
@@ -375,12 +375,6 @@ def base_status(ctx: typer.Context) -> None:
         con.print("[lw.muted]hint: rebuild with `langsuite base build`[/]")
 
 
-def _planned(name: str) -> None:
-    @base_app.command(name, help=f"{name.capitalize()} published snapshots (planned, M5f).")
-    def _stub() -> None:
-        raise NotBuiltYetError(f"base {name}", "M5f")
-
-
 @base_app.command("snapshots")
 def base_snapshots(ctx: typer.Context) -> None:
     """Snapshots kept on this machine; pinned ones are never pruned.
@@ -442,5 +436,111 @@ def base_pin(
     _console(ctx).print(f"[lw.ok]{msg}[/]")
 
 
-for _name in ("pull", "changelog"):
-    _planned(_name)
+@base_app.command("pull")
+def base_pull(
+    ctx: typer.Context,
+    source: Annotated[str, typer.Argument(help="https URL or folder with snapshot.tar.gz(.sig).")],
+    key: Annotated[
+        Path | None,
+        typer.Option(help="Publisher's cosign public key (PEM). Env: LANGSUITE_SNAPSHOT_KEY."),
+    ] = None,
+) -> None:
+    """Install a published snapshot after checking its signature; the old base is kept.
+
+    Example: langsuite base pull https://example.org/langsuite/latest --key cosign.pub
+    """
+    import os
+
+    from langsuite.core import snapshots
+    from langsuite.core.errors import AuthError
+
+    key_path = key or (Path(os.environ["LANGSUITE_SNAPSHOT_KEY"])
+                       if os.environ.get("LANGSUITE_SNAPSHOT_KEY") else None)  # fmt: skip
+    if key_path is None:
+        raise AuthError("No publisher key given; refusing an unverified snapshot.",
+                        hint="Pass --key cosign.pub or set LANGSUITE_SNAPSHOT_KEY.")  # fmt: skip
+    manifest = snapshots.pull(source, key_path.read_bytes())
+    if _json(ctx):
+        _emit("base", manifest.to_json())
+        return
+    _console(ctx).print(f"[lw.ok]Verified and installed {manifest.snapshot_id}[/] "
+                        "· see `langsuite base changelog`")  # fmt: skip
+
+
+@base_app.command("publish")
+def base_publish(
+    ctx: typer.Context,
+    out: Annotated[Path, typer.Argument(help="Folder to write snapshot.tar.gz and .sig to.")],
+    key: Annotated[Path, typer.Option(help="cosign private key (PEM, unencrypted).")],
+) -> None:
+    """Pack and sign the current base for `base pull` (maintainers; data CI does this).
+
+    Example: langsuite base publish dist/snapshot --key cosign.key
+    """
+    from langsuite.core import snapshots
+
+    bundle = snapshots.pack(None, out)
+    snapshots.sign(bundle, key.read_bytes())
+    data = {"bundle": str(bundle), "sha256": snapshots.sha256_file(bundle)}
+    if _json(ctx):
+        _emit("publish", data)
+        return
+    _console(ctx).print(
+        f"[lw.ok]Wrote {bundle} and {bundle.name}.sig[/] sha256 {data['sha256'][:12]}"
+    )
+
+
+@base_app.command("changelog")
+def base_changelog(
+    ctx: typer.Context,
+    old: Annotated[str | None, typer.Argument(help="Older snapshot (default: previous).")] = None,
+    new: Annotated[str | None, typer.Argument(help="Newer snapshot (default: current).")] = None,
+    check: Annotated[
+        bool, typer.Option("--check", help="Exit 3 if any score moved more than 15 points.")
+    ] = False,
+) -> None:
+    """Every fact and score change between two snapshots; stale fields are marked.
+
+    Example: langsuite base changelog
+    """
+    from langsuite.core import snapshots
+    from langsuite.core.errors import DataError
+    from langsuite.core.kb import KnowledgeBase
+
+    current = read_manifest()
+    kept = [m.snapshot_id for m in kept_snapshots()]
+    new = new or (current.snapshot_id if current else None)
+    if old is None:
+        older = [k for k in kept if k != new]
+        old = older[0] if older else None
+    if not old or not new:
+        raise DataError("Need two snapshots to compare.", hint="See `langsuite base snapshots`.")
+    with KnowledgeBase(snapshot=old) as a, KnowledgeBase(snapshot=new) as b:
+        log = snapshots.changelog(a, b)
+    data = log.to_json()
+    if _json(ctx):
+        _emit("changelog", data)
+    else:
+        con = _console(ctx)
+        con.print(f"[lw.title]{log.old} → {log.new}[/]")
+        con.print(f"Languages added {len(log.added)}, removed {len(log.removed)}; "
+                  f"facts changed {len(log.changes)}; scores moved {len(log.scores)}; "
+                  f"stale fields {len(log.stale)}")  # fmt: skip
+        for x in log.added:
+            con.print(f"  [lw.ok]+ {escape(x)}[/]")
+        for x in log.removed:
+            con.print(f"  [lw.warn]- {escape(x)}[/]")
+        for c in log.changes:
+            con.print(f"  ~ {escape(c['lang'])}.{escape(c['feature'])}: "
+                      f"{escape(str(c['old']))} → {escape(str(c['new']))}")  # fmt: skip
+        for sc in log.scores:
+            flag = " [lw.warn]jump[/]" if abs(sc["delta"]) > snapshots.JUMP_LIMIT else ""
+            con.print(
+                f"  score {escape(sc['lang'])}: {sc['old']} → {sc['new']} ({sc['delta']:+}){flag}"
+            )
+        for st in log.stale[:20]:
+            con.print(f"  [lw.muted]stale {escape(st['lang'])}.{escape(st['feature'])} "
+                      f"(retrieved {st['retrieved_at']})[/]")  # fmt: skip
+    if check and log.jumps:
+        raise DataError(f"{len(log.jumps)} score(s) moved more than {snapshots.JUMP_LIMIT:g} points; publishing is blocked.",  # noqa: E501
+                        hint="Data CI opens an issue with the details.")  # fmt: skip

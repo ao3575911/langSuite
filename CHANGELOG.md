@@ -2,6 +2,7 @@
 
 ## Unreleased
 ### Added
+- M5f: `docs search|quote|ingest` over registered official docs (ETag/hash re-ingest; verbatim quotes with link, version and anchor; UNKNOWN licence gives a 200-character excerpt and link); `inclusion`, `inclusion check|list` (dead links flagged, archived after 14 days with 3 failures, still readable); `base publish` and `base pull` with cosign-compatible ECDSA P-256 signatures (tampered or unsigned bundles refused); `base changelog [--check]` (every fact and score change, stale fields, a gate on score moves over 15); `.github/workflows/data.yml` (weekly rebuild, gate, issue on block, signing when a key secret exists). Bot `/docs`, `/inclusion`, `/base changelog`.
 - M5g: `account` (suggest, claim, rename, private, link, lookup), `badges`, `streak`, `settings gamification on|off`; handles reject look-alikes, confusables, profanity and reserved words; renames limited to once per 30 days with a 180-day redirect hold; streaks and badges recompute from `events.jsonl`; off records no events. Bot `/link`, `/private`, `/badges`, `/streak`.
 - Bot digests now run on python-telegram-bot's JobQueue (`[job-queue]` extra).
 - M5: code similarity from the Rosetta pack (`code-shingles-jaccard/1`): `similar --by code|both`, `like <task> --as <lang> --in <lang>`, `diff <task> --lang a,b`; feature/code disagreements listed on the dashboard.
