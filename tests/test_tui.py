@@ -195,8 +195,15 @@ def test_explore_snapshot(snap_compare: Any, kb_home: Any, theme: str) -> None:
     async def setup(pilot: Any) -> None:
         pilot.app.theme = theme
         await _explore_ready(pilot)
-        pilot.app.query_one("#explore-search").focus()
+        search = pilot.app.query_one("#explore-search")
+        search.cursor_blink = False  # blinking cursor makes frames non-deterministic
+        search.focus()
         await pilot.press(*"haskell")
-        await pilot.pause(0.3)
+        # Wait out the debounce and any search/detail workers so slow CI
+        # runners render the same settled frame as fast ones.
+        for _ in range(3):
+            await pilot.pause(0.3)
+            await pilot.app.workers.wait_for_complete()
+        await pilot.pause()
 
     assert snap_compare(app, terminal_size=(120, 40), run_before=setup)
