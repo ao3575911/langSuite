@@ -6,3 +6,4 @@ __pycache__/
 .coverage
 *.egg-info/
 snapshot_report.html
+snapshot_failures/

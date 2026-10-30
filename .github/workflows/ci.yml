@@ -40,7 +40,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: snapshot-report-${{ matrix.os }}
-          path: snapshot_report.html
+          path: snapshot_failures/
           if-no-files-found: ignore
   licence-pack:
     runs-on: ubuntu-latest
