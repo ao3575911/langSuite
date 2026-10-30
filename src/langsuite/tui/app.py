@@ -161,6 +161,10 @@ class LangsuiteApp(App[None]):
             self.query_one("#query-input").focus()
         if target == "workspace":
             self.query_one("#ws-findings").focus()
+        if target == "write":
+            tab = "tab-verify" if cmd.name == "verify" else "tab-snippet"
+            self.query_one("#write-tabs", TabbedContent).active = tab
+            self.query_one("#verify-code" if cmd.name == "verify" else "#write-task").focus()
         if target not in BUILT_SECTIONS:
             from langsuite.cli.implemented import GROUP_APPS
 

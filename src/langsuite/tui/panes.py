@@ -43,11 +43,13 @@ def _register_built() -> None:
     from langsuite.tui.explore import ExplorePane
     from langsuite.tui.query_pane import QueryPane
     from langsuite.tui.workspace_pane import WorkspacePane
+    from langsuite.tui.write_pane import WritePane
 
     PANE_FACTORIES["explore"] = ExplorePane
     PANE_FACTORIES["query"] = QueryPane
     PANE_FACTORIES["workspace"] = WorkspacePane
-    BUILT_SECTIONS.update({"explore", "query", "workspace"})
+    PANE_FACTORIES["write"] = WritePane
+    BUILT_SECTIONS.update({"explore", "query", "workspace", "write"})
 
 
 _register_built()

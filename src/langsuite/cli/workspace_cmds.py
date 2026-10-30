@@ -84,6 +84,9 @@ def finding_save(
     kind: Annotated[str, typer.Argument(help=f"One of: {', '.join(KINDS)}.")],
     target: Annotated[str, typer.Argument(help="Query text, or a language.")],
     vs: Annotated[str | None, typer.Option("--vs", help="Second language for `pair`.")] = None,
+    lang: Annotated[
+        str | None, typer.Option("--lang", help="Language for `snippet` (target = task).")
+    ] = None,
     k: Annotated[int, typer.Option("--k", "-k", min=1, max=200)] = 10,
     title: Annotated[str | None, typer.Option("--title", "-t")] = None,
     tag: Annotated[list[str] | None, typer.Option("--tag")] = None,
@@ -103,6 +106,16 @@ def finding_save(
         if not vs:
             raise UsageError("`pair` needs --vs.", hint="e.g. finding save pair java --vs kotlin")
         args = {"a": target, "b": vs}
+    elif kind == "snippet":
+        if not lang:
+            raise UsageError(
+                "`snippet` needs --lang.", hint="e.g. finding save snippet fizzbuzz --lang go"
+            )
+        args = {"task": target, "lang": lang}
+    elif kind == "verify":
+        raise UsageError(
+            "Save verify runs with `langsuite extract` right after `langsuite verify`."
+        )
     else:
         args = {"lang": target}
     ws = _ws()
@@ -177,6 +190,24 @@ def _result_lines(f: Finding) -> list[str]:
         return out
     if f.kind == "pair":
         return [f"Score {r['score']:.3f}; shared: {', '.join(r['shared']) or '—'}"]
+    if f.kind == "snippet":
+        res = r["result"]
+        mark = "verified ✓" if r["verified"] else f"not verified ({res['reason']})"
+        return [
+            f"{r['task']} in `{r['lang']}`: {mark} with {res['toolchain']} "
+            f"(`{res['image']}@{res['digest'][:19]}…`).",
+            "",
+            "```" + r["lang"],
+            r["code"].rstrip("\n"),
+            "```",
+            "",
+            f"Source: {r['attribution']}",
+        ]
+    if f.kind == "verify":
+        return [
+            f"`{r['lang']}` code `{r['code_sha256'][:12]}`: {r['status']} ({r['reason']}) "
+            f"with {r['toolchain']} (`{r['image']}@{r['digest'][:19]}…`)."
+        ]
     lang = r["language"]
     return [
         f"{lang['name']} ({lang['kind']}, {lang.get('appeared') or '—'}): "

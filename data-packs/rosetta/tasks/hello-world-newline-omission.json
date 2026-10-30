@@ -1,0 +1,1053 @@
+{
+ "attribution": "Rosetta Code, “Hello world/Newline omission” (rev 415862), by Rosetta Code contributors, https://rosettacode.org/wiki/Hello_world/Newline_omission?oldid=415862 · GFDL-1.2",
+ "expected": "Goodbye, World!",
+ "licence": "GFDL-1.2",
+ "licence_url": "https://www.gnu.org/licenses/old-licenses/fdl-1.2.html",
+ "retrieved_at": "2026-10-30T03:55:46Z",
+ "revid": 415862,
+ "solutions": {
+  "acl2": {
+   "header": "ACL2",
+   "lang": "acl2",
+   "variants": [
+    "(cw \"Goodbye, World!\")\n"
+   ]
+  },
+  "action": {
+   "header": "Action!",
+   "lang": "action",
+   "variants": [
+    "PROC Main()\n  Print(\"Goodbye, World!\")\nRETURN\n"
+   ]
+  },
+  "ada": {
+   "header": "Ada",
+   "lang": "ada",
+   "variants": [
+    "with Ada.Text_IO;\n\nprocedure Goodbye_World is\nbegin\n   Ada.Text_IO.Put(\"Goodbye, World!\");\nend Goodbye_World;\n",
+    "with Ada.Text_IO;\nwith Ada.Text_IO.Text_Streams;\n\nprocedure Goodbye_World is\n    stdout: Ada.Text_IO.File_Type := Ada.Text_IO.Standard_Output;\nbegin\n    String'Write(Ada.Text_IO.Text_Streams.Stream(stdout), \"Goodbye World\");\nend Goodbye_World;\n"
+   ]
+  },
+  "algol-68": {
+   "header": "ALGOL 68",
+   "lang": "algol-68",
+   "variants": [
+    "BEGIN\n   print (\"Goodbye, World!\")\nEND\n"
+   ]
+  },
+  "arkscript": {
+   "header": "ArkScript",
+   "lang": "arkscript",
+   "variants": [
+    "(puts \"Goodbye, World!\")\n"
+   ]
+  },
+  "arturo": {
+   "header": "Arturo",
+   "lang": "arturo",
+   "variants": [
+    "prints \"Goodbye, World!\"\n"
+   ]
+  },
+  "asymptote": {
+   "header": "Asymptote",
+   "lang": "asymptote",
+   "variants": [
+    "write('Goodbye, World!', suffix=none);\n"
+   ]
+  },
+  "ats": {
+   "header": "ATS",
+   "lang": "ats",
+   "variants": [
+    "implement main0 () = print \"Goodbye, World!\"\n"
+   ]
+  },
+  "autohotkey": {
+   "header": "AutoHotkey",
+   "lang": "autohotkey",
+   "variants": [
+    "DllCall(\"AllocConsole\")\nFileAppend, Goodbye`, World!, CONOUT$ ; No newline outputted\nMsgBox\n"
+   ]
+  },
+  "autoit": {
+   "header": "AutoIt",
+   "lang": "autoit",
+   "variants": [
+    "ConsoleWrite(\"Goodbye, World!\")\n"
+   ]
+  },
+  "awk": {
+   "header": "AWK",
+   "lang": "awk",
+   "variants": [
+    "BEGIN { printf(\"Goodbye, World!\") }\n"
+   ]
+  },
+  "b": {
+   "header": "B",
+   "lang": "b",
+   "variants": [
+    "main()\n{\n    putstr(\"Goodbye, World!\");\n    return(0);\n}\n"
+   ]
+  },
+  "ballerina": {
+   "header": "Ballerina",
+   "lang": "ballerina",
+   "variants": [
+    "import ballerina/io; \n\npublic function main() {\n    io:print(\"Goodbye, World!\"); \n}\n"
+   ]
+  },
+  "bash": {
+   "header": "UNIX Shell",
+   "lang": "bash",
+   "variants": [
+    "printf \"Goodbye, World!\"          # This works. There is no newline.\nprintf %s \"-hyphens and % signs\"  # Use %s with arbitrary strings.\n",
+    "echo -n 'Goodbye, World!'\n",
+    "echo 'Goodbye, World!\\c'\n",
+    "print -n \"Goodbye, World!\"\nprint -nr -- \"-hyphens and \\backslashes\"\n",
+    "echo -n \"Goodbye, World!\"\necho -n \"-hyphens and \\backslashes\"\n"
+   ]
+  },
+  "basic": {
+   "header": "BASIC",
+   "lang": "basic",
+   "variants": [
+    "10 REM The trailing semicolon prevents a newline\n20 PRINT \"Goodbye, World!\";\n",
+    "PRINT \"Goodbye, World!\";\nPRINT \"Goodbye, World!\" FORMAT \"%s\"\n",
+    "PRINT \"GOODBYE, WORLD!\";\n",
+    "print \"Goodbye, World!\";  '' the trailing semi-colon suppresses the new line\n",
+    "10 print chr$(14) : rem Switch to lower+uppercase character set\n20 print \"Goodbye, World!\";\n30 rem * If we end this program here, we will not see the effect because \n40 rem   BASIC will print 'READY' at a new line anyway.\n50 rem * So, we just print additional message...\n60 print \"(End of the world)\"\n70 end\n"
+   ]
+  },
+  "bbc-basic": {
+   "header": "BBC BASIC",
+   "lang": "bbc-basic",
+   "variants": [
+    "      REM BBC BASIC accepts the standard trailing semicolon:\n      PRINT \"Goodbye World!\";\n      \n      REM One could also output the characters individually:\n      GW$ = \"Goodbye World!\"\n      FOR i% = 1 TO LEN(GW$)\n        VDU ASCMID$(GW$, i%)\n      NEXT\n"
+   ]
+  },
+  "bc": {
+   "header": "bc",
+   "lang": "bc",
+   "variants": [
+    "\"Goodbye, World!\"\n"
+   ]
+  },
+  "befunge": {
+   "header": "Befunge",
+   "lang": "befunge",
+   "variants": [
+    "\"!dlroW ,eybdooG\">:#,_@\n"
+   ]
+  },
+  "blade": {
+   "header": "Blade",
+   "lang": "blade",
+   "variants": [
+    "print('Goodbye, World!')\n"
+   ]
+  },
+  "c": {
+   "header": "C",
+   "lang": "c",
+   "variants": [
+    "#include <stdio.h>\n#include <stdlib.h>\n\nint main(int argc, char *argv[]) {\n  (void) printf(\"Goodbye, World!\");    /* No automatic newline */\n  return EXIT_SUCCESS;\n}\n"
+   ]
+  },
+  "clipper": {
+   "header": "Clipper",
+   "lang": "clipper",
+   "variants": [
+    "?? \"Goodbye, World!\"\n"
+   ]
+  },
+  "clojure": {
+   "header": "Clojure",
+   "lang": "clojure",
+   "variants": [
+    "(print \"Goodbye, World!\")\n"
+   ]
+  },
+  "cobol": {
+   "header": "COBOL",
+   "lang": "cobol",
+   "variants": [
+    "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. GOODBYE-WORLD.\n       PROCEDURE DIVISION.\n           DISPLAY 'Goodbye, World!' WITH NO ADVANCING.\n           STOP RUN.\n       END PROGRAM GOODBYE-WORLD.\n"
+   ]
+  },
+  "coffeescript": {
+   "header": "CoffeeScript",
+   "lang": "coffeescript",
+   "variants": [
+    "process.stdout.write \"Goodbye, World!\"\n"
+   ]
+  },
+  "common-lisp": {
+   "header": "Common Lisp",
+   "lang": "common-lisp",
+   "variants": [
+    "(princ \"Goodbye, World!\")\n"
+   ]
+  },
+  "cpp": {
+   "header": "C++",
+   "lang": "cpp",
+   "variants": [
+    "#include <iostream>\n\nint main() {\n  std::cout << \"Goodbye, World!\";\n  return 0;\n}\n"
+   ]
+  },
+  "creative-basic": {
+   "header": "Creative Basic",
+   "lang": "creative-basic",
+   "variants": [
+    "'In a window\n\nDEF Win:WINDOW\nDEF Close:CHAR\nDEF ScreenSizeX,ScreenSizeY:INT\n \nGETSCREENSIZE(ScreenSizeX,ScreenSizeY)\n \nWINDOW Win,0,0,ScreenSizeX,ScreenSizeY,0,0,\"Goodbye program\",MainHandler\n \nPRINT Win,\"Goodbye, World!\"\n'Prints in the upper left corner of the window (position 0,0).\nPRINT\"Win,\" I ride off into the sunset.\"\n\n'There does not appear to be a means of starting a new line when printing in a window, other than by using the MOVE command.\n'Therefore, both sentences here will print on the same line, i.e., in the same vertical position.\n \nWAITUNTIL Close=1\n \nCLOSEWINDOW Win\n \nEND\n \nSUB MainHandler\n \n    IF @CLASS=@IDCLOSEWINDOW THEN Close=1   \n \nRETURN\n\n'In the console\n\nOPENCONSOLE\n\n'Insert a trailing comma.\nPRINT\"Goodbye, World!\",\nPRINT\" I ride off into the sunset.\"\n\nPRINT:PRINT\"Press any key to end.\"\n\nDO:UNTIL INKEY$<>\"\"\n\nCLOSECONSOLE\n\n'Since this a Cbasic console program.\nEND \n"
+   ]
+  },
+  "crystal": {
+   "header": "Crystal",
+   "lang": "crystal",
+   "variants": [
+    "print \"Goodbye, World!\"\n"
+   ]
+  },
+  "d": {
+   "header": "D",
+   "lang": "d",
+   "variants": [
+    "import std.stdio;\n\nvoid main() {\n    write(\"Goodbye, World!\");\n}\n"
+   ]
+  },
+  "dale": {
+   "header": "dt",
+   "lang": "dale",
+   "variants": [
+    "\"Goodbye, World!\" p\n"
+   ]
+  },
+  "dart": {
+   "header": "Dart",
+   "lang": "dart",
+   "variants": [
+    "import 'dart:io';\n \nvoid main() {\n  stdout.write(\"Goodbye, World!\");\n}\n"
+   ]
+  },
+  "dc": {
+   "header": "Dc",
+   "lang": "dc",
+   "variants": [
+    "[Goodbye, World!]P\n",
+    "370913249815566165486152944077005857 P\n"
+   ]
+  },
+  "delphi": {
+   "header": "Delphi",
+   "lang": "delphi",
+   "variants": [
+    "program Project1;\n\n{$APPTYPE CONSOLE}\n\nbegin\n  Write('Goodbye, World!');\nend.\n"
+   ]
+  },
+  "elena": {
+   "header": "Elena",
+   "lang": "elena",
+   "variants": [
+    "public Program()\n{\n    //print will not append a newline\n    Console.write(\"Goodbye, World!\")\n}\n"
+   ]
+  },
+  "elixir": {
+   "header": "Elixir",
+   "lang": "elixir",
+   "variants": [
+    "IO.write \"Goodbye, World!\"\n"
+   ]
+  },
+  "emacs-lisp": {
+   "header": "Emacs Lisp",
+   "lang": "emacs-lisp",
+   "variants": [
+    "(princ \"Goodbye, World!\")\n"
+   ]
+  },
+  "erlang": {
+   "header": "Erlang",
+   "lang": "erlang",
+   "variants": [
+    "io:format(\"Goodbye, world!\").\n"
+   ]
+  },
+  "euphoria": {
+   "header": "Euphoria",
+   "lang": "euphoria",
+   "variants": [
+    "-- In Euphoria puts() does not insert a newline character after outputting a string\nputs(1,\"Goodbye, world!\")\n"
+   ]
+  },
+  "f-sharp": {
+   "header": "F Sharp",
+   "lang": "f-sharp",
+   "variants": [
+    "// A program that will run in the interpreter (fsi.exe)\nprintf \"Goodbye, World!\";;\n\n// A compiled program\n[<EntryPoint>]\nlet main args =\n    printf \"Goodbye, World!\"\n    0 \n"
+   ]
+  },
+  "factor": {
+   "header": "Factor",
+   "lang": "factor",
+   "variants": [
+    "USE: io\n\"Goodbye, World!\" write\n"
+   ]
+  },
+  "falcon": {
+   "header": "Falcon",
+   "lang": "falcon",
+   "variants": [
+    "print(\"Goodbye, World!\")\n",
+    ">> \"Goodbye, World!\"\n"
+   ]
+  },
+  "fantom": {
+   "header": "Fantom",
+   "lang": "fantom",
+   "variants": [
+    "class Main {\n  Void main() {\n    // Print with newline\n    echo(\"Hello, World!\") \n    // Or\n    Env.cur.out.printLine(\"Hello, World!\") \n\n    // Print without a newline\n    Env.cur.out.print(\"Goodbye, world!\")\n\n    // Also can get a reference to the standard output stream\n    out := Env.cur.out\n\n    out.print(\"Goodbye, world!\")\n    out.flush() // and flush buffer if needed\n    // or method chain\n    out.print(\"Goodbye, world!\").flush()\n\n    // Also we can an implement a user-defined method \n    print(\"Hello, world! I'm back!\");\n\n  }\n  \n  // User-defined 'print' method\n  private Void print(Str s) {\n      Env.cur.out.print(s)\n  }\n\n}\n"
+   ]
+  },
+  "focal": {
+   "header": "FOCAL",
+   "lang": "focal",
+   "variants": [
+    "TYPE \"Goodbye, World!\"\n"
+   ]
+  },
+  "forth": {
+   "header": "Forth",
+   "lang": "forth",
+   "variants": [
+    "\\ The Forth word .\" does not insert a newline character after outputting a string\n.\" Goodbye, World!\"\n"
+   ]
+  },
+  "fortran": {
+   "header": "Fortran",
+   "lang": "fortran",
+   "variants": [
+    "program bye\n  write (*,'(a)',advance='no') 'Goodbye, World!'\nend program bye\n",
+    "      WRITE (6,1) \"Goodbye, World!\"\n    1 FORMAT (A,$)\n      END\n"
+   ]
+  },
+  "freebasic": {
+   "header": "FreeBASIC",
+   "lang": "freebasic",
+   "variants": [
+    "' FB 1.10.1 Win64\n\nPrint \"Goodbye, World!\";  ' the trailing semi-colon suppresses the new line\nSleep\n"
+   ]
+  },
+  "frink": {
+   "header": "Frink",
+   "lang": "frink",
+   "variants": [
+    "print[\"Goodbye, World!\"]\n"
+   ]
+  },
+  "futurebasic": {
+   "header": "FutureBasic",
+   "lang": "futurebasic",
+   "variants": [
+    "include \"NSLog.incl\"\n\nprint\n// A semicolon will suppress a line feed in a print statement.\nprint \"a, \";\nprint \"b, \";\nprint \"c\"\n\nprint : print\n\n// When logging, a \\b (escaped b) appended to a string will suppress a line feed.\nNSLog( @\"d, \\b\" )\nNSLog( @\"e, \\b\" )\nNSLog( @\"f\" )\n\nlong i\nMutableStringRef mutStr\nmutStr = fn MutableStringWithCapacity(0)\n\n// Feeds and returns can be easily omitted using a mutable string\nfor i = 1 to 99\nMutableStringAppendFormat( mutStr, @\"%3ld, \", i )\nif ( i mod 10 == 0 ) then MutableStringAppendString( mutStr, @\"\\n\" )\nif ( i == 99 ) then MutableStringAppendFormat( mutStr, @\"%3ld\", i + 1  )\nnext\n\nprint mutStr\n\nHandleEvents\n"
+   ]
+  },
+  "gambas": {
+   "header": "Gambas",
+   "lang": "gambas",
+   "variants": [
+    "Public Sub Main()\n\nPrint \"Goodbye, \"; 'The semicolon stops the newline being added\nPrint \"World!\"\n\nEnd\n"
+   ]
+  },
+  "genie": {
+   "header": "Genie",
+   "lang": "genie",
+   "variants": [
+    "[indent=4]\n/*\n  Hello, with no newline, in Genie\n  valac helloNoNewline.gs\n*/\n\ninit\n    stdout.printf(\"%s\", \"Goodbye, World!\")\n"
+   ]
+  },
+  "go": {
+   "header": "Go",
+   "lang": "go",
+   "variants": [
+    "package main\n\nimport \"fmt\"\n\nfunc main() { fmt.Print(\"Goodbye, World!\") }\n"
+   ]
+  },
+  "groovy": {
+   "header": "Groovy",
+   "lang": "groovy",
+   "variants": [
+    "print \"Goodbye, world\"\n"
+   ]
+  },
+  "harbour": {
+   "header": "Harbour",
+   "lang": "harbour",
+   "variants": [
+    "?? \"Goodbye, world\"\nor\nQQout( \"Goodbye, world\" )\n"
+   ]
+  },
+  "haskell": {
+   "header": "Haskell",
+   "lang": "haskell",
+   "variants": [
+    "main = putStr \"Goodbye, world\"\n"
+   ]
+  },
+  "holyc": {
+   "header": "HolyC",
+   "lang": "holyc",
+   "variants": [
+    "\"Goodbye, World!\";\n"
+   ]
+  },
+  "huginn": {
+   "header": "Huginn",
+   "lang": "huginn",
+   "variants": [
+    "#! /bin/sh\nexec huginn --no-argv -E \"${0}\" \"${@}\"\n#! huginn\n\nmain() {\n\tprint( \"Goodbye, World!\" );\n\treturn ( 0 );\n}\n"
+   ]
+  },
+  "ibm-gml": {
+   "header": "GML",
+   "lang": "ibm-gml",
+   "variants": [
+    "show_message(\"Goodbye, World!\")\n"
+   ]
+  },
+  "icon": {
+   "header": "Icon",
+   "lang": "icon",
+   "variants": [
+    "procedure main()\n   writes(\"Goodbye, World!\")    \nend\n"
+   ]
+  },
+  "io": {
+   "header": "Io",
+   "lang": "io",
+   "variants": [
+    "write(\"Goodbye, World!\")\n"
+   ]
+  },
+  "j": {
+   "header": "J",
+   "lang": "j",
+   "variants": [
+    "   stdout\n1!:2&4\n",
+    "   put=: 0 0 $ 1!:2&4\n\n   put 'Goodbye, World!'\nGoodbye, World!\n",
+    "   load 'general/misc/prompt'\n   prompt 'Goodbye, World!'\nGoodbye, World!\n"
+   ]
+  },
+  "jakt": {
+   "header": "Jakt",
+   "lang": "jakt",
+   "variants": [
+    "fn main() {\n    print(\"Goodbye, World!\")\n}\n"
+   ]
+  },
+  "janet": {
+   "header": "Janet",
+   "lang": "janet",
+   "variants": [
+    "(prin \"Goodbye, World!\")\n"
+   ]
+  },
+  "java": {
+   "header": "Java",
+   "lang": "java",
+   "variants": [
+    "public class HelloWorld\n{\n public static void main(String[] args)\n {\n  System.out.print(\"Goodbye, World!\");\n }\n}\n"
+   ]
+  },
+  "javascript": {
+   "header": "JavaScript",
+   "lang": "javascript",
+   "variants": [
+    "process.stdout.write(\"Goodbye, World!\");\n"
+   ]
+  },
+  "jolie": {
+   "header": "Ol",
+   "lang": "jolie",
+   "variants": [
+    "(display \"Goodbye, World!\")\n"
+   ]
+  },
+  "joy": {
+   "header": "Joy",
+   "lang": "joy",
+   "variants": [
+    "\"Goodbye, World!\" putchars.\n"
+   ]
+  },
+  "jq": {
+   "header": "jq",
+   "lang": "jq",
+   "variants": [
+    "$ jq -n -j '\"Goodbye, World!\"'\nGoodbye, World!$ \n",
+    "$ echo '\"Goodbye, World!\"' | jq -j \nGoodbye, World!$ \n"
+   ]
+  },
+  "julia": {
+   "header": "Julia",
+   "lang": "julia",
+   "variants": [
+    "print(\"Goodbye, World!\")\n"
+   ]
+  },
+  "kotlin": {
+   "header": "Kotlin",
+   "lang": "kotlin",
+   "variants": [
+    "fun main(args: Array<String>) = print(\"Goodbye, World!\")\n"
+   ]
+  },
+  "lasso": {
+   "header": "Lasso",
+   "lang": "lasso",
+   "variants": [
+    "stdout(\"Goodbye, World!\")\n"
+   ]
+  },
+  "lfe": {
+   "header": "LFE",
+   "lang": "lfe",
+   "variants": [
+    "(io:format \"Goodbye, World\")\n"
+   ]
+  },
+  "liberty-basic": {
+   "header": "Liberty BASIC",
+   "lang": "liberty-basic",
+   "variants": [
+    "print \"Goodbye, World!\";\n"
+   ]
+  },
+  "lil": {
+   "header": "LIL",
+   "lang": "lil",
+   "variants": [
+    "write Goodbye, World!\n"
+   ]
+  },
+  "limbo": {
+   "header": "Limbo",
+   "lang": "limbo",
+   "variants": [
+    "implement HelloWorld;\n\ninclude \"sys.m\"; sys: Sys;\ninclude \"draw.m\";\n\nHelloWorld: module {\n\tinit: fn(nil: ref Draw->Context, nil: list of string);\n};\n\ninit(nil: ref Draw->Context, nil: list of string)\n{\n\tsys = load Sys Sys->PATH;\n\tsys->print(\"Goodbye, World!\"); # No automatic newline.\n}\n"
+   ]
+  },
+  "llvmir": {
+   "header": "LLVM",
+   "lang": "llvmir",
+   "variants": [
+    "; This is not strictly LLVM, as it uses the C library function \"printf\".\n; LLVM does not provide a way to print values, so the alternative would be\n; to just load the string into memory, and that would be boring.\n\n$\"OUTPUT_STR\" = comdat any\n@\"OUTPUT_STR\" = linkonce_odr unnamed_addr constant [16 x i8] c\"Goodbye, World!\\00\", comdat, align 1\n\n;--- The declaration for the external C printf function.\ndeclare i32 @printf(i8*, ...)\n\ndefine i32 @main() {\n    %1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([16 x i8], [16 x i8]* @\"OUTPUT_STR\", i32 0, i32 0))\n    ret i32 0\n}\n"
+   ]
+  },
+  "logtalk": {
+   "header": "Logtalk",
+   "lang": "logtalk",
+   "variants": [
+    ":- object(error_message).\n\n    % the initialization/1 directive argument is automatically executed\n    % when the object is compiled loaded into memory:\n    :- initialization(write('Goodbye, World!')).\n\n:- end_object.\n"
+   ]
+  },
+  "lolcode": {
+   "header": "LOLCODE",
+   "lang": "lolcode",
+   "variants": [
+    "HAI 1.3\nVISIBLE \"Goodbye, World!\"!\nKTHXBYE\n"
+   ]
+  },
+  "lua": {
+   "header": "Lua",
+   "lang": "lua",
+   "variants": [
+    "io.write(\"Goodbye, World!\")\n"
+   ]
+  },
+  "m4": {
+   "header": "m4",
+   "lang": "m4",
+   "variants": [
+    "`Goodbye, World!'dnl\n"
+   ]
+  },
+  "manool": {
+   "header": "MANOOL",
+   "lang": "manool",
+   "variants": [
+    "{{extern \"manool.org.18/std/0.3/all\"} in Out.Write[\"Goodbye, World!\"]}\n"
+   ]
+  },
+  "maple": {
+   "header": "Maple",
+   "lang": "maple",
+   "variants": [
+    "printf( \"Goodbye, World!\" );\n"
+   ]
+  },
+  "mathematica": {
+   "header": "Mathematica",
+   "lang": "mathematica",
+   "variants": [
+    "NotebookWrite[EvaluationNotebook[], \"Goodbye, World!\"]\n",
+    "WriteString[$Output, \"Goodbye, World!\"]\n"
+   ]
+  },
+  "matlab": {
+   "header": "MATLAB",
+   "lang": "matlab",
+   "variants": [
+    " fprintf('Goodbye, World!');\n"
+   ]
+  },
+  "microsoft-small-basic": {
+   "header": "Microsoft Small Basic",
+   "lang": "microsoft-small-basic",
+   "variants": [
+    "TextWindow.Write(\"Goodbye, World!\")\n"
+   ]
+  },
+  "min": {
+   "header": "min",
+   "lang": "min",
+   "variants": [
+    "\"Goodbye, World!\" print\n"
+   ]
+  },
+  "mirc": {
+   "header": "mIRC Scripting Language",
+   "lang": "mirc",
+   "variants": [
+    "echo -ag Goodbye, World!\n"
+   ]
+  },
+  "modula-2": {
+   "header": "Modula-2",
+   "lang": "modula-2",
+   "variants": [
+    "MODULE HelloWorld;\nFROM Terminal IMPORT WriteString,ReadChar;\n\nBEGIN\n    WriteString(\"Goodbye, World!\");\n    ReadChar\nEND HelloWorld.\n"
+   ]
+  },
+  "neko": {
+   "header": "Neko",
+   "lang": "neko",
+   "variants": [
+    "/**\n hellonnl.neko\n Tectonics:\n   nekoc hellonnl.neko\n   neko hellonnl\n\n   -or-\n\n   nekoc hellonnl.neko\n   nekotools boot hellonnl.n\n   ./hellonnl\n*/\n\n$print(\"Goodbye, World!\");\n"
+   ]
+  },
+  "nemerle": {
+   "header": "Nemerle",
+   "lang": "nemerle",
+   "variants": [
+    "using System.Console;\n\nmodule Hello\n{\n    // as with C#, Write() does not append a newline\n    Write(\"Goodbye, world!\");\n\n    // equivalently\n    Write(\"Goodbye, \");\n    Write(\"world!\");\n}\n"
+   ]
+  },
+  "netrexx": {
+   "header": "NetRexx",
+   "lang": "netrexx",
+   "variants": [
+    "/* NetRexx */\noptions replace format comments java crossref symbols binary\n\nsay 'Goodbye, World!\\-'\n"
+   ]
+  },
+  "newlisp": {
+   "header": "NewLISP",
+   "lang": "newlisp",
+   "variants": [
+    "(print \"Goodbye, World!\")\n"
+   ]
+  },
+  "nim": {
+   "header": "Nim",
+   "lang": "nim",
+   "variants": [
+    "stdout.write \"Goodbye, World!\"\n"
+   ]
+  },
+  "nu": {
+   "header": "Nu",
+   "lang": "nu",
+   "variants": [
+    "print -n 'Goodbye, World!'\n"
+   ]
+  },
+  "oberon-2": {
+   "header": "Oberon-2",
+   "lang": "oberon-2",
+   "variants": [
+    "MODULE HelloWorld;\nIMPORT Out;\nBEGIN\n  Out.String(\"Goodbye, world!\")\nEND HelloWorld.\n"
+   ]
+  },
+  "ocaml": {
+   "header": "OCaml",
+   "lang": "ocaml",
+   "variants": [
+    "print_string \"Goodbye, World!\"\n"
+   ]
+  },
+  "oforth": {
+   "header": "Oforth",
+   "lang": "oforth",
+   "variants": [
+    "\"Goodbye, World!\" print\n"
+   ]
+  },
+  "ooc": {
+   "header": "OOC",
+   "lang": "ooc",
+   "variants": [
+    "main: func {\n  \"Goodbye, World!\" print()\n}\n"
+   ]
+  },
+  "oxygene": {
+   "header": "Oxygene",
+   "lang": "oxygene",
+   "variants": [
+    "namespace HelloWorld;\n \ninterface\n \ntype\n  HelloWorld = class\n  public\n    class method Main; \n  end;\n \nimplementation\n \nclass method HelloWorld.Main;\nbegin\n  Console.Write('Farewell, ');\n  Console.Write('cruel ');\n  Console.WriteLine('world!');\nend;\n \nend.\n"
+   ]
+  },
+  "pari-gp": {
+   "header": "PARI/GP",
+   "lang": "pari-gp",
+   "variants": [
+    "print1(\"Goodbye, World!\")\n"
+   ]
+  },
+  "parrot-assembly": {
+   "header": "PASM",
+   "lang": "parrot-assembly",
+   "variants": [
+    "print \"Goodbye World!\"    # Newlines do not occur unless we embed them\nend\n"
+   ]
+  },
+  "pascal": {
+   "header": "Pascal",
+   "lang": "pascal",
+   "variants": [
+    "program NewLineOmission(output);\n \nbegin\n  write('Goodbye, World!');\nend.\n"
+   ]
+  },
+  "pascal-abc.net": {
+   "header": "PascalABC.NET",
+   "lang": "pascal-abc.net",
+   "variants": [
+    "##\nWrite('Goodbye, World!');\n"
+   ]
+  },
+  "perl": {
+   "header": "Perl",
+   "lang": "perl",
+   "variants": [
+    "print \"Goodbye, World!\";    # A newline does not occur automatically\n"
+   ]
+  },
+  "php": {
+   "header": "PHP",
+   "lang": "php",
+   "variants": [
+    "echo \"Goodbye, World !\";\n"
+   ]
+  },
+  "picat": {
+   "header": "Picat",
+   "lang": "picat",
+   "variants": [
+    "print(\"Goodbye, World!\")\n"
+   ]
+  },
+  "picolisp": {
+   "header": "PicoLisp",
+   "lang": "picolisp",
+   "variants": [
+    "(prin \"Goodbye, World!\")\n"
+   ]
+  },
+  "pict": {
+   "header": "Pict",
+   "lang": "pict",
+   "variants": [
+    "(pr \"Hello World!\");\n"
+   ]
+  },
+  "pike": {
+   "header": "Pike",
+   "lang": "pike",
+   "variants": [
+    "write(\"Goodbye, World!\");\n"
+   ]
+  },
+  "pl-i": {
+   "header": "PL/I",
+   "lang": "pl-i",
+   "variants": [
+    "put ('Goodbye, World!');\n"
+   ]
+  },
+  "plain-english": {
+   "header": "Plain English",
+   "lang": "plain-english",
+   "variants": [
+    "To run:\nStart up.\nWrite \"Goodbye, world!\" on the console without advancing.\nWait for the escape key.\nShut down.\n"
+   ]
+  },
+  "powershell": {
+   "header": "PowerShell",
+   "lang": "powershell",
+   "variants": [
+    "Write-Host -NoNewLine \"Goodbye, \"\nWrite-Host -NoNewLine \"World!\"\n"
+   ]
+  },
+  "processing": {
+   "header": "Processing",
+   "lang": "processing",
+   "variants": [
+    "print(\"Goodbye, World!\");    /* No automatic newline */\n"
+   ]
+  },
+  "prolog": {
+   "header": "Prolog",
+   "lang": "prolog",
+   "variants": [
+    ":- write('Goodbye, World!').\n"
+   ]
+  },
+  "purebasic": {
+   "header": "PureBasic",
+   "lang": "purebasic",
+   "variants": [
+    "OpenConsole()\nPrint(\"Goodbye, World!\")\nInput() ;wait for enter key to be pressed\n"
+   ]
+  },
+  "python": {
+   "header": "Python",
+   "lang": "python",
+   "variants": [
+    "import sys\nsys.stdout.write(\"Goodbye, World!\")\n",
+    "print(\"Goodbye, World!\", end=\"\")\n"
+   ]
+  },
+  "r": {
+   "header": "R",
+   "lang": "r",
+   "variants": [
+    "cat(\"Goodbye, world!\")\n"
+   ]
+  },
+  "ra": {
+   "header": "Ra",
+   "lang": "ra",
+   "variants": [
+    "class HelloWorld\n\t**Prints \"Goodbye, World!\" without a new line**\n\n\ton start\n\n\t\tprint \"Goodbye, World!\" without new line\n"
+   ]
+  },
+  "racket": {
+   "header": "Racket",
+   "lang": "racket",
+   "variants": [
+    "#lang racket\n(display \"Goodbye, World!\")\n"
+   ]
+  },
+  "raku": {
+   "header": "Raku",
+   "lang": "raku",
+   "variants": [
+    "print \"Goodbye, World!\";\nprintf \"%s\", \"Goodbye, World!\";\n"
+   ]
+  },
+  "rebol": {
+   "header": "Rebol",
+   "lang": "rebol",
+   "variants": [
+    "prin \"Goodbye, World!\"\n"
+   ]
+  },
+  "red": {
+   "header": "Red",
+   "lang": "red",
+   "variants": [
+    "prin \"Goodbye, World!\"\n"
+   ]
+  },
+  "rexx": {
+   "header": "REXX",
+   "lang": "rexx",
+   "variants": [
+    "/*REXX pgm displays a   \"Goodbye, World!\"   without a trailing newline. */\n\ncall charout ,'Goodbye, World!'\n"
+   ]
+  },
+  "ring": {
+   "header": "Ring",
+   "lang": "ring",
+   "variants": [
+    "see \"Goodbye, World!\"\n"
+   ]
+  },
+  "ruby": {
+   "header": "Ruby",
+   "lang": "ruby",
+   "variants": [
+    "print \"Goodbye, World!\"\n"
+   ]
+  },
+  "run-basic": {
+   "header": "Run BASIC",
+   "lang": "run-basic",
+   "variants": [
+    "print \"Goodbye, World!\";\n"
+   ]
+  },
+  "rust": {
+   "header": "Rust",
+   "lang": "rust",
+   "variants": [
+    "fn main () {\n    print!(\"Goodbye, World!\");\n}\n"
+   ]
+  },
+  "rye": {
+   "header": "Rye",
+   "lang": "rye",
+   "variants": [
+    "prn \"Goodbye, World!\"\n"
+   ]
+  },
+  "scala": {
+   "header": "Scala",
+   "lang": "scala",
+   "variants": [
+    "print(\"Goodbye, World!\")\n"
+   ]
+  },
+  "scheme": {
+   "header": "Scheme",
+   "lang": "scheme",
+   "variants": [
+    "(display \"Goodbye, World!\")\n"
+   ]
+  },
+  "scilab": {
+   "header": "Scilab",
+   "lang": "scilab",
+   "variants": [
+    "print(\"Goodbye, World!\")\n"
+   ]
+  },
+  "seed7": {
+   "header": "Seed7",
+   "lang": "seed7",
+   "variants": [
+    "$ include \"seed7_05.s7i\";\n \nconst proc: main is func\n  begin\n    write(\"Goodbye, World!\");\n  end func;\n"
+   ]
+  },
+  "setl": {
+   "header": "SETL",
+   "lang": "setl",
+   "variants": [
+    "nprint( 'Goodbye, World!' );\n"
+   ]
+  },
+  "smalltalk": {
+   "header": "Smalltalk",
+   "lang": "smalltalk",
+   "variants": [
+    "Transcript show: 'Goodbye, World!'.\n"
+   ]
+  },
+  "standard-ml": {
+   "header": "Standard ML",
+   "lang": "standard-ml",
+   "variants": [
+    "print \"Goodbye, World!\"\n"
+   ]
+  },
+  "swift": {
+   "header": "Swift",
+   "lang": "swift",
+   "variants": [
+    "print(\"Goodbye, World!\", terminator: \"\")\n",
+    "print(\"Goodbye, World!\")\n"
+   ]
+  },
+  "tcl": {
+   "header": "Tcl",
+   "lang": "tcl",
+   "variants": [
+    "puts -nonewline \"Goodbye, World!\"\n"
+   ]
+  },
+  "transact-sql": {
+   "header": "Transact-SQL",
+   "lang": "transact-sql",
+   "variants": [
+    " PRINT 'Goodbye, World!'\n",
+    " select 'Goodbye, World!'\n"
+   ]
+  },
+  "txr": {
+   "header": "TXR",
+   "lang": "txr",
+   "variants": [
+    "$ txr -e '(put-string \"Goodbye, world!\")'\nGoodbye, world!$\n"
+   ]
+  },
+  "vale": {
+   "header": "Vale",
+   "lang": "vale",
+   "variants": [
+    "import stdlib.*;\n\nexported func main() {\n\tprint(\"Goodbye, World!\");\n}\n"
+   ]
+  },
+  "verilog": {
+   "header": "Verilog",
+   "lang": "verilog",
+   "variants": [
+    "module main;\n  initial \n    begin\n      $write(\"Goodbye, World!\");\n      $finish ;\n    end\nendmodule\n"
+   ]
+  },
+  "vim-script": {
+   "header": "Vim Script",
+   "lang": "vim-script",
+   "variants": [
+    "echon \"Goodbye, World!\"\n"
+   ]
+  },
+  "wren": {
+   "header": "Wren",
+   "lang": "wren",
+   "variants": [
+    "System.write(\"Goodbye, World!\")\n"
+   ]
+  },
+  "xpath": {
+   "header": "XPath",
+   "lang": "xpath",
+   "variants": [
+    "'Goodbye, World!'\n"
+   ]
+  },
+  "xpl0": {
+   "header": "XPL0",
+   "lang": "xpl0",
+   "variants": [
+    "code Text=12;\nText(0, \"Goodbye, World!\")\n"
+   ]
+  },
+  "xslt": {
+   "header": "XSLT",
+   "lang": "xslt",
+   "variants": [
+    "<xsl:text>Goodbye, World!</xsl:text>\n"
+   ]
+  },
+  "zig": {
+   "header": "Zig",
+   "lang": "zig",
+   "variants": [
+    "const std = @import(\"std\");\nconst Io = std.Io;\n\npub fn main(init: std.process.Init) !void {\n    try Io.File.stdout().writeStreamingAll(init.io, \"Hello world!\");\n}\n"
+   ]
+  }
+ },
+ "task": "Hello world/Newline omission",
+ "url": "https://rosettacode.org/wiki/Hello_world/Newline_omission?oldid=415862"
+}

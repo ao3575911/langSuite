@@ -13,12 +13,14 @@ A research knowledge base of programming languages: how they work, how they rela
 | Knowledge base of 5,000+ languages (PLDB + Linguist) with sourced evidence: `base build/status`, `lang list/show --evidence`, `feature list/show`, Explore pane with live search | Built (M1) |
 | Structured `query` DSL and feature `similar` with a shuffled-feature baseline (z-scores); Query pane and Similar tab | Built (M2) |
 | Code similarity, clusters, scores and grades | Planned (M5–M5c) |
-| Verified snippets, cited answers, how/when guides | Planned (M4, M5d) |
+| Verified snippets: `verify` runs code in a digest-pinned, offline Docker sandbox (20 toolchains); `snippet` shows attributed Rosetta Code solutions marked verified only when they ran; Write pane | Built (M4) |
+| Cited answers, how/when guides | Planned (M5d) |
+| Signed snapshots: `base pull`, `base changelog`, data CI | Planned (M5f) |
 | Workspaces: findings re-runnable bit-for-bit on their pinned snapshot, notes, saved queries, own-data overlay (custom languages), `base pin`; Workspace pane with `Ctrl+S` to save | Built (M3) |
 | Telegram bot with group workspaces | Planned (M5e) |
 | Hosted SaaS | Planned (M5i) |
 
-> **Status: M0 scaffold.** Commands are listed but not built yet; each one says which milestone brings it. Spec: [`docs/SPEC.md`](docs/SPEC.md).
+> **Status: pre-1.0, built through M4.** Planned commands are listed and say which milestone brings them. Spec: [`docs/SPEC.md`](docs/SPEC.md).
 
 ## Install
 
@@ -86,6 +88,19 @@ langsuite base snapshots      # kept snapshots; pinned or cited ones are never p
 
 A finding stores the command, snapshot id, a copy of any own data it saw, its evidence ids (`ev-…`, one per sourced assertion) and the SHA-256 of its canonical result. Every `base build` keeps the old snapshot (the newest five plus any pinned or cited), so a finding saved today still re-runs to the identical bytes after the base is upgraded. Workspaces are plain JSON folders under `<data home>/workspaces/<name>/`; own data never touches the shared base. In the app, press `Ctrl+S` in Explore (profile, or the Similar tab) or Query to save a finding, and `5` for the Workspace pane (`v` verify, `Del` remove, notes, saved queries, own data).
 
+## Verify and snippets
+
+```sh
+langsuite verify hello.py                       # language from the extension; exit 1 if it fails
+echo 'main = putStrLn "hi"' | langsuite v - --lang haskell --expect hi
+langsuite verify --toolchains                   # 20 pinned images (image@sha256 digest)
+langsuite snippet fizzbuzz --lang python,go,rust  # Rosetta Code, verified per language
+langsuite snippet --tasks                       # tasks in your pack
+langsuite snippet --fetch                       # fetch the default tasks into your data dir
+```
+
+Code runs in Docker with no network, a read-only root, a non-root user, all capabilities dropped, 256 MB memory, 64 processes, 1 CPU and a timeout. Images are pulled by digest; a local tag pointing at another digest is refused, never run. A snippet is marked **verified** only when it ran and (for tasks with a fixed answer) its output matched; without Docker every snippet says **unverified**. Results are cached by code hash and carry an evidence id (`vr-…`) that findings cite. Rosetta Code solutions are share-alike, kept in `data-packs/rosetta/` or your data dir, and always shown with their attribution line. In the app, press `6` for the Write pane (Snippet and Verify tabs, `Ctrl+R` runs, `Ctrl+S` saves a finding).
+
 ## Use
 
 ```sh
@@ -95,7 +110,7 @@ langsuite -m concise ...  # modes: default | concise | thorough
 langsuite --json ...      # stable JSON; --plain for no colour
 ```
 
-Exit codes: `0` ok · `2` no result · `3` data error · `4` auth · `5` quota.
+Exit codes: `0` ok · `1` verification failed · `2` no result · `3` data error · `4` auth · `5` quota.
 
 ## Develop
 

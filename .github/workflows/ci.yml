@@ -35,6 +35,9 @@ jobs:
       - uses: astral-sh/setup-uv@v6
       - run: uv sync --locked
       - run: uv run pytest
+        env:
+          # Linux runners have Docker: the sandbox acceptance tests must run there.
+          LANGSUITE_REQUIRE_DOCKER: ${{ matrix.os == 'ubuntu-latest' && '1' || '' }}
       - name: Upload snapshot report on failure
         if: failure()
         uses: actions/upload-artifact@v4
@@ -94,3 +97,16 @@ jobs:
         env:
           LANGSUITE_LIVE: "1"
         run: uv run pytest tests/test_kb.py tests/test_discover.py -k live --no-cov
+
+  verifier-toolchains:
+    # Optional (not a required check): every pinned toolchain runs its hello world.
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --locked
+      - env:
+          LANGSUITE_VERIFY_ALL: "1"
+          LANGSUITE_REQUIRE_DOCKER: "1"
+        run: uv run pytest tests/test_verify.py -m docker --no-cov

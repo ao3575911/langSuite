@@ -43,7 +43,7 @@ build-backend = "hatchling.build"
 packages = ["src/langsuite"]
 
 [tool.hatch.build.targets.sdist]
-exclude = ["data-packs/rosetta-gfdl/**", "data-packs/cc-by-sa/**"]
+exclude = ["data-packs/rosetta/**", "data-packs/cc-by-sa/**"]
 
 [tool.ruff]
 line-length = 100
@@ -56,6 +56,9 @@ ignore = ["S101", "PT018"]
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["S603", "S607"]
 "scripts/**" = ["S603", "S607"]
+# Paths under /tmp here are inside the sandbox container's private tmpfs, not the host.
+"src/langsuite/verify/toolchains.py" = ["S108"]
+"src/langsuite/verify/sandbox.py" = ["S108", "S603"]
 
 [tool.mypy]
 strict = true
@@ -63,7 +66,8 @@ python_version = "3.12"
 files = ["src", "scripts", "tests"]
 
 [tool.pytest.ini_options]
-addopts = "-q --cov=langsuite.core --cov=langsuite.cli --cov=langsuite.ingest --cov-report=term-missing --cov-fail-under=85"
+markers = ["docker: runs real containers; skipped without Docker unless LANGSUITE_REQUIRE_DOCKER=1"]
+addopts = "-q --cov=langsuite.core --cov=langsuite.cli --cov=langsuite.ingest --cov=langsuite.verify --cov-report=term-missing --cov-fail-under=85"
 testpaths = ["tests"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"

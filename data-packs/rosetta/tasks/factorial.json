@@ -1,0 +1,1855 @@
+{
+ "attribution": "Rosetta Code, “Factorial” (rev 416980), by Rosetta Code contributors, https://rosettacode.org/wiki/Factorial?oldid=416980 · GFDL-1.2",
+ "expected": null,
+ "licence": "GFDL-1.2",
+ "licence_url": "https://www.gnu.org/licenses/old-licenses/fdl-1.2.html",
+ "retrieved_at": "2026-10-30T03:55:49Z",
+ "revid": 416980,
+ "solutions": {
+  "8th": {
+   "header": "8th",
+   "lang": "8th",
+   "variants": [
+    ": factorial   \\ n -- n!\n     1 swap ' n:* 1 rot loop ;\n"
+   ]
+  },
+  "abap": {
+   "header": "ABAP",
+   "lang": "abap",
+   "variants": [
+    "form factorial using iv_val type i.\n  data: lv_res type i value 1.\n  do iv_val times.\n    multiply lv_res by sy-index.\n  enddo.\n\n  iv_val = lv_res.\nendform.\n",
+    "form fac_rec using iv_val type i.\n  data: lv_temp type i.\n\n  if iv_val = 0.\n    iv_val = 1.\n  else.\n    lv_temp = iv_val - 1.\n    perform fac_rec using lv_temp.\n    multiply iv_val by lv_temp.\n  endif.\nendform.\n"
+   ]
+  },
+  "action": {
+   "header": "Action!",
+   "lang": "action",
+   "variants": [
+    "CARD FUNC Factorial(INT n BYTE POINTER err)\n  CARD i,res\n\n  IF n<0 THEN\n    err^=1 RETURN (0)\n  ELSEIF n>8 THEN\n    err^=2 RETURN (0)\n  FI\n    \n  res=1\n  FOR i=2 TO n\n  DO \n    res=res*i\n  OD\n    \n  err^=0\nRETURN (res)\n\nPROC Main()\n  INT i,f\n  BYTE err\n\n  FOR i=-2 TO 10\n  DO \n    f=Factorial(i,@err)\n\n    IF err=0 THEN\n      PrintF(\"%I!=%U%E\",i,f)\n    ELSEIF err=1 THEN\n      PrintF(\"%I is negative value%E\",i)\n    ELSE\n      PrintF(\"%I! is to big%E\",i)\n    FI\n  OD\nRETURN\n"
+   ]
+  },
+  "actionscript": {
+   "header": "ActionScript",
+   "lang": "actionscript",
+   "variants": [
+    "public static function factorial(n:int):int\n{\n    if (n < 0)\n        return 0;\n\n    var fact:int = 1;\n    for (var i:int = 1; i <= n; i++)\n        fact *= i;\n\n    return fact;\n}\n",
+    "public static function factorial(n:int):int\n{\n   if (n < 0)\n       return 0;\n\n   if (n == 0)\n       return 1;\n   \n   return n * factorial(n - 1);\n}\n"
+   ]
+  },
+  "ada": {
+   "header": "Ada",
+   "lang": "ada",
+   "variants": [
+    "function Factorial (N : Positive) return Positive is\n   Result : Positive := N;\n   Counter : Natural := N - 1;\nbegin\n   for I in reverse 1..Counter loop\n      Result := Result * I;\n   end loop;\n   return Result;\nend Factorial;\n",
+    "function Factorial(N : Positive) return Positive is\n   Result : Positive := 1;\nbegin\n   if N > 1 then\n      Result := N * Factorial(N - 1);\n   end if;\n   return Result;\nend Factorial;\n",
+    "with Ada.Numerics.Generic_Complex_Types;\nwith Ada.Numerics.Generic_Complex_Elementary_Functions;\nwith Ada.Numerics.Generic_Elementary_Functions;\nwith Ada.Text_IO.Complex_Io;\nwith Ada.Text_Io; use Ada.Text_Io;\n\nprocedure Factorial_Numeric_Approximation is\n   type Real is digits 15;\n   package Complex_Pck is new Ada.Numerics.Generic_Complex_Types(Real);\n   use Complex_Pck;\n   package Complex_Io is new Ada.Text_Io.Complex_Io(Complex_Pck);\n   use Complex_IO;\n   package Cmplx_Elem_Funcs is new Ada.Numerics.Generic_Complex_Elementary_Functions(Complex_Pck);\n   use Cmplx_Elem_Funcs;\n   \n   function Gamma(X : Complex) return Complex is\n      package Elem_Funcs is new Ada.Numerics.Generic_Elementary_Functions(Real);\n      use Elem_Funcs;\n      use Ada.Numerics;\n      -- Coefficients used by the GNU Scientific Library\n      G : Natural := 7;\n      P : constant array (Natural range 0..G + 1) of Real := (\n         0.99999999999980993, 676.5203681218851, -1259.1392167224028,\n         771.32342877765313, -176.61502916214059, 12.507343278686905,\n         -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7);\n      Z : Complex := X;\n      Cx : Complex;\n      Ct : Complex;\n   begin\n      if Re(Z) < 0.5 then\n         return Pi / (Sin(Pi * Z) * Gamma(1.0 - Z));\n      else\n         Z := Z - 1.0;\n         Set_Re(Cx, P(0));\n         Set_Im(Cx, 0.0);\n         for I in 1..P'Last loop\n            Cx := Cx + (P(I) / (Z + Real(I)));\n         end loop;\n         Ct := Z + Real(G) + 0.5;\n         return Sqrt(2.0 * Pi) * Ct**(Z + 0.5) * Exp(-Ct) * Cx;\n      end if;\n   end Gamma;\n   \n   function Factorial(N : Complex) return Complex is\n   begin\n      return Gamma(N + 1.0);\n   end Factorial;\n   Arg : Complex;\nbegin\n   Put(\"factorial(-0.5)**2.0 = \");\n   Set_Re(Arg, -0.5);\n   Set_Im(Arg, 0.0);\n   Put(Item => Factorial(Arg) **2.0, Fore => 1, Aft => 8, Exp => 0);\n   New_Line;\n   for I in 0..9 loop\n      Set_Re(Arg, Real(I));\n      Set_Im(Arg, 0.0);\n      Put(\"factorial(\" & Integer'Image(I) & \") = \");\n      Put(Item => Factorial(Arg), Fore => 6, Aft => 8, Exp => 0);\n      New_Line;\n   end loop;\nend Factorial_Numeric_Approximation;\n"
+   ]
+  },
+  "agda": {
+   "header": "Agda",
+   "lang": "agda",
+   "variants": [
+    "module Factorial where\n\nopen import Data.Nat using (ℕ ; zero ; suc ; _*_)\n\nfactorial : (n : ℕ) → ℕ\nfactorial zero = 1\nfactorial (suc n) = (suc n) * (factorial n)\n"
+   ]
+  },
+  "aime": {
+   "header": "Aime",
+   "lang": "aime",
+   "variants": [
+    "integer\nfactorial(integer n)\n{\n    integer i, result;\n\n    result = 1;\n    i = 1;\n    while (i < n) {\n        i += 1;\n        result *= i;\n    }\n\n    return result;\n}\n"
+   ]
+  },
+  "apex": {
+   "header": "Apex",
+   "lang": "apex",
+   "variants": [
+    "public static long fact(final Integer n) {\n    if (n < 0) {\n        System.debug('No negative numbers');\n        return 0;\n    }\n    long ans = 1;\n    for (Integer i = 1; i <= n; i++) {\n        ans *= i;\n    }\n    return ans;\n}\n",
+    "public static long factRec(final Integer n) {\n    if (n < 0){\n        System.debug('No negative numbers');\n        return 0;\n    }\n    return (n < 2) ? 1 : n * fact(n - 1);\n}\n"
+   ]
+  },
+  "apl": {
+   "header": "APL",
+   "lang": "apl",
+   "variants": [
+    "      !6\n720\n",
+    "      FACTORIAL←{×/⍳⍵}  ⍝ OR:   FACTORIAL←×/⍳ \n",
+    "      FACTORIAL 6\n720\n",
+    "      fac←{⍵>1 : ⍵×fac ⍵-1 ⋄ 1}\n      fac 5\n120\n"
+   ]
+  },
+  "applescript": {
+   "header": "AppleScript",
+   "lang": "applescript",
+   "variants": [
+    "on factorial(x)\n    if x < 0 then return 0\n    set R to 1\n    repeat while x > 1\n        set {R, x} to {R * x, x - 1}\n    end repeat\n    return R\nend factorial\n",
+    "-- factorial :: Int -> Int\non factorial(x)\n    if x > 1 then\n        x * (factorial(x - 1))\n    else\n        1\n    end if\nend factorial\n",
+    "------------------------ FACTORIAL -----------------------\n\n-- factorial :: Int -> Int\non factorial(x)\n    \n    product(enumFromTo(1, x))\n    \nend factorial\n\n\n--------------------------- TEST -------------------------\non run\n    \n    factorial(11)\n    \n    --> 39916800\n    \nend run\n\n\n-------------------- GENERIC FUNCTIONS -------------------\n\n-- enumFromTo :: Int -> Int -> [Int]\non enumFromTo(m, n)\n    if m ≤ n then\n        set xs to {}\n        repeat with i from m to n\n            set end of xs to i\n        end repeat\n        xs\n    else\n        {}\n    end if\nend enumFromTo\n\n\n-- foldl :: (a -> b -> a) -> a -> [b] -> a\non foldl(f, startValue, xs)\n    tell mReturn(f)\n        set v to startValue\n        set lng to length of xs\n        repeat with i from 1 to lng\n            set v to |λ|(v, item i of xs, i, xs)\n        end repeat\n        return v\n    end tell\nend foldl\n\n\n-- Lift 2nd class handler function into 1st class script wrapper \n-- mReturn :: Handler -> Script\non mReturn(f)\n    if class of f is script then\n        f\n    else\n        script\n            property |λ| : f\n        end script\n    end if\nend mReturn\n\n\n-- product :: [Num] -> Num\non product(xs)\n    script multiply\n        on |λ|(a, b)\n            a * b\n        end |λ|\n    end script\n    \n    foldl(multiply, 1, xs)\nend product\n"
+   ]
+  },
+  "arkscript": {
+   "header": "ArkScript",
+   "lang": "arkscript",
+   "variants": [
+    "(let factorial (fun (n) {\n  (mut result 1)\n  (mut i 2)\n  (while (< i n) {\n    (set result (* result i))\n    (set i (+ 1 i)) })\n  result }))\n\n(import std.List)\n\n(list:forEach\n  (list:iota 0 8)\n  (fun (n) (print n \"\\t\" (factorial n))))\n"
+   ]
+  },
+  "arturo": {
+   "header": "Arturo",
+   "lang": "arturo",
+   "variants": [
+    "factorial: function [n][\n\tswitch n > 0 -> n * factorial n-1\n\t\t\t\t -> 1\n] \n\nloop 1..19 [x]->\n\tprint [\"Factorial of\" x \"=\" factorial x]\n",
+    "factorial: $[n][\n    fold.seed:1 1..n [a,b][a*b]\n]\n\nloop 1..19 [x][\n\tprint [\"Factorial of\" x \"=\" factorial x]\n]\n",
+    "factorial: $[n][product 1..n]\n\nloop 1..19 [x][\n\tprint [\"Factorial of\" x \"=\" factorial x]\n]\n"
+   ]
+  },
+  "asciidots": {
+   "header": "AsciiDots",
+   "lang": "asciidots",
+   "variants": [
+    "/---------*--~-$#-&\n| /--;---\\| [!]-\\\n| *------++--*#1/\n| | /1#\\ ||\n[*]*{-}-*~<+*?#-.\n*-------+-</\n\\-#0----/\n"
+   ]
+  },
+  "asymptote": {
+   "header": "Asymptote",
+   "lang": "asymptote",
+   "variants": [
+    "real factorial(int n) {\n    real f = 1;\n    for (int i = 2; i <= n; ++i)\n        f = f * i;\n    return f;\n}\n\nwrite(\"The factorials for the first 5 positive integers are:\");\nfor (int j = 1; j <= 5; ++j)\n    write(string(j) + \"! = \" + string(factorial(j)));\n"
+   ]
+  },
+  "ats": {
+   "header": "ATS",
+   "lang": "ats",
+   "variants": [
+    "fun\nfact\n(\n  n: int\n) : int = res where\n{\n  var n: int = n\n  var res: int = 1\n  val () = while (n > 0) (res := res * n; n := n - 1)\n}\n",
+    "fun\nfactorial\n  (n:int): int =\n  if n > 0 then n * factorial(n-1) else 1\n// end of [factorial]\n",
+    "fun\nfactorial\n  (n:int): int = let\n  fun loop(n: int, res: int): int =\n    if n > 0 then loop(n-1, n*res) else res\nin\n  loop(n, 1)\nend // end of [factorial]\n"
+   ]
+  },
+  "autohotkey": {
+   "header": "AutoHotkey",
+   "lang": "autohotkey",
+   "variants": [
+    "MsgBox % factorial(4)\n\nfactorial(n)\n{\n  result := 1 \n  Loop, % n\n    result *= A_Index\n  Return result \n}\n",
+    "MsgBox % factorial(4)\n\nfactorial(n)\n{\n  return n > 1 ? n-- * factorial(n) : 1\n}\n"
+   ]
+  },
+  "autoit": {
+   "header": "AutoIt",
+   "lang": "autoit",
+   "variants": [
+    ";AutoIt Version: 3.2.10.0\nMsgBox (0,\"Factorial\",factorial(6))\nFunc factorial($int)\n    If $int < 0 Then\n      Return 0\n   EndIf\n   $fact = 1\n   For $i = 1 To $int\n        $fact = $fact * $i\n   Next\n   Return $fact\nEndFunc\n",
+    ";AutoIt Version: 3.2.10.0\nMsgBox (0,\"Factorial\",factorial(6))\nFunc factorial($int)\n   if $int < 0 Then\n      return 0\n   Elseif $int == 0 Then\n      return 1\n   EndIf\n   return $int * factorial($int - 1)\nEndFunc\n"
+   ]
+  },
+  "avail": {
+   "header": "Avail",
+   "lang": "avail",
+   "variants": [
+    "Assert: 7! = 5040;\n",
+    "Method \"_`!\" is [n : [0..1] | 1];\n\nMethod \"_`!\" is\n[\n\tn : [2..∞)\n|\n\tleft fold 2 to n through [k : [2..∞), s : [2..∞) | k × s]\n];\n"
+   ]
+  },
+  "awk": {
+   "header": "AWK",
+   "lang": "awk",
+   "variants": [
+    "function fact_r(n)\n{\n  if ( n <= 1 ) return 1;\n  return n*fact_r(n-1);\n}\n",
+    "function fact(n)\n{\n  if ( n < 1 ) return 1;\n  r = 1\n  for(m = 2; m <= n; m++) {\n    r *= m;\n  }\n  return r\n}\n"
+   ]
+  },
+  "babel": {
+   "header": "Babel",
+   "lang": "babel",
+   "variants": [
+    "((main \n    {(0 1 2 3 4 5 6 7 8 9 10)\n    {fact ! %d nl <<}    \n    each})\n\n(fact\n       {({dup 0 =}{ zap 1 }\n         {dup 1 =}{ zap 1 }\n         {1      }{ <- 1 {iter 1 + *} -> 1 - times })\n        cond}))\n",
+    "((main \n    {(0 1 2 3 4 5 6 7 8 9 10) \n    {fact ! %d nl <<}\n    each})\n\n(fact\n       {({dup 0 =}{ zap 1 }\n         {dup 1 =}{ zap 1 }\n         {1      }{ dup 1 - fact ! *})\n        cond}))\n"
+   ]
+  },
+  "ballerina": {
+   "header": "Ballerina",
+   "lang": "ballerina",
+   "variants": [
+    "import ballerina/io;\n\nfunction fac(int a) returns int {\n    int prod = 1;\n    foreach int i in 1...a {\n        prod *= i;\n    }\n    return prod;\n}\n\npublic function main() {\n    foreach int i in 1...10 {\n        io:print(i);\n        io:print(\"! = \");\n        io:print(fac(i));\n        io:println();\n    }\n}\n"
+   ]
+  },
+  "bash": {
+   "header": "bash",
+   "lang": "bash",
+   "variants": [
+    "factorial()\n{\n  if [ $1 -le 1 ]\n  then\n    echo 1\n  else\n    result=$(factorial $[$1-1])\n    echo $((result*$1))\n  fi\n}\n",
+    "factorial()\n{\n  declare -nI _result=$1\n  declare -i n=$2\n\n  _result=1\n  while (( n > 0 )); do\n    let _result*=n\n    let n-=1\n  done\n}\n"
+   ]
+  },
+  "basic": {
+   "header": "BASIC",
+   "lang": "basic",
+   "variants": [
+    "FUNCTION factorial (n AS Integer) AS Integer\n    DIM f AS Integer, i AS Integer\n    f = 1\n    FOR  i = 2 TO n\n        f = f*i\n    NEXT i\n    factorial = f\nEND FUNCTION\n",
+    "FUNCTION factorial (n AS Integer) AS Integer\n    IF n < 2 THEN\n        factorial = 1\n    ELSE\n        factorial = n * factorial(n-1)\n    END IF\nEND FUNCTION\n",
+    "100 N = 4 : GOSUB 200\"FACTORIAL\n110 PRINT N\n120 END\n\n200 N = INT(N)\n210 IF N > 1 THEN FOR I = N - 1 TO 2 STEP -1 : N = N * I : NEXT I\n220 RETURN\n",
+    " 10 A = 768:L = 7\n 20  DATA 165,157,240,3\n 30  DATA 32,149,217,96\n 40  FOR I = A TO A + L\n 50  READ B: POKE I,B: NEXT \n 60 H = 256: POKE 12,A / H\n 70  POKE 11,A -  PEEK (12) * H\n 80  DEF  FN FA(N) =  USR (N < 2) + N *  FN FA(N - 1)\n 90  PRINT  FN FA(4)\n",
+    "' Factorial\nFUNCTION factorial(NUMBER n) TYPE NUMBER\n    IF n <= 1 THEN\n        RETURN 1\n    ELSE\n        RETURN n * factorial(n - 1)\n    ENDIF\nEND FUNCTION\n\nn = VAL(TOKEN$(ARGUMENT$, 2))\nPRINT n, factorial(n) FORMAT \"%ld! = %ld\\n\"\n"
+   ]
+  },
+  "bc": {
+   "header": "bc",
+   "lang": "bc",
+   "variants": [
+    "#! /usr/bin/bc -q\n\ndefine f(x) {\n  if (x <= 1) return (1); return (f(x-1) * x)\n}\nf(1000)\nquit\n"
+   ]
+  },
+  "beads-lang": {
+   "header": "Beads",
+   "lang": "beads-lang",
+   "variants": [
+    "beads 1 program Factorial\n//  only works for cardinal numbers 0..N\ncalc main_init\n\tlog to_str(Iterative(4))  //  24\n\tlog to_str(Recursive(5))  //  120\n\ncalc Iterative(\n\tn:num\t--  number of iterations\n\t):num   --  result\n\tvar total = 1\n\tloop from:2 to:n index:ix\n\t\ttotal = ix * total \n\treturn total\n\t\ncalc Recursive ditto\n\tif n <= 1\n\t\treturn 1\n\telse\n\t\treturn n * Recursive(n-1)\n"
+   ]
+  },
+  "befunge": {
+   "header": "Befunge",
+   "lang": "befunge",
+   "variants": [
+    "&1\\>  :v v *<\n   ^-1:_$>\\:|\n         @.$<\n"
+   ]
+  },
+  "bqn": {
+   "header": "BQN",
+   "lang": "bqn",
+   "variants": [
+    "Fac ← ×´1+↕\n! 720 ≡ Fac 6\n"
+   ]
+  },
+  "bruijn": {
+   "header": "Bruijn",
+   "lang": "bruijn",
+   "variants": [
+    ":import std/Math .\n\nfactorial [∏ (+1) → 0 | [0]]\n\n:test ((factorial (+10)) =? (+3628800)) ([[1]])\n"
+   ]
+  },
+  "c": {
+   "header": "C",
+   "lang": "c",
+   "variants": [
+    "int factorial(int n) {\n    int result = 1;\n    for (int i = 1; i <= n; ++i)\n        result *= i;\n    return result;\n}\n",
+    "int factorialSafe(int n) {\n    int result = 1;\n    if(n<0)\n        return -1;\n    for (int i = 1; i <= n; ++i)\n        result *= i;\n    return result;\n}\n",
+    "int factorial(int n) {\n    return n == 0 ? 1 : n * factorial(n - 1);\n}\n",
+    "int factorialSafe(int n) {\n    return n<0 ? -1 : n == 0 ? 1 : n * factorialSafe(n - 1);\n}\n",
+    "int fac_aux(int n, int acc) {\n    return n < 1 ? acc : fac_aux(n - 1, acc * n);\n}\n\nint fac_auxSafe(int n, int acc) {\n    return n<0 ? -1 : n < 1 ? acc : fac_aux(n - 1, acc * n);\n}\n\nint factorial(int n) {\n    return fac_aux(n, 1);\n}\n"
+   ]
+  },
+  "c3": {
+   "header": "C3",
+   "lang": "c3",
+   "variants": [
+    "fn int factorial(int n)\n{\n    int result = 1;\n    for (int i = 1; i <= n; ++i)\n    {\n        result *= i;\n    }\n    return result;\n}\n",
+    " fn int factorial(int n)\n{\n    return n == 0 ? 1 : n * factorial(n - 1);\n}\n",
+    "macro int factorial($n)\n{\n    $if ($n == 0):\n        return 1;\n    $else:\n        return $n * @factorial($n - 1);\n    $endif;\n}\n\nfn void test()\n{\n    int x = @factorial(10);\n}\n"
+   ]
+  },
+  "cat": {
+   "header": "Cat",
+   "lang": "cat",
+   "variants": [
+    "define rec_fac\n      { dup 1 <= [pop 1] [dec rec_fac *] if }\n"
+   ]
+  },
+  "ceylon": {
+   "header": "Ceylon",
+   "lang": "ceylon",
+   "variants": [
+    "shared void run() {\n\t\n\tInteger? recursiveFactorial(Integer n) => \n\t\t\tswitch(n <=> 0)\n\t\t\tcase(smaller) null\n\t\t\tcase(equal) 1\n\t\t\tcase(larger) if(exists f = recursiveFactorial(n - 1)) then n * f else null;\n\t\n\t\n\tInteger? iterativeFactorial(Integer n) =>\n\t\t\tswitch(n <=> 0)\n\t\t\tcase(smaller) null\n\t\t\tcase(equal) 1\n\t\t\tcase(larger) (1:n).reduce(times);\n\t\n\tfor(Integer i in 0..10) {\n\t\tprint(\"the iterative factorial of     ``i`` is ``iterativeFactorial(i) else \"negative\"``\n\t\t       and the recursive factorial of ``i`` is ``recursiveFactorial(i) else \"negative\"``\\n\");\n\t}\n}\n"
+   ]
+  },
+  "chapel": {
+   "header": "Chapel",
+   "lang": "chapel",
+   "variants": [
+    "proc fac(n) {\n\tvar r = 1;\n\tfor i in 1..n do\n\t\tr *= i;\n \n\treturn r;\n}\n"
+   ]
+  },
+  "chef": {
+   "header": "Chef",
+   "lang": "chef",
+   "variants": [
+    "Caramel Factorials.\n\nOnly reads one value.\n\nIngredients.\n1 g Caramel\n2 g Factorials\n\nMethod.\nTake Factorials from refrigerator.\nPut Caramel into 1st mixing bowl.\nVerb the Factorials.\nCombine Factorials into 1st mixing bowl.\nVerb Factorials until verbed.\nPour contents of the 1st mixing bowl into the 1st baking dish.\n\nServes 1.\n"
+   ]
+  },
+  "chuck": {
+   "header": "ChucK",
+   "lang": "chuck",
+   "variants": [
+    "0 => int total;\nfun int factorial(int i)\n{\n    if (i == 0) return 1;\n    else\n    {\n        i * factorial(i - 1) => total;\n    } \n    return total;\n}\n\n// == another way \nfun int factorial(int x)\n{ \n    if (x <= 1 ) return 1; \n    else return x * factorial (x - 1);\n}\n\n// call\nfactorial (5) => int answer;\n\n// test\nif ( answer == 120 ) <<<\"success\">>>;\n",
+    "1 => int total;\nfun int factorial(int i)\n{\n    while(i > 0) \n    {\n        total * i => total;\n        1 -=> i;\n    }\n    return total;\n}\n"
+   ]
+  },
+  "clay": {
+   "header": "Clay",
+   "lang": "clay",
+   "variants": [
+    "factorialRec(n) {\n    if (n == 0) return 1;\n    return n * factorialRec(n - 1);\n}\n\nfactorialIter(n) {\n    for (i in range(1, n))\n        n *= i;\n    return n;\n}\n\nfactorialFold(n) {\n    return reduce(multiply, 1, range(1, n + 1));\n}\n",
+    "[n|n > 0] factorialStatic(static n) = n * factorialStatic(static n - 1);\noverload factorialStatic(static 0) = 1;\n",
+    "[N|Integer?(N)] factorial(n: N) {\n    if (n == 0) return N(1);\n    return n * factorial(n - 1);\n}\n",
+    "main() {\n    println(factorialRec(5));           // 120\n    println(factorialIter(5));          // 120\n    println(factorialFold(5));          // 120\n    println(factorialStatic(static 5)); // 120\n    println(factorial(Int64(20)));      // 2432902008176640000\n}\n"
+   ]
+  },
+  "clips": {
+   "header": "CLIPS",
+   "lang": "clips",
+   "variants": [
+    " (deffunction factorial (?a)\n    (if (or (not (integerp ?a)) (< ?a 0)) then\n        (printout t \"Factorial Error!\" crlf)\n     else\n        (if (= ?a 0) then\n            1\n         else\n            (* ?a (factorial (- ?a 1))))))\n"
+   ]
+  },
+  "clojure": {
+   "header": "Clojure",
+   "lang": "clojure",
+   "variants": [
+    "(defn factorial [x]\n  (apply *' (range 2 (inc x))))\n",
+    "(defn factorial [x]\n  (if (< x 2)\n      1\n      (*' x (factorial (dec x)))))\n",
+    "(defn factorial [x]\n  (loop [x x\n         acc 1]\n    (if (< x 2)\n        acc\n        (recur (dec x) (*' acc x)))))\n",
+    "(defn factorial\n  ([x] (trampoline factorial x 1))\n  ([x acc]\n   (if (< x 2)\n     acc\n     #(factorial (dec x) (*' acc x)))))\n"
+   ]
+  },
+  "clu": {
+   "header": "CLU",
+   "lang": "clu",
+   "variants": [
+    "factorial = proc (n: int) returns (int) signals (negative)\n    if n<0 then signal negative\n    elseif n=0 then return(1)\n    else return(n * factorial(n-1))\n    end\nend factorial\n\nstart_up = proc ()\n    po: stream := stream$primary_output()\n    \n    for i: int in int$from_to(0, 10) do\n        fac: int := factorial(i)\n        stream$putl(po, int$unparse(i) || \"! = \" || int$unparse(fac))\n    end\nend start_up\n"
+   ]
+  },
+  "cmake": {
+   "header": "CMake",
+   "lang": "cmake",
+   "variants": [
+    "function(factorial var n)\n  set(product 1)\n  foreach(i RANGE 2 ${n})\n    math(EXPR product \"${product} * ${i}\")\n  endforeach(i)\n  set(${var} ${product} PARENT_SCOPE)\nendfunction(factorial)\n\nfactorial(f 12)\nmessage(\"12! = ${f}\")\n"
+   ]
+  },
+  "cobol": {
+   "header": "COBOL",
+   "lang": "cobol",
+   "variants": [
+    "MOVE FUNCTION FACTORIAL(num) TO result\n",
+    "       IDENTIFICATION DIVISION.\n       FUNCTION-ID. factorial_iterative.\n\n       DATA DIVISION.\n       LOCAL-STORAGE SECTION.\n       01  i      PIC 9(38).\n\n       LINKAGE SECTION.\n       01  n      PIC 9(38).\n       01  ret    PIC 9(38).\n\n       PROCEDURE DIVISION USING BY VALUE n RETURNING ret.\n           MOVE 1 TO ret\n \n           PERFORM VARYING i FROM 2 BY 1 UNTIL n < i\n               MULTIPLY i BY ret\n           END-PERFORM\n \n           GOBACK.\n\n       END FUNCTION factorial_iterative.\n",
+    "       IDENTIFICATION DIVISION.\n       FUNCTION-ID. factorial_recursive.\n\n       DATA DIVISION.\n       LOCAL-STORAGE SECTION.\n       01  prev-n PIC 9(38).\n\n       LINKAGE SECTION.\n       01  n      PIC 9(38).\n       01  ret    PIC 9(38).\n\n       PROCEDURE DIVISION USING BY VALUE n RETURNING ret.\n           IF n = 0\n               MOVE 1 TO ret\n           ELSE\n               SUBTRACT 1 FROM n GIVING prev-n\n               MULTIPLY n BY factorial_recursive(prev-n) GIVING ret\n           END-IF\n \n           GOBACK.\n\n       END FUNCTION factorial_recursive.\n",
+    "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. factorial_test.\n\n       ENVIRONMENT DIVISION.\n       CONFIGURATION SECTION.\n       REPOSITORY.\n           FUNCTION factorial_iterative\n           FUNCTION factorial_recursive.\n\n       DATA DIVISION.\n       LOCAL-STORAGE SECTION.\n       01  i      PIC 9(38).\n\n       PROCEDURE DIVISION.\n           DISPLAY\n               \"i = \"\n               WITH NO ADVANCING\n           END-DISPLAY.\n           ACCEPT i END-ACCEPT.\n           DISPLAY SPACE END-DISPLAY.\n\n           DISPLAY\n               \"factorial_iterative(i) = \"\n               factorial_iterative(i)\n           END-DISPLAY.\n\n           DISPLAY\n               \"factorial_recursive(i) = \"\n               factorial_recursive(i)\n           END-DISPLAY.\n\n           GOBACK.\n\n       END PROGRAM factorial_test.\n"
+   ]
+  },
+  "coffeescript": {
+   "header": "CoffeeScript",
+   "lang": "coffeescript",
+   "variants": [
+    "fac = (n) ->\n  if n <= 1\n    1\n  else\n    n * fac n-1\n",
+    "fac = (n) ->\n  [1..n].reduce (x,y) -> x*y\n"
+   ]
+  },
+  "comal": {
+   "header": "Comal",
+   "lang": "comal",
+   "variants": [
+    "  PROC Recursive(n) CLOSED\n    r:=1\n    IF n>1 THEN \n      r:=n*Recursive(n-1)\n    ENDIF\n    RETURN r\n  ENDPROC Recursive\n"
+   ]
+  },
+  "common-lisp": {
+   "header": "Common Lisp",
+   "lang": "common-lisp",
+   "variants": [
+    "(defun factorial (n)\n  (if (zerop n) 1 (* n (factorial (1- n)))))\n",
+    "(defun factorial (n)\n  (if (< n 2) 1 (* n (factorial (1- n)))))\n",
+    "(defun factorial (n &optional (m 1))\n  (if (zerop n) m (factorial (1- n) (* m n))))\n",
+    "(defun factorial (n)\n  \"Calculates N!\"\n  (loop for result = 1 then (* result i)\n     for i from 2 to n \n     finally (return result)))\n",
+    "(defun factorial (n)\n    (reduce #'* (loop for i from 1 to n collect i)))\n"
+   ]
+  },
+  "component-pascal": {
+   "header": "Component Pascal",
+   "lang": "component-pascal",
+   "variants": [
+    "MODULE RcdFactorial;\nIMPORT TextMappers, DevCommanders, StdLog;\n\nPROCEDURE GetParams(VAR ps: ARRAY OF INTEGER);\nVAR\n\ti: INTEGER;\n\ts: TextMappers.Scanner;\n\tp: DevCommanders.Par;\nBEGIN\n\tp := DevCommanders.par;\n\tIF p # NIL THEN\n\t\ts.ConnectTo(p.text);s.SetPos(p.beg);\n\t\ts.Scan;i := 0;\n\t\tWHILE (i < LEN(ps)) & (s.type = TextMappers.int) DO\n\t\t\tps[i] := s.int;INC(i);\n\t\t\ts.Scan\n\t\tEND\n\tEND\nEND GetParams;\n\nPROCEDURE Factorial(i: LONGINT): LONGINT;\nVAR\nBEGIN\n\tIF i < 0 THEN i := -i  END;\n\tIF i < 2 THEN\n\t\tRETURN i\n\tELSE\n\t\tRETURN i * Factorial(i - 1)\n\tEND\nEND Factorial;\n\nPROCEDURE ComputeRange*;\nVAR\n\ti: INTEGER;\n\tps: ARRAY 2 OF INTEGER;\nBEGIN\n\tGetParams(ps);\n\tFOR i := ps[0] TO ps[1] DO\n\t\tStdLog.Int(i);StdLog.String(\"! =\");StdLog.Int(Factorial(i));\n\t\tStdLog.Ln\t\t\n\tEND\nEND ComputeRange;\n\nEND RcdFactorial.\n"
+   ]
+  },
+  "cpp": {
+   "header": "C++",
+   "lang": "cpp",
+   "variants": [
+    "#include <boost/iterator/counting_iterator.hpp>\n#include <algorithm>\n\nint factorial(int n)\n{\n  // last is one-past-end\n  return std::accumulate(boost::counting_iterator<int>(1), boost::counting_iterator<int>(n+1), 1, std::multiplies<int>());\n}\n",
+    "//iteration with while\nlong long int factorial(long long int n)\n{ \n   long long int r = 1;\n   while(1<n) \n       r *= n--;\n   return r;\n}\n",
+    "template <int N>\nstruct Factorial \n{\n    enum { value = N * Factorial<N - 1>::value };\n};\n \ntemplate <>\nstruct Factorial<0> \n{\n    enum { value = 1 };\n};\n \n// Factorial<4>::value == 24\n// Factorial<0>::value == 1\nvoid foo()\n{\n    int x = Factorial<4>::value; // == 24\n    int y = Factorial<0>::value; // == 1\n}\n",
+    "#include <algorithm>\n#include <chrono>\n#include <iostream>\n#include <numeric>\n#include <vector>\n#include <boost/iterator/counting_iterator.hpp>\n\nusing ulli = unsigned long long int;\n\n// bad style do-while and wrong for Factorial1(0LL) -> 0 !!!\nulli Factorial1(ulli m_nValue) {\n    ulli result = m_nValue;\n    ulli result_next;\n    ulli pc = m_nValue;\n    do {\n        result_next = result * (pc - 1);\n        result = result_next;\n        pc--;\n    } while (pc > 2);\n    return result;\n}\n\n// iteration with while\nulli Factorial2(ulli n) {\n    ulli r = 1;\n    while (1 < n)\n        r *= n--;\n    return r;\n}\n\n// recursive\nulli Factorial3(ulli n) {\n    return n < 2 ? 1 : n * Factorial3(n - 1);\n}\n\n// tail recursive\ninline ulli _fac_aux(ulli n, ulli acc) {\n    return n < 1 ? acc : _fac_aux(n - 1, acc * n);\n}\nulli Factorial4(ulli n) {\n    return _fac_aux(n, 1);\n}\n\n// accumulate with functor\nulli Factorial5(ulli n) {\n    // last is one-past-end\n    return std::accumulate(boost::counting_iterator<ulli>(1ULL),\n                           boost::counting_iterator<ulli>(n + 1ULL), 1ULL,\n                           std::multiplies<ulli>());\n}\n\n// accumulate with lambda\nulli Factorial6(ulli n) {\n    // last is one-past-end\n    return std::accumulate(boost::counting_iterator<ulli>(1ULL),\n                           boost::counting_iterator<ulli>(n + 1ULL), 1ULL,\n                           [](ulli a, ulli b) { return a * b; });\n}\n\nint main() {\n    ulli v = 20; // max value with unsigned long long int\n    ulli result;\n    std::cout << std::fixed;\n    using duration = std::chrono::duration<double, std::micro>;\n\n    {\n        auto t1 = std::chrono::high_resolution_clock::now();\n        result = Factorial1(v);\n        auto t2 = std::chrono::high_resolution_clock::now();\n        std::cout << \"do-while(1)               result \" << result << \" took \" << duration(t2 - t1).count() << \" µs\\n\";\n    }\n\n    {\n        auto t1 = std::chrono::high_resolution_clock::now();\n        result = Factorial2(v);\n        auto t2 = std::chrono::high_resolution_clock::now();\n        std::cout << \"while(2)                  result \" << result << \" took \" << duration(t2 - t1).count() << \" µs\\n\";\n    }\n\n    {\n        auto t1 = std::chrono::high_resolution_clock::now();\n        result = Factorial3(v);\n        auto t2 = std::chrono::high_resolution_clock::now();\n        std::cout << \"recursive(3)              result \" << result << \" took \" << duration(t2 - t1).count() << \" µs\\n\";\n    }\n\n    {\n        auto t1 = std::chrono::high_resolution_clock::now();\n        result = Factorial3(v);\n        auto t2 = std::chrono::high_resolution_clock::now();\n        std::cout << \"tail recursive(4)         result \" << result << \" took \" << duration(t2 - t1).count() << \" µs\\n\";\n    }\n\n    {\n        auto t1 = std::chrono::high_resolution_clock::now();\n        result = Factorial5(v);\n        auto t2 = std::chrono::high_resolution_clock::now();\n        std::cout << \"std::accumulate(5)        result \" << result << \" took \" << duration(t2 - t1).count() << \" µs\\n\";\n    }\n\n    {\n        auto t1 = std::chrono::high_resolution_clock::now();\n        result = Factorial6(v);\n        auto t2 = std::chrono::high_resolution_clock::now();\n        std::cout << \"std::accumulate lambda(6) result \" << result << \" took \" << duration(t2 - t1).count() << \" µs\\n\";\n    }\n}\n"
+   ]
+  },
+  "crystal": {
+   "header": "Crystal",
+   "lang": "crystal",
+   "variants": [
+    "def factorial(x : Int)\n    ans = 1\n    (1..x).each do |i|\n        ans *= i\n    end\n    return ans\nend\n",
+    "def factorial(x : Int)\n    if x <= 1\n        return 1\n    end\n    return x * factorial(x - 1)\nend\n"
+   ]
+  },
+  "d": {
+   "header": "D",
+   "lang": "d",
+   "variants": [
+    "uint factorial(in uint n) pure nothrow @nogc\nin {\n    assert(n <= 12);\n} body {\n    uint result = 1;\n    foreach (immutable i; 1 .. n + 1)\n        result *= i;\n    return result;\n}\n\n// Computed and printed at compile-time.\npragma(msg, 12.factorial);\n\nvoid main() {\n    import std.stdio;\n\n    // Computed and printed at run-time.\n    12.factorial.writeln;\n}\n",
+    "uint factorial(in uint n) pure nothrow @nogc\nin {\n    assert(n <= 12);\n} body {\n    if (n == 0)\n        return 1;\n    else\n        return n * factorial(n - 1);\n}\n\n// Computed and printed at compile-time.\npragma(msg, 12.factorial);\n\nvoid main() {\n    import std.stdio;\n\n    // Computed and printed at run-time.\n    12.factorial.writeln;\n}\n",
+    "import std.stdio, std.algorithm, std.range;\n\nuint factorial(in uint n) pure nothrow @nogc\nin {\n    assert(n <= 12);\n} body {\n    return reduce!q{a * b}(1u, iota(1, n + 1));\n}\n\n// Computed and printed at compile-time.\npragma(msg, 12.factorial);\n\nvoid main() {\n    // Computed and printed at run-time.\n    12.factorial.writeln;\n}\n",
+    "uint factorial(in uint n) pure nothrow\nin {\n    assert(n <= 12);\n} body {\n    static uint inner(uint n, uint acc) pure nothrow @nogc {\n        if (n < 1)\n            return acc;\n        else\n            return inner(n - 1, acc * n);\n    }\n    return inner(n, 1);\n}\n\n// Computed and printed at compile-time.\npragma(msg, 12.factorial);\n\nvoid main() {\n    import std.stdio;\n\n    // Computed and printed at run-time.\n    12.factorial.writeln;\n}\n"
+   ]
+  },
+  "dart": {
+   "header": "Dart",
+   "lang": "dart",
+   "variants": [
+    "int fact(int n) {\n  if(n<0) {\n    throw new IllegalArgumentException('Argument less than 0');\n  }\n  return n==0 ? 1 : n*fact(n-1);\n}\n\nmain() {\n  print(fact(10));\n  print(fact(-1));\n}\n",
+    "int fact(int n) {\n  if(n<0) {\n    throw new IllegalArgumentException('Argument less than 0');\n  }\n  int res=1;\n  for(int i=1;i<=n;i++) {\n    res*=i;\n  }\n  return res;\n}\n \nmain() {\n  print(fact(10));\n  print(fact(-1));\n}\n"
+   ]
+  },
+  "dc": {
+   "header": "dc",
+   "lang": "dc",
+   "variants": [
+    "[*\n * (n) lfx -- (factorial of n)\n *]sz\n[\n 1 Sp           [product = 1]sz\n [              [Loop while 1 < n:]sz\n  d lp * sp      [product = n * product]sz\n  1 -            [n = n - 1]sz\n  d 1 <f\n ]Sf d 1 <f\n Lfsz           [Drop loop.]sz\n sz             [Drop n.]sz\n Lp             [Push product.]sz\n]sf\n\n[*\n * For example, print the factorial of 50.\n *]sz\n50 lfx psz\n"
+   ]
+  },
+  "delphi": {
+   "header": "Delphi",
+   "lang": "delphi",
+   "variants": [
+    "program Factorial1;\n\n{$APPTYPE CONSOLE}\n\nfunction FactorialIterative(aNumber: Integer): Int64;\nvar\n  i: Integer;\nbegin\n  Result := 1;\n  for i := 1 to aNumber do\n    Result := i * Result;\nend;\n\nbegin\n  Writeln('5! = ', FactorialIterative(5));\nend.\n",
+    "program Factorial2;\n\n{$APPTYPE CONSOLE}\n\nfunction FactorialRecursive(aNumber: Integer): Int64;\nbegin\n  if aNumber < 1 then\n    Result := 1\n  else\n    Result := aNumber * FactorialRecursive(aNumber - 1);\nend;\n\nbegin\n  Writeln('5! = ', FactorialRecursive(5));\nend.\n",
+    "program Factorial3;\n\n{$APPTYPE CONSOLE}\n\nfunction FactorialTailRecursive(aNumber: Integer): Int64;\n\n  function FactorialHelper(aNumber: Integer; aAccumulator: Int64): Int64;\n  begin\n    if aNumber = 0 then\n      Result := aAccumulator\n    else\n      Result := FactorialHelper(aNumber - 1, aNumber * aAccumulator);\n    end;\n\nbegin\n  if aNumber < 1 then\n    Result := 1\n  else\n    Result := FactorialHelper(aNumber, 1);\nend;\n\nbegin\n  Writeln('5! = ', FactorialTailRecursive(5));\nend.\n"
+   ]
+  },
+  "draco-programming-language": {
+   "header": "Draco",
+   "lang": "draco-programming-language",
+   "variants": [
+    "/* Note that ulong is 32 bits, so fac(12) is the largest\n * supported value. This is why the input parameter\n * is a byte. The parameters are all unsigned. */ \nproc nonrec fac(byte n) ulong:\n    byte i;\n    ulong rslt;\n    rslt := 1;\n    for i from 2 upto n do\n        rslt := rslt * i\n    od;\n    rslt\ncorp\n\nproc nonrec main() void:\n    byte i;\n    for i from 0 upto 12 do\n        writeln(i:2, \"! = \", fac(i):9)\n    od\ncorp\n"
+   ]
+  },
+  "dylan": {
+   "header": "Dylan",
+   "lang": "dylan",
+   "variants": [
+    "define method factorial (n)\n  if (n < 1)\n    error(\"invalid argument\");\n  else\n    reduce1(\\*, range(from: 1, to: n))\n  end\nend method;\n",
+    "define method factorial (n)\n  if (n < 1)\n    error(\"invalid argument\");\n  else\n    let total = 1;\n    for (i from n to 2 by -1)\n      total := total * i;\n    end;\n    total\n  end\nend method;\n",
+    "define method factorial (n)\n  if (n < 1)\n    error(\"invalid argument\");\n  end;\n  local method loop (n)\n          if (n <= 2)\n            n\n          else\n            n * loop(n - 1)\n          end\n        end;\n  loop(n)\nend method;\n",
+    "define method factorial (n)\n  if (n < 1)\n    error(\"invalid argument\");\n  end;\n  // Dylan implementations are required to perform tail call optimization so                                                                                                                                                                \n  // this is equivalent to iteration.                                                                                                                                                                                                       \n  local method loop (n, total)\n          if (n <= 2)\n            total\n          else\n            let next = n - 1;\n            loop(next, total * next)\n          end\n        end;\n  loop(n, n)\nend method;\n"
+   ]
+  },
+  "e": {
+   "header": "E",
+   "lang": "e",
+   "variants": [
+    "pragma.enable(\"accumulator\")\ndef factorial(n) {\n  return accum 1 for i in 2..n { _ * i }\n}\n"
+   ]
+  },
+  "egl": {
+   "header": "EGL",
+   "lang": "egl",
+   "variants": [
+    "function fact(n int in) returns (bigint)\n    if (n < 0)\n        writestdout(\"No negative numbers\");\n        return (0);\n    end\n    ans bigint = 1;\n    for (i int from 1 to n)\n        ans *= i;\n    end\n    return (ans);\nend\n",
+    "function fact(n int in) returns (bigint)\n    if (n < 0)\n        SysLib.writeStdout(\"No negative numbers\");\n        return (0);\n    end\n    if (n < 2)\n    \treturn (1);\n    else \n    \treturn (n * fact(n - 1));\n    end\nend\n"
+   ]
+  },
+  "eiffel": {
+   "header": "Eiffel",
+   "lang": "eiffel",
+   "variants": [
+    "note\n\tdescription: \"recursive and iterative factorial example of a positive integer.\"\n\nclass\n\tFACTORIAL_EXAMPLE\n\ncreate\n\tmake\n\nfeature -- Initialization\n\n\tmake\n\t\tlocal\n\t\t\tn: NATURAL\n\t\tdo\n\t\t\tn := 5\n\t\t\tprint (\"%NFactorial of \" + n.out + \" = \")\n\t\t\tprint (recursive_factorial (n))\n\t\tend\n\nfeature -- Access\n\n\trecursive_factorial (n: NATURAL): NATURAL\n\t\t\t-- factorial of 'n'\n\t\tdo\n\t\t\tif n = 0 then\n\t\t\t\tResult := 1\n\t\t\telse\n\t\t\t\tResult := n * recursive_factorial (n - 1)\n\t\t\tend\n\t\tend\n\n\titerative_factorial (n: NATURAL): NATURAL\n\t\t\t-- factorial of 'n'\n\t\tlocal\n\t\t\tv: like n\n\t\tdo\n\t\t\tfrom\n\t\t\t\tResult := 1\n\t\t\t\tv := n\n\t\t\tuntil\n\t\t\t\tv <= 1\n\t\t\tloop\n\t\t\t\tResult := Result * v\n\t\t\t\tv := v - 1\n\t\t\tend\n\t\tend\n\nend\n"
+   ]
+  },
+  "elixir": {
+   "header": "Elixir",
+   "lang": "elixir",
+   "variants": [
+    "defmodule Factorial do\n  # Simple recursive function\n  def fac(0), do: 1\n  def fac(n) when n > 0, do: n * fac(n - 1)\n  \n  # Tail recursive function\n  def fac_tail(0), do: 1\n  def fac_tail(n), do: fac_tail(n, 1)\n  def fac_tail(1, acc), do: acc \n  def fac_tail(n, acc) when n > 1, do: fac_tail(n - 1, acc * n)\n\n  # Tail recursive function with default parameter\n  def fac_default(n, acc \\\\ 1)\n  def fac_default(0, acc), do: acc\n  def fac_default(n, acc) when n > 0, do: fac_default(n - 1, acc * n)\n  \n  # Using Enumeration features\n  def fac_reduce(0), do: 1\n  def fac_reduce(n) when n > 0, do: Enum.reduce(1..n, 1, &*/2)\n\n  # Using Enumeration features with pipe operator\n  def fac_pipe(0), do: 1\n  def fac_pipe(n) when n > 0, do: 1..n |> Enum.reduce(1, &*/2)\n\nend\n"
+   ]
+  },
+  "elm": {
+   "header": "Elm",
+   "lang": "elm",
+   "variants": [
+    "factorial : Int -> Int\nfactorial n =\n  if n < 1 then 1 else n*factorial(n-1)\n",
+    "factorialAux : Int -> Int -> Int\nfactorialAux a acc =\n    if a < 2 then acc else factorialAux (a - 1) (a * acc)\n\nfactorial : Int -> Int\nfactorial a =\n    factorialAux a 1\n",
+    "import List exposing (product, range)\n\nfactorial : Int -> Int\nfactorial a =\n    product (range 1 a)\n"
+   ]
+  },
+  "emacs-lisp": {
+   "header": "Emacs Lisp",
+   "lang": "emacs-lisp",
+   "variants": [
+    ";; Functional (most elegant and best suited to Lisp dialects):\n(defun fact (n)\n  \"Return the factorial of integer N, which require to be positive or 0.\"\n  ;; Elisp won't do any type checking automatically, so\n  ;; good practice would be doing that ourselves:\n  (if (not (and (integerp n) (>= n 0)))\n      (error \"Function fact (N): Not a natural number or 0: %S\" n)) \n  ;; But the actual code is very short:\n  (apply '* (number-sequence 1 n)))     \n  ;; (For N = 0, number-sequence returns the empty list, resp. nil,\n  ;; and the * function works with zero arguments, returning 1.) \n",
+    ";; Recursive:\n(defun fact (n)\n  \"Return the factorial of integer N, which require to be positive or 0.\"\n  (if (not (and (integerp n) (>= n 0))) ; see above\n      (error \"Function fact (N): Not a natural number or 0: %S\" n))\n  (cond ; (or use an (if ...) with an else part)\n   ((or (= n 0) (= n 1)) 1)\n    (t (* n (fact (1- n))))))\n",
+    "(require 'calc)\n(calc-eval \"fact(30)\")\n=>\n\"265252859812191058636308480000000\"\n"
+   ]
+  },
+  "erlang": {
+   "header": "Erlang",
+   "lang": "erlang",
+   "variants": [
+    "lists:foldl(fun(X,Y) -> X*Y end, 1, lists:seq(1,N)).\n",
+    "fac(1) -> 1;\nfac(N) -> N * fac(N-1).\n",
+    "fac(N) -> fac(N-1,N).\nfac(1,N) -> N;\nfac(I,N) -> fac(I-1,N*I).\n"
+   ]
+  },
+  "euphoria": {
+   "header": "Euphoria",
+   "lang": "euphoria",
+   "variants": [
+    "function factorial(integer n)\n  atom f = 1\n  while n > 1 do\n    f *= n\n    n -= 1\n  end while\n\n  return f\nend function\n",
+    "function factorial(integer n)\n  if n > 1 then\n    return factorial(n-1) * n\n  else\n    return 1\n  end if\nend function\n",
+    "function factorial(integer n, integer acc = 1)\n  if n <= 0 then\n    return acc\n  else\n    return factorial(n-1, n*acc)\n  end if\nend function\n",
+    "include std/mathcons.e\n\nenum MUL_LLL, \n\tTESTEQ_LIL,\n\tTESTLT_LIL,\n\tTRUEGO_LL, \n\tMOVE_LL, \n\tINCR_L, \n\tTESTGT_LLL, \n\tGOTO_L,\n\tOUT_LI,\n\tOUT_II,\n\tSTOP\n\t\nglobal sequence tape = { \n\t1, \n\t1,\n\t0,\n\t0,\n\t0,\n\t{TESTLT_LIL, 5, 0, 4},\n\t{TRUEGO_LL, 4, 22}, \n\t{TESTEQ_LIL, 5, 0, 4},\n\t{TRUEGO_LL, 4, 20},\n\t{MUL_LLL, 1, 2, 3},\n\t{TESTEQ_LIL, 3, PINF, 4},\n\t{TRUEGO_LL, 4, 18},\n\t{MOVE_LL, 3, 1},\n\t{INCR_L, 2},\n\t{TESTGT_LLL, 2, 5, 4 },\n\t{TRUEGO_LL, 4, 18},\n\t{GOTO_L, 10},\n\t{OUT_LI, 3, \"%.0f\\n\"},\n\t{STOP},\n\t{OUT_II, 1, \"%.0f\\n\"},\n\t{STOP},\n\t{OUT_II, \"Negative argument\", \"%s\\n\"},\n\t{STOP}\n}\n\nglobal integer ip = 1\n\nprocedure eval( sequence cmd )\n\tatom i = 1\n\twhile i <= length( cmd ) do\n\t\tswitch cmd[ i ] do\n\t\t\tcase MUL_LLL then -- multiply location location giving location\n\t\t\t\ttape[ cmd[ i + 3 ] ] = tape[ cmd[ i + 1 ] ] * tape[ cmd[ i + 2 ] ]\n\t\t\t\ti += 3\n\t\t\tcase TESTEQ_LIL then -- test if location eq value giving location\n\t\t\t\ttape[ cmd[ i + 3 ]] = ( tape[ cmd[ i + 1 ] ] = cmd[ i + 2 ] )\n\t\t\t\ti += 3\n\t\t\tcase TESTLT_LIL then -- test if location eq value giving location\n\t\t\t\ttape[ cmd[ i + 3 ]] = ( tape[ cmd[ i + 1 ] ] < cmd[ i + 2 ] )\n\t\t\t\ti += 3\n\t\t\tcase TRUEGO_LL then -- if true in location, goto location\n\t\t\t\tif tape[ cmd[ i + 1 ] ] then\n\t\t\t\t\tip = cmd[ i + 2 ] - 1\n\t\t\t\tend if\n\t\t\t\ti += 2\n\t\t\tcase MOVE_LL then -- move value at location to location\n\t\t\t\ttape[ cmd[ i + 2 ] ] = tape[ cmd[ i + 1 ] ] \n\t\t\t\ti += 2\n\t\t\tcase INCR_L then -- increment value at location\n\t\t\t\ttape[ cmd[ i + 1 ] ] += 1\n\t\t\t\ti += 1\n\t\t\tcase TESTGT_LLL then -- test if location gt location giving location\n\t\t\t\ttape[ cmd[ i + 3 ]] = ( tape[ cmd[ i + 1 ] ] > tape[ cmd[ i + 2 ] ] )\n\t\t\t\ti += 3\n\t\t\tcase GOTO_L then -- goto location\n\t\t\t\tip = cmd[ i + 1 ] - 1\n\t\t\t\ti += 1\n\t\t\tcase OUT_LI then -- output location using format\n\t\t\t\tprintf( 1, cmd[ i + 2], tape[ cmd[ i + 1 ] ] ) \n\t\t\t\ti += 2\n\t\t\tcase OUT_II then -- output immediate using format\n\t\t\t\tif sequence( cmd[ i + 1 ] ) then\n\t\t\t\t\tprintf( 1, cmd[ i + 2], { cmd[ i + 1 ] } ) \n\t\t\t\telse\n\t\t\t\t\tprintf( 1, cmd[ i + 2], cmd[ i + 1 ] ) \n\t\t\t\tend if\n\t\t\t\ti += 2\n\t\t\tcase STOP then -- stop\n\t\t\t\tabort(0)\n\t\tend switch\n\t\ti += 1\n\tend while\nend procedure\n\ninclude std/convert.e\n\nsequence cmd = command_line()\nif length( cmd ) > 2 then\n\tputs( 1, cmd[ 3 ] & \"! = \" )\n\ttape[ 5 ] = to_number(cmd[3])\nelse\n\tputs( 1, \"eui fact.ex <number>\\n\" )\n\tabort(1)\nend if\n\nwhile 1 do\n\tif sequence( tape[ ip ] ) then\n\t\teval( tape[ ip ] ) \n\tend if\n\tip += 1\nend while\n"
+   ]
+  },
+  "ezhil": {
+   "header": "Ezhil",
+   "lang": "ezhil",
+   "variants": [
+    "நிரல்பாகம்  fact ( n )\n  @( n == 0 ) ஆனால்\n            பின்கொடு  1\n     இல்லை\n            பின்கொடு    n*fact( n - 1 )\n    முடி\nமுடி\n\nபதிப்பி fact ( 10 )\n"
+   ]
+  },
+  "f-sharp": {
+   "header": "F_Sharp",
+   "lang": "f-sharp",
+   "variants": [
+    "//val inline factorial :\n//   ^a ->  ^a\n//    when  ^a : (static member get_One : ->  ^a) and\n//          ^a : (static member ( + ) :  ^a *  ^a ->  ^a) and\n//          ^a : (static member ( * ) :  ^a *  ^a ->  ^a)\nlet inline factorial n = Seq.reduce (*) [ LanguagePrimitives.GenericOne .. n ]\n"
+   ]
+  },
+  "factor": {
+   "header": "Factor",
+   "lang": "factor",
+   "variants": [
+    "USING: math.ranges sequences ;\n\n: factorial ( n -- n ) [1,b] product ;\n"
+   ]
+  },
+  "false": {
+   "header": "FALSE",
+   "lang": "false",
+   "variants": [
+    "[1\\[$][$@*\\1-]#%]f:\n^'0- f;!.\n",
+    "[$1=~[$1-f;!*]?]f:\n"
+   ]
+  },
+  "fancy": {
+   "header": "Fancy",
+   "lang": "fancy",
+   "variants": [
+    "def class Number {\n  def factorial {\n    1 upto: self . product\n  }\n}\n\n# print first ten factorials\n1 upto: 10 do_each: |i| {\n  i to_s ++ \"! = \" ++ (i factorial) println\n}\n"
+   ]
+  },
+  "fantom": {
+   "header": "Fantom",
+   "lang": "fantom",
+   "variants": [
+    "class Main\n{\n  static Int factorialRecursive (Int n)\n  {\n    if (n <= 1)\n      return 1\n    else\n      return n * (factorialRecursive (n - 1))\n  }\n\n  static Int factorialIterative (Int n)\n  {\n    Int product := 1\n    for (Int i := 2; i <=n ; ++i)\n    {\n      product *= i\n    }\n    return product\n  }\n\n  static Int factorialFunctional (Int n)\n  {\n    (1..n).toList.reduce(1) |a,v| \n    { \n      v->mult(a) // use a dynamic invoke\n      // alternatively, cast a:  v * (Int)a\n    }\n  }\n\n  public static Void main ()\n  {\n    echo (factorialRecursive(20))\n    echo (factorialIterative(20))\n    echo (factorialFunctional(20))\n  }\n}\n"
+   ]
+  },
+  "fennel": {
+   "header": "Fennel",
+   "lang": "fennel",
+   "variants": [
+    "(do\n    (fn factorial [n]    ;;; iterative factorial\n        (if (< n 2)\n            1\n        ;else\n            (do (var f 2)\n                (for [i 3 n]\n                     (set f (* f i))\n                )\n                f\n            )\n        )\n    )\n\n    (for [n 0 10]\n         (io.write (string.format \"%2d! = %s\\n\" n (factorial n)))\n    )\n)\n"
+   ]
+  },
+  "flang": {
+   "header": "Flang",
+   "lang": "flang",
+   "variants": [
+    "модуль «Факториал»\n\nтотальная функция «Приписать в начало»\n  принимает первое: число, элементы: список числа\n  возвращает список числа\n  пример «В пустой»\n    дано первое равно 1\n    дано элементы равно пустой список\n    ожидается [1]\n  свёртка элементы начиная с [первое] как акк и эл → добавить эл к акк\n\nтотальная функция «Произведение»\n  принимает элементы: список числа\n  возвращает число\n  пример «Произведение четырёх»\n    дано элементы равно [1, 2, 3, 4]\n    ожидается 24\n  пример «Произведение пустого — единица»\n    дано элементы равно пустой список\n    ожидается 1\n  свёртка элементы начиная с 1 как акк и эл → акк умножить на эл\n\nфункция «Числа от и до»\n  принимает начало: число, конец: число\n  возвращает список числа\n  пример «От одного до пяти»\n    дано начало равно 1\n    дано конец равно 5\n    ожидается [1, 2, 3, 4, 5]\n  пример «Пустой промежуток»\n    дано начало равно 1\n    дано конец равно 0\n    ожидается пустой список\n  если начало больше конец\n    то пустой список\n    иначе «Приписать в начало» от начало и («Числа от и до» от (начало плюс 1) и конец)\n\nфункция «Факториал произведением»\n  принимает н: число\n  возвращает число\n  пример «Пять факториал»\n    дано н равно 5\n    ожидается 120\n  пример «Ноль факториал»\n    дано н равно 0\n    ожидается 1\n  «Произведение» от («Числа от и до» от 1 и н)\n\nтотальная функция «Факториал»\n  принимает н: число\n  возвращает число\n  пример «Пять факториал»\n    дано н равно 5\n    ожидается 120\n  пример «Десять факториал»\n    дано н равно 10\n    ожидается 3628800\n  пример «Ноль факториал»\n    дано н равно 0\n    ожидается 1\n  пример «Двадцать факториал ещё точен в double»\n    дано н равно 20\n    ожидается 2432902008176640000\n  если н не больше 1\n    то 1\n    иначе н умножить на («Факториал» от (н минус 1))\n",
+    "module «Factorial»\n\ntotal function «Prepend»\n  accepts element: number, items: list of number\n  returns list of number\n  example «Into an empty list»\n    given element equals 1\n    given items equals empty list\n    expected [1]\n  fold items starting with [element] as acc and elem → add elem to acc\n\ntotal function «Product»\n  accepts items: list of number\n  returns number\n  example «Product of four»\n    given items equals [1, 2, 3, 4]\n    expected 24\n  example «Product of the empty list is one»\n    given items equals empty list\n    expected 1\n  fold items starting with 1 as acc and elem → acc times elem\n\nfunction «Numbers from and to»\n  accepts start: number, finish: number\n  returns list of number\n  example «One to five»\n    given start equals 1\n    given finish equals 5\n    expected [1, 2, 3, 4, 5]\n  example «Empty range»\n    given start equals 1\n    given finish equals 0\n    expected empty list\n  if start is greater than finish\n    then empty list\n    else «Prepend» of start and («Numbers from and to» of (start plus 1) and finish)\n\nfunction «Factorial by product»\n  accepts n: number\n  returns number\n  example «Five factorial»\n    given n equals 5\n    expected 120\n  example «Zero factorial»\n    given n equals 0\n    expected 1\n  «Product» of («Numbers from and to» of 1 and n)\n\ntotal function «Factorial»\n  accepts n: number\n  returns number\n  example «Five factorial»\n    given n equals 5\n    expected 120\n  example «Ten factorial»\n    given n equals 10\n    expected 3628800\n  example «Zero factorial»\n    given n equals 0\n    expected 1\n  example «Twenty factorial is still exact in a double»\n    given n equals 20\n    expected 2432902008176640000\n  if n is at most 1\n    then 1\n    else n times («Factorial» of (n minus 1))\n"
+   ]
+  },
+  "focal": {
+   "header": "FOCAL",
+   "lang": "focal",
+   "variants": [
+    "1.1 F N=0,10; D 2\n1.2 S N=-3; D 2\n1.3 S N=100; D 2\n1.4 S N=300; D 2\n1.5 Q\n\n2.1 I (N)3.1,4.1\n2.2 S R=1\n2.3 F I=1,N; S R=R*I\n2.4 T \"FACTORIAL OF \", %3.0, N, \" IS \", %8.0, R, !\n2.9 R\n\n3.1 T \"N IS NEGATIVE\" !; D 2.9\n\n4.1 T \"FACTORIAL OF     0 IS          1\" !; D 2.9\n"
+   ]
+  },
+  "forth": {
+   "header": "Forth",
+   "lang": "forth",
+   "variants": [
+    ": fac ( n -- n! ) 1 swap 1+ 1 ?do i * loop ;\n",
+    ": factorial ( n -- d )\n    dup 33 u> -24 and throw\n    dup 2 < IF\n        drop 1.\n    ELSE\n        1.\n        rot 1+ 2 DO\n            i 1 m*/\n        LOOP\n    THEN ;\n\n33 factorial d. 8683317618811886495518194401280000000  ok\n-5 factorial d. \n:2: Invalid numeric argument\n"
+   ]
+  },
+  "fortran": {
+   "header": "Fortran",
+   "lang": "fortran",
+   "variants": [
+    "nfactorial = PRODUCT((/(i, i=1,n)/))\n",
+    "INTEGER RECURSIVE FUNCTION RECURSIVE_FACTORIAL(X) RESULT(ANS)\n    INTEGER, INTENT(IN) :: X\n\n    IF (X <= 1) THEN\n        ANS = 1\n    ELSE\n        ANS = X * RECURSIVE_FACTORIAL(X-1)\n    END IF\n\nEND FUNCTION RECURSIVE_FACTORIAL\n",
+    "      INTEGER FUNCTION MFACT(N)\n      INTEGER N,I,FACT\n      FACT=1\n      IF (N.EQ.0) GOTO 20\n      DO 10 I=1,N\n        FACT=FACT*I\n10    CONTINUE\n20    CONTINUE\n      MFACT = FACT\n      RETURN\n      END\n"
+   ]
+  },
+  "frink": {
+   "header": "Frink",
+   "lang": "frink",
+   "variants": [
+    "// Calculate factorial with math operator\nx = 5\nprintln[x!]\n\n// Calculate factorial with built-in function\nprintln[factorial[x]]\n",
+    "// Build factorial function with using a range and product function.\nfactorial2[x] := product[1 to x]\nprintln[factorial2[5]]\n",
+    "factorial3[x] :=\n{\n   if x <= 1\n      return 1\n   else\n      return x * factorial3[x-1] // function calling itself\n}\n\nprintln[factorial3[5]]\n"
+   ]
+  },
+  "funl": {
+   "header": "FunL",
+   "lang": "funl",
+   "variants": [
+    "def factorial( n ) =\n  if n < 0\n    error( 'factorial: n should be non-negative' )\n  else\n    res = 1\n\n    for i <- 2..n\n      res *= i\n\n    res\n",
+    "def\n  factorial( (0|1) ) = 1\n  factorial( n )\n    | n > 0 = n*factorial( n - 1 )\n    | otherwise = error( 'factorial: n should be non-negative' )\n",
+    "def factorial( n )\n  | n >= 0 =\n    def\n      fact( acc, 0 ) = acc\n      fact( acc, n ) = fact( acc*n, n - 1 )\n\n    fact( 1, n )\n  | otherwise = error( 'factorial: n should be non-negative' )\n",
+    "def factorial( n )\n  | n >= 0 = product( 1..n )\n  | otherwise = error( 'factorial: n should be non-negative' )\n"
+   ]
+  },
+  "futhark": {
+   "header": "Futhark",
+   "lang": "futhark",
+   "variants": [
+    "fun fact(n: int): int =\n  if n == 0 then 1\n            else n * fact(n-1)\n",
+    "fun fact(n: int): int =\n  loop (out = 1) = for i < n do\n    out * (i+1)\n  in out\n"
+   ]
+  },
+  "futurebasic": {
+   "header": "FutureBasic",
+   "lang": "futurebasic",
+   "variants": [
+    "window 1, @\"Factorial\", ( 0, 0, 300, 550 )\n\nlocal fn factorialIterative( n as long ) as double\n  double f\n  long i\n\n  if ( n > 1 )\n    f = 1\n    for i = 2 to n\n      f = f * i\n    next\n  else\n    f = 1\n  end if\nend fn = f\n\nlocal fn factorialRecursive( n as long ) as double\n  double f\n\n  if ( n < 2 )\n    f = 1\n  else\n    f = n * fn factorialRecursive( n -1 )\n  end if\nend fn = f\n\nlong i\n\nfor i = 0 to 12\n  print \"Iterative:\"; using \"####\"; i; \" = \"; fn factorialIterative( i )\n  print \"Recursive:\"; using \"####\"; i; \" = \"; fn factorialRecursive( i )\n  print\nnext\n\nHandleEvents\n"
+   ]
+  },
+  "gap": {
+   "header": "GAP",
+   "lang": "gap",
+   "variants": [
+    "# Built-in\nFactorial(5);\n\n# An implementation\nfact := n -> Product([1 .. n]);\n"
+   ]
+  },
+  "gleam": {
+   "header": "Gleam",
+   "lang": "gleam",
+   "variants": [
+    "list.fold(int.range(1, n + 1, [], list.prepend), 1, int.multiply)\n",
+    "pub fn fac(n: Int) -> Int {\n  case n {\n    1 -> 1\n    n -> n * fac(n - 1)\n  }\n}\n",
+    "pub fn fac(n: Int) -> Int {\n  fac_helper(n, n - 1)\n}\n\nfn fac_helper(n: Int, acc: Int) -> Int {\n  case n, acc {\n    n, 1 -> n\n    n, i -> fac_helper(n * i, i - 1)\n  }\n}\n"
+   ]
+  },
+  "gnuplot": {
+   "header": "gnuplot",
+   "lang": "gnuplot",
+   "variants": [
+    "set xrange [0:4.95]\nset key left\nplot int(x)!\n",
+    "# Using int(n) allows non-integer \"n\" inputs with the factorial\n# calculated on int(n) in that case.\n# Arranging the condition as \"n>=2\" avoids infinite recursion if\n# n==NaN, since any comparison involving NaN is false.  Could change\n# \"1\" to an expression like \"n*0+1\" to propagate a NaN input to the\n# output too, if desired.\n#\nfactorial(n) = (n >= 2 ? int(n)*factorial(n-1) : 1)\nset xrange [0:4.95]\nset key left\nplot factorial(x)\n"
+   ]
+  },
+  "go": {
+   "header": "Go",
+   "lang": "go",
+   "variants": [
+    "package main\n\nimport (\n    \"fmt\"\n    \"math/big\"\n)\n\nfunc main() {\n    fmt.Println(factorial(800))\n}\n\nfunc factorial(n int64) *big.Int {\n    if n < 0 {\n        return nil\n    }\n    r := big.NewInt(1)\n    var f big.Int\n    for i := int64(2); i <= n; i++ {\n        r.Mul(r, f.SetInt64(i))\n    }\n    return r\n}\n",
+    "package main\n\nimport (\n    \"math/big\"\n    \"fmt\"\n)\n\nfunc factorial(n int64) *big.Int {\n    var z big.Int\n    return z.MulRange(1, n)\n}\n\nfunc main() {\n    fmt.Println(factorial(800))\n}\n",
+    "package main\n\nimport (\n    \"fmt\"\n    \"math\"\n)\n\nfunc factorial(n float64) float64 {\n    return math.Gamma(n + 1)\n}\n\nfunc main() {\n    for i := 0.; i <= 10; i++ {\n        fmt.Println(i, factorial(i))\n    }\n    fmt.Println(100, factorial(100))\n}\n",
+    "package main\n\nimport (\n    \"fmt\"\n    \"math\"\n    \"math/big\"\n)\n\nfunc lfactorial(n float64) float64 {\n    l, _ := math.Lgamma(n + 1)\n    return l\n}\n\nfunc factorial(n float64) *big.Float {\n    i, frac := math.Modf(lfactorial(n) * math.Log2E)\n    z := big.NewFloat(math.Exp2(frac))\n    return z.SetMantExp(z, int(i))\n}\n\nfunc main() {\n    for i := 0.; i <= 10; i++ {\n        fmt.Println(i, factorial(i))\n    }\n    fmt.Println(100, factorial(100))\n    fmt.Println(800, factorial(800))\n}\n"
+   ]
+  },
+  "golfscript": {
+   "header": "Golfscript",
+   "lang": "golfscript",
+   "variants": [
+    "{.!{1}{,{)}%{*}*}if}:fact;\n5fact puts # test\n",
+    "{),(;{*}*}:fact;\n",
+    "{.1<{;1}{.(fact*}if}:fact;\n"
+   ]
+  },
+  "groovy": {
+   "header": "Groovy",
+   "lang": "groovy",
+   "variants": [
+    "def rFact\nrFact = { (it > 1) ? it * rFact(it - 1) : 1 as BigInteger }\n",
+    "def iFact = { (it > 1) ? (2..it).inject(1 as BigInteger) { i, j -> i*j } : 1 }\n",
+    "def time = { Closure c ->\n    def start = System.currentTimeMillis()\n    def result = c()\n    def elapsedMS = (System.currentTimeMillis() - start)/1000\n    printf '(%6.4fs elapsed)', elapsedMS\n    result\n}\n\ndef dashes = '---------------------'\nprint \"   n!       elapsed time   \"; (0..15).each { def length = Math.max(it - 3, 3); printf \" %${length}d\", it }; println()\nprint \"--------- -----------------\"; (0..15).each { def length = Math.max(it - 3, 3); print \" ${dashes[0..<length]}\" }; println()\n[recursive:rFact, iterative:iFact].each { name, fact ->\n    printf \"%9s \", name\n    def factList = time { (0..15).collect {fact(it)} }\n    factList.each { printf ' %3d', it }\n    println()\n}\n"
+   ]
+  },
+  "haskell": {
+   "header": "Haskell",
+   "lang": "haskell",
+   "variants": [
+    "factorial n = product [1..n]\n",
+    "factorial = product . enumFromTo 1\n",
+    "factorial n = foldl (*) 1 [1..n]\n",
+    "factorials = scanl (*) 1 [1..]\n",
+    "factorials = 1 : zipWith (*) factorials [1..]\n"
+   ]
+  },
+  "haxe": {
+   "header": "Haxe",
+   "lang": "haxe",
+   "variants": [
+    "static function factorial(n:Int):Int {\n  var result = 1;\n  while (1<n)\n    result *= n--;\n  return result;\n}\n",
+    "static function factorial(n:Int):Int {\n  return n == 0 ? 1 : n * factorial2(n - 1);\n}\n",
+    "inline static function _fac_aux(n, acc:Int):Int {\n  return n < 1 ? acc : _fac_aux(n - 1, acc * n);\n}\n\nstatic function factorial(n:Int):Int {\n  return _fac_aux(n,1);\n}\n",
+    "static function factorial(n:Int):Int {\n  return [for (i in 1...(n+1)) i].fold(function(num, total) return total *= num, 1);\n}\n",
+    "using StringTools;\nusing Lambda;\n\nclass Factorial {\n  // iterative\n  static function factorial1(n:Int):Int {\n    var result = 1;\n    while (1<n)\n      result *= n--;\n    return result;\n  }\n\n  // recursive\n  static function factorial2(n:Int):Int {\n    return n == 0 ? 1 : n * factorial2(n - 1);\n  }\n\n  // tail-recursive\n  inline static function _fac_aux(n, acc:Int):Int {\n    return n < 1 ? acc : _fac_aux(n - 1, acc * n);\n  }\n\n  static function factorial3(n:Int):Int {\n    return _fac_aux(n,1);\n  }\n\n  // functional \n  static function factorial4(n:Int):Int {\n    return [for (i in 1...(n+1)) i].fold(function(num, total) return total *= num, 1);\n  }\n\n  static function main() {\n    var v = 12;\n    // iterative\n    var start = haxe.Timer.stamp();\n    var result = factorial1(v);\n    var duration = haxe.Timer.stamp() - start;\n    Sys.println('iterative'.rpad(' ', 20) + 'result: $result time: $duration ms');\n\n    // recursive\n    start = haxe.Timer.stamp();\n    result = factorial2(v);\n    duration = haxe.Timer.stamp() - start;\n    Sys.println('recursive'.rpad(' ', 20) + 'result: $result time: $duration ms');\n\n    // tail-recursive\n    start = haxe.Timer.stamp();\n    result = factorial3(v);\n    duration = haxe.Timer.stamp() - start;\n    Sys.println('tail-recursive'.rpad(' ', 20) + 'result: $result time: $duration ms');\n\n    // functional\n    start = haxe.Timer.stamp();\n    result = factorial4(v);\n    duration = haxe.Timer.stamp() - start;\n    Sys.println('functional'.rpad(' ', 20) + 'result: $result time: $duration ms');\n  }\n}\n"
+   ]
+  },
+  "hobbes": {
+   "header": "Hobbes",
+   "lang": "hobbes",
+   "variants": [
+    "factorial :: int -> int\nfactorial n = if (n == 0) then 1 else n * factorial(n - 1)\n"
+   ]
+  },
+  "holyc": {
+   "header": "HolyC",
+   "lang": "holyc",
+   "variants": [
+    "U64 Factorial(U64 n) {\n  U64 i, result = 1;\n  for (i = 1; i <= n; ++i)\n    result *= i;\n  return result;\n}\n\nPrint(\"1:  %d\\n\", Factorial(1));\nPrint(\"10: %d\\n\", Factorial(10));\n",
+    "I64 Factorial(I64 n) {\n  if (n == 0)\n    return 1;\n  if (n < 0)\n    return -1 * ((-1 * n) * Factorial((-1 * n) - 1));\n  return n * Factorial(n - 1));\n}\n\nPrint(\"+1:  %d\\n\", Factorial(1));\nPrint(\"+10: %d\\n\", Factorial(10));\nPrint(\"-10: %d\\n\", Factorial(-10));\n"
+   ]
+  },
+  "hy": {
+   "header": "Hy",
+   "lang": "hy",
+   "variants": [
+    "(defn ! [n]\n  (reduce *\n    (range 1 (inc n))\n    1))\n\n(print (! 6))  ; 720\n(print (! 0))  ; 1\n"
+   ]
+  },
+  "i": {
+   "header": "i",
+   "lang": "i",
+   "variants": [
+    "concept factorial(n) {\n\treturn n!\n}\n \nsoftware {\n\tprint(factorial(-23))\n\tprint(factorial(0))\n\tprint(factorial(1))\n\tprint(factorial(2))\n\tprint(factorial(3))\n\tprint(factorial(22))\n} \n"
+   ]
+  },
+  "ibm-gml": {
+   "header": "GML",
+   "lang": "ibm-gml",
+   "variants": [
+    "n = argument0\nj = 1\nfor(i = 1; i <= n; i += 1)\n    j *= i\nreturn j\n"
+   ]
+  },
+  "icon": {
+   "header": "Icon",
+   "lang": "icon",
+   "variants": [
+    "procedure factorial(n)     \n   n := integer(n) | runerr(101, n)\n   if n < 0 then fail\n   return if n = 0 then 1 else n*factorial(n-1)\nend \n",
+    "procedure factorial(n)\t\t\t#: return n! (n factorial)\n   local i\n   n := integer(n) | runerr(101, n)\n   if n < 0 then fail\n   i := 1\n   every i *:= 1 to n\n   return i\nend\n"
+   ]
+  },
+  "idl": {
+   "header": "IDL",
+   "lang": "idl",
+   "variants": [
+    "function fact,n\n   return, product(lindgen(n)+1)\nend\n"
+   ]
+  },
+  "insitux": {
+   "header": "Insitux",
+   "lang": "insitux",
+   "variants": [
+    "(function factorial n\n  (... *1 (range 2 (inc n))))\n",
+    "(function factorial x\n  (if (< x 2)\n      1\n      (*1 x (factorial (dec x)))))\n"
+   ]
+  },
+  "io": {
+   "header": "Io",
+   "lang": "io",
+   "variants": [
+    "3 factorial\n"
+   ]
+  },
+  "j": {
+   "header": "J",
+   "lang": "j",
+   "variants": [
+    "  ! 8             NB.  Built in factorial operator\n40320\n",
+    "   */1+i.8\n40320\n",
+    "  (*$:@:<:)^:(1&<) 8\n40320\n",
+    "  ! 8 0.8 _0.8    NB.  Generalizes as 1 + the gamma function\n40320 0.931384 4.59084\n  ! 800x          NB.  Also arbitrarily large\n7710530113353860041446393977750283605955564018160102391634109940339708518270930693670907697955390330926478612242306774446597851526397454014801846531749097625044706382742591201733097017026108750929188168469858421505936237186038616420630788341172340985137252...\n"
+   ]
+  },
+  "jakt": {
+   "header": "Jakt",
+   "lang": "jakt",
+   "variants": [
+    "fn factorial(anon n: i64) throws -> i64 {\n    if n < 0 {\n        throw Error::from_string_literal(\"Factorial's operand must be non-negative\")\n    }\n    mut result = 1\n    for i in 1..(n + 1) {\n        result *= i\n    }\n    return result\n}\n\nfn main() {\n    for i in 0..11 {\n        println(\"{} factorial is {}\", i, factorial(i))\n    }\n}\n"
+   ]
+  },
+  "janet": {
+   "header": "Janet",
+   "lang": "janet",
+   "variants": [
+    "(defn factorial [x]\n    (cond\n        (< x 0) nil\n        (= x 0) 1\n        (* x (factorial (dec x)))))\n",
+    "(defn factorial-iter [product counter max-count]\n  (if (> counter max-count)\n    product\n    (factorial-iter (* counter product) (inc counter) max-count)))\n\n(defn factorial [n]\n  (factorial-iter 1 1 n))\n",
+    "(defn factorial [x]\n    (cond\n        (< x 0) nil\n        (= x 0) 1\n        (do\n            (var fac 1)\n            (for i 1 (inc x)\n                (*= fac i))\n            fac)))\n",
+    "(defn factorial [x]\n    (cond\n        (< x 0) nil\n        (= x 0) 1\n        (product (range 1 (inc x)))))\n"
+   ]
+  },
+  "java": {
+   "header": "Java",
+   "lang": "java",
+   "variants": [
+    "package programas;\n\nimport java.math.BigInteger;\nimport java.util.InputMismatchException;\nimport java.util.Scanner;\n\npublic class IterativeFactorial {\n\n  public BigInteger factorial(BigInteger n) {\n    if ( n == null ) {\n      throw new IllegalArgumentException();\n    }\n    else if ( n.signum() == - 1 ) {\n      // negative\n      throw new IllegalArgumentException(\"Argument must be a non-negative integer\");\n    }\n    else {\n      BigInteger factorial = BigInteger.ONE;\n      for ( BigInteger i = BigInteger.ONE; i.compareTo(n) < 1; i = i.add(BigInteger.ONE) ) {\n        factorial = factorial.multiply(i);\n      }\n      return factorial;\n    }\n  }\n\n  public static void main(String[] args) {\n    Scanner scanner = new Scanner(System.in);\n    BigInteger number, result;\n    boolean error = false;\n    System.out.println(\"FACTORIAL OF A NUMBER\");\n    do {\n      System.out.println(\"Enter a number:\");\n      try {\n        number = scanner.nextBigInteger();\n        result = new IterativeFactorial().factorial(number);\n        error = false;\n        System.out.println(\"Factorial of \" + number + \": \" + result);\n      }\n      catch ( InputMismatchException e ) {\n        error = true;\n        scanner.nextLine();\n      }\n\n      catch ( IllegalArgumentException e ) {\n        error = true;\n        scanner.nextLine();\n      }\n    }\n    while ( error );\n    scanner.close();\n  }\n\n}\n",
+    "package programas;\n\nimport java.math.BigInteger;\nimport java.util.InputMismatchException;\nimport java.util.Scanner;\n\npublic class RecursiveFactorial {\n\n  public BigInteger factorial(BigInteger n) {\n    if ( n == null ) {\n      throw new IllegalArgumentException();\n    }\n\n    else if ( n.equals(BigInteger.ZERO) ) {\n      return BigInteger.ONE;\n    }\n    else if ( n.signum() == - 1 ) {\n      // negative\n      throw new IllegalArgumentException(\"Argument must be a non-negative integer\");\n    }\n    else {\n      return n.equals(BigInteger.ONE)\n          ? BigInteger.ONE\n          : factorial(n.subtract(BigInteger.ONE)).multiply(n);\n    }\n  }\n\n  public static void main(String[] args) {\n    Scanner scanner = new Scanner(System.in);\n    BigInteger number, result;\n    boolean error = false;\n    System.out.println(\"FACTORIAL OF A NUMBER\");\n    do {\n      System.out.println(\"Enter a number:\");\n      try {\n        number = scanner.nextBigInteger();\n        result = new RecursiveFactorial().factorial(number);\n        error = false;\n        System.out.println(\"Factorial of \" + number + \": \" + result);\n      }\n      catch ( InputMismatchException e ) {\n        error = true;\n        scanner.nextLine();\n      }\n\n      catch ( IllegalArgumentException e ) {\n        error = true;\n        scanner.nextLine();\n      }\n    }\n    while ( error );\n    scanner.close();\n\n  }\n\n}\n",
+    "import java.math.BigInteger;\nimport java.util.InputMismatchException;\nimport java.util.Scanner;\n\npublic class LargeFactorial {\n    public static long userInput;\n    public static void main(String[]args){\n        Scanner input = new Scanner(System.in);\n        System.out.println(\"Input factorial integer base: \");\n        try {\n            userInput = input.nextLong();\n            System.out.println(userInput + \"! is\\n\" + factorial(userInput) + \" using standard factorial method.\");\n            System.out.println(userInput + \"! is\\n\" + factorialRec(userInput) + \" using recursion method.\");\n        }catch(InputMismatchException x){\n            System.out.println(\"Please give integral numbers.\");\n        }catch(StackOverflowError ex){\n            if(userInput > 0) {\n                System.out.println(\"Number too big.\");\n            }else{\n                System.out.println(\"Please give non-negative(positive) numbers.\");\n            }\n        }finally {\n            System.exit(0);\n        }\n    }\n    public static BigInteger factorialRec(long n){\n        BigInteger result = BigInteger.ONE;\n        return n == 0 ? result : result.multiply(BigInteger.valueOf(n)).multiply(factorial(n-1));\n    }\n    public static BigInteger factorial(long n){\n        BigInteger result = BigInteger.ONE;\n        for(int i = 1; i <= n; i++){\n            result = result.multiply(BigInteger.valueOf(i));\n        }\n        return result;\n    }\n}\n",
+    "import java.math.BigInteger;\nimport java.util.function.Function;\nimport java.util.stream.LongStream;\nimport java.util.stream.Stream;\n\npublic final class Factorial {\n\n\tpublic static void main(String[] args) {\n\t\t// Valid only for integer arguments 1, 2, ... , 20\n\t\tFunction<Integer, Long> factorialPositive = n -> LongStream.rangeClosed(2, n).reduce(1, (a, b) -> a * b);\t\t\n\t\t\n\t\t// Valid for integer arguments <= 20\n\t\tFunction<Integer, Long> factorial = n -> {\n\t\t\tif ( n < 0 || n > 20 ) {\n\t\t\t\tthrow new AssertionError(\"Argument is out of range: \" + n);\n\t\t\t}\n\t\t\t\n\t\t\treturn factorialPositive.apply(n);\n\t\t};\n\t\t\n\t\t// Return a BigInteger value\n\t\tFunction<Integer, BigInteger> factorialBig = n -> Stream.iterate(BigInteger.ONE, i -> i.add(BigInteger.ONE))\n\t\t\t\t                                                .limit(n)\n\t\t\t\t                                                .reduce(BigInteger.ONE, BigInteger::multiply);\n\t}\n\n}\n"
+   ]
+  },
+  "javascript": {
+   "header": "JavaScript",
+   "lang": "javascript",
+   "variants": [
+    "function factorial(n) {\n  // factorial is only defined for non-negative integers\n  if (n < 0 || !Number.isInteger(n)) return NaN;\n\n  let result = 1;\n\n  // we skip zero and one since both are 1 and are identity\n  while (n > 1) {\n    result *= n;\n    n--;\n  }\n\n  return result;\n}\n",
+    "(function(x) {\n\n  var memo = {};\n\n  function factorial(n) {\n    return n < 2 ? 1 : memo[n] || (memo[n] = n * factorial(n - 1));\n  }\n  \n  return factorial(x);\n  \n})(18);\n",
+    "6402373705728000\n",
+    "(function () {\n    'use strict';\n\n    // factorial :: Int -> Int\n    function factorial(x) {\n\n        return range(1, x)\n            .reduce(function (a, b) {\n                return a * b;\n            }, 1);\n    }\n\n\n\n    // range :: Int -> Int -> [Int]\n    function range(m, n) {\n        var a = Array(n - m + 1),\n            i = n + 1;\n\n        while (i-- > m) a[i - m] = i;\n        return a;\n    }\n\n\n    return factorial(18);\n\n})();\n",
+    "6402373705728000\n"
+   ]
+  },
+  "jovial": {
+   "header": "JOVIAL",
+   "lang": "jovial",
+   "variants": [
+    "PROC FACTORIAL(ARG) U;\n    BEGIN\n    ITEM ARG U;\n    ITEM TEMP U;\n    TEMP = 1;\n    FOR I:2 BY 1 WHILE I<=ARG;\n        TEMP = TEMP*I;\n    FACTORIAL = TEMP;\n    END\n"
+   ]
+  },
+  "joy": {
+   "header": "Joy",
+   "lang": "joy",
+   "variants": [
+    "DEFINE ! == [1] [*] primrec.\n6!.\n"
+   ]
+  },
+  "jq": {
+   "header": "jq",
+   "lang": "jq",
+   "variants": [
+    "def fact:\n  reduce range(1; .+1) as $i (1; . * $i);\n",
+    "def fact(n):\n  if n <= 1 then n\n  else n * fact(n-1)\n  end;\n",
+    "def fact:\n  def _fact:\n    # Input: [accumulator, counter]\n    if .[1] <= 1 then .\n    else [.[0] * .[1], .[1] - 1]|  _fact\n    end; \n  # Extract the accumulated value from the output of _fact:\n  [1, .] | _fact | .[0] ;\n"
+   ]
+  },
+  "julia": {
+   "header": "Julia",
+   "lang": "julia",
+   "variants": [
+    "function fact(n::Integer)\n    n < 0 && return zero(n)\n    f = one(n)\n    for i in 2:n\n        f *= i\n    end\n    return f\nend\n\nfor i in 10:20\n\tprintln(\"$i -> \", fact(i))\nend\n",
+    "fact2(n::Integer) = prod(Base.OneTo(n))\n@show fact2(20)\n"
+   ]
+  },
+  "k": {
+   "header": "K",
+   "lang": "k",
+   "variants": [
+    "  facti:*/1+!:\n  facti 5\n120\n",
+    "  factr:{:[x>1;x*_f x-1;1]}\n  factr 6\n720\n"
+   ]
+  },
+  "kaikai": {
+   "header": "Kaikai",
+   "lang": "kaikai",
+   "variants": [
+    "fn factorial(n: Int) : Int = if n <= 1 { 1 } else { n * factorial(n - 1) }\n\nfn main() : Unit / Stdout =\n  [0..10] |! println(\"#{.}! = #{factorial(.)}\")\n"
+   ]
+  },
+  "klong": {
+   "header": "Klong",
+   "lang": "klong",
+   "variants": [
+    "    factRecursive::{:[x>1;x*.f(x-1);1]}\n    factIterative::{*/1+!x}\n"
+   ]
+  },
+  "konsolscript": {
+   "header": "KonsolScript",
+   "lang": "konsolscript",
+   "variants": [
+    "function factorial(Number n):Number {\n  Var:Number ret;\n  if (n >= 0) {\n    ret = 1;\n    Var:Number i = 1;\n    for (i = 1; i <= n; i++) {\n      ret = ret * i;\n    }\n  } else {\n    ret = 0;\n  }\n  return ret;\n}\n"
+   ]
+  },
+  "kotlin": {
+   "header": "Kotlin",
+   "lang": "kotlin",
+   "variants": [
+    "fun facti(n: Int) = when {\n    n < 0 -> throw IllegalArgumentException(\"negative numbers not allowed\")\n    else  -> {\n        var ans = 1L\n        for (i in 2..n) ans *= i\n        ans\n    }\n}\n\nfun factr(n: Int): Long = when {\n    n < 0 -> throw IllegalArgumentException(\"negative numbers not allowed\")\n    n < 2 -> 1L\n    else  -> n * factr(n - 1)\n}\n\nfun main(args: Array<String>) {\n    val n = 20\n    println(\"$n! = \" + facti(n))\n    println(\"$n! = \" + factr(n))\n}\n"
+   ]
+  },
+  "lambda-calculus": {
+   "header": "Lambda Calculus",
+   "lang": "lambda-calculus",
+   "variants": [
+    "FACT = λnf.n (λra.a (r (λfx.f (a f x)))) (λa.f) (λh.h)\n;; FACT n f x = 1 (2 (3 ... (n f) ...)) x = (1*2*3*...*n)(f)(x)\n",
+    "0 = λfx. x \n1 = λfx. f x \nSUCC = λmfx. f (m f x) \nADD  = λnmfx. n f (m f x)  = λnmfx. n SUCC m f x\nSUB  = λnmfx. n PRED m f x\nMULT = λnmfx. n (m f) x \nPOW  = λbnfx. n b f x \nPRED = λnfx. n (λri. i (r f)) (λf. x) (λa. a)    \nHALF = λnfx. n (λrij. i (r j i)) (λji. x) (λa. a) f\n\n;; iteration: (MULT n (MULT ... (MULT 2 (MULT 1 1)) ...))\nFACT1 = λn. n (λrai. r (MULT i a) (SUCC i)) (λai. a) 1 1 \n\n;; recursion: (MULT 1 (MULT 2 (MULT ... (MULT n 1) ...)))\nFACT2 = λn. n (λra. MULT a (r (SUCC a))) (λa. 1) 1\n;;            (λraf. a (r (SUCC a) f))\n\n;; direct code creation: (1 (2 (... (n f) ...))) x\nFACT = λnfx. n (λra. a (r (SUCC a))) (λa. f) 1 x\n\n;; calculation:\nFACT (SUCC (SUCC 1)) f x\n;; => 1 (2 (3 ((λa. f) 4))) x\n;; =>    2 (3       f  )  x\n;; => 3 f     (3 f     x  )\n;; => f (f (f (f (f (f x)))))\n",
+    "ADD     <--->   APPEND\nSUCC    <--->   CONS\n0       <--->   NIL \nISZERO  <--->   ISEMPTY\nPRED    <--->   TAIL\nMULT    <--->   CARTESIAN_PRODUCT\nMIN     <--->   ZIP (or MAP2)\n",
+    "0 = λzs.z\n1 = λzs.s 0\n2 = λzs.s 1\nSUCC = λuzs.s u\nPRED = λm.m 0 (λu.u) = λmzs.m z (λu.u z s)\n;; PRED 0 z s = z = 0 z s\n;; PRED (SUCC u) z s = SUCC u z (λu.u z s) = (λu.u z s) u = u z s\n\ntoChurch = λmfx. (λg.g g m) (λgi. i x (λu. f (g g u))) \nfromChurch = λm. m SUCC 0 = λm. m (λuzs.s u) (λzs.z)\n\nADD  = λij. toChurch j SUCC   i\nMULT = λij. toChurch j (ADD i) 0\nEXPT = λij. toChurch j (MULT i) 1\nFACT = λi . toChurch i (λri. MULT i (r (SUCC i))) (λi. 1) 1\n",
+    "LOOP = λxfm. (λg.g g m) (λgi. i x (λu. f i (g g u)))  \n\n;; LOOP x f m =  f m (f (m-1) (... (f 1 x) ...))\n"
+   ]
+  },
+  "lasso": {
+   "header": "Lasso",
+   "lang": "lasso",
+   "variants": [
+    "define factorial(n) => {\n  local(x = 1)\n  with i in generateSeries(2, #n)\n  do {\n    #x *= #i\n  }\n  return #x\n}\n",
+    "define factorial(n) => #n < 2 ? 1 | #n * factorial(#n - 1)\n"
+   ]
+  },
+  "ldpl": {
+   "header": "LDPL",
+   "lang": "ldpl",
+   "variants": [
+    "data:\nn is number\n\nprocedure:\nsub factorial\n    parameters:\n        n is number\n        result is number\n    local data:\n        i is number\n        m is number\n    procedure:\n        store 1 in result\n        in m solve n + 1\n        for i from 1 to m step 1 do\n            multiply result by i in result\n        repeat\nend sub\ncreate statement \"get factorial of $ in $\" executing factorial\n\nget factorial of 5 in n\ndisplay n lf\n"
+   ]
+  },
+  "lean": {
+   "header": "Lean",
+   "lang": "lean",
+   "variants": [
+    "def factorial (n : Nat) : Nat :=\n  match n with\n  | 0 => 1\n  | (k + 1) => (k + 1) * factorial (k)\n"
+   ]
+  },
+  "lfe": {
+   "header": "LFE",
+   "lang": "lfe",
+   "variants": [
+    "(defun factorial (n)\n  (cond\n    ((== n 0) 1)\n    ((> n 0) (* n (factorial (- n 1))))))\n",
+    "(defun factorial\n  ((n) (when (== n 0)) 1)\n  ((n) (when (> n 0))\n    (* n (factorial (- n 1)))))\n",
+    "(defun factorial\n  ((0) 1)\n  ((n) (when (> n 0))\n    (* n (factorial (- n 1)))))\n",
+    "(defun factorial (n)\n  (factorial n 1))\n\n(defun factorial\n  ((0 acc) acc)\n  ((n acc) (when (> n 0))\n    (factorial (- n 1) (* n acc))))\n",
+    "> (lists:map #'factorial/1 (lists:seq 10 20))\n(3628800\n 39916800\n 479001600\n 6227020800\n 87178291200\n 1307674368000\n 20922789888000\n 355687428096000\n 6402373705728000\n 121645100408832000\n 2432902008176640000)\n"
+   ]
+  },
+  "lingo": {
+   "header": "Lingo",
+   "lang": "lingo",
+   "variants": [
+    "on fact (n)\n  if n<=1 then return 1\n  return n * fact(n-1)\nend\n",
+    "on fact (n)\n  res = 1\n  repeat with i = 2 to n\n    res = res*i\n  end repeat\n  return res\nend\n"
+   ]
+  },
+  "lisaac": {
+   "header": "Lisaac",
+   "lang": "lisaac",
+   "variants": [
+    "- factorial x : INTEGER : INTEGER <- (\n  + result : INTEGER;\n  (x <= 1).if {\n    result := 1;\n  } else {\n    result := x * factorial(x - 1);\n  };\n  result\n);\n"
+   ]
+  },
+  "livecode": {
+   "header": "LiveCode",
+   "lang": "livecode",
+   "variants": [
+    "// recursive\nfunction factorialr n\n    if n < 2 then \n        return 1\n    else\n        return n * factorialr(n-1)\n    end if\nend factorialr\n\n// using accumulator\nfunction factorialacc n acc\n    if n = 0 then\n        return acc\n    else\n        return factorialacc(n-1, n * acc)\n    end if\nend factorialacc\n\nfunction factorial n\n    return factorialacc(n,1)\nend factorial\n\n// iterative\nfunction factorialit n\nput 1 into f\n    if n > 1 then \n        repeat with i = 1 to n\n            multiply f by i\n        end repeat\n    end if\n    return f\nend factorialit\n"
+   ]
+  },
+  "llvmir": {
+   "header": "LLVM",
+   "lang": "llvmir",
+   "variants": [
+    "; ModuleID = 'factorial.c'\n; source_filename = \"factorial.c\"\n; target datalayout = \"e-m:w-i64:64-f80:128-n8:16:32:64-S128\"\n; target triple = \"x86_64-pc-windows-msvc19.21.27702\"\n\n; This is not strictly LLVM, as it uses the C library function \"printf\".\n; LLVM does not provide a way to print values, so the alternative would be\n; to just load the string into memory, and that would be boring.\n\n; Additional comments have been inserted, as well as changes made from the output produced by clang such as putting more meaningful labels for the jumps\n\n$\"\\01??_C@_04PEDNGLFL@?$CFld?6?$AA@\" = comdat any\n\n@\"\\01??_C@_04PEDNGLFL@?$CFld?6?$AA@\" = linkonce_odr unnamed_addr constant [5 x i8] c\"%ld\\0A\\00\", comdat, align 1\n\n;--- The declaration for the external C printf function.\ndeclare i32 @printf(i8*, ...)\n\n; Function Attrs: noinline nounwind optnone uwtable\ndefine i32 @factorial(i32) #0 {\n;-- local copy of n\n  %2 = alloca i32, align 4\n;-- long result\n  %3 = alloca i32, align 4\n;-- int i\n  %4 = alloca i32, align 4\n;-- local n = parameter n\n  store i32 %0, i32* %2, align 4\n;-- result = 1\n  store i32 1, i32* %3, align 4\n;-- i = 1\n  store i32 1, i32* %4, align 4\n  br label %loop\n\nloop:\n;-- i <= n\n  %5 = load i32, i32* %4, align 4\n  %6 = load i32, i32* %2, align 4\n  %7 = icmp sle i32 %5, %6\n  br i1 %7, label %loop_body, label %exit\n\nloop_body:\n;-- result *= i\n  %8 = load i32, i32* %4, align 4\n  %9 = load i32, i32* %3, align 4\n  %10 = mul nsw i32 %9, %8\n  store i32 %10, i32* %3, align 4\n  br label %loop_increment\n\nloop_increment:\n;-- ++i\n  %11 = load i32, i32* %4, align 4\n  %12 = add nsw i32 %11, 1\n  store i32 %12, i32* %4, align 4\n  br label %loop\n\nexit:\n;-- return result\n  %13 = load i32, i32* %3, align 4\n  ret i32 %13\n}\n\n; Function Attrs: noinline nounwind optnone uwtable\ndefine i32 @main() #0 {\n;-- factorial(5)\n  %1 = call i32 @factorial(i32 5)\n;-- printf(\"%ld\\n\", factorial(5))\n  %2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([5 x i8], [5 x i8]* @\"\\01??_C@_04PEDNGLFL@?$CFld?6?$AA@\", i32 0, i32 0), i32 %1)\n;-- return 0\n  ret i32 0\n}\n\nattributes #0 = { noinline nounwind optnone uwtable \"correctly-rounded-divide-sqrt-fp-math\"=\"false\" \"disable-tail-calls\"=\"false\" \"less-precise-fpmad\"=\"false\" \"no-frame-pointer-elim\"=\"false\" \"no-infs-fp-math\"=\"false\" \"no-jump-tables\"=\"false\" \"no-nans-fp-math\"=\"false\" \"no-signed-zeros-fp-math\"=\"false\" \"no-trapping-math\"=\"false\" \"stack-protector-buffer-size\"=\"8\" \"target-cpu\"=\"x86-64\" \"target-features\"=\"+fxsr,+mmx,+sse,+sse2,+x87\" \"unsafe-fp-math\"=\"false\" \"use-soft-float\"=\"false\" }\n\n!llvm.module.flags = !{!0, !1}\n!llvm.ident = !{!2}\n\n!0 = !{i32 1, !\"wchar_size\", i32 2}\n!1 = !{i32 7, !\"PIC Level\", i32 2}\n!2 = !{!\"clang version 6.0.1 (tags/RELEASE_601/final)\"}\n"
+   ]
+  },
+  "logo": {
+   "header": "Logo",
+   "lang": "logo",
+   "variants": [
+    "to factorial :n\n  if :n < 2 [output 1]\n  output :n * factorial :n-1\nend\n",
+    "to factorial :n \n\tmake \"fact 1 \n\tmake \"i 1 \n\trepeat :n [make \"fact :fact * :i make \"i :i + 1] \n\tprint :fact \nend\n"
+   ]
+  },
+  "lolcode": {
+   "header": "LOLCODE",
+   "lang": "lolcode",
+   "variants": [
+    "HAI 1.3\n\nHOW IZ I Faktorial YR Number\n  BOTH SAEM 1 AN BIGGR OF Number AN 1 \n  O RLY?\n   YA RLY\n    FOUND YR 1\n   NO WAI\n    FOUND YR PRODUKT OF Number AN I IZ Faktorial YR DIFFRENCE OF Number AN 1 MKAY\n  OIC\nIF U SAY SO\n\nIM IN YR Loop UPPIN YR Index WILE DIFFRINT Index AN 13\n  VISIBLE Index \"! = \" I IZ Faktorial YR Index MKAY\nIM OUTTA YR Loop\nKTHXBYE\n"
+   ]
+  },
+  "lua": {
+   "header": "Lua",
+   "lang": "lua",
+   "variants": [
+    "function fact(n)\n  return n > 0 and n * fact(n-1) or 1\nend\n",
+    "function fact(n, acc)\n  acc = acc or 1\n  if n == 0 then\n    return acc\n  end\n  return fact(n-1, n*acc)\nend\n",
+    "fact = setmetatable({[0] = 1}, {\n  __call = function(t,n)\n    if n < 0 then return 0 end\n    if not t[n] then t[n] = n * t(n-1) end\n    return t[n]\n  end\n})\n"
+   ]
+  },
+  "m4": {
+   "header": "M4",
+   "lang": "m4",
+   "variants": [
+    "define(`factorial',`ifelse(`$1',0,1,`eval($1*factorial(decr($1)))')')dnl\ndnl\nfactorial(5)\n"
+   ]
+  },
+  "mad": {
+   "header": "MAD",
+   "lang": "mad",
+   "variants": [
+    "            NORMAL MODE IS INTEGER\n           \n          R   CALCULATE FACTORIAL OF N \n            INTERNAL FUNCTION(N)\n            ENTRY TO FACT.\n            RES = 1\n            THROUGH FACMUL, FOR MUL = 2, 1, MUL.G.N\nFACMUL      RES = RES * MUL\n            FUNCTION RETURN RES\n            END OF FUNCTION\n           \n          R   USE THE FUNCTION TO PRINT 0! THROUGH 12!\n            VECTOR VALUES FMT = $I2,6H ! IS ,I9*$\n            THROUGH PRNFAC, FOR NUM = 0, 1, NUM.G.12\nPRNFAC      PRINT FORMAT FMT, NUM, FACT.(NUM)\n\n            END OF PROGRAM\n"
+   ]
+  },
+  "manool": {
+   "header": "MANOOL",
+   "lang": "manool",
+   "variants": [
+    "{ let rec\n  { Fact = -- compile-time constant binding\n    { proc { N } as -- precondition: N.IsI48[] & (N >= 0)\n    : if N == 0 then 1 else\n      N * Fact[N - 1]\n    }\n  }\n  in -- use Fact here or just make the whole expression to evaluate to it:\n  Fact\n}\n",
+    "{ let rec\n  { Fact = -- compile-time constant binding\n    { proc { N } as -- precondition: N.IsI48[] & (N >= 0)\n      { if N == 0 then 1 else\n        N * Fact[N - 1]\n      }\n    }\n  }\n  in -- use Fact here or just make the whole expression to evaluate to it:\n  Fact\n}\n",
+    "{ let\n  { Fact = -- compile-time constant binding\n    { proc { N } as -- precondition: N.IsI48[] & (N >= 0)\n    : var { Res = 1 } in -- variable binding\n    : do Res after -- return result\n    : while N <> 0 do -- loop while N does not equal to zero\n      Res = N * Res; N = N - 1\n    }\n  }\n  in -- use Fact here or just make the whole expression to evaluate to it:\n  Fact\n}\n"
+   ]
+  },
+  "maple": {
+   "header": "Maple",
+   "lang": "maple",
+   "variants": [
+    "> 5!;\n                                  120\n",
+    "RecFact := proc( n :: nonnegint )\n        if n = 0 or n = 1 then\n                1\n        else\n                n * thisproc( n -  1 )\n        end if\nend proc:\n",
+    "> seq( RecFact( i ) = i!, i = 0 .. 10 );\n1 = 1, 1 = 1, 2 = 2, 6 = 6, 24 = 24, 120 = 120, 720 = 720, 5040 = 5040,\n\n    40320 = 40320, 362880 = 362880, 3628800 = 3628800\n",
+    "IterFact := proc( n :: nonnegint )\n        local   i;\n        mul( i, i = 2 .. n )\nend proc:\n",
+    "> seq( IterFact( i ) = i!, i = 0 .. 10 );\n1 = 1, 1 = 1, 2 = 2, 6 = 6, 24 = 24, 120 = 120, 720 = 720, 5040 = 5040,\n\n    40320 = 40320, 362880 = 362880, 3628800 = 3628800\n"
+   ]
+  },
+  "mathematica": {
+   "header": "Mathematica",
+   "lang": "mathematica",
+   "variants": [
+    "factorial[n_Integer] := n*factorial[n-1]\nfactorial[0] = 1\n",
+    "factorial[n_Integer] := \n  Block[{i, result = 1}, For[i = 1, i <= n, ++i, result *= i]; result]\n",
+    "factorial[n_Integer] := Block[{i}, Times @@ Table[i, {i, n}]]\n"
+   ]
+  },
+  "matlab": {
+   "header": "MATLAB",
+   "lang": "matlab",
+   "variants": [
+    "answer = factorial(N)\n",
+    "function f=fac(n)\n    if n==0\n        f=1;\n        return\n    else\n        f=n*fac(n-1);\n    end\n",
+    "  function b=factorial(a)\n\tb=1;\t\n\tfor i=1:a\t\n\t    b=b*i;\n\tend\n"
+   ]
+  },
+  "maude": {
+   "header": "Maude",
+   "lang": "maude",
+   "variants": [
+    "fmod FACTORIAL is\n\n\tprotecting INT .\n\t\n\top undefined : -> Int .\n\top _! : Int -> Int .\n\t\n\tvar n : Int .\n\t\n\teq 0 ! = 1 .\n\teq n ! = if n < 0 then undefined else n * (sd(n, 1) !) fi .\n\t\nendfm\n\nred 11 ! .\n"
+   ]
+  },
+  "maxima": {
+   "header": "Maxima",
+   "lang": "maxima",
+   "variants": [
+    "n!\n",
+    "fact(n) := if n < 2 then 1 else n * fact(n - 1)$\n",
+    "fact2(n) := block([r: 1], for i thru n do r: r * i, r)$\n"
+   ]
+  },
+  "maxscript": {
+   "header": "MAXScript",
+   "lang": "maxscript",
+   "variants": [
+    "fn factorial n =\n(\n    if n == 0 then return 1\n    local fac = 1\n    for i in 1 to n do\n    (\n        fac *= i\n    )\n    fac\n)\n",
+    "fn factorial_rec n =\n(\n    local fac = 1\n    if n > 1 then\n    (\n        fac = n * factorial_rec (n - 1)\n    )\n    fac\n)\n"
+   ]
+  },
+  "mercury": {
+   "header": "Mercury",
+   "lang": "mercury",
+   "variants": [
+    ":- module factorial.\n\n:- interface.\n:- import_module integer.\n\n:- func factorial(integer) = integer.\n\n:- implementation.\n\n:- pragma memo(factorial/1).\n\nfactorial(N) =\n    (   N =< integer(0)\n    ->  integer(1)\n    ;   factorial(N - integer(1)) * N\n    ).\n",
+    ":- module test_factorial.\n:- interface.\n:- import_module io.\n\n:- pred main(io::di, io::uo) is det.\n\n:- implementation.\n:- import_module factorial.\n:- import_module char, integer, list, string.\n\nmain(!IO) :-\n    command_line_arguments(Args, !IO),\n    filter(is_all_digits, Args, CleanArgs),\n    Arg1 = list.det_index0(CleanArgs, 0),\n    Number = integer.det_from_string(Arg1),\n    Result = factorial(Number),\n    Fmt = integer.to_string,\n    io.format(\"factorial(%s) = %s\\n\", [s(Fmt(Number)), s(Fmt(Result))], !IO).\n",
+    "factorial(100) = 93326215443944152681699238856266700490715968264381621468592963895217599993229915608941463976156518286253697920827223758251185210916864000000000000000000000000\n"
+   ]
+  },
+  "min": {
+   "header": "min",
+   "lang": "min",
+   "variants": [
+    "((dup 0 ==) 'succ (dup pred) '* linrec) :factorial\n"
+   ]
+  },
+  "miniscript": {
+   "header": "MiniScript",
+   "lang": "miniscript",
+   "variants": [
+    "factorial = function(n)\n    result = 1\n    for i in range(2,n)\n        result = result * i\n    end for\n    return result\nend function\n\nprint factorial(10)\n",
+    "factorial = function(n) \n    if n <= 0 then return 1 else return n * factorial(n-1)\nend function\n\nprint factorial(10)\n"
+   ]
+  },
+  "minizinc": {
+   "header": "MiniZinc",
+   "lang": "minizinc",
+   "variants": [
+    "var int: factorial(int: n) =\n  let {\n    array[0..n] of var int: factorial;\n    constraint forall(a in 0..n)(\n      factorial[a] == if (a == 0) then\n        1\n      else\n        a*factorial[a-1]\n      endif\n  )} in factorial[n];\n\nvar int: fac = factorial(6);\nsolve satisfy;\noutput [show(fac),\"\\n\"];\n"
+   ]
+  },
+  "mirah": {
+   "header": "Mirah",
+   "lang": "mirah",
+   "variants": [
+    "def factorial_iterative(n:int)\n    2.upto(n-1) do |i|\n        n *= i \n    end\n    n\nend\n\nputs factorial_iterative 10\n"
+   ]
+  },
+  "modula-2": {
+   "header": "Modula-2",
+   "lang": "modula-2",
+   "variants": [
+    "MODULE Factorial;\nFROM FormatString IMPORT FormatString;\nFROM Terminal IMPORT WriteString,ReadChar;\n\nPROCEDURE Factorial(n : CARDINAL) : CARDINAL;\nVAR result : CARDINAL;\nBEGIN\n    result := 1;\n    WHILE n#0 DO\n        result := result * n;\n        DEC(n)\n    END;\n    RETURN result\nEND Factorial;\n\nVAR\n    buf : ARRAY[0..63] OF CHAR;\n    n : CARDINAL;\nBEGIN\n    FOR n:=0 TO 10 DO\n        FormatString(\"%2c! = %7c\\n\", buf, n, Factorial(n));\n        WriteString(buf)\n    END;\n\n    ReadChar\nEND Factorial.\n"
+   ]
+  },
+  "modula-3": {
+   "header": "Modula-3",
+   "lang": "modula-3",
+   "variants": [
+    "PROCEDURE FactIter(n: CARDINAL): CARDINAL =\n  VAR\n    result := n;\n    counter := n - 1;\n    \n  BEGIN\n    FOR i := counter TO 1 BY -1 DO\n      result := result * i;\n    END;\n    RETURN result;\n  END FactIter;\n",
+    "PROCEDURE FactRec(n: CARDINAL): CARDINAL =\n  VAR result := 1;\n\n  BEGIN\n    IF n > 1 THEN\n      result := n * FactRec(n - 1);\n    END;\n    RETURN result;\n  END FactRec;\n"
+   ]
+  },
+  "mouse": {
+   "header": "Mouse",
+   "lang": "mouse",
+   "variants": [
+    "\"PRIME NUMBERS!\" N1 = (NN. 1 + = #P,N.; )\n\n$P F1 = N1 =\n   ( FF . 1 + = %AF. - ^ %AF./F. * %A - 1 + [N0 = 0 ^ ] )\n     N. [ %A! \"!\" ] @\n\n$$\n"
+   ]
+  },
+  "mumps": {
+   "header": "MUMPS",
+   "lang": "mumps",
+   "variants": [
+    "factorial(num)\tNew ii,result\n\tIf num<0 Quit \"Negative number\"\n\tIf num[\".\" Quit \"Not an integer\"\n\tSet result=1 For ii=1:1:num Set result=result*ii\n\tQuit result\n\nWrite $$factorial(0) ; 1\nWrite $$factorial(1) ; 1\nWrite $$factorial(2) ; 2\nWrite $$factorial(3) ; 6\nWrite $$factorial(10) ; 3628800\nWrite $$factorial(-6) ; Negative number\nWrite $$factorial(3.7) ; Not an integer\n",
+    "factorial(num)\t;\n\tIf num<0 Quit \"Negative number\"\n\tIf num[\".\" Quit \"Not an integer\"\n\tIf num<2 Quit 1\n\tQuit num*$$factorial(num-1)\n\nWrite $$factorial(0) ; 1\nWrite $$factorial(1) ; 1\nWrite $$factorial(2) ; 2\nWrite $$factorial(3) ; 6\nWrite $$factorial(10) ; 3628800\nWrite $$factorial(-6) ; Negative number\nWrite $$factorial(3.7) ; Not an integer\n"
+   ]
+  },
+  "neko": {
+   "header": "Neko",
+   "lang": "neko",
+   "variants": [
+    "var factorial = function(number) {\n\tvar i = 1;\n\tvar result = 1;\n\n\twhile(i <= number) {\n\t\tresult *= i;\n\t\ti += 1;\n\t}\n\n\treturn result;\n};\n\n$print(factorial(10));\n"
+   ]
+  },
+  "nemerle": {
+   "header": "Nemerle",
+   "lang": "nemerle",
+   "variants": [
+    "using System;\nusing System.Console;\n\nmodule Program\n{\n  Main() : void\n  {\n      WriteLine(\"Factorial of which number?\");\n      def number = long.Parse(ReadLine());\n      WriteLine(\"Using Fold : Factorial of {0} is {1}\", number, FactorialFold(number));\n      WriteLine(\"Using Match: Factorial of {0} is {1}\", number, FactorialMatch(number));\n      WriteLine(\"Iterative  : Factorial of {0} is {1}\", number, FactorialIter(number));\n  }\n  \n  FactorialFold(number : long) : long\n  {\n      $[1L..number].FoldLeft(1L, _ * _ )\n  }\n  \n  FactorialMatch(number : long) : long\n  {\n      |0L => 1L\n      |n  => n * FactorialMatch(n - 1L)\n  }\n  \n  FactorialIter(number : long) : long\n  {\n      mutable accumulator = 1L;\n      for (mutable factor = 1L; factor <= number; factor++)\n      {\n          accumulator *= factor;\n      }\n      accumulator  //implicit return\n  }\n}\n"
+   ]
+  },
+  "netrexx": {
+   "header": "NetRexx",
+   "lang": "netrexx",
+   "variants": [
+    "/* NetRexx */\n\noptions replace format comments java crossref savelog symbols nobinary\n\nnumeric digits 64 -- switch to exponential format when numbers become larger than 64 digits\n\nsay 'Input a number: \\-'\nsay\ndo\n  n_ = long ask -- Gets the number, must be an integer\n\n  say n_'! =' factorial(n_) '(using iteration)'\n  say n_'! =' factorial(n_, 'r') '(using recursion)'\n\n  catch ex = Exception\n    ex.printStackTrace\nend\n\nreturn\n\nmethod factorial(n_ = long, fmethod = 'I') public static returns Rexx signals IllegalArgumentException\n\n  if n_ < 0 then -\n    signal IllegalArgumentException('Sorry, but' n_ 'is not a positive integer')\n\n  select\n    when fmethod.upper = 'R' then -\n      fact = factorialRecursive(n_)\n    otherwise -\n      fact = factorialIterative(n_)\n    end\n\n  return fact\n\nmethod factorialIterative(n_ = long) private static returns Rexx\n\n  fact = 1\n  loop i_ = 1 to n_\n    fact = fact * i_\n    end i_\n\n  return fact\n\nmethod factorialRecursive(n_ = long) private static returns Rexx\n\n  if n_ > 1 then -\n    fact = n_ * factorialRecursive(n_ - 1)\n  else -\n   fact = 1\n\n  return fact\n"
+   ]
+  },
+  "newlisp": {
+   "header": "newLISP",
+   "lang": "newlisp",
+   "variants": [
+    "> (define (factorial n) (exp (gammaln (+ n 1))))\n(lambda (n) (exp (gammaln (+ n 1))))\n> (factorial 4)\n24\n"
+   ]
+  },
+  "nial": {
+   "header": "Nial",
+   "lang": "nial",
+   "variants": [
+    "fact is recur [ 0 =, 1 first, pass, product, -1 +]\n",
+    "|fact 4\n=24\n"
+   ]
+  },
+  "nickle": {
+   "header": "Nickle",
+   "lang": "nickle",
+   "variants": [
+    "int fact(int n) { return n!; }\n"
+   ]
+  },
+  "nim": {
+   "header": "Nim",
+   "lang": "nim",
+   "variants": [
+    "import math\nlet i:int = fac(x)\n",
+    "proc factorial(x): int =\n  if x > 0: x * factorial(x - 1)\n  else: 1\n",
+    "proc factorial(x: int): int =\n  result = 1\n  for i in 2..x:\n    result *= i\n"
+   ]
+  },
+  "nlp-plus-plus": {
+   "header": "NLP++",
+   "lang": "nlp-plus-plus",
+   "variants": [
+    "@DECL\nfact(L(\"n\")) {\n    if (L(\"n\") <= 1)\n        return 1;\n    return L(\"n\") * fact(L(\"n\") - 1);\n}\n@@DECL\n\n@CODE\nL(\"i\") = 0;\nwhile (L(\"i\") <= 20) {\n    cout() << L(\"i\") << \"! = \" << fact(L(\"i\")) << \"\\n\";\n    L(\"i\")++;\n}\n# factorial() is also built in.\ncout() << \"12! = \" << factorial(12) << \"\\n\";\n@@CODE\n"
+   ]
+  },
+  "nu": {
+   "header": "Nu",
+   "lang": "nu",
+   "variants": [
+    "def 'math factorial' [] {[$in 1] | math max | 1..$in | math product}\n\n..10 | each {math factorial}\n"
+   ]
+  },
+  "nyquist": {
+   "header": "Nyquist",
+   "lang": "nyquist",
+   "variants": [
+    "(defun factorial (n)\n  (do ((x n (* x n)))\n      ((= n 1) x)\n    (setq n (1- n))))\n",
+    "(defun factorial (n)\n  (if (= n 1)\n      1\n      (* n (factorial (1- n)))))\n"
+   ]
+  },
+  "oberon-2": {
+   "header": "Oberon-2",
+   "lang": "oberon-2",
+   "variants": [
+    "MODULE Factorial;\nIMPORT\n  Out;\n\nVAR \n  i: INTEGER;\n\n  PROCEDURE Iterative(n: LONGINT): LONGINT;\n  VAR\n    i, r: LONGINT;\n  BEGIN\n    ASSERT(n >= 0);\n    r := 1;\n    FOR i := n TO 2 BY -1 DO\n      r := r * i\n    END;\n    RETURN r\n  END Iterative;\n\n  PROCEDURE Recursive(n: LONGINT): LONGINT;\n  VAR\n    r: LONGINT;\n  BEGIN\n    ASSERT(n >= 0);\n    r := 1;\n    IF n > 1 THEN \n      r := n * Recursive(n - 1)\n    END;\n    RETURN r\n  END Recursive;\n\nBEGIN\n  FOR i := 0 TO 9 DO\n    Out.String(\"Iterative \");Out.Int(i,0);Out.String('! =');Out.Int(Iterative(i),0);Out.Ln;\n  END;\n  Out.Ln;\n  FOR i := 0 TO 9 DO\n    Out.String(\"Recursive \");Out.Int(i,0);Out.String('! =');Out.Int(Recursive(i),0);Out.Ln;\n  END\nEND Factorial.\n"
+   ]
+  },
+  "ocaml": {
+   "header": "OCaml",
+   "lang": "ocaml",
+   "variants": [
+    "let rec factorial n =\n  if n <= 0 then 1\n  else n * factorial (n-1)\n",
+    "let factorial n =\n  let rec loop i accum =\n    if i > n then accum\n    else loop (i + 1) (accum * i)\n  in loop 1 1\n",
+    "let factorial n =\n  let result = ref 1 in\n  for i = 1 to n do\n    result := !result * i\n  done;\n  !result\n",
+    "let rec factorial n =\n  let rec loop acc = function\n    | 0 -> acc\n    | n -> loop (Z.mul (Z.of_int n) acc) (n - 1)\n  in loop Z.one n\n\nlet () =\n  if not !Sys.interactive then\n    begin\n      Sys.argv.(1) |> int_of_string |> factorial |> Z.print;\n      print_newline ()\n    end\n"
+   ]
+  },
+  "octave": {
+   "header": "Octave",
+   "lang": "octave",
+   "variants": [
+    "% built in factorial\nprintf(\"%d\\n\", factorial(50));\n\n% let's define our recursive...\nfunction fact = my_fact(n)\n  if ( n <= 1 )\n    fact = 1;\n  else\n    fact = n * my_fact(n-1);\n  endif\nendfunction\n\nprintf(\"%d\\n\", my_fact(50));\n\n% let's define our iterative\nfunction fact = iter_fact(n)\n  fact = 1;\n  for i = 2:n\n    fact = fact * i;\n  endfor\nendfunction\n\nprintf(\"%d\\n\", iter_fact(50));\n"
+   ]
+  },
+  "odin": {
+   "header": "Odin",
+   "lang": "odin",
+   "variants": [
+    "package main\n\nfactorial :: proc(n: int) -> int {\n  return 1 if n == 0 else n * factorial(n - 1)\n}\n\nfactorial_iterative :: proc(n: int) -> int {\n  result := 1\n  for i in 2..=n do result *= i\n  return result\n}\n\nmain :: proc() {\n  assert(factorial(4) == 24)\n  assert(factorial_iterative(4) == 24)\n}\n"
+   ]
+  },
+  "oforth": {
+   "header": "Oforth",
+   "lang": "oforth",
+   "variants": [
+    ": fact(n)  n ifZero: [ 1 ] else: [ n n 1- fact * ] ;\n",
+    ": fact | i | 1 swap loop: i [ i * ] ;\n"
+   ]
+  },
+  "order": {
+   "header": "Order",
+   "lang": "order",
+   "variants": [
+    "#include <order/interpreter.h>\n\n#define ORDER_PP_DEF_8fac                     \\\nORDER_PP_FN(8fn(8N,                           \\\n                8if(8less_eq(8N, 0),          \\\n                    1,                        \\\n                    8mul(8N, 8fac(8dec(8N))))))\n\nORDER_PP(8to_lit(8fac(8)))    // 40320\n",
+    "#include <order/interpreter.h>\n\n#define ORDER_PP_DEF_8fac                                                                         \\\nORDER_PP_FN(8fn(8N,                                                                               \\\n                8let((8F, 8fn(8I, 8A, 8G,                                                         \\\n                              8if(8greater(8I, 8N),                                               \\\n                                  8A,                                                             \\\n                                  8apply(8G, 8seq_to_tuple(8seq(8inc(8I), 8mul(8A, 8I), 8G)))))), \\\n                      8apply(8F, 8seq_to_tuple(8seq(1, 1, 8F))))))\n\nORDER_PP(8to_lit(8fac(8)))    // 40320\n"
+   ]
+  },
+  "oz": {
+   "header": "Oz",
+   "lang": "oz",
+   "variants": [
+    "fun {Fac1 N}\n   {FoldL {List.number 1 N 1} Number.'*' 1}\nend\n",
+    "fun {Fac2 N}\n   fun {Loop N Acc}\n      if N < 1 then Acc\n      else\n\t {Loop N-1 N*Acc}\n      end\n   end\nin\n   {Loop N 1}\nend\n",
+    "fun {Fac3 N}\n   Result = {NewCell 1}\nin\n   for I in 1..N do\n      Result := @Result * I\n   end\n   @Result\nend\n"
+   ]
+  },
+  "pari-gp": {
+   "header": "PARI/GP",
+   "lang": "pari-gp",
+   "variants": [
+    "fact(n)=if(n<2,1,n*fact(n-1))\n",
+    "fact(n)=my(p=1);for(k=2,n,p*=k);p\n",
+    "fact(n)=factorback([2..n])\n",
+    "f( a, b )={ \n\tmy(c);\n\tif( b == a, return(a));\n\tif( b-a > 1,\n\t\tc=(b + a) >> 1;\n\t\treturn(f(a, c) * f(c+1, b))\n\t);\n\treturn( a * b );\n}\n\nfact(n) = f(1, n)\n",
+    "fact(n)=n!\n"
+   ]
+  },
+  "pascal": {
+   "header": "Pascal",
+   "lang": "pascal",
+   "variants": [
+    "function factorial(n: integer): integer;\n var\n  i, result: integer;\n begin\n  result := 1;\n  for i := 2 to n do\n   result := result * i;\n  factorial := result\n end;\n",
+    "{$mode objFPC}{R+}\nFUNCTION Fact(n: qword): qword;\n\nVAR\n    F: qword;\n\nBEGIN\n    if n > 20 then\n    begin\n        WriteLn('This function is only accurate up to 20!');\n        exit(0);\n    end;\n\n    asm\n        (*) Initialize result = 1 (0! = 1 case handled automatically) (*)\n\n        mov     $1, %rax          (*)  RAX = 1 (initial result)       (*)\n        mov      n, %rcx          (*)  RCX = input number (counter)   (*)\n\n        test    %rcx, %rcx        (*)  Check if n=0                   (*)\n        jz      .Lstore_result    (*)  Skip loop if n=0               (*)\n\n    .Lloop1:\n        imul    %rcx, %rax        (*)  RAX = RAX * RCX (signed mul)   (*)\n        dec     %rcx              (*)  Decrement RCX                  (*)\n        jnz     .Lloop1           (*)  Loop while RCX != 0            (*)\n\n    .Lstore_result:\n        mov     %rax, F           (*)  Store result in F              (*)\n    end ['rax', 'rcx'];           (*)  Tell compiler register change  (*)\n\n    Result := F;\n\nEND;\n\n\nvar\n    N       : integer = 20 ;\n\nbegin\n\n    writeln;\n    writeln( BasicFact(N));\n\nend.        (*)    Function Fact    (*)\n",
+    "program GMPfact;\n\n{$mode objfpc}\n\nuses\n\n    gmp\n    ;\n\n    function Factorial(n: qword): string;\n        var\n            ResultMPZ: mpz_t;\n            i: qword;\n        begin\n            mpz_init_set_ui(ResultMPZ, 1);\n            for i := 2 to n do\n                mpz_mul_ui(ResultMPZ, ResultMPZ, i);\n            Result := mpz_get_str(nil, 10, ResultMPZ);\n            mpz_clear(ResultMPZ);\n        end;\n\nvar\n    N     : integer = 101 ;\n    Fact  :        string ;\n\nbegin\n    Fact := Factorial(101);\n    writeln( N ,'! = ', Fact);\nend.    (*)     GMPfact     (*)\n\n\nOutput:\n101! = 9425947759838359420851623124482936749562312794702543768327889353416977599316221476503087861591808346911623490003549599583369706302603264000000000000000000000000\n",
+    "function factorial(n: integer): integer;\n begin\n  if n = 0\n   then\n    factorial := 1\n   else\n    factorial := n*factorial(n-1)\n end;\n"
+   ]
+  },
+  "pascal-abc.net": {
+   "header": "PascalABC.NET",
+   "lang": "pascal-abc.net",
+   "variants": [
+    "function FactIter(n: integer): BigInteger;\nbegin\n  Result := 1;\n  for var i:=2 to n do\n    Result *= i;\nend;\n\nfunction FactRec(n: integer): BigInteger;\nbegin\n  if n = 0 then\n    Result := 1\n  else Result := n * FactRec(n - 1);\nend;\n\n\nbegin\n  for var i:=1 to 20 do\n    Println(i,FactRec(i),FactIter(i));\nend.\n"
+   ]
+  },
+  "pebble": {
+   "header": "Pebble",
+   "lang": "pebble",
+   "variants": [
+    ";Factorial example program for x86 DOS\n;Compiles to 207 bytes com executable\n\nprogram examples\\fctrl\n\ndata\n\n\tint f[1]\n\tint n[0]\n\nbegin\n\n\techo \"Factorial\"\n\techo \"Enter an integer: \"\n\n\tinput [n]\n\n\tlabel loop\n\n\t\t[f] = [f] * [n]\n\n\t\t-1 [n]\n\n\tif [n] > 0 then loop\n\n\techo [f]\n\tpause\n\tkill\n\nend\n"
+   ]
+  },
+  "perl": {
+   "header": "Perl",
+   "lang": "perl",
+   "variants": [
+    "sub factorial\n{\n  my $n = shift;\n  my $result = 1;\n  for (my $i = 1; $i <= $n; ++$i)\n  {\n    $result *= $i;\n  };\n  $result;\n}\n\n# using a .. range\nsub factorial {\n    my $r = 1;\n    $r *= $_ for 1..shift;\n    $r;\n}\n",
+    "sub factorial\n{\n  my $n = shift;\n  ($n == 0)? 1 : $n*factorial($n-1);\n}\n",
+    "use List::Util qw(reduce);\nsub factorial\n{\n  my $n = shift;\n  reduce { $a * $b } 1, 1 .. $n\n}\n",
+    "use ntheory qw/factorial/;\n# factorial returns a UV (native unsigned int) or Math::BigInt depending on size\nsay length(  factorial(10000)  );\n",
+    "use bigint;\nsay length(  10000->bfac  );\n"
+   ]
+  },
+  "php": {
+   "header": "PHP",
+   "lang": "php",
+   "variants": [
+    "<?php\nfunction factorial($n) {\n  if ($n < 0) {\n    return 0;\n  }\n\n  $factorial = 1;\n  for ($i = $n; $i >= 1; $i--) {\n    $factorial = $factorial * $i;\n  }\n\n  return $factorial;\n}\n?>\n",
+    "<?php\nfunction factorial($n) {\n  if ($n < 0) {\n    return 0;\n  }\n\n  if ($n == 0) {\n    return 1;\n  }\n\n  else {\n    return $n * factorial($n-1);\n  }\n}\n?>\n",
+    "<?php\nfunction factorial($n) { return $n == 0 ? 1 : array_product(range(1, $n)); }\n?>\n",
+    "gmp_fact($n)\n"
+   ]
+  },
+  "picat": {
+   "header": "Picat",
+   "lang": "picat",
+   "variants": [
+    "fact(N) = prod(1..N)\n"
+   ]
+  },
+  "picolisp": {
+   "header": "PicoLisp",
+   "lang": "picolisp",
+   "variants": [
+    "(de fact (N)\n   (if (=0 N)\n      1\n      (* N (fact (dec N))) ) )\n",
+    "(de fact (N)\n   (apply * (range 1 N) ) )\n"
+   ]
+  },
+  "piet-programming-language": {
+   "header": "Piet",
+   "lang": "piet-programming-language",
+   "variants": [
+    "push 1\nnot\nin(number)\nduplicate \nnot        // label a\npointer    // pointer 1\nduplicate\npush 1\nsubtract\npush 1\npointer\npush 1\nnoop\npointer\nduplicate  // the next op is back at label a\n\npush 1     // this part continues from pointer 1\nnoop\npush 2     // label b\npush 1\nrot 1 2\nduplicate\nnot\npointer    // pointer 2\nmultiply\npush 3\npointer\npush 3\npointer\npush 3\npush 3\npointer\npointer    // back at label b\n\npop        // continues from pointer 2\nout(number)\nexit\n"
+   ]
+  },
+  "pl-0": {
+   "header": "PL/0",
+   "lang": "pl-0",
+   "variants": [
+    "var n, f;\nbegin\n  ? n;\n  f := 1;\n  while n <> 0 do\n  begin\n    f := f * n;\n    n := n - 1\n  end;\n  ! f\nend.\n"
+   ]
+  },
+  "pl-i": {
+   "header": "PL/I",
+   "lang": "pl-i",
+   "variants": [
+    "factorial: procedure (N) returns (fixed decimal (30));\n   declare N fixed binary nonassignable;\n   declare i fixed decimal (10);\n   declare F fixed decimal (30);\n\n   if N < 0 then signal error;\n   F = 1;\n   do i = 2 to N;\n      F = F * i;\n   end;\n   return (F);\nend factorial;\n"
+   ]
+  },
+  "pl-sql": {
+   "header": "PL/SQL",
+   "lang": "pl-sql",
+   "variants": [
+    "Declare\n  /*====================================================================================================\n  -- For     :  https://rosettacode.org/\n  -- --\n  -- Task    : Factorial\n  -- Method  : iterative\n  -- Language: PL/SQL\n  --\n  -- 2020-12-30 by alvalongo\n  ====================================================================================================*/\n  --\n  function fnuFactorial(inuValue   integer)\n  return number\n  is\n    nuFactorial number;\n  Begin\n    if inuValue is not null then\n       nuFactorial:=1;\n       --\n       if inuValue>=1 then\n          --\n          For nuI in 1..inuValue loop\n              nuFactorial:=nuFactorial*nuI;\n          end loop;\n          --\n       End if;\n       --\n    End if;\n    --\n    return(nuFactorial);\n  End fnuFactorial;\nBEGIN\n  For nuJ in 0..100 loop\n      Dbms_Output.Put_Line('Factorial('||nuJ||')='||fnuFactorial(nuJ));\n  End loop;\nEND;\n"
+   ]
+  },
+  "plain-english": {
+   "header": "Plain English",
+   "lang": "plain-english",
+   "variants": [
+    "A factorial is a number.\n\nTo run:\n  Start up.\n  Demonstrate input.\n  Write \"Bye-bye!\" to the console.\n  Wait for 1 second.\n  Shut down.\n \nTo demonstrate input:\n  Write \"Enter a number: \" to the console without advancing.\n  Read a string from the console.\n  If the string is empty, exit.\n  Convert the string to a number.\n  If the number is negative, repeat.\n  Compute a factorial of the number.\n  Write \"Factorial of the number: \" then the factorial then the return byte to the console.\n  Repeat.\n\nTo decide if a string is empty:\n  If the string's length is 0, say yes.\n  Say no.\n\nTo compute a factorial of a number:\n  If the number is 0, put 1 into the factorial; exit.\n  Compute another factorial of the number minus 1.  \\ recursion\n  Put the other factorial times the number into the factorial.\n"
+   ]
+  },
+  "postscript": {
+   "header": "PostScript",
+   "lang": "postscript",
+   "variants": [
+    "/fact {\n  dup 0 eq     % check for the argument being 0\n  {\n    pop 1      % if so, the result is 1\n  }\n  {\n    dup\n    1 sub\n    fact       % call recursively with n - 1\n    mul        % multiply the result with n\n  } ifelse\n} def\n",
+    "/fact {\n  1            % initial value for the product\n  1 1          % for's start value and increment\n  4 -1 roll    % bring the argument to the top as for's end value\n  { mul } for\n} def\n",
+    "/myfact {{dup 0 eq} {pop 1} {dup pred} {mul} linrec}.\n"
+   ]
+  },
+  "powershell": {
+   "header": "PowerShell",
+   "lang": "powershell",
+   "variants": [
+    "function Get-Factorial ($x) {\n    if ($x -eq 0) {\n        return 1\n    }\n    return $x * (Get-Factorial ($x - 1))\n}\n",
+    "function Get-Factorial ($x) {\n    if ($x -eq 0) {\n        return 1\n    } else {\n        $product = 1\n        1..$x | ForEach-Object { $product *= $_ }\n        return $product\n    }\n}\n",
+    "function Get-Factorial ($x) {\n    if ($x -eq 0) {\n        return 1\n    }\n    return (Invoke-Expression (1..$x -join '*'))\n}\n"
+   ]
+  },
+  "processing": {
+   "header": "Processing",
+   "lang": "processing",
+   "variants": [
+    "int fact(int n){\n\tif(n <= 1){\n\t\treturn 1;\n\t} else{\n\t\treturn n*fact(n-1);\n\t}\n}\n",
+    "long fi(int n) {\n    if (n < 0){\n      return -1;\n    }\n    \n    if (n == 0){\n      return 1;\n    } else {\n      long r = 1;\n      \n      for (long i = 1; i <= n; i++){\n        r = r * i;\n      }\n      \n      return r;\n    }\n}\n"
+   ]
+  },
+  "prolog": {
+   "header": "Prolog",
+   "lang": "prolog",
+   "variants": [
+    "fact(X, 1) :- X<2.\nfact(X, F) :- Y is X-1, fact(Y,Z), F is Z*X.\n",
+    "fact(N, NF) :-\n\tfact(1, N, 1, NF).\n\nfact(X, X, F, F) :- !.\nfact(X, N, FX, F) :-\n\tX1 is X + 1,\n\tFX1 is FX * X1,\n\tfact(X1, N, FX1, F).\n",
+    "% foldl(Pred, Init, List, R).\n%\nfoldl(_Pred, Val, [], Val).\nfoldl(Pred, Val, [H | T], Res) :-\n\tcall(Pred, Val, H, Val1),\n\tfoldl(Pred, Val1, T, Res).\n\n% factorial\np(X, Y, Z) :- Z is X * Y).\n\nfact(X, F) :-\n\tnumlist(2, X, L),\n\tfoldl(p, 1, L, F).\n",
+    ":- use_module(lambda).\n\n% foldl(Pred, Init, List, R).\n%\nfoldl(_Pred, Val, [], Val).\nfoldl(Pred, Val, [H | T], Res) :-\n\tcall(Pred, Val, H, Val1),\n\tfoldl(Pred, Val1, T, Res).\n\nfact(N, F) :-\n\tnumlist(2, N, L),\n\tfoldl(\\X^Y^Z^(Z is X * Y), 1, L, F).\n",
+    ":- use_module(lambda).\n\nfact(N, FN) :-\n\tcont_fact(N, FN, \\X^Y^(Y = X)).\n\ncont_fact(N, F, Pred) :-\n\t(   N = 0 ->\n\t    call(Pred, 1, F)\n\t;   N1 is N - 1,\n\n\t    P =  \\Z^T^(T is Z * N),\n\t    cont_fact(N1, FT, P),\n\t    call(Pred, FT, F)\n\t).\n"
+   ]
+  },
+  "pure": {
+   "header": "Pure",
+   "lang": "pure",
+   "variants": [
+    "fact n = n*fact (n-1) if n>0;\n       = 1 otherwise;\nlet facts = map fact (1..10); facts;\n",
+    "fact n = loop 1 n with\n  loop p n = if n>0 then loop (p*n) (n-1) else p;\nend;\n"
+   ]
+  },
+  "python": {
+   "header": "Python",
+   "lang": "python",
+   "variants": [
+    "import math\nmath.factorial(n)\n",
+    "def factorial(n):\n    result = 1\n    for i in range(1, n+1):\n        result *= i\n    return result\n",
+    "from operator import mul\nfrom functools import reduce\n\ndef factorial(n):\n    return reduce(mul, range(1,n+1), 1)\n",
+    "from itertools import (accumulate, chain)\nfrom operator import mul\n\n# factorial :: Integer\ndef factorial(n):\n    return list(\n        accumulate(chain([1], range(1, 1 + n)), mul)\n    )[-1]\n",
+    "from itertools import (accumulate, chain)\nfrom operator import mul\n\n\n# factorials :: [Integer]\ndef factorials(n):\n    return list(\n        accumulate(chain([1], range(1, 1 + n)), mul)\n    )\n\nprint(factorials(5))\n\n# -> [1, 1, 2, 6, 24, 120]\n"
+   ]
+  },
+  "q": {
+   "header": "Q",
+   "lang": "q",
+   "variants": [
+    "f:(*/)1+til@\n",
+    "f:(*)over 1+til@\n",
+    "f:prd 1+til@\n",
+    "f:{(*/)1+til x}\n",
+    "f:{$[x=1;1;x*.z.s x-1]}\n"
+   ]
+  },
+  "r": {
+   "header": "R",
+   "lang": "r",
+   "variants": [
+    "fact <- function(n) {\n  if (n <= 1) 1\n  else n * Recall(n - 1)\n}\n",
+    "factIter <- function(n) {\n  f = 1\n  if (n > 1) {\n    for (i in 2:n) f <- f * i\n  }\n  f\n}\n",
+    "print(factorial(50)) # 3.041409e+64\n",
+    " fact_fp <- function(n) ifelse(!n, 1, Reduce(`*`, seq_len(n))) \n"
+   ]
+  },
+  "racket": {
+   "header": "Racket",
+   "lang": "racket",
+   "variants": [
+    "(define (factorial n)\n  (if (= 0 n)\n      1\n      (* n (factorial (- n 1)))))\n",
+    "(define (factorial n)\n  (define (fact n acc)\n    (if (= 0 n) \n        acc\n        (fact (- n 1) (* n acc))))\n  (fact n 1))\n",
+    "(define (factorial n)\n  (for/fold ([pro 1]) ([i (in-range 1 (+ n 1))]) (* pro i)))\n",
+    "(define (factorial n)\n  (for/product ([i (in-range 1 (+ n 1))]) i))\n"
+   ]
+  },
+  "raku": {
+   "header": "Raku",
+   "lang": "raku",
+   "variants": [
+    "sub postfix:<!> (Int $n) { [*] 2..$n }\nsay 5!;\n",
+    "constant fact = 1, |[\\*] 1..*;\nsay fact[5]\n"
+   ]
+  },
+  "rapira": {
+   "header": "Rapira",
+   "lang": "rapira",
+   "variants": [
+    "Фун Факт(n)\n  f := 1\n  для i от 1 до n\n        f := f * i\n  кц\n  Возврат f\nКон Фун\n",
+    "Фун Факт(n)\n  Если n = 1\n    Возврат 1\n  Иначе\n    Возврат n * Факт(n - 1)\n  Всё\nКон Фун\n\nПроц Старт()\n  n := ВводЦел('Введите число (n <= 12) :')\n  печать 'n! = '\n  печать Факт(n)\nКон проц \n",
+    "fun factorial(number)\n  if number = 0 then\n    return 1\n  fi\n\n  return number * factorial(number - 1)\nend\n"
+   ]
+  },
+  "rascal": {
+   "header": "Rascal",
+   "lang": "rascal",
+   "variants": [
+    "public int factorial_iter(int n){\n\tresult = 1;\n\tfor(i <- [1..n])\n\t\tresult *= i;\n\treturn result;\n}\n",
+    "public int factorial_iter2(int n) = (1 | it*e | int e <- [1..n]);\n",
+    "public int factorial_rec(int n){\n\tif(n>1) return n*factorial_rec(n-1);\n\t\telse return 1;\n}\n"
+   ]
+  },
+  "rebol": {
+   "header": "Rebol",
+   "lang": "rebol",
+   "variants": [
+    "Rebol [\n    Title: \"Factorial\"\n    URL: http://rosettacode.org/wiki/Factorial_function\n]\n \n;; Standard recursive implementation.\nfactorial: func [n][\n    either n > 1 [n * factorial n - 1] [1]\n]\n \n;; Iteration.\nifactorial: func [n][\n    f: 1\n    for i 2 n 1 [f: f * i]\n    f\n]\n\neither system/version < 3.0.0 [\n    ; Automatic memoization.\n    ; I'm just going to say up front that this is a stunt. However, you've\n    ; got to admit it's pretty nifty. Note that the 'memo' function\n    ; works with an unlimited number of arguments (although the expected\n    ; gains decrease as the argument count increases).\n    memo: func [\n        \"Defines memoizing function -- keeps arguments/results for later use.\"\n        args [block!] \"Function arguments. Just specify variable names.\"\n        body [block!] \"The body block of the function.\"\n        /local m-args m-r\n    ][\n        do compose/deep [\n            func [\n                (args)\n                /dump \"Dump memory.\"\n            ][\n                m-args: []\n                if dump [return m-args]\n                \n                if m-r: select/only m-args reduce [(args)] [return m-r]\n                \n                m-r: do [(body)]\n                append m-args reduce [reduce [(args)] m-r]\n                m-r\n            ]\n        ]\n    ]\n\n    mfactorial: memo [n][\n        either n > 1 [n * mfactorial n - 1] [1]\n    ]\n][\n    ;; Above hack is not supported in Rebol3\n    mfactorial: func[i][none]\n]\n \n;; Test them on numbers zero to ten.\nfor i 0 10 1 [print [i \":\" factorial i  ifactorial i  mfactorial i]]\n"
+   ]
+  },
+  "red": {
+   "header": "Red",
+   "lang": "red",
+   "variants": [
+    "fac: function [n][r: 1 repeat i n [r: r * i] r]\nfac: function [n][repeat i also n n: 1 [n: n * i] n]\n",
+    "fac: func [n][either n > 1 [n * fac n - 1][1]]\nfac: func [n][any [if n = 0 [1] n * fac n - 1]]\nfac: func [n][do pick [[n * fac n - 1] 1] n > 1]\n",
+    "fac: function [n][m: #(0 1) any [m/:n m/:n: n * fac n - 1]]\n"
+   ]
+  },
+  "refal": {
+   "header": "Refal",
+   "lang": "refal",
+   "variants": [
+    "$ENTRY Go {\n    = <Facts 0 10>;\n}\n\nFacts {\n    s.N s.Max, <Compare s.N s.Max>: '+' = ;\n    s.N s.Max = <Prout <Symb s.N>'! = ' <Fact s.N>>\n                <Facts <+ s.N 1> s.Max>;\n};\n\nFact {\n    0   = 1;\n    s.N = <* s.N <Fact <- s.N 1>>>;\n};\n"
+   ]
+  },
+  "rexx": {
+   "header": "REXX",
+   "lang": "rexx",
+   "variants": [
+    "call time('r')\nnumeric digits 999999999\na = 10/3\nsay length(a) time('e')\n",
+    "-- 12 Jun 2026\ninclude Setting\n\nsay 'FACTORIAL'\nsay version\nsay\ncall First20\ncall Timer 'r'\ncall Imperative 10, '1 13 71 450 3249 25206 205022 1723508 14842907 130202808'\ncall Timer 'r'\nif pos('Regina',version) > 0 then\n   call Recursive 10, '1 13 71 450 3249 25206 205022'\nelse\n   call Recursive 10, '1 13 71 450 3249'\ncall Timer 'r'\ncall Imperative 100000,'1 13 71 450 3249 25206'\ncall Timer 'r'\nexit\n\nFirst20:\nsay 'First 20 FactorialS...'\nnumeric digits 30\ndo n = 1 to 20\n   say n'! =' Fact(n)\nend\nsay\nreturn\n\nImperative:\narg d,p\nnumeric digits d\nsay 'Imperative in' d 'digits precision...'\ndo i = 1 to Words(p)\n   call Time('r'); f = Word(p,i); h = Fact(f)\n   parse var h 'E' e\n   if e = '' then\n      say Right(f'!',10) 'has exact' Right(Length(h),9) 'digits'\n   else\n      say Right(f'!',10) 'has about' Right(e+1,9) 'digits'\nend\nsay\nreturn\n\nRecursive:\narg d,p\nnumeric digits d\nsay 'Recursive in' d 'digits precision...'\ndo i = 1 to Words(p)\n   call Time('r'); f = Word(p,i); h = Recurs(f)\n   parse var h 'E' e\n   if e = '' then\n      say Right(f'!',10) 'has exact' Right(Length(h),9) 'digits'\n   else\n      say Right(f'!',10) 'has about' Right(e+1,9) 'digits'\nend\nsay\nreturn\n\nRecurs:\nprocedure\narg xx\nif xx = 0 then\n   return 1\nelse\n   return xx*Recurs(xx-1)\n\n-- Timer Fact\ninclude Math\n"
+   ]
+  },
+  "rhombus": {
+   "header": "Rhombus",
+   "lang": "rhombus",
+   "variants": [
+    "#lang rhombus/static\n\nfun factorial:\n| factorial(0): 1\n| factorial(n): n * factorial(n - 1)\n",
+    "#lang rhombus/static\n\nfun factorial(n):\n  for values(a=1) (n in 1..=n):\n    a * n\n\nfactorial(6) // output: 720\n"
+   ]
+  },
+  "ring": {
+   "header": "Ring",
+   "lang": "ring",
+   "variants": [
+    "give n\nx = fact(n)\nsee n + \" factorial is : \" + x\n\nfunc fact nr if nr = 1 return 1 else return nr * fact(nr-1) ok\n"
+   ]
+  },
+  "rockstar": {
+   "header": "Rockstar",
+   "lang": "rockstar",
+   "variants": [
+    "Factorial takes a number\nIf a number is 0\nGive back 1.\n\nPut a number into the first\nKnock a number down\nGive back the first times Factorial taking a number\n",
+    "Real Love takes a heart\nA page is a memory.\nPut A page over A page into the book\nIf a heart is nothing\nGive back the book\n\nPut a heart into my hands\nKnock my hands down\nGive back a heart of Real Love taking my hands\n"
+   ]
+  },
+  "rocq-prover": {
+   "header": "Rocq",
+   "lang": "rocq-prover",
+   "variants": [
+    "Fixpoint factorial (n : nat) : nat :=\n  match n with\n    | 0 => 1\n    | S k => (S k) * (factorial k)\n  end.\n"
+   ]
+  },
+  "ruby": {
+   "header": "Ruby",
+   "lang": "ruby",
+   "variants": [
+    "# Recursive\ndef factorial_recursive(n)\n  n.zero? ? 1 : n * factorial_recursive(n - 1)\nend\n\n# Tail-recursive\ndef factorial_tail_recursive(n, prod = 1)\n  n.zero? ? prod : factorial_tail_recursive(n - 1, prod * n)\nend\n\n# Iterative with Range#each\ndef factorial_iterative(n)\n  (2...n).each { |i| n *= i }\n  n.zero? ? 1 : n\nend\n\n# Iterative with Range#inject\ndef factorial_inject(n)\n  (1..n).inject(1){ |prod, i| prod * i }\nend\n\n# Iterative with Range#reduce, requires Ruby 1.8.7\ndef factorial_reduce(n)\n  (2..n).reduce(1, :*)\nend\n\n\nrequire 'benchmark'\n\nn = 400\nm = 10000\n\nBenchmark.bm(16) do |b|\n  b.report('recursive:')       {m.times {factorial_recursive(n)}}\n  b.report('tail recursive:')  {m.times {factorial_tail_recursive(n)}}\n  b.report('iterative:')       {m.times {factorial_iterative(n)}}\n  b.report('inject:')          {m.times {factorial_inject(n)}}\n  b.report('reduce:')          {m.times {factorial_reduce(n)}}\nend\n"
+   ]
+  },
+  "rust": {
+   "header": "Rust",
+   "lang": "rust",
+   "variants": [
+    "fn factorial_recursive (n: u64) -> u64 {\n    match n {\n        0 => 1,\n        _ => n * factorial_recursive(n-1)\n    }\n}\n\nfn factorial_iterative(n: u64) -> u64 {\n    (1..=n).product()\n}\n\nfn main () {\n    for i in 1..10 {\n        println!(\"{}\", factorial_recursive(i))\n    }\n    for i in 1..10 {\n        println!(\"{}\", factorial_iterative(i))\n    }\n}\n"
+   ]
+  },
+  "sasl": {
+   "header": "SASL",
+   "lang": "sasl",
+   "variants": [
+    "fac 4\nwhere fac 0 = 1\n      fac n = n * fac (n - 1)\n?\n"
+   ]
+  },
+  "sather": {
+   "header": "Sather",
+   "lang": "sather",
+   "variants": [
+    "class MAIN is\n\n  -- recursive\n  fact(a: INTI):INTI is\n    if a < 1.inti then return 1.inti; end;\n    return a * fact(a - 1.inti);\n  end;\n\n  -- iterative\n  fact_iter(a:INTI):INTI is\n    s ::= 1.inti;\n    loop s := s * a.downto!(1.inti); end;\n    return s;\n  end;\n\n  main is\n    a :INTI := 10.inti;\n    #OUT + fact(a) + \" = \" + fact_iter(a) + \"\\n\";\n  end;\nend;\n"
+   ]
+  },
+  "scala": {
+   "header": "Scala",
+   "lang": "scala",
+   "variants": [
+    "def factorial(n: Int) = {\n  var res = 1\n  for (i <- 1 to n)\n    res *= i \n  res\n}\n",
+    "def factorial(n: Int): Int = \n  if (n < 1) 1 \n  else       n * factorial(n - 1)\n",
+    "def factorial(n: Int) = {\n  @tailrec def fact(x: Int, acc: Int): Int = {\n    if (x < 2) acc else fact(x - 1, acc * x)\n  }\n  fact(n, 1)\n}\n",
+    "def factorial(n: Int) = (2 to n).product\n",
+    "def factorial(n: Int) =\n  (2 to n).foldLeft(1)(_ * _)\n"
+   ]
+  },
+  "scheme": {
+   "header": "Scheme",
+   "lang": "scheme",
+   "variants": [
+    "(define (factorial n)\n  (if (<= n 0)\n      1\n      (* n (factorial (- n 1)))))\n",
+    "(define (factorial n)\n  (let loop ((i 1)\n             (accum 1))\n    (if (> i n)\n        accum\n        (loop (+ i 1) (* accum i)))))\n",
+    "(define (factorial n)\n  (do ((i 1 (+ i 1))\n       (accum 1 (* accum i)))\n      ((> i n) accum)))\n",
+    ";Using a generator and a function that apply generated values to a function taking two arguments\n\n;A generator knows commands 'next? and 'next\n(define (range a b)\n(let ((k a))\n(lambda (msg)\n(cond\n\t((eq? msg 'next?) (<= k b))\n\t((eq? msg 'next)\n\t(cond\n\t\t((<= k b) (set! k (+ k 1)) (- k 1))\n\t\t(else 'nothing-left)))))))\n\n;Similar to List.fold_left in OCaml, but uses a generator\n(define (fold fun a gen)\n(let aux ((a a))\n\t(if (gen 'next?) (aux (fun a (gen 'next))) a)))\n\n;Now the factorial function\n(define (factorial n) (fold * 1 (range 1 n)))\n\n(factorial 8)\n\n;40320\n",
+    "(define (range n)\n  (let ((lst '()))\n    (do ((i 1 (+ i 1)))\n        ((= i (+ n 1)))\n      (set! lst (cons i lst)))\n    (reverse lst)))\n\n(define (fact n)\n  (apply * (range n)))\n"
+   ]
+  },
+  "scilab": {
+   "header": "Scilab",
+   "lang": "scilab",
+   "variants": [
+    "answer = factorial(N)\n",
+    "function f=factoriter(n)\n    f=1\n    for i=2:n\n        f=f*i\n    end\nendfunction\n",
+    "function f=factorrec(n)\n    if n==0 then f=1\n            else f=n*factorrec(n-1)\n    end\nendfunction\n",
+    "function f=factorgamma(n)\n    f = gamma(n+1)\nendfunction\n"
+   ]
+  },
+  "seed7": {
+   "header": "Seed7",
+   "lang": "seed7",
+   "variants": [
+    "const func bigInteger: factorial (in bigInteger: n) is func\n  result\n    var bigInteger: fact is 1_;\n  local\n    var bigInteger: i is 0_;\n  begin\n    for i range 1_ to n do\n      fact *:= i;\n    end for;\n  end func;\n",
+    "const func bigInteger: factorial (in bigInteger: n) is func\n  result\n    var bigInteger: fact is 1_;\n  begin\n    if n > 1_ then\n      fact := n * factorial(pred(n));\n    end if;\n  end func;\n"
+   ]
+  },
+  "self": {
+   "header": "Self",
+   "lang": "self",
+   "variants": [
+    "n factorial\n",
+    "factorial: n = (|r <- 1| 1 to: n + 1 Do: [|:i| r: r * i]. r) \n",
+    "factorial: n = (n <= 1 ifTrue: 1 False: [n * (factorial: n predecessor)])\n",
+    "factorial: n = (((vector copySize: n) mapBy: [|:e. :i| i + 1]) product)\n"
+   ]
+  },
+  "sequencel": {
+   "header": "SequenceL",
+   "lang": "sequencel",
+   "variants": [
+    "factorial(n) := product(1 ... n);\n",
+    "factorials(n)[i] := product(1 ... i) foreach i within 1 ... n;\n",
+    "factorial: int -> int;\nfactorial(n) :=\n\t\t1 when n <= 0\n\telse\n\t\tn * factorial(n-1);\n",
+    "factorial(n) :=\n\tfactorialHelper(1, n);\n\t\nfactorialHelper(acc, n) :=\n\t\tacc when n <= 0\n\telse\n\t\tfactorialHelper(acc * n, n-1);\n"
+   ]
+  },
+  "setl": {
+   "header": "SETL",
+   "lang": "setl",
+   "variants": [
+    "$ Recursive\nproc fact(n);\n    if (n < 2) then\n        return 1;\n    else\n        return n * fact(n - 1);\n    end if;\nend proc;\n\n$ Iterative\nproc factorial(n);\n    v := 1;\n    for i in {2..n} loop\n        v *:= i;\n    end loop;\n    return v;\nend proc;\n"
+   ]
+  },
+  "shen": {
+   "header": "Shen",
+   "lang": "shen",
+   "variants": [
+    "(define factorial\n    0 -> 1\n    X -> (* X (factorial (- X 1))))\n"
+   ]
+  },
+  "simula": {
+   "header": "Simula",
+   "lang": "simula",
+   "variants": [
+    "begin\n    integer procedure factorial(n);\n    integer n;\n    begin\n        integer fact, i;\n        fact := 1;\n        for i := 2 step 1 until n do\n            fact := fact * i;\n        factorial := fact\n    end;\n    integer f; outtext(\"factorials:\"); outimage;\n    for f := 0, 1, 2, 6, 9 do begin\n        outint(f, 2); outint(factorial(f), 8); outimage\n    end\nend\n"
+   ]
+  },
+  "sisal": {
+   "header": "Sisal",
+   "lang": "sisal",
+   "variants": [
+    "define main\n\nfunction main(x : integer returns integer)\n\n  for a in 1, x\n    returns\n      value of product a\n  end for\n\nend function\n",
+    "define main\n\nfunction main(x : integer returns integer)\n\n  if x = 0 then\n    1\n  else\n    x * main(x - 1)\n  end if\n\nend function\n"
+   ]
+  },
+  "slope": {
+   "header": "Slope",
+   "lang": "slope",
+   "variants": [
+    "(define factorial (lambda (n)\n  (cond \n    ((negative? n) (! \"Negative inputs to factorial are invalid\"))\n    ((zero? n) 1)\n    (else (reduce (lambda (num acc) (* num acc)) 1 (range n 1))))))\n",
+    "(define factorial (lambda (n)\n  (cond \n    ((negative? n) (! \"Negative inputs to factorial are invalid\"))\n    ((zero? n) 1)\n    (else\n      (for ((acc 1 (* acc i))(i 1 (+ i 1))) ((<= i n) acc))))))\n"
+   ]
+  },
+  "smalltalk": {
+   "header": "Smalltalk",
+   "lang": "smalltalk",
+   "variants": [
+    "Number extend [\n  my_factorial [\n    (self < 2) \n        ifTrue: [ ^1 ]\n        ifFalse: [                 \n\t    ^ (2 to: self) fold: [ :a :b | a * b ]\n        ]\n  ]\n].\n\n7 factorial printNl.\n7 my_factorial printNl.\n",
+    "Number extend [\n  factorial [\n    self < 0 ifTrue: [ self error: 'factorial is defined for natural numbers' ].\n    self isZero ifTrue: [ ^1 ].\n    ^self * ((self - 1) factorial)\n  ]\n].\n",
+    "|fac|\n\nfac := [:n |\n    n < 0 ifTrue: [ self error: 'fac is defined for natural numbers' ].\n    n <= 1 \n        ifTrue: [ 1 ]\n        ifFalse: [ n * (fac value:(n - 1)) ]\n].\n\nfac value:1000.\n",
+    "| fac |\nfac := [ :n | (1 to: n) inject: 1 into: [ :prod :next | prod * next ] ]. \nfac value: 10. \n\"3628800\"\n",
+    "fac := [:n | (1 to: n) product].\nfac value:40 \n-> 815915283247897734345611269596115894272000000000\n"
+   ]
+  },
+  "snobol4": {
+   "header": "SNOBOL4",
+   "lang": "snobol4",
+   "variants": [
+    "        define('rfact(n)') :(rfact_end)\nrfact   rfact = le(n,0) 1 :s(return)\n        rfact = n * rfact(n - 1) :(return)\nrfact_end\n",
+    "        define('trfact(n,f)') :(trfact_end)\ntrfact  trfact = le(n,0) f :s(return)\n        trfact = trfact(n - 1, n * f) :(return)\ntrfact_end\n",
+    "        define('ifact(n)') :(ifact_end)\nifact   ifact = 1\nif1     ifact = gt(n,0) n * ifact :f(return)\n        n = n - 1 :(if1)\nifact_end\n",
+    "loop    i = le(i,10) i + 1 :f(end)\n        output = rfact(i) ' ' trfact(i,1) ' ' ifact(i) :(loop)\nend\n"
+   ]
+  },
+  "spin": {
+   "header": "Spin",
+   "lang": "spin",
+   "variants": [
+    "con\n  _clkmode = xtal1 + pll16x\n  _clkfreq = 80_000_000\n \nobj\n  ser : \"FullDuplexSerial.spin\"\n \npub main | i\n  ser.start(31, 30, 0, 115200)\n\n  repeat i from 0 to 10\n    ser.dec(fac(i))\n    ser.tx(32)\n\n  waitcnt(_clkfreq + cnt)\n  ser.stop\n  cogstop(0)\n\npub fac(n) : f \n  f := 1\n  repeat while n > 0\n    f *= n\n    n -= 1\n"
+   ]
+  },
+  "spl": {
+   "header": "SPL",
+   "lang": "spl",
+   "variants": [
+    "fact(n)=\n  ? n!>1, <=1\n  <= n*fact(n-1)\n.\n"
+   ]
+  },
+  "sql": {
+   "header": "SQL",
+   "lang": "sql",
+   "variants": [
+    "WITH RECURSIVE f(a, b) AS (\n  VALUES(1, 1)\n  UNION ALL\n  SELECT a * b, b + 1 FROM f WHERE b <= 9\n)\nSELECT MAX(a) FROM f\n"
+   ]
+  },
+  "standard-ml": {
+   "header": "Standard ML",
+   "lang": "standard-ml",
+   "variants": [
+    "fun factorial n =\n  if n <= 0 then 1\n  else n * factorial (n-1)\n",
+    "fun factorial n = let\n  fun loop (i, accum) =\n    if i > n then accum\n    else loop (i + 1, accum * i)\nin\n  loop (1, 1)\nend\n"
+   ]
+  },
+  "stata": {
+   "header": "Stata",
+   "lang": "stata",
+   "variants": [
+    "mata\nreal scalar function fact1(real scalar n) {\n\tif (n<2) return(1)\n\telse return(fact1(n-1)*n)\n}\n\nreal scalar function fact2(real scalar n) {\n\ta=1\n\tfor (i=2;i<=n;i++) a=a*i\n\treturn(a)\n}\n\nprintf(\"%f\\n\",fact1(8))\nprintf(\"%f\\n\",fact2(8))\nprintf(\"%f\\n\",factorial(8))\n"
+   ]
+  },
+  "supercollider": {
+   "header": "SuperCollider",
+   "lang": "supercollider",
+   "variants": [
+    "f = { |n| (1..n).product };\n\nf.(10);\n\n// for numbers larger than 12, use 64 bit float\n// instead of 32 bit integers, because the integer range is exceeded\n// (1..n) returns an array of floats when n is a float\n\nf.(20.0);\n",
+    "f = { |n| if(n < 2) { 1 } { n * f.(n - 1) } };\nf.(10);\n"
+   ]
+  },
+  "swift": {
+   "header": "Swift",
+   "lang": "swift",
+   "variants": [
+    "func factorial(_ n: Int) -> Int {\n\treturn n < 2 ? 1 : (2...n).reduce(1, *)\n}\n",
+    "func factorial(_ n: Int) -> Int {\n\treturn n < 2 ? 1 : n * factorial(n - 1)\n}\n"
+   ]
+  },
+  "tcl": {
+   "header": "Tcl",
+   "lang": "tcl",
+   "variants": [
+    "# tailcall optimization is standard in tcl8.6 \nproc fact { n { result 1. } } {\n    if { $n <= 1 } {\n        return $result\n    } else {\n        tailcall fact [expr {$n-1}] [expr {$n*$result}]\n    }\n}\n\nset  f [fact 10]\n\nputs $f\n",
+    "proc ifact n {\n    for {set i $n; set sum 1} {$i >= 2} {incr i -1} {\n        set sum [expr {$sum * $i}]\n    }\n    return $sum\n}\n",
+    "proc rfact n { \n    expr {$n < 2 ? 1 : $n * [rfact [incr n -1]]} \n}\n",
+    "proc tcl::mathfunc::fact n {expr {$n < 2? 1: $n*fact($n-1)}}\n",
+    "proc ifact_caching n {\n    global fact_cache\n        tailcall fact [expr {$n-1}] [expr {$n*$result}]\n    if { ! [info exists fact_cache]} {\n        set fact_cache {1 1}\n    }\n    if {$n < [llength $fact_cache]} {\n        return [lindex $fact_cache $n]\n    }\n    set i [expr {[llength $fact_cache] - 1}]\n    set sum [lindex $fact_cache $i]\n    while {$i < $n} {\n        incr i\n        set sum [expr {$sum * $i}]\n        lappend fact_cache $sum\n    }\n    return $sum\n}\n"
+   ]
+  },
+  "txr": {
+   "header": "TXR",
+   "lang": "txr",
+   "variants": [
+    "$ txr -p '(n-perm-k 10 10)'\n3628800\n",
+    "$ txr -p '[reduce-left * (range 1 10) 1]'\n3628800\n"
+   ]
+  },
+  "uiua": {
+   "header": "Uiua",
+   "lang": "uiua",
+   "variants": [
+    "Factorial = /×+1⇡\n"
+   ]
+  },
+  "ussr": {
+   "header": "USSR",
+   "lang": "ussr",
+   "variants": [
+    "fac(result): n acc [\n    if(done): {n <= 1} [\n        return(result): acc\n    ]\n\n    set(next_n): {n - 1}\n    set(next_acc): {acc * n}  \n\n    fac(result): next_n next_acc\n]\n\ninit(ret): arg_cnt arg_vec [\n    scan(ok): \"Enter n: INTEGER INT;\" n\n    fac(result): n 1\n    print(out): result\n    return(ret): 0\n]\n"
+   ]
+  },
+  "verilog": {
+   "header": "Verilog",
+   "lang": "verilog",
+   "variants": [
+    "module main;\n \n  function automatic [7:0] factorial;\n    input [7:0] i_Num; \n    begin\n      if (i_Num == 1)\n        factorial = 1; \n      else\n        factorial = i_Num * factorial(i_Num-1);\n    end\n  endfunction\n \n  initial\n    begin\n      $display(\"Factorial of 1 = %d\", factorial(1));\n      $display(\"Factorial of 2 = %d\", factorial(2));\n      $display(\"Factorial of 3 = %d\", factorial(3));\n      $display(\"Factorial of 4 = %d\", factorial(4));\n      $display(\"Factorial of 5 = %d\", factorial(5));\n    end\nendmodule\n"
+   ]
+  },
+  "vhdl": {
+   "header": "VHDL",
+   "lang": "vhdl",
+   "variants": [
+    "LIBRARY ieee;\nUSE ieee.std_logic_1164.ALL;\nUSE ieee.numeric_std.ALL;\n\nENTITY Factorial IS\n\tGENERIC (\n\t\t\tNbin : INTEGER := 3 ; -- number of bit to input number \n\t\t\tNbou : INTEGER := 13) ; -- number of bit to output factorial\n\t\n\tPORT (\n\t\tclk : IN STD_LOGIC ; -- clock of circuit\n\t\tsr  : IN STD_LOGIC_VECTOR(1 DOWNTO 0); -- set and reset  \n\t\tN   : IN STD_LOGIC_VECTOR(Nbin-1 DOWNTO 0) ; -- max number \n\t    Fn  : OUT STD_LOGIC_VECTOR(Nbou-1 DOWNTO 0)); -- factorial of \"n\"\n\t\t  \t\t  \nEND Factorial ;\n\nARCHITECTURE Behavior OF Factorial IS \n---------------------- Program Multiplication -------------------------------- \n\tFUNCTION Mult ( CONSTANT MFa : IN UNSIGNED ;\n\t\t\t\t\tCONSTANT MI   : IN UNSIGNED ) RETURN UNSIGNED IS \t\t\t \n\tVARIABLE Z : UNSIGNED(MFa'RANGE) ;\n\tVARIABLE U : UNSIGNED(MI'RANGE) ;\n\tBEGIN\n\tZ := TO_UNSIGNED(0, MFa'LENGTH) ; -- to obtain the multiplication\n\tU := MI ; -- regressive counter \n\t\tLOOP \n\t\t\tZ := Z + MFa ; -- make multiplication\n\t\t\tU := U - 1 ; \n\t\t\tEXIT WHEN U = 0 ;\n\t\tEND LOOP ; \n\t\tRETURN Z ;\n\tEND Mult ; \n-------------------Program Factorial ---------------------------------------\n\tFUNCTION Fact (CONSTANT Nx : IN NATURAL ) RETURN UNSIGNED IS \n\tVARIABLE C  : NATURAL RANGE 0 TO 2**Nbin-1 ;\n\tVARIABLE I  : UNSIGNED(Nbin-1 DOWNTO 0) ;\n\tVARIABLE Fa : UNSIGNED(Nbou-1 DOWNTO 0) ;\n\tBEGIN \n\t\tC := 0 ; -- counter \n\t\tI :=  TO_UNSIGNED(1, Nbin) ;\n\t\tFa := TO_UNSIGNED(1, Nbou) ;\t\n\t\tLOOP\n\t\t\tEXIT WHEN C = Nx ; -- end loop \n\t\t\tC := C + 1 ;  -- progressive couter \n\t\t\tFa := Mult (Fa , I ); -- call function to make a multiplication \n\t\t\tI := I + 1 ; -- \n\t\tEND LOOP ;\n\t\tRETURN Fa ;\n\tEND Fact ;\n--------------------- Program TO Call Factorial Function ------------------------------------------------------\n\tTYPE Table IS ARRAY (0 TO 2**Nbin-1) OF UNSIGNED(Nbou-1 DOWNTO 0) ;\n\tFUNCTION Call_Fact RETURN Table IS\n\tVARIABLE Fc : Table ; \n\tBEGIN \n\t\tFOR c IN 0 TO 2**Nbin-1 LOOP\n\t\t\tFc(c) := Fact(c) ;\t\t\n\t\tEND LOOP ;\n\t\tRETURN Fc ; \n\tEND FUNCTION Call_Fact;\n\t\n\tCONSTANT Result : Table := Call_Fact ;\n ------------------------------------------------------------------------------------------------------------\nSIGNAL Nin : STD_LOGIC_VECTOR(N'RANGE) ;\nBEGIN    -- start of architecture\n\n\nNin <= N               WHEN RISING_EDGE(clk) AND sr = \"10\" ELSE\n       (OTHERS => '0') WHEN RISING_EDGE(clk) AND sr = \"01\" ELSE\n\t   UNAFFECTED;\n\nFn <= STD_LOGIC_VECTOR(Result(TO_INTEGER(UNSIGNED(Nin)))) WHEN RISING_EDGE(clk) ;\n\nEND Behavior ;\n"
+   ]
+  },
+  "vim-script": {
+   "header": "Vim Script",
+   "lang": "vim-script",
+   "variants": [
+    "function! Factorial(n)\n  if a:n < 2\n    return 1\n  else\n    return a:n * Factorial(a:n-1)\n  endif\nendfunction\n"
+   ]
+  },
+  "vyxal": {
+   "header": "Vyxal",
+   "lang": "vyxal",
+   "variants": [
+    "¡\n",
+    "ɾƒ*\n",
+    "λ0=[1|‹x*];\n"
+   ]
+  },
+  "wart": {
+   "header": "Wart",
+   "lang": "wart",
+   "variants": [
+    "def (fact n)\n  if (n = 0)\n    1\n    (n * (fact n-1))\n",
+    "def (fact n)\n  (n * (fact n-1))\n\ndef (fact 0)\n  1\n",
+    "def (fact n)\n  ret result 1\n    for i 1 (i <= n) ++i\n      result <- result*i\n",
+    "# a useful helper to generate all the natural numbers until n\ndef (nums n)\n  collect+for i 1 (i <= n) ++i\n    yield i\n\ndef (fact n)\n  (reduce (*) nums.n 1)\n"
+   ]
+  },
+  "wasm": {
+   "header": "WebAssembly",
+   "lang": "wasm",
+   "variants": [
+    "(module\n  ;; recursive\n  (func $fac (param f64) (result f64)\n    get_local 0\n    f64.const 1\n    f64.lt\n    if (result f64)\n      f64.const 1\n    else\n      get_local 0\n      get_local 0\n      f64.const 1\n      f64.sub\n      call $fac\n      f64.mul\n    end)\n  (export \"fac\" (func $fac)))\n",
+    "(module\n  ;; recursive, more compact version\n  (func $fac_f64 (export \"fac_f64\") (param f64) (result f64)\n    get_local 0 f64.const 1 f64.lt\n    if (result f64)\n      f64.const 1\n    else\n      get_local 0  \n        get_local 0  f64.const 1  f64.sub\n        call $fac_f64\n      f64.mul\n    end\n  )\n)\n",
+    "(module\n  ;; recursive, refactored to use s-expressions\n  (func $fact_f64 (export \"fact_f64\") (param f64) (result f64)\n    (if (result f64) (f64.lt (get_local 0) (f64.const 1))\n      (then f64.const 1)\n      (else\n        (f64.mul\n          (get_local 0)\n          (call $fact_f64 (f64.sub (get_local 0) (f64.const 1)))\n        )\n      )\n    )\n  )\n)\n",
+    "(module\n  ;; recursive, refactored to use s-expressions and named variables\n  (func $fact_f64 (export \"fact_f64\") (param $n f64) (result f64)\n    (if (result f64) (f64.lt (get_local $n) (f64.const 1))\n      (then f64.const 1)\n      (else\n        (f64.mul\n          (get_local $n)\n          (call $fact_f64 (f64.sub (get_local $n) (f64.const 1)))\n        )\n      )\n    )\n  )\n)\n",
+    "(module\n  ;; iterative, generated by C compiler (LLVM) from recursive code!\n  (func $factorial (export \"factorial\") (param $p0 i32) (result i32)\n    (local $l0 i32) (local $l1 i32)\n    block $B0\n      get_local $p0\n      i32.eqz\n      br_if $B0\n      i32.const 1\n      set_local $l0\n      loop $L1\n        get_local $p0\n        get_local $l0\n        i32.mul\n        set_local $l0\n        get_local $p0\n        i32.const -1\n        i32.add\n        tee_local $l1\n        set_local $p0\n        get_local $l1\n        br_if $L1\n      end\n      get_local $l0\n      return\n    end\n    i32.const 1\n  )\n)\n"
+   ]
+  },
+  "wren": {
+   "header": "Wren",
+   "lang": "wren",
+   "variants": [
+    "import \"./fmt\" for Fmt\nimport \"./big\" for BigInt\n\nclass Factorial {\n    static iterative(n) {\n        if (n < 2) return BigInt.one\n        var fact = BigInt.one\n        for (i in 2..n.toSmall) fact = fact * i\n        return fact\n    }\n\n    static recursive(n) {\n        if (n < 2) return BigInt.one\n        return n * recursive(n-1)\n    }\n}\n\nvar n = BigInt.new(24)\nFmt.print(\"Factorial(%(n)) iterative -> $,s\", Factorial.iterative(n))\nFmt.print(\"Factorial(%(n)) recursive -> $,s\", Factorial.recursive(n))\n"
+   ]
+  },
+  "x86-assembly": {
+   "header": "x86 Assembly",
+   "lang": "x86-assembly",
+   "variants": [
+    "global factorial\nsection .text\n\n; Input in ECX register (greater than 0!)\n; Output in EAX register\nfactorial:\n  mov   eax, 1\n.factor:\n  mul   ecx\n  loop  .factor\n  ret\n",
+    "global fact\nsection .text\n\n; Input and output in EAX register\nfact:\n  cmp    eax, 1\n  je    .done   ; if eax == 1 goto done\n\n  ; inductive case\n  push  eax  ; save n (ie. what EAX is)\n  dec   eax  ; n - 1\n  call  fact ; fact(n - 1)\n  pop   ebx  ; fetch old n\n  mul   ebx  ; multiplies EAX with EBX, ie. n * fac(n - 1)\n  ret\n\n.done:\n  ; base case: return 1\n  mov   eax, 1\n  ret\n",
+    "global factorial\nsection .text\n\n; Input in ECX register\n; Output in EAX register\nfactorial:\n  mov   eax, 1  ; default argument, store 1 in accumulator\n\n.base_case:\n  test  ecx, ecx\n  jnz   .inductive_case  ; return accumulator if n == 0\n  ret\n\n.inductive_case:\n  mul   ecx         ; accumulator *= n\n  dec   ecx         ; n -= 1\n  jmp   .base_case  ; tail call\n"
+   ]
+  },
+  "xl-lang": {
+   "header": "XL",
+   "lang": "xl-lang",
+   "variants": [
+    "0! -> 1\nN! -> N * (N-1)!\n"
+   ]
+  },
+  "xpl0": {
+   "header": "XPL0",
+   "lang": "xpl0",
+   "variants": [
+    "func FactIter(N);       \\Factorial of N using iterative method\nint N;                  \\range: 0..12\nint F, I;\n[F:= 1;\nfor I:= 2 to N do F:= F*I;\nreturn F;\n];\n\nfunc FactRecur(N);      \\Factorial of N using recursive method\nint N;                  \\range: 0..12\nreturn if N<2 then 1 else N*FactRecur(N-1);\n"
+   ]
+  },
+  "xtclang": {
+   "header": "Ecstasy",
+   "lang": "xtclang",
+   "variants": [
+    "module ShowFactorials {\n    static <Value extends IntNumber> Value factorial(Value n) {\n        assert:arg n >= Value.zero();\n        return n <= Value.one() ? n : n * factorial(n-Value.one());\n    }\n\n    @Inject Console console;\n    void run() {\n        // 128-bit test\n        UInt128 bigNum = 34;\n        console.print($\"factorial({bigNum})={factorial(bigNum)}\");\n\n        // 64-bit test\n        for (Int i : 10..-1) {\n            console.print($\"factorial({i})={factorial(i)}\");\n        }\n    }\n}\n"
+   ]
+  },
+  "zig": {
+   "header": "Zig",
+   "lang": "zig",
+   "variants": [
+    "pub fn factorial(comptime Num: type, n: i8) ?Num {\n    return if (@typeInfo(Num) != .Int)\n        @compileError(\"factorial called with non-integral type: \" ++ @typeName(Num))\n    else if (n < 0)\n        null\n    else calc: {\n        var i: i8 = 1;\n        var fac: Num = 1;\n        while (i <= n) : (i += 1) {\n            const tmp = @mulWithOverflow(fac, i);\n            if (tmp[1] != 0)\n                break :calc null; // overflow\n            fac = tmp[0];\n        } else break :calc fac;\n    };\n}\n\npub fn main() !void {\n    const stdout = @import(\"std\").io.getStdOut().writer();\n\n    try stdout.print(\"-1! = {?}\\n\", .{factorial(i32, -1)});\n    try stdout.print(\"0! = {?}\\n\", .{factorial(i32, 0)});\n    try stdout.print(\"5! = {?}\\n\", .{factorial(i32, 5)});\n    try stdout.print(\"33!(64 bit) = {?}\\n\", .{factorial(i64, 33)}); // not valid i64 factorial\n    try stdout.print(\"33! = {?}\\n\", .{factorial(i128, 33)}); // biggest i128 factorial possible\n    try stdout.print(\"34! = {?}\\n\", .{factorial(i128, 34)}); // will overflow\n}\n"
+   ]
+  }
+ },
+ "task": "Factorial",
+ "url": "https://rosettacode.org/wiki/Factorial?oldid=416980"
+}
