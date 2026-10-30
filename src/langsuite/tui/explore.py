@@ -14,6 +14,7 @@ from textual.widgets import DataTable, Input, Static, TabbedContent, TabPane
 
 from langsuite.core.errors import LangsuiteError
 from langsuite.core.kb import KnowledgeBase, Language
+from langsuite.core.similarity import BASELINE_METHOD, similar
 from langsuite.tui.sections import Section
 
 DEBOUNCE_S = 0.12
@@ -42,6 +43,8 @@ class ExplorePane(Vertical):
                     yield VerticalScroll(Static(id="detail-features"))
                 with TabPane("Lineage", id="tab-lineage"):
                     yield VerticalScroll(Static(id="detail-lineage"))
+                with TabPane("Similar", id="tab-similar"):
+                    yield VerticalScroll(Static(id="detail-similar"))
                 with TabPane("Evidence", id="tab-evidence"):
                     yield VerticalScroll(Static(id="detail-evidence"))
                 for name, milestone in PLANNED_TABS:
@@ -158,6 +161,8 @@ class ExplorePane(Vertical):
             lineage.append("\n[dim]Source: PLDB influencedBy[/]")
         self.query_one("#detail-lineage", Static).update("\n".join(lineage))
 
+        self.query_one("#detail-similar", Static).update(self._similar_text(lang))
+
         refs: list[str] = []
         ev = []
         for a in rows:
@@ -171,3 +176,27 @@ class ExplorePane(Vertical):
         ev.append("")
         ev.extend(f"[dim]\\[{n}] {escape(u)}[/]" for n, u in enumerate(refs, 1))
         self.query_one("#detail-evidence", Static).update("\n".join(ev))
+
+    def _similar_text(self, lang: Language) -> str:
+        assert self.kb is not None
+        try:
+            result = similar(self.kb, lang.id, k=10, baseline=True)
+        except LangsuiteError as err:
+            return f"[dim]{escape(err.message)}[/]"
+        if not result.neighbours:
+            return "[dim]No comparable languages.[/]"
+        lines = [
+            f"[b]Most like {escape(lang.name)}[/b] [dim]by features · "
+            f"{result.known_traits} known traits[/]",
+            "",
+        ]
+        for n, nb in enumerate(result.neighbours, 1):
+            z = nb.baseline.z if nb.baseline else 0.0
+            tone = "green" if z >= 3 else ("yellow" if z >= 2 else "dim")
+            shared = ", ".join(nb.shared[:5]) + (" …" if len(nb.shared) > 5 else "")
+            lines.append(
+                f"{n:>2}. [b]{escape(nb.name)}[/b] {nb.score:.2f} [{tone}]z {z:.1f}[/]"
+                f"  [dim]{escape(shared)}[/]"
+            )
+        lines += ["", f"[dim]{result.method}; z vs {BASELINE_METHOD}. z≥3 is strong.[/]"]
+        return "\n".join(lines)

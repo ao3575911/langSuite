@@ -2,6 +2,9 @@
 
 ## Unreleased
 ### Added
+- M2: `query` DSL (`and`/`or`/`not`, brackets, fields with `= != >= <= > < ~`, feature `=yes|no|unknown`, `key=value` feature shorthand, `sort=[-]field`, `top=N`); errors point at the exact column with a hint; planned fields (`score`, `grade`, `paradigm`) name their milestone.
+- M2: `similar <lang> [--k] [--min-traits] [--vs <lang>]`: rarity-weighted Jaccard over sourced traits with shared/only-in lists, and a seeded shuffled-feature baseline (z-score) per pair; deterministic output; `--by code|both` planned for M5.
+- M2: Query pane (validated as you type, sortable columns) and Similar tab in Explore; `g q` focuses the query, `g s` opens Similar.
 - M1: knowledge base. `base build [--offline] [--from DIR]` ingests PLDB (public domain) and GitHub Linguist (MIT) into a DuckDB snapshot with a manifest (snapshot hash, source sha256, licences, retrieval times). Cached, conditional (ETag) downloads with retries and cache fallback; atomic swap so failed builds never damage the current base.
 - M1: feature vocabulary v1 (166 PLDB traits in 8 categories plus 9 facts); every assertion stores source, URL, excerpt, retrieved_at and confidence; conflicting values kept side by side; influence edges.
 - M1: `lang list [query] [--kind] [--feature]`, `lang show <lang> [--evidence]` (lookup by id, name, alias or .ext, "did you mean" on misses), `feature list [--category] [--all]`, `feature show`, `base status`; JSON for all; modes change detail.

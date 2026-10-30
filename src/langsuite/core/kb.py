@@ -13,10 +13,13 @@ from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
 from functools import cached_property
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from langsuite.core.errors import DataError, NoResultError
 from langsuite.core.paths import base_dir
+
+if TYPE_CHECKING:
+    from langsuite.core.similarity import TraitMatrix
 
 DB_NAME = "current.duckdb"
 MANIFEST_NAME = "manifest.json"
@@ -179,6 +182,7 @@ class KnowledgeBase:
     def __init__(self, home: Path | None = None) -> None:
         import duckdb
 
+        self._trait_matrix: TraitMatrix | None = None
         folder = base_dir(home)
         db = folder / DB_NAME
         if not db.is_file():
@@ -379,3 +383,39 @@ class KnowledgeBase:
             )
         ]
         return [e for e in rows if e.dst == lang_id], [e for e in rows if e.src == lang_id]
+
+    # ----- similarity inputs (M2) ---------------------------------------------
+
+    def trait_pairs(self) -> list[tuple[str, str]]:
+        """(language, trait) for every trait a source asserts the language has."""
+        rows = self._rows(
+            "SELECT DISTINCT a.lang_id, a.feature_id FROM assertions a "
+            "JOIN features f ON f.id = a.feature_id "
+            "WHERE f.kind = 'trait' AND a.value = 'yes' ORDER BY 1, 2"
+        )
+        return [(str(r[0]), str(r[1])) for r in rows]
+
+    @cached_property
+    def _trait_values(self) -> dict[str, dict[str, str]]:
+        out: dict[str, dict[str, str]] = {}
+        for lang, fid, value in self._rows(
+            "SELECT DISTINCT a.lang_id, a.feature_id, a.value FROM assertions a "
+            "JOIN features f ON f.id = a.feature_id "
+            "WHERE f.kind = 'trait' AND a.value IN ('yes', 'no') ORDER BY 1, 2, 3"
+        ):
+            feats = out.setdefault(str(lang), {})
+            # any source saying "yes" wins; conflicts stay visible in the evidence
+            if feats.get(str(fid)) != "yes":
+                feats[str(fid)] = str(value)
+        return out
+
+    def trait_values(self) -> dict[str, dict[str, str]]:
+        """language → trait → "yes" | "no" (absent = unknown)."""
+        return self._trait_values
+
+    def trait_matrix(self) -> TraitMatrix:
+        if self._trait_matrix is None:
+            from langsuite.core.similarity import TraitMatrix
+
+            self._trait_matrix = TraitMatrix.from_kb(self)
+        return self._trait_matrix

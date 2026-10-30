@@ -8,11 +8,12 @@ from typing import Any
 import pytest
 from textual.binding import Binding
 from textual.coordinate import Coordinate
-from textual.widgets import ContentSwitcher, DataTable
+from textual.widgets import ContentSwitcher, DataTable, TabbedContent
 
 from langsuite.cli.aliases import COMMANDS
 from langsuite.tui.app import LangsuiteApp
 from langsuite.tui.leader import LeaderScreen
+from langsuite.tui.query_pane import QueryPane
 from langsuite.tui.sections import SECTIONS, section_for
 from langsuite.tui.widgets import HeaderBar
 
@@ -126,6 +127,8 @@ def test_snapshot(snap_compare: Any, section: Any, theme: str, size: tuple[int, 
         if theme != "plain":
             pilot.app.theme = theme
         await pilot.press(section.key)
+        await pilot.app.workers.wait_for_complete()
+        await pilot.pause()
 
     assert snap_compare(app, terminal_size=size, run_before=setup)
 
@@ -205,5 +208,134 @@ def test_explore_snapshot(snap_compare: Any, kb_home: Any, theme: str) -> None:
             await pilot.pause(0.3)
             await pilot.app.workers.wait_for_complete()
         await pilot.pause()
+
+    assert snap_compare(app, terminal_size=(120, 40), run_before=setup)
+
+
+# ----- Query pane and Similar tab (M2) -------------------------------------------
+
+
+async def _query_ready(pilot: Any) -> None:
+    await pilot.press("3")
+    await pilot.app.workers.wait_for_complete()
+    await pilot.pause()
+
+
+async def _type_query(pilot: Any, text: str) -> None:
+    box = pilot.app.query_one("#query-input")
+    box.cursor_blink = False
+    box.focus()
+    box.value = ""
+    await pilot.press(*text)
+    for _ in range(2):
+        await pilot.pause(0.3)
+        await pilot.app.workers.wait_for_complete()
+    await pilot.pause()
+
+
+async def test_query_pane_runs_dsl(kb_home: Any) -> None:
+    app = LangsuiteApp()
+    async with app.run_test(size=(120, 40)) as pilot:
+        await _query_ready(pilot)
+        await _type_query(pilot, "homoiconicity sort=year")
+        table = app.query_one("#query-table", DataTable)
+        assert [table.get_cell_at(Coordinate(r, 0)) for r in range(table.row_count)] == [
+            "lisp",
+            "scheme",
+            "racket",
+        ]
+        assert "3 matches" in str(app.query_one("#query-status").render())
+
+
+async def test_query_pane_validates_as_you_type(kb_home: Any) -> None:
+    app = LangsuiteApp()
+    async with app.run_test(size=(120, 40)) as pilot:
+        await _query_ready(pilot)
+        await _type_query(pilot, "(macros")
+        status = str(app.query_one("#query-status").render())
+        assert "Missing" in status and "column 1" in status
+        assert app.query_one("#query-input").has_class("-invalid")
+        await pilot.press(")")
+        await pilot.pause(0.4)
+        assert not app.query_one("#query-input").has_class("-invalid")
+
+
+async def test_query_pane_planned_field_and_header_sort(kb_home: Any) -> None:
+    app = LangsuiteApp()
+    async with app.run_test(size=(120, 40)) as pilot:
+        await _query_ready(pilot)
+        await _type_query(pilot, "score>=70")
+        assert "M5c" in str(app.query_one("#query-status").render())
+        await _type_query(pilot, "kind=pl")
+        pane = app.query_one(QueryPane)
+        table = app.query_one("#query-table", DataTable)
+        table.post_message(
+            DataTable.HeaderSelected(table, table.ordered_columns[3].key, 3, label=None)  # type: ignore[arg-type]
+        )
+        await pilot.pause(0.2)
+        assert table.get_cell_at(Coordinate(0, 0)) == "lisp"
+        table.post_message(
+            DataTable.HeaderSelected(table, table.ordered_columns[3].key, 3, label=None)  # type: ignore[arg-type]
+        )
+        await pilot.pause(0.2)
+        assert pane.result is not None and pane.result.descending
+
+
+async def test_query_pane_without_base_explains() -> None:
+    app = LangsuiteApp()
+    async with app.run_test(size=(120, 40)) as pilot:
+        await _query_ready(pilot)
+        assert "base build" in str(app.query_one("#query-status").render())
+
+
+async def test_leader_q_focuses_query_and_s_opens_similar(kb_home: Any) -> None:
+    app = LangsuiteApp()
+    async with app.run_test(size=(120, 40)) as pilot:
+        await pilot.press("g", "q")
+        await pilot.pause()
+        assert app.focused is app.query_one("#query-input")
+        app.set_focus(None)
+        await pilot.press("g", "s", "enter")
+        await pilot.pause()
+        assert app.query_one("#explore-tabs", TabbedContent).active == "tab-similar"
+
+
+async def test_similar_tab_lists_racket_for_scheme(kb_home: Any) -> None:
+    app = LangsuiteApp()
+    async with app.run_test(size=(120, 40)) as pilot:
+        await _explore_ready(pilot)
+        app.query_one("#explore-search").focus()
+        await pilot.press(*"scheme")
+        await pilot.pause(0.4)
+        text = str(app.query_one("#detail-similar").render())
+        assert "Most like Scheme" in text and "Racket" in text and "z " in text
+
+
+@pytest.mark.parametrize("theme", ["langsuite", "langsuite-high-contrast"])
+def test_query_snapshot(snap_compare: Any, kb_home: Any, theme: str) -> None:
+    app = LangsuiteApp()
+
+    async def setup(pilot: Any) -> None:
+        pilot.app.theme = theme
+        await _query_ready(pilot)
+        await _type_query(pilot, "kind=pl sort=year")
+
+    assert snap_compare(app, terminal_size=(120, 40), run_before=setup)
+
+
+def test_similar_tab_snapshot(snap_compare: Any, kb_home: Any) -> None:
+    app = LangsuiteApp()
+
+    async def setup(pilot: Any) -> None:
+        await _explore_ready(pilot)
+        search = pilot.app.query_one("#explore-search")
+        search.cursor_blink = False
+        search.focus()
+        await pilot.press(*"scheme")
+        for _ in range(2):
+            await pilot.pause(0.3)
+            await pilot.app.workers.wait_for_complete()
+        pilot.app.query_one("#explore-tabs").active = "tab-similar"
+        await pilot.pause(0.2)
 
     assert snap_compare(app, terminal_size=(120, 40), run_before=setup)
