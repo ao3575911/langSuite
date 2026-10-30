@@ -2,7 +2,7 @@
 
 **Tagline:** A research knowledge base of programming languages: how they work, how they relate, with evidence.
 
-**Positioning:** a fully featured, top-of-market, state-of-the-art tool for language researchers and developers in training; flexible across CLI, TUI and the langsuite Telegram bot. Claims in README and marketing must match shipped features; anything unbuilt is labelled planned.
+**Positioning:** a fully featured, top-of-market, state-of-the-art tool for language researchers and developers in training; flexible across the Textual app (terminal and browser), the CLI and the langsuite Telegram bot. Claims in README and marketing must match shipped features; anything unbuilt is labelled planned.
 
 ## Vision
 > A highly valuable resource you can explore to discover, and extract your findings from into your workspace, from research done by analysis and by querying the resource. It writes snippets on demand, explains how to use different languages and when, and answers simple and advanced questions on languages and syntax.
@@ -113,7 +113,7 @@ Scheduled GitHub Actions in a separate `langsuite-data` repo (nightly liveness, 
 - **Baselines:** shuffled-feature and random-task baselines so a score means something.
 
 ## 4a. Discovery dashboard and cluster labels
-**Layout (TUI and web, same data):**
+**Layout (Textual app in terminal and browser, same data):**
 - Left: cluster tree (dendrogram), each node titled with its label, e.g. **lazy · pure · functional**, plus member count and bootstrap support.
 - Centre: cluster map (2-D projection of language vectors, coloured by cluster); select a cluster or language to focus.
 - Right: evidence panel for the selection: the label's top features with scores, member coverage ("lazy: 6/7 members, base rate 4%"), sources per assertion, verified Rosetta tasks behind code similarity.
@@ -234,6 +234,38 @@ Front ends: CLI · TUI · Telegram bot · HTTP API + MCP → langsuite.core → 
 - **Deployment:** one `docker compose` with `core` (API + workers), `bot`, `verifier` (Docker-in-Docker or a socket proxy restricted to the run image), and a volume for DuckDB/Parquet. Polling for a laptop or home server (no public URL); webhook behind HTTPS for a server. Cost: Telegram Bot API is free; a small VPS (UNKNOWN price; check provider) plus xAI usage per question (UNKNOWN; depends on plan).
 - **Bot hosting:** one official hosted `@langsuite_bot` (SaaS); group workspaces belong to the tenant of the admin who adds it. Self-hosted bot only in local mode.
 
+## 6e. Textual app (first-class interface)
+The Textual app is the primary interactive interface; the CLI is its scriptable twin. Both call `langsuite.core` only (parity test).
+
+**Launch:** `langsuite` with no arguments on a TTY, or `langsuite ui` (alias `t`), opens the app. Non-TTY with no arguments prints `--help`. `langsuite ui --serve [--port 8000]` runs it in the browser via `textual serve` (local only by default; hosted browser access follows SaaS auth, §6).
+
+**Layout:**
+- Header: handle `$langsuite/<username>/<workspace>`, current mode, base snapshot and its age, connection state (hosted/local).
+- Left nav: Dashboard · Explore · Query · Analyse · Workspace · Write · Account (same pillars as `--help`).
+- Main pane per section; right evidence panel (sources, evidence ids, method version) for the selection; footer with live key hints.
+
+**Panes:**
+- **Dashboard:** cluster tree with labels, 2-D cluster map, evidence panel (§4a); rename label, save finding.
+- **Explore:** language list with live search (debounced ≤ 150 ms, fuzzy on name/alias/extension), language detail tabs (Features · Lineage · Docs · Score · Snippets).
+- **Query:** filter builder plus raw DSL input with validation as you type; results table sortable by any column.
+- **Analyse:** rank (asc/desc toggle, filters), compare A/B side by side, task diff across languages.
+- **Workspace:** findings, notes, saved queries; `extract` from any result with one key.
+- **Write:** snippet and guide requests; syntax-highlighted code (Textual `TextArea`/Rich Syntax, language-tagged), copy, verify status badge.
+
+**Interaction:**
+- Full mouse support (click, scroll, select, resize split panes).
+- Command palette (`ctrl+p`) listing every CLI command and alias; typing an alias (e.g. `s haskell`) runs it.
+- Keybindings mirror CLI shorthands: one key per pillar and the alias as a leader sequence (e.g. `g` then `s` = similar), shown in the footer and `?` help screen. A test asserts every CLI alias has a binding or palette entry and no binding collides.
+- Mode switcher (Default/Concise/Thorough) in the header and `ctrl+m`; same precedence and strict output bounds as §6c.
+- Async workers for network/LLM calls; spinners after 300 ms; cancel with `esc`; errors shown as toast + detail, never a crash.
+
+**Themes and accessibility:**
+- Themes: `langsuite` (default dark), light, and high-contrast (WCAG AA ≥ 4.5:1 text contrast); switch from palette or `settings theme`.
+- Plain/screen-reader mode (`--plain` or `LANGSUITE_A11Y=1`): no box drawing, no colour-only meaning (grades also shown as letters), linear focus order, every widget labelled, announcements as plain text lines.
+- Full keyboard operation; visible focus; reduced motion option.
+
+**Tests:** `pytest-textual-snapshot` SVG snapshots per pane in default, high-contrast and plain themes at 80×24 and 120×40; Textual `Pilot` tests for key flows (search → open language → extract finding; switch mode; palette alias run); parity test app vs CLI on the same fixture.
+
 ## 6b. Usernames, handles and gamification
 **Handle.** At onboarding each user picks a unique `username`; each workspace gets a `slug`. The handle `$langsuite/<username>/<workspace>` (e.g. `$langsuite/lazyfox/haskell-notes`) is the input placeholder in the CLI/TUI prompt, the app input and header, and Telegram inline input (`@langsuite_bot` placeholder set per user where the Bot API allows; otherwise shown in the reply header). Purpose: identity, show and retention, not security.
 - **Nominated usernames.** The system proposes 3 by default, user can edit or pick one. Built from the user's stated interests or top explored languages (e.g. `lispwright`, `ocamlo`, `lazyfox`), 4–12 chars, pronounceable, no digits unless needed, availability-checked before display. Deterministic generator + word lists (no LLM needed; xAI optional for flavour, output still filtered).
@@ -263,7 +295,7 @@ Front ends: CLI · TUI · Telegram bot · HTTP API + MCP → langsuite.core → 
 | note | n | workspace | w | base | b |
 | inclusion | inc | account | ac | badges | bg |
 | streak | st | settings | set | usage | u |
-| login | li | logout | lo | tui | t |
+| login | li | logout | lo | ui | t |
 | mode | m | | | | |
 Subcommands keep their names (`f ls` = `finding list`; `ls`, `sh`, `rm` are universal sub-aliases). A test asserts every command has exactly one alias, no alias equals another command or alias, and `--help` lists both. Telegram uses the same aliases (`/a`, `/q`, `/s`…).
 
@@ -311,13 +343,15 @@ langsuite inclusion check <lang> | inclusion list --status flagged|archived
 langsuite account init [--username u] | suggest [--n 5] | rename <new> | show | privacy public|private | link telegram | delete
 langsuite workspace rename <slug> ; langsuite badges|streak [--json] ; langsuite settings gamification on|off
 langsuite login|logout ; langsuite usage ; langsuite mode show|set <m> [--workspace]
-langsuite tui
+langsuite                      # no args on a TTY: open the Textual app
+langsuite ui [--serve] [--port 8000]   # Textual app; --serve = browser via textual serve
 ```
 Every command: `-m <mode>`, `--json`, `--plain`, `--local` (local mode), exit codes 0 ok / 2 no result / 3 data error / 4 auth / 5 quota.
 
 ## 8. MoSCoW (pillar in brackets)
 - **Must:** username onboarding with validation and handle display [all]; KB from PLDB + Linguist [all]; inclusion records and checks [1]; official docs ingest and quoting [2]; data CI with gates and signed releases [all]; feature vocabulary [1]; structured queries [2]; feature similarity [1]; provenance on every result [all]; local workspace with findings, notes, `extract` [4]; JSON/Markdown export [4].
-- **Should:** nominated usernames, badges and streaks (opt-out) [all]; scores, grades, `rank`, `compare`, `diff` [3]; dashboard with cluster labels and renames [1]; Rosetta pack + Docker verify, 20 toolchains [5]; verified `snippet` [5]; code similarity, clustering, influence graph [1]; `ask` Q&A with citations and abstain [2]; `guide how/when` [5]; BibTeX export [4]; TUI [all]; Telegram bot with group workspaces, roles, DSL, digests [all]; HTTP API + MCP server + webhooks [4].
+- **Should:** nominated usernames, badges and streaks (opt-out) [all]; scores, grades, `rank`, `compare`, `diff` [3]; Rosetta pack + Docker verify, 20 toolchains [5]; verified `snippet` [5]; code similarity, clustering, influence graph [1]; `ask` Q&A with citations and abstain [2]; `guide how/when` [5]; BibTeX export [4]; Telegram bot with group workspaces, roles, DSL, digests [all]; HTTP API + MCP server + webhooks [4].
+- **Must (app):** Textual app as a first-class interface (§6e) with dashboard, panes, live search, palette, mode switcher, themes and accessibility; browser via `textual serve` [all].
 - **Must (SaaS):** hosted API, auth, Stripe billing, quotas/metering, tenant isolation; install one-liner; grouped help + aliases; themed output with plain/JSON; three modes with enforcement.
 - **Could:** local mode [all]; sync to object store [4]; web UI [all]; 100+ toolchains [5].
 - **Won't (v1):** editing the shared base by users; overage billing; web UI beyond account/billing pages.
@@ -327,6 +361,8 @@ Use Python 3.12+ (uv, Typer, Textual, DuckDB, tree-sitter bindings, scikit-learn
 
 ## 10. Milestones
 - **M0** Repo, CI (ruff, mypy strict, pytest), MIT licence, data-pack layout. *Test:* CI green; a planted GFDL file in the wheel fails CI; licence-check job runs on every PR.
+- **M0b** Textual app shell (§6e): `langsuite` / `langsuite ui` launch, header with handle placeholder and mode, left nav, empty panes with "planned (Mx)" states, command palette with all aliases, mode switcher, themes incl. high-contrast and plain, `ui --serve`. Adds `textual` and `pytest-textual-snapshot`. *Test:* snapshot per pane × 3 themes × 2 sizes; Pilot: palette runs an alias, mode switch persists precedence; binding/alias coverage test; no-args non-TTY prints help; app starts ≤ 600 ms.
+- **From M1 on, every feature milestone ships CLI + Textual pane together;** its *Test* includes the pane's snapshots and a Pilot flow, and the parity test covers it.
 - **M1** KB ingest PLDB + Linguist, feature vocabulary, provenance. *Test:* ≥800 languages; every assertion has source + retrieved_at; `show haskell --evidence` lists sources.
 - **M2** Query + feature similarity + baselines. *Test:* golden: Racket in Scheme's top 3; every golden pair ≥3 SD above shuffled baseline mean; same output on two runs.
 - **M3** Workspace: findings, notes, saved queries, own data overlay, pinned snapshots. *Test:* add custom language; base upgrade leaves old finding reproducible bit-for-bit.
@@ -340,7 +376,7 @@ Use Python 3.12+ (uv, Typer, Textual, DuckDB, tree-sitter bindings, scikit-learn
 - **M5g** Accounts, handles, gamification. *Test:* onboarding offers 3 available nominations derived from a fixture profile; `Lazy`/`lazy` collide; `l4ngsuite`, `langsuíte` (confusable) and a profane fixture are rejected; reserved words rejected; rename redirects old handle for 180 days and blocks reclaim during hold; a second rename within 30 days is refused; findings keep `user_id` after rename; CLI prompt, TUI header and Telegram reply header show `$langsuite/<u>/<ws>`; Telegram `/start` creates a link and a group slug resolves; private handle not visible to a non-member; streak/badge counts recompute identically from `Event` log; `gamification off` hides badges and records no new events.
 - **M5h** CLI UX: help, aliases, output, modes. *Test:* alias table test (unique, complete, in help); `--help` groups match spec and each line ≤ 60 chars; snapshot tests rich/plain/JSON; `NO_COLOR` and pipe give no ANSI; mode precedence flag > workspace > global; on a 60-prompt mode set (20 per mode, incl. live xAI in nightly), 100% outputs within bounds after validation and ≥ 90% before trimming; how-to questions contain code in all modes; abstain identical across modes.
 - **M5i** SaaS. *Test:* tenant A cannot read B (API, SQL with RLS, object store, verifier) in an isolation suite; device-code login works from CLI; Stripe test-mode checkout upgrades entitlement, cancel downgrades to read-only; replayed Stripe webhook is ignored; quota reaches 100% → exit 5 with polite message; usage events sum to the invoice preview; restore from backup into staging passes smoke tests; load test meets p95 SLOs; account delete removes tenant data within the window.
-- **M6** xAI explanations with citations, TUI, exports, sync bundle, release candidate (no tag without Adam's OK), GIFs. *Test:* uncited sentences stripped; an injected instruction in a fixture doc does not change the answer; local mode passes all non-LLM tests; one-command install works in fresh Linux/macOS containers (PyPI publish only after Adam's OK); webhook to 127.0.0.1 refused.
+- **M6** xAI explanations with citations, app polish (browser/hosted `serve`, a11y audit), exports, sync bundle, release candidate (no tag without Adam's OK), GIFs. *Test:* uncited sentences stripped; an injected instruction in a fixture doc does not change the answer; local mode passes all non-LLM tests; one-command install works in fresh Linux/macOS containers (PyPI publish only after Adam's OK); webhook to 127.0.0.1 refused.
 
 ## 11. Risks
 | Risk | Mitigation |
