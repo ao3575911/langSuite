@@ -36,7 +36,7 @@ from langsuite.core.paths import data_home
 
 SCHEMA = 1
 DEFAULT = "default"
-KINDS = ("query", "similar", "pair", "lang", "snippet", "verify")
+KINDS = ("query", "similar", "pair", "lang", "snippet", "verify", "ask", "guide")
 OVERLAY_SOURCE = "user"
 _SLUG = re.compile(r"^[a-z][a-z0-9_-]{0,31}$")  # SPEC §6g workspace slug
 _LANG_ID = re.compile(r"^[a-z0-9][a-z0-9_.+#-]{0,47}$")
@@ -206,6 +206,10 @@ def command_line(kind: str, args: dict[str, Any]) -> str:
         return f"langsuite similar {args['a']} --vs {args['b']}"
     if kind == "snippet":
         return f"langsuite snippet {json.dumps(args['task'])} --lang {args['lang']}"
+    if kind == "ask":
+        return f"langsuite ask {json.dumps(args['question'])}"
+    if kind == "guide":
+        return f"langsuite guide {args['lang']}"
     if kind == "verify":
         return f"langsuite verify <code {str(args['code_sha256'])[:12]}> --lang {args['lang']}"
     return f"langsuite lang show {args['lang']}"
@@ -251,6 +255,16 @@ def run_recorded(kb: KnowledgeBase, kind: str, args: dict[str, Any]) -> tuple[An
         return data, sorted({a.evidence_id for a in rows}), f"{lang.name} profile"
     if kind in {"snippet", "verify"}:
         return _run_verify(kb, kind, args)
+    if kind in {"ask", "guide"}:
+        from langsuite.core import ask as qa
+
+        ans = (
+            qa.answer(kb, str(args["question"]))
+            if kind == "ask"
+            else qa.guide(kb, str(args["lang"]))
+        )
+        ev = [c.id for c in ans.citations]
+        return ans.to_json(), ev, f"{'Ask' if kind == 'ask' else 'Guide'}: {ans.question}"
     raise UsageError(f"Unknown finding kind `{kind}`.", hint=f"Use one of {', '.join(KINDS)}.")
 
 
@@ -480,7 +494,19 @@ class Workspace:
         )
         _write(path, finding.to_json())
         self._retain(snapshot)
+        self.event("finding.saved", {"id": finding.id, "title": finding.title, "kind": kind})
         return finding
+
+    def event(self, kind: str, data: dict[str, Any]) -> None:
+        """Append to the workspace event log and notify webhooks (best effort)."""
+        from langsuite.core import webhooks
+
+        author = CURRENT_AUTHOR.get() or {}
+        row = {"at": _now(), "kind": kind, "user": author.get("id"), "data": data}
+        with (self.path / "events.jsonl").open("a", encoding="utf-8") as fh:
+            fh.write(json.dumps(row, sort_keys=True) + "\n")
+        if kind in webhooks.EVENTS:
+            webhooks.deliver(self.path, kind, {"workspace": self.slug, **data})
 
     def _retain(self, snapshot: str) -> None:
         """Make sure the snapshot a finding used is kept, even if it is the current base."""

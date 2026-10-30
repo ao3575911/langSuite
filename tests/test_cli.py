@@ -27,6 +27,8 @@ def test_every_command_has_exactly_one_unique_alias() -> None:
 def test_spec_alias_table() -> None:
     expected = {
         "lang": "l",
+        "webhook": "hk",
+        "mcp": "j",
         "feature": "ft",
         "query": "q",
         "similar": "s",
@@ -98,7 +100,7 @@ def test_stub_and_alias_exit_no_result(cmd: object, capsys: pytest.CaptureFixtur
 
 def test_json_error_envelope(capsys: pytest.CaptureFixture[str]) -> None:
     with pytest.raises(SystemExit) as ex:
-        main(["--json", "ask"])
+        main(["--json", "badges"])
     assert ex.value.code == 2
     payload = json.loads(capsys.readouterr().out)
     assert payload["schema"] == 1 and payload["kind"] == "error"

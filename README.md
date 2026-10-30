@@ -16,18 +16,18 @@ A research knowledge base of programming languages: how they work, how they rela
 | Structured `query` DSL and feature `similar` with a shuffled-feature baseline (z-scores); Query pane and Similar tab | Built (M2) |
 | Code similarity, clusters, scores and grades | Built (M5, M5b, M5c): `similar --by code`, `like`, `diff`, `cluster`, `dashboard`, `influence`, `rank`, `compare`; Dashboard and Analyse panes |
 | Verified snippets: `verify` runs code in a digest-pinned, offline Docker sandbox (20 toolchains); `snippet` shows attributed Rosetta Code solutions marked verified only when they ran; Write pane | Built (M4) |
-| Cited answers, how/when guides | Planned (M5d) |
+| Cited answers that abstain when the base cannot support them (`ask`), `guide <lang>`; `extract` keeps citations | Built (M5d), template-based (no LLM) |
 | Signed snapshots: `base pull`, `base changelog`, data CI | Planned (M5f) |
 | Workspaces: findings re-runnable bit-for-bit on their pinned snapshot, notes, saved queries, own-data overlay (custom languages), `base pin`; Workspace pane with `Ctrl+S` to save | Built (M3) |
 | Telegram bot (`langsuite bot run`): same commands and aliases as the CLI, a workspace per chat, admin/contributor/viewer roles, findings with authors, rate limits, code runs off unless an admin enables them; `bot try` and the Account pane simulate it offline | Built (M5e) |
-| Bot extras: `/ask`, inline mode, digests, webhooks, MCP | Planned (M5d, M5h) |
+| Bot `/ask`, `/guide`, `/mode`, `/digest` schedules, inline mode; signed outbound `webhook`s; `mcp` stdio server for agents | Built (M5d, M5h) |
 | Accounts, handles (`$langsuite/<user>/<ws>`), opt-in gamification | Planned (M5g) |
-| CLI modes (concise/teach/expert) and LLM output bounds | Planned (M5h) |
+| `mode` per workspace or global (flag > workspace > global) | Built (M5h); LLM output bounds wait for xAI answers |
 | Hosted SaaS, `workspace sync`, billing | Planned (M5i) |
 | Release prep: 1.0.0, release notes, PyPI trusted-publishing workflow (tag-triggered; nothing tagged or published yet) | Built (M6, release prep) |
 | xAI explanations with citations, hosted `serve`, a11y audit, sync bundle, GIFs | Planned (M6, after 1.0.0) |
 
-> **Status: 1.0.0 release candidate, built through M5c plus the Telegram bot (M5e); M5d, M5f, M5g, M5h and M5i are planned. Published to PyPI from signed tags ([`docs/RELEASING.md`](docs/RELEASING.md)).** Release notes: [`docs/RELEASE_NOTES_1.0.0.md`](docs/RELEASE_NOTES_1.0.0.md). Planned commands are listed and say which milestone brings them. Spec: [`docs/SPEC.md`](docs/SPEC.md).
+> **Status: 1.0.0 release candidate, built through M5h; M5f, M5g and M5i are in progress. Published to PyPI from signed tags ([`docs/RELEASING.md`](docs/RELEASING.md)).** Release notes: [`docs/RELEASE_NOTES_1.0.0.md`](docs/RELEASE_NOTES_1.0.0.md). Planned commands are listed and say which milestone brings them. Spec: [`docs/SPEC.md`](docs/SPEC.md).
 
 ## Install
 

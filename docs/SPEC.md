@@ -297,7 +297,7 @@ The Textual app is the primary interactive interface; the CLI is its scriptable 
 | streak | st | settings | set | usage | u |
 | login | li | logout | lo | ui | t |
 | bot | bt | | | | |
-| mode | m | | | | |
+| mode | m | webhook | hk | mcp | j |
 Subcommands keep their names (`f ls` = `finding list`; `ls`, `sh`, `rm` are universal sub-aliases). A test asserts every command has exactly one alias, no alias equals another command or alias, and `--help` lists both. Telegram uses the same aliases (`/a`, `/q`, `/s`…).
 
 **Output:** Rich theme `langsuite` (one palette, 256-colour + truecolour): tables with aligned numbers, grade chips, syntax-highlighted code (Pygments, language-tagged), citation footnotes `[1]`, evidence panel, spinners for > 300 ms. Plain fallback when not a TTY, `NO_COLOR` set or `--plain`: no ANSI, ASCII borders, same content. `--json` (stable schema, versioned) on every command. Telegram: MarkdownV2 tables as monospace, code as fenced blocks. Snapshot tests per command for rich, plain and JSON.

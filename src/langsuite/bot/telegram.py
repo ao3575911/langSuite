@@ -133,24 +133,69 @@ def make_button_handler(core: Bot) -> Any:
     return on_button
 
 
+def make_inline_handler(core: Bot) -> Any:
+    """Inline mode: `@langsuite_bot similar haskell` in any chat (enable with /setinline)."""
+
+    async def on_inline(update: Any, context: Any) -> None:
+        from telegram import InlineQueryResultArticle, InputTextMessageContent
+
+        query = update.inline_query
+        if query is None:
+            return
+        cards = await asyncio.to_thread(core.inline, query.query, query.from_user.id)
+        results = [
+            InlineQueryResultArticle(
+                id=str(n),
+                title=title,
+                description=body.splitlines()[0][:100] if body else "",
+                input_message_content=InputTextMessageContent(f"{title}\n\n{body}"[:4000]),
+            )
+            for n, (title, body) in enumerate(cards)
+        ]
+        await query.answer(results, cache_time=60, is_personal=True)
+
+    return on_inline
+
+
+async def digest_loop(app: Any, core: Bot, every: float = 60.0) -> None:  # pragma: no cover
+    """Send digests whose time has come; checks once a minute."""
+    from datetime import UTC, datetime
+
+    while True:
+        try:
+            for chat_id, reply in await asyncio.to_thread(core.due_digests, datetime.now(UTC)):
+                await app.bot.send_message(chat_id, reply.plain[:4000])
+        except Exception:
+            log.exception("digest run failed")
+        await asyncio.sleep(every)
+
+
 def build_application(token: str, core: Bot | None = None) -> Any:
     """The PTB Application; building it makes no network calls."""
     from telegram import BotCommand as TgCommand
-    from telegram.ext import Application, CallbackQueryHandler, MessageHandler, filters
+    from telegram.ext import (
+        Application,
+        CallbackQueryHandler,
+        InlineQueryHandler,
+        MessageHandler,
+        filters,
+    )
 
     async def post_init(app: Any) -> None:
         await app.bot.set_my_commands([TgCommand(n, h) for n, h in menu()])
         await app.bot.set_my_description(DESCRIPTION)
         await app.bot.set_my_short_description(SHORT_DESCRIPTION)
+        app.create_task(digest_loop(app, core_))
         me = await app.bot.get_me()
         logging.getLogger("langsuite.bot").warning("langsuite bot started as @%s", me.username)
 
     logging.getLogger("httpx").setLevel(logging.WARNING)
     logging.getLogger("httpx").addFilter(_Redact(token))
+    core_ = core or Bot()
     app = Application.builder().token(token).post_init(post_init).build()
-    core = core or Bot()
-    app.add_handler(MessageHandler(filters.COMMAND, make_handler(core)))
-    app.add_handler(CallbackQueryHandler(make_button_handler(core)))
+    app.add_handler(MessageHandler(filters.COMMAND, make_handler(core_)))
+    app.add_handler(CallbackQueryHandler(make_button_handler(core_)))
+    app.add_handler(InlineQueryHandler(make_inline_handler(core_)))
     return app
 
 
@@ -158,4 +203,6 @@ def run_polling(token: str) -> None:  # pragma: no cover - needs a live token
     logging.basicConfig(format="%(asctime)s %(levelname)s %(name)s: %(message)s",
                         level=logging.INFO)  # fmt: skip
     logging.getLogger().addFilter(_Redact(token))
-    build_application(token).run_polling(allowed_updates=["message", "callback_query"])
+    build_application(token).run_polling(
+        allowed_updates=["message", "callback_query", "inline_query"]
+    )

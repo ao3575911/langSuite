@@ -6,6 +6,9 @@
 - M5b: `cluster` / `dashboard`: deterministic k-medoids over rarity-weighted traits, k by silhouette (4 to 12) or `--k`, bootstrap support per cluster, labels = top 3 traits by lift with evidence ids, `dashboard rename <medoid> <name>` per workspace; `influence <lang> --depth N`.
 - M5c: `rank` / `compare`: transparent scores from `criteria/1` (safety, expressiveness, modularity, popularity, maturity), grades A ≥ 85, B ≥ 70, C ≥ 55, D ≥ 40, else E; missing criteria lower confidence and never count as zero; `--by custom --profile`, `--filter "grade>=B paradigm=functional"`.
 - Dashboard and Analyse panes run these commands in-process with presets.
+- M5d: `ask` (method `kb-templates/1`): when/who/what, does X have Y, which languages have Y, influence, how do I write T in X; every sentence cites evidence, PLDB facts or a Rosetta permalink; anything else abstains. `guide <lang>`. Findings from `ask`/`guide` keep their citations. Golden set: 25 simple, 25 advanced, 20 out-of-KB.
+- M5h: `mode [concise|default|thorough] [--global|--reset]`; `webhook add|list|remove|test` (HTTPS only, private IPs refused, HMAC-SHA256 with timestamp, retries, auto-disable after 5 failures) firing on `finding.saved` and `digest.ready`; workspace event log (`events.jsonl`); `mcp`: stdio MCP server with `similar`, `ask`, `lang_show`, `query`, `rank`.
+- Bot: `/ask`, `/guide`, `/mode`, `/digest daily|weekly …` (Australia/Perth, checked each minute), inline mode (`@langsuite_bot similar haskell`).
 
 ## 1.0.0 — release candidate (not tagged or published)
 ### Release

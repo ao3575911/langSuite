@@ -56,7 +56,10 @@ def root(
         typer.Option("--version", callback=_version, is_eager=True, help="Show version."),
     ] = None,
 ) -> None:
-    ctx.obj = Ctx(resolve_mode(mode), json_, plain_wanted(plain), local, debug, plain)
+    from langsuite.cli.system_cmds import global_mode, workspace_mode
+
+    chosen = resolve_mode(mode, workspace_mode(), global_mode())
+    ctx.obj = Ctx(chosen, json_, plain_wanted(plain), local, debug, plain)
 
 
 def _make_stub(cmd: Command) -> Callable[[typer.Context], None]:

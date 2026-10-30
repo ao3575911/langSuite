@@ -12,6 +12,7 @@ from __future__ import annotations
 import contextlib
 import io
 import json
+import logging
 import os
 import re
 import shlex
@@ -20,12 +21,16 @@ import time
 import uuid
 from collections.abc import Callable
 from dataclasses import dataclass, field
+from datetime import datetime, timedelta
 from enum import StrEnum
 from pathlib import Path
 from typing import Any
+from zoneinfo import ZoneInfo
 
 from langsuite.bot.onboarding import DEFAULT_WS, Registry, internal_workspace
 from langsuite.core.paths import data_home
+
+log = logging.getLogger("langsuite.bot")
 
 MAX_MESSAGE = 3800  # Telegram allows 4096; leave room for the header and escapes
 WIDTH = 64  # monospace columns that read well on a phone
@@ -127,6 +132,9 @@ BOT_COMMANDS: tuple[BotCommand, ...] = (
                {"list": READ, "ls": READ, "add": WRITE, "remove": WRITE, "rm": WRITE}, "list"),
     BotCommand("base", "b", "knowledge base: /b status",
                {"status": READ, "snapshots": READ}, "status"),
+    BotCommand("ask", "a", "cited answer, or none: /a does haskell have type inference",
+               {"": READ}),
+    BotCommand("guide", "g", "start with a language: /g scheme", {"": READ}),
     BotCommand("cluster", "c", "language families: /c --langs scheme,racket,ml --k 2",
                {"": READ}),
     BotCommand("dashboard", "db", "clusters, labels and evidence: /db --top 60",
@@ -148,6 +156,9 @@ for _c in BOT_COMMANDS:
 NOT_IN_BOT: dict[str, str] = {
     "ui": "the app needs a terminal or browser",
     "workspace": "each chat has exactly one workspace; /settings shows it",
+    "mode": "each chat keeps its own: /mode concise",
+    "mcp": "an MCP server talks stdio to local agents, not to chats",
+    "webhook": "the signing secret would show in the chat; set up with the CLI",
 }
 BOT_ONLY = {
     "start": "set up: pick a handle and a workspace",
@@ -156,6 +167,8 @@ BOT_ONLY = {
     "help": "commands",
     "role": "admins: reply to someone with /role contributor",
     "settings": "chat settings: /settings coderuns on|off (admins)",
+    "mode": "reply length: /mode concise|default|thorough",
+    "digest": "scheduled results: /digest weekly mon 09:00 macros top=5",
 }
 
 # Options that would touch files, the network or the debug path; never from a chat.
@@ -174,6 +187,8 @@ def bot_dir(home: Path | None = None) -> Path:
 class ChatState:
     roles: dict[str, str] = field(default_factory=dict)
     code_runs: bool = False
+    mode: str | None = None
+    digest: dict[str, Any] | None = None
 
 
 def _state_path(chat_id: int, home: Path | None) -> Path:
@@ -185,15 +200,59 @@ def load_state(chat_id: int, home: Path | None = None) -> ChatState:
     if not path.is_file():
         return ChatState()
     data = json.loads(path.read_text(encoding="utf-8"))
-    return ChatState(dict(data.get("roles", {})), bool(data.get("code_runs", False)))
+    return ChatState(
+        dict(data.get("roles", {})),
+        bool(data.get("code_runs", False)),
+        data.get("mode"),
+        data.get("digest"),
+    )
 
 
 def save_state(chat_id: int, state: ChatState, home: Path | None = None) -> None:
     path = _state_path(chat_id, home)
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_name(f".{uuid.uuid4().hex}.tmp")
-    tmp.write_text(json.dumps({"roles": state.roles, "code_runs": state.code_runs}, indent=1))
+    data = {"roles": state.roles, "code_runs": state.code_runs, "mode": state.mode,
+            "digest": state.digest}  # fmt: skip
+    tmp.write_text(json.dumps(data, indent=1))
     tmp.replace(path)
+
+
+DAYS = ("mon", "tue", "wed", "thu", "fri", "sat", "sun")
+DIGEST_TZ = "Australia/Perth"
+
+
+def parse_digest(args: list[str], tz: str = DIGEST_TZ) -> dict[str, Any]:
+    """`daily 09:00 <query>` or `weekly mon 09:00 <query>`."""
+    if not args or args[0] not in ("daily", "weekly"):
+        raise ValueError("start with daily or weekly, e.g. /digest weekly mon 09:00 macros")
+    every, rest = args[0], args[1:]
+    day = None
+    if every == "weekly":
+        if not rest or rest[0][:3].lower() not in DAYS:
+            raise ValueError("weekly needs a day: mon, tue, wed, thu, fri, sat or sun")
+        day, rest = rest[0][:3].lower(), rest[1:]
+    if not rest or not re.fullmatch(r"([01]?\d|2[0-3]):[0-5]\d", rest[0]):
+        raise ValueError("give a time as HH:MM, e.g. 09:00")
+    hhmm, query = rest[0], " ".join(rest[1:]).strip()
+    if not query:
+        raise ValueError("add the query to run, e.g. macros top=5")
+    out: dict[str, Any] = {"every": every, "time": hhmm.zfill(5), "tz": tz, "query": query}
+    if day:
+        out["day"] = day
+    return out
+
+
+def last_slot(d: dict[str, Any], now: datetime) -> datetime:
+    """The most recent scheduled time at or before `now`, in the digest's timezone."""
+    local = now.astimezone(ZoneInfo(d.get("tz", DIGEST_TZ)))
+    hh, mm = (int(x) for x in d["time"].split(":"))
+    slot = local.replace(hour=hh, minute=mm, second=0, microsecond=0)
+    if d["every"] == "weekly":
+        slot -= timedelta(days=(local.weekday() - DAYS.index(d["day"])) % 7)
+    while slot > local:
+        slot -= timedelta(days=7 if d["every"] == "weekly" else 1)
+    return slot
 
 
 def role_of(chat: Chat, state: ChatState) -> Role:
@@ -367,6 +426,10 @@ class Bot:
             return self._role(chat, state, role, args)
         if name == "settings":
             return self._settings(chat, state, role, args)
+        if name == "mode":
+            return self._mode(chat, state, role, args)
+        if name == "digest":
+            return self._digest(chat, state, role, args, rest)
         cmd = BY_NAME.get(name)
         if cmd is None:
             return _text_reply(f"error: unknown command /{name}. Try /help.")
@@ -464,6 +527,89 @@ class Bot:
             code_block=False,
         )
 
+    def _mode(self, chat: Chat, state: ChatState, role: Role, args: list[str]) -> Reply:
+        if args:
+            if args[0] not in ("concise", "default", "thorough"):
+                return _text_reply("error: try /mode concise, /mode default or /mode thorough.")
+            if role is not Role.ADMIN:
+                return _text_reply("Not allowed: only admins can change the chat's mode.")
+            state.mode = None if args[0] == "default" else args[0]
+            save_state(chat.chat_id, state, self.home)
+        return _text_reply(f"mode: {state.mode or 'default'} (replies in this chat)")
+
+    def _digest(
+        self, chat: Chat, state: ChatState, role: Role, args: list[str], rest: str
+    ) -> Reply:
+        if not args:
+            d = state.digest
+            if not d:
+                return _text_reply("No digest. Try /digest weekly mon 09:00 macros top=5")
+            when = f"{d['every']} {d.get('day', '')} {d['time']}".replace("  ", " ")
+            return _text_reply(f"digest: {when} ({d['tz']}): /q {d['query']}")
+        if role.rank < WRITE.rank:
+            return _text_reply("Not allowed: contributors can set digests.")
+        if args[0] == "off":
+            state.digest = None
+            save_state(chat.chat_id, state, self.home)
+            return _text_reply("Digest off.")
+        try:
+            digest = parse_digest(args)
+        except ValueError as err:
+            return _text_reply(f"error: {err}")
+        state.digest = digest
+        save_state(chat.chat_id, state, self.home)
+        when = f"{digest['every']} {digest.get('day', '')} {digest['time']}".replace("  ", " ")
+        return _text_reply(f"Digest set: {when} ({digest['tz']}), runs /q {digest['query']}")
+
+    def due_digests(self, now: datetime) -> list[tuple[int, Reply]]:
+        """Run every digest whose slot has passed since it last ran; marks them run."""
+        out: list[tuple[int, Reply]] = []
+        folder = bot_dir(self.home) / "chats"
+        for path in sorted(folder.glob("*.json")) if folder.is_dir() else []:
+            chat_id = int(path.stem)
+            state = load_state(chat_id, self.home)
+            d = state.digest
+            if not d:
+                continue
+            slot = last_slot(d, now)
+            if d.get("last") and d["last"] >= slot.isoformat():
+                continue
+            chat = Chat(chat_id, 0, "digest", chat_id < 0)
+            code, text = self.runner(["query", *shlex.split(d["query"])], self.workspace(chat),
+                                     {"id": 0, "name": "digest", "via": "telegram"})  # fmt: skip
+            d["last"] = slot.isoformat()
+            save_state(chat_id, state, self.home)
+            self._digest_event(chat, d)
+            header = f"{self.where(chat)} · digest · /q {d['query']}"
+            out.append((chat_id, _reply(text or f"exit {code}", header)))
+        return out
+
+    def _digest_event(self, chat: Chat, d: dict[str, Any]) -> None:
+        from langsuite.core.workspace import Workspace
+
+        try:
+            Workspace(None, self.workspace(chat)).event("digest.ready", {"query": d["query"]})
+        except OSError:
+            log.warning("digest event not recorded for chat %s", chat.chat_id)
+
+    def inline(self, text: str, user_id: int) -> list[tuple[str, str]]:
+        """Inline mode: `@langsuite_bot similar haskell` → (title, plain text) cards."""
+        text = text.strip()
+        if not text:
+            return []
+        words = text.split()
+        name = words[0].lstrip("/").lower()
+        cmd = BY_NAME.get(name)
+        if cmd is None or cmd.subs.get("", Role.ADMIN) is not READ or cmd.needs_code:
+            cmd, words = BY_NAME["ask"], ["ask", *words]
+        if any(w.split("=", 1)[0] in _BLOCKED for w in words):
+            return []
+        chat = Chat(user_id, user_id, "inline")
+        code, out = self.runner([cmd.name, *words[1:]], self.workspace(chat), None)
+        if code != 0 or not out.strip():
+            return []
+        return [(f"/{cmd.alias} {' '.join(words[1:])}"[:64], out[:3500])]
+
     # -- CLI commands
 
     def _run(
@@ -484,6 +630,8 @@ class Bot:
             return _text_reply(f"error: {bad[0]} is not available in chats.")
         args = _shape(cmd.name, sub, args)
         cli = [cmd.name, *([sub] if sub else []), *args]
+        if state.mode:
+            cli = ["--mode", state.mode, *cli]
         if cmd.name == "query" and "--save" in args and role.rank < WRITE.rank:
             return _text_reply("Not allowed: contributors can save queries.")
         if cmd.name == "snippet":
@@ -508,7 +656,8 @@ class Bot:
             code, out = self._run_code(cli, rest, chat, author)
         else:
             code, out = self.runner(cli, self.workspace(chat), author)
-        header = f"{self.where(chat)} · /{cmd.alias} {' '.join(cli[1:])}".strip()
+        shown = cli[2:] if cli[0] == "--mode" else cli
+        header = f"{self.where(chat)} · /{cmd.alias} {' '.join(shown[1:])}".strip()
         reply = _reply(out or ("done" if code == 0 else f"exit {code}"), header)
         reply.failed = code != 0
         return reply
