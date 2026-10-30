@@ -1,4 +1,4 @@
-# langwish
+# langsuite
 
 A research knowledge base of programming languages: how they work, how they relate, with evidence.
 
@@ -10,20 +10,20 @@ Not on PyPI yet. From source:
 
 ```sh
 # prerequisites: Python 3.12+, uv (https://docs.astral.sh/uv/)
-git clone https://github.com/ao3575911/langwish && cd langwish
+git clone https://github.com/ao3575911/langsuite && cd langsuite
 uv sync
-uv run langwish --help
+uv run langsuite --help
 ```
 
-Planned one-liner once published: `pipx install langwish && langwish login`.
+Planned one-liner once published: `pipx install langsuite && langsuite login`.
 
 ## Use
 
 ```sh
-langwish --help          # commands grouped by pillar, alias in brackets
-langwish l show haskell  # every command has a short alias (l = lang)
-langwish -m concise ...  # modes: default | concise | thorough
-langwish --json ...      # stable JSON; --plain for no colour
+langsuite --help          # commands grouped by pillar, alias in brackets
+langsuite l show haskell  # every command has a short alias (l = lang)
+langsuite -m concise ...  # modes: default | concise | thorough
+langsuite --json ...      # stable JSON; --plain for no colour
 ```
 
 Exit codes: `0` ok · `2` no result · `3` data error · `4` auth · `5` quota.

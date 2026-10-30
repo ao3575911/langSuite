@@ -13,7 +13,7 @@ class ExitCode(IntEnum):
     QUOTA = 5
 
 
-class LangwishError(Exception):
+class LangsuiteError(Exception):
     """Base error. `message` is short and user-facing; `hint` says what to do next."""
 
     exit_code: ExitCode = ExitCode.DATA
@@ -24,19 +24,19 @@ class LangwishError(Exception):
         self.hint = hint
 
 
-class NoResultError(LangwishError):
+class NoResultError(LangsuiteError):
     exit_code = ExitCode.NO_RESULT
 
 
-class DataError(LangwishError):
+class DataError(LangsuiteError):
     exit_code = ExitCode.DATA
 
 
-class AuthError(LangwishError):
+class AuthError(LangsuiteError):
     exit_code = ExitCode.AUTH
 
 
-class QuotaError(LangwishError):
+class QuotaError(LangsuiteError):
     exit_code = ExitCode.QUOTA
 
 

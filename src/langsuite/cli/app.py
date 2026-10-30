@@ -9,11 +9,11 @@ from typing import Annotated
 
 import typer
 
-from langwish import __version__
-from langwish.cli.aliases import COMMANDS, Command, help_line
-from langwish.cli.output import make_console, plain_wanted, to_json
-from langwish.core.errors import LangwishError, NotBuiltYetError
-from langwish.core.modes import Mode, resolve_mode
+from langsuite import __version__
+from langsuite.cli.aliases import COMMANDS, Command, help_line
+from langsuite.cli.output import make_console, plain_wanted, to_json
+from langsuite.core.errors import LangsuiteError, NotBuiltYetError
+from langsuite.core.modes import Mode, resolve_mode
 
 
 @dataclass
@@ -26,7 +26,7 @@ class Ctx:
 
 
 app = typer.Typer(
-    name="langwish",
+    name="langsuite",
     help="Research knowledge base of programming languages, with evidence.",
     no_args_is_help=True,
     rich_markup_mode="rich",
@@ -38,7 +38,7 @@ app = typer.Typer(
 
 def _version(value: bool) -> None:
     if value:
-        typer.echo(f"langwish {__version__}")
+        typer.echo(f"langsuite {__version__}")
         raise typer.Exit()
 
 
@@ -77,8 +77,8 @@ def main(argv: list[str] | None = None) -> None:
     args = sys.argv[1:] if argv is None else argv
     debug = "--debug" in args
     try:
-        app(args=args, prog_name="langwish")
-    except LangwishError as err:
+        app(args=args, prog_name="langsuite")
+    except LangsuiteError as err:
         if debug:
             raise
         if "--json" in args:

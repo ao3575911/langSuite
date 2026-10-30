@@ -6,9 +6,9 @@ import re
 import pytest
 from typer.testing import CliRunner
 
-from langwish.cli.aliases import COMMANDS, PANELS, SUB_ALIASES, help_line
-from langwish.cli.app import app, main
-from langwish.core.errors import ExitCode
+from langsuite.cli.aliases import COMMANDS, PANELS, SUB_ALIASES, help_line
+from langsuite.cli.app import app, main
+from langsuite.core.errors import ExitCode
 
 runner = CliRunner()
 ANSI = re.compile(r"\x1b\[[0-9;]*m")
@@ -79,7 +79,7 @@ def test_help_lists_names_aliases_and_groups() -> None:
 
 @pytest.mark.parametrize("cmd", COMMANDS, ids=lambda c: c.name)
 def test_stub_and_alias_exit_no_result(cmd: object, capsys: pytest.CaptureFixture[str]) -> None:
-    from langwish.cli.aliases import Command
+    from langsuite.cli.aliases import Command
 
     assert isinstance(cmd, Command)
     for word in (cmd.name, cmd.alias):
@@ -101,7 +101,7 @@ def test_json_error_envelope(capsys: pytest.CaptureFixture[str]) -> None:
 
 
 def test_debug_reraises() -> None:
-    from langwish.core.errors import NotBuiltYetError
+    from langsuite.core.errors import NotBuiltYetError
 
     with pytest.raises(NotBuiltYetError):
         main(["--debug", "lang"])
@@ -111,7 +111,7 @@ def test_version_and_usage_error(capsys: pytest.CaptureFixture[str]) -> None:
     with pytest.raises(SystemExit) as ex:
         main(["--version"])
     assert ex.value.code == 0
-    assert "langwish" in capsys.readouterr().out
+    assert "langsuite" in capsys.readouterr().out
     with pytest.raises(SystemExit) as ex:
         main(["no-such-command"])
     assert ex.value.code == 2

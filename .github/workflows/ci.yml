@@ -45,7 +45,7 @@ jobs:
         run: python3 scripts/check_wheel_licences.py dist/*.whl
       - name: Planted GFDL file must fail the check
         run: |
-          echo "GNU Free Documentation License 1.2" > src/langwish/planted.txt
+          echo "GNU Free Documentation License 1.2" > src/langsuite/planted.txt
           uv build --wheel --out-dir planted
           if python3 scripts/check_wheel_licences.py planted/*.whl; then
             echo "::error::planted GFDL file was not caught"; exit 1

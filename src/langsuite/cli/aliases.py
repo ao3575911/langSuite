@@ -47,7 +47,7 @@ COMMANDS: tuple[Command, ...] = (
     Command("guide", "g", WRITE, "How to use a language, or when", "M5d"),
     Command("verify", "v", WRITE, "Run code in the sandbox verifier", "M4"),
     Command("account", "ac", ACCOUNT, "Username and account settings", "M5g"),
-    Command("login", "li", ACCOUNT, "Sign in to langwish", "M5i"),
+    Command("login", "li", ACCOUNT, "Sign in to langsuite", "M5i"),
     Command("logout", "lo", ACCOUNT, "Sign out", "M5i"),
     Command("usage", "u", ACCOUNT, "Plan usage and quota", "M5i"),
     Command("badges", "bg", ACCOUNT, "Your badges", "M5g"),
