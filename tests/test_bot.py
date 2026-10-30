@@ -195,7 +195,7 @@ def test_build_application_offline() -> None:
 
     application = tg.build_application("123456:TEST-not-a-real-token", _bot(runner=FakeRunner()))
     assert isinstance(application, Application)
-    assert len(application.handlers[0]) == 2  # commands and suggestion buttons
+    assert len(application.handlers[0]) == 3  # commands, buttons, inline queries
     names = [n for n, _ in tg.menu()]
     assert "similar" in names and "role" in names and all(len(h) <= 60 for _, h in tg.menu())
 

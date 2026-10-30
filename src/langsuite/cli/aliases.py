@@ -55,6 +55,8 @@ COMMANDS: tuple[Command, ...] = (
     Command("settings", "set", SYSTEM, "Preferences such as gamification", "M5g"),
     Command("bot", "bt", SYSTEM, "Run or try the Telegram bot", "M5e"),
     Command("mode", "m", SYSTEM, "Show or set output mode", "M5h"),
+    Command("webhook", "hk", SYSTEM, "Signed outbound webhooks", "M5h"),
+    Command("mcp", "j", SYSTEM, "Serve tools to agents over MCP", "M5h"),
     Command("ui", "t", SYSTEM, "Open the app (terminal or browser)", "M0b"),
 )
 

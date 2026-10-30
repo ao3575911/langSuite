@@ -5,9 +5,6 @@ The output is the CLI's own plain rendering, so the pane and the CLI never disag
 
 from __future__ import annotations
 
-import contextlib
-import io
-import os
 import shlex
 
 from rich.markup import escape
@@ -16,29 +13,8 @@ from textual.app import ComposeResult
 from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.widgets import Button, Input, Static
 
+from langsuite.cli.inproc import run_plain
 from langsuite.tui.sections import Section
-
-
-def run_plain(args: list[str], width: int = 100) -> tuple[int, str]:
-    from langsuite.cli.app import main
-
-    out = io.StringIO()
-    saved = {k: os.environ.get(k) for k in ("COLUMNS", "NO_COLOR")}
-    os.environ.update(COLUMNS=str(width), NO_COLOR="1")
-    code = 0
-    try:
-        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(out):
-            try:
-                main(["--plain", *args])
-            except SystemExit as stop:
-                code = stop.code if isinstance(stop.code, int) else (0 if stop.code is None else 1)
-    finally:
-        for k, v in saved.items():
-            if v is None:
-                os.environ.pop(k, None)
-            else:
-                os.environ[k] = v
-    return code, out.getvalue().rstrip()
 
 
 class CommandPane(Vertical):

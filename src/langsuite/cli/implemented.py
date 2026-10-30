@@ -16,9 +16,12 @@ from langsuite.cli.analyse_cmds import (
     like,
     rank,
 )
+from langsuite.cli.ask_cmds import ask, guide
 from langsuite.cli.bot_cmds import bot_app
 from langsuite.cli.discover_cmds import query, similar
 from langsuite.cli.kb_cmds import base_app, feature_app, lang_app
+from langsuite.cli.mcp_server import mcp
+from langsuite.cli.system_cmds import mode, webhook_app
 from langsuite.cli.ui_cmd import ui
 from langsuite.cli.verify_cmds import snippet, verify
 from langsuite.cli.workspace_cmds import extract, finding_app, note_app, workspace_app
@@ -36,6 +39,10 @@ COMMAND_FUNCS: dict[str, Callable[..., Any]] = {
     "rank": rank,
     "compare": compare,
     "diff": diff,
+    "ask": ask,
+    "guide": guide,
+    "mode": mode,
+    "mcp": mcp,
 }
 GROUP_APPS: dict[str, typer.Typer] = {
     "lang": lang_app,
@@ -46,4 +53,5 @@ GROUP_APPS: dict[str, typer.Typer] = {
     "finding": finding_app,
     "note": note_app,
     "workspace": workspace_app,
+    "webhook": webhook_app,
 }

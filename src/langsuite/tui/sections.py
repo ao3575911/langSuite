@@ -35,7 +35,13 @@ _PANEL_TO_SECTION = {
     "Account": "account",
     "System": "account",
 }
-_OVERRIDES = {"dashboard": "dashboard", "cluster": "dashboard", "mode": "", "ui": ""}
+_OVERRIDES = {
+    "dashboard": "dashboard",
+    "cluster": "dashboard",
+    "mode": "",
+    "ui": "",
+    "mcp": "account",
+}
 
 
 def section_for(cmd: Command) -> str:
