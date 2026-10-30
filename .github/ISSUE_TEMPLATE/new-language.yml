@@ -1,0 +1,44 @@
+name: New language request
+description: Ask for a language to be added to the knowledge base.
+title: "language: "
+labels: [data, enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: See the [inclusion rule](https://github.com/ao3575911/langsuite/wiki/Knowledge-Base-and-Sources#inclusion-rule). `langsuite inclusion <lang>` shows how an existing language scores.
+  - type: input
+    id: language
+    attributes:
+      label: Language name
+    validations:
+      required: true
+  - type: input
+    id: website
+    attributes:
+      label: Official website
+      placeholder: https://
+    validations:
+      required: true
+  - type: input
+    id: docs
+    attributes:
+      label: Official documentation URL
+      placeholder: https://
+    validations:
+      required: true
+  - type: checkboxes
+    id: rule
+    attributes:
+      label: Inclusion checklist
+      options:
+        - label: It is a public language (anyone can use it).
+          required: true
+        - label: It has a working compiler or interpreter you can download.
+          required: true
+        - label: It has public official documentation.
+          required: true
+        - label: It is listed on PLDB or GitHub Linguist (link below if so).
+  - type: textarea
+    id: notes
+    attributes:
+      label: PLDB / Linguist links and notes

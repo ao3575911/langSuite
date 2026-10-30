@@ -1,0 +1,50 @@
+name: Bug report
+description: Something in the CLI, the app (TUI) or the Telegram bot does not work as documented.
+title: "bug: "
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: langsuite version
+      description: Output of `langsuite --version`.
+      placeholder: langsuite 1.0.0
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: Ubuntu 24.04, macOS 15, Windows 11 …
+    validations:
+      required: true
+  - type: dropdown
+    id: interface
+    attributes:
+      label: Interface
+      options: [CLI, TUI, Telegram bot]
+      multiple: true
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Exact commands or bot messages. Add `--debug` to a CLI command for a traceback.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual
+      description: Paste the output. Never paste tokens or keys.
+      render: text
+    validations:
+      required: true

@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and ideas (Discussions)
+    url: https://github.com/ao3575911/langsuite/discussions
+    about: Ask how to do something or share an idea.
+  - name: Wiki
+    url: https://github.com/ao3575911/langsuite/wiki
+    about: Guides, CLI reference, FAQ and troubleshooting.
+  - name: Telegram bot (@langsuite_bot)
+    url: https://t.me/langsuite_bot
+    about: Try langsuite in Telegram.

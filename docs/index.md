@@ -48,4 +48,4 @@ Not done yet: [open questions](OPEN_QUESTIONS.md) and [issues](https://github.co
 
 ## More
 
-[Full guide](guide.md) · [Spec](SPEC.md) · [Changelog](https://github.com/ao3575911/langsuite/blob/main/CHANGELOG.md) · [Discussions](https://github.com/ao3575911/langsuite/discussions) · Licence: see [LICENSE](https://github.com/ao3575911/langsuite/blob/main/LICENSE)
+[Wiki](https://github.com/ao3575911/langsuite/wiki) · [Full guide](guide.md) · [Spec](SPEC.md) · [Changelog](https://github.com/ao3575911/langsuite/blob/main/CHANGELOG.md) · [Discussions](https://github.com/ao3575911/langsuite/discussions) · Licence: see [LICENSE](https://github.com/ao3575911/langsuite/blob/main/LICENSE)
