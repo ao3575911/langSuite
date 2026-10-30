@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import ClassVar
 
 from rich.markup import escape
 from textual import on, work
 from textual.app import ComposeResult
+from textual.binding import Binding, BindingType
 from textual.containers import Vertical
 from textual.timer import Timer
 from textual.widgets import DataTable, Input, Static
@@ -14,6 +16,7 @@ from textual.widgets import DataTable, Input, Static
 from langsuite.core.errors import LangsuiteError
 from langsuite.core.kb import KnowledgeBase
 from langsuite.core.query import QueryError, QueryResult, run
+from langsuite.core.workspace import open_kb
 from langsuite.tui.sections import Section
 
 DEBOUNCE_S = 0.15
@@ -29,6 +32,8 @@ COLUMNS = (("id", 22), ("name", 26), ("kind", 10), ("year", 4), ("traits", 6))
 
 class QueryPane(Vertical):
     """Filter languages with the same DSL as `langsuite query`."""
+
+    BINDINGS: ClassVar[list[BindingType]] = [Binding("ctrl+s", "extract", "Save finding")]
 
     def __init__(self, section: Section, home: Path | None = None) -> None:
         super().__init__(id=f"pane-{section.id}", classes="pane querypane")
@@ -58,7 +63,7 @@ class QueryPane(Vertical):
     @work(thread=True, exclusive=True, group="kb-query")
     def _load(self) -> None:
         try:
-            kb = KnowledgeBase(self.home)
+            kb = open_kb(self.home)
             _ = kb.languages
             kb.trait_matrix()
             kb.trait_values()
@@ -148,3 +153,12 @@ class QueryPane(Vertical):
         else:
             self._sort = (field, field == "traits")
         self.execute(self.query_one(Input).value)
+
+    def action_extract(self) -> None:
+        from langsuite.tui.workspace_pane import save_finding_in_background
+
+        if self.result is None:
+            self.notify("Run a query first.", timeout=2)
+            return
+        text = self._with_sort(self.query_one(Input).value)
+        save_finding_in_background(self, "query", {"text": text, "top": None})

@@ -14,7 +14,7 @@ A research knowledge base of programming languages: how they work, how they rela
 | Structured `query` DSL and feature `similar` with a shuffled-feature baseline (z-scores); Query pane and Similar tab | Built (M2) |
 | Code similarity, clusters, scores and grades | Planned (M5–M5c) |
 | Verified snippets, cited answers, how/when guides | Planned (M4, M5d) |
-| Workspace: findings, notes, `extract` | Planned (M3) |
+| Workspaces: findings re-runnable bit-for-bit on their pinned snapshot, notes, saved queries, own-data overlay (custom languages), `base pin`; Workspace pane with `Ctrl+S` to save | Built (M3) |
 | Telegram bot with group workspaces | Planned (M5e) |
 | Hosted SaaS | Planned (M5i) |
 
@@ -67,6 +67,24 @@ langsuite s scheme --vs racket             # one pair, with the baseline spelled
 ```
 
 Fields: `name id kind year rank traits ext alias creator source website`; operators `= != >= <= > < ~`; `and`, `or`, `not`, brackets; `sort=[-]field`, `top=N`. Similarity is a rarity-weighted Jaccard over sourced traits (`features-idf-jaccard/1`); each score comes with a z-score against 1,000 seeded shuffles that keep each language's trait count and each trait's frequency (`shuffled-features/2`). z ≥ 3 is strong. Unknown is never treated as "no". In the app, press `3` for the Query pane (validated as you type, click a column to sort) or open the Similar tab in Explore.
+
+## Workspaces and findings
+
+```sh
+langsuite q "homoiconicity year<1990" --save old-lisps   # saved query (run: --saved old-lisps)
+langsuite x --title "Early Lisps"                       # extract the last result as finding f1
+langsuite finding save similar scheme                   # or save any query/similar/pair/lang run
+langsuite f show f1 --verify                            # re-run on its own snapshot: sha256 must match
+langsuite f verify                                      # all findings; exit 3 if any changed
+langsuite f export --format md|json|csv -o report.md
+langsuite n add "check macro hygiene" --on f1
+langsuite w import examples/own-data.yml                # your own languages and traits (overlay)
+langsuite w init lisp-survey && langsuite w export lisp-survey.json
+langsuite base pin            # freeze this workspace on the current snapshot; --clear to follow
+langsuite base snapshots      # kept snapshots; pinned or cited ones are never pruned
+```
+
+A finding stores the command, snapshot id, a copy of any own data it saw, its evidence ids (`ev-…`, one per sourced assertion) and the SHA-256 of its canonical result. Every `base build` keeps the old snapshot (the newest five plus any pinned or cited), so a finding saved today still re-runs to the identical bytes after the base is upgraded. Workspaces are plain JSON folders under `<data home>/workspaces/<name>/`; own data never touches the shared base. In the app, press `Ctrl+S` in Explore (profile, or the Similar tab) or Query to save a finding, and `5` for the Workspace pane (`v` verify, `Del` remove, notes, saved queries, own data).
 
 ## Use
 

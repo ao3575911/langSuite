@@ -10,7 +10,7 @@ from typing import Annotated
 import typer
 
 from langsuite import __version__
-from langsuite.cli.aliases import COMMANDS, Command, help_line
+from langsuite.cli.aliases import COMMANDS, SUB_ALIASES, Command, help_line
 from langsuite.cli.output import make_console, plain_wanted, to_json
 from langsuite.core.errors import LangsuiteError, NotBuiltYetError
 from langsuite.core.modes import Mode, resolve_mode
@@ -67,12 +67,22 @@ def _make_stub(cmd: Command) -> Callable[[typer.Context], None]:
     return stub
 
 
+def _add_sub_aliases(sub: typer.Typer) -> None:
+    """`ls`, `sh`, `rm` work wherever `list`, `show`, `remove` exist (SPEC §7)."""
+    names = {c.name: c for c in sub.registered_commands}
+    for short, full in SUB_ALIASES.items():
+        target = names.get(full)
+        if target is not None and short not in names and target.callback is not None:
+            sub.command(short, hidden=True, help=f"Alias of {full}.")(target.callback)
+
+
 def _register() -> None:
     from langsuite.cli.implemented import COMMAND_FUNCS, GROUP_APPS
 
     for cmd in COMMANDS:
         if cmd.name in GROUP_APPS:
             sub = GROUP_APPS[cmd.name]
+            _add_sub_aliases(sub)
             app.add_typer(sub, name=cmd.name, help=help_line(cmd), rich_help_panel=cmd.panel)
             app.add_typer(sub, name=cmd.alias, help=f"Alias of {cmd.name}.", hidden=True)
             continue

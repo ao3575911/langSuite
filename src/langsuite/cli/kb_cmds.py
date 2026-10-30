@@ -14,8 +14,9 @@ from rich.table import Table
 
 from langsuite.cli.output import make_console, to_json
 from langsuite.core.errors import NoResultError, NotBuiltYetError
-from langsuite.core.kb import Assertion, KnowledgeBase, Language, read_manifest
+from langsuite.core.kb import Assertion, Language, kept_snapshots, read_manifest
 from langsuite.core.modes import Mode
+from langsuite.core.workspace import Workspace, open_kb, remember
 
 lang_app = typer.Typer(no_args_is_help=True, help="List languages or show one.")
 feature_app = typer.Typer(no_args_is_help=True, help="List or show language features.")
@@ -67,7 +68,7 @@ def lang_list(
 
     Example: langsuite lang list lisp --feature macros
     """
-    with KnowledgeBase() as kb:
+    with open_kb() as kb:
         hits = kb.search(query, limit=None)
         if kind:
             hits = [h for h in hits if h.kind.lower() == kind.lower()]
@@ -135,11 +136,12 @@ def lang_show(
 
     Example: langsuite lang show haskell --evidence
     """
-    with KnowledgeBase() as kb:
+    with open_kb() as kb:
         language = kb.resolve(lang)
         rows = kb.assertions(language.id)
         parents, children = kb.edges(language.id)
         feats = {f.id: f for f in kb.features}
+        remember("lang", {"lang": language.id})
         if _json(ctx):
             _emit(
                 "language",
@@ -222,7 +224,7 @@ def feature_list(
 
     Example: langsuite feature list --category Types
     """
-    with KnowledgeBase() as kb:
+    with open_kb() as kb:
         counts = kb.feature_counts()
         feats = [f for f in kb.features if all_ or f.kind == "trait"]
         if category:
@@ -271,7 +273,7 @@ def feature_show(
 
     Example: langsuite feature show lazy-evaluation
     """
-    with KnowledgeBase() as kb:
+    with open_kb() as kb:
         feat = kb.resolve_feature(feature)
         yes = kb.languages_with(feat.id, "yes")
         no = kb.languages_with(feat.id, "no")
@@ -379,5 +381,66 @@ def _planned(name: str) -> None:
         raise NotBuiltYetError(f"base {name}", "M5f")
 
 
-for _name in ("pull", "pin", "changelog"):
+@base_app.command("snapshots")
+def base_snapshots(ctx: typer.Context) -> None:
+    """Snapshots kept on this machine; pinned ones are never pruned.
+
+    Example: langsuite base snapshots
+    """
+    from langsuite.core.workspace import pinned_snapshots
+
+    current = read_manifest()
+    kept = kept_snapshots()
+    pinned = pinned_snapshots()
+    rows = [
+        {
+            "snapshot": m.snapshot_id,
+            "built_at": m.built_at,
+            "current": bool(current and current.snapshot_id == m.snapshot_id),
+            "pinned": m.snapshot_id in pinned,
+            "languages": m.counts.get("languages"),
+        }
+        for m in kept
+    ]
+    if _json(ctx):
+        _emit("snapshots", rows)
+        return
+    con = _console(ctx)
+    if not rows:
+        con.print("[lw.muted]No snapshots kept yet. Build one with `langsuite base build`.[/]")
+        return
+    for r in rows:
+        flags = " ".join(
+            x for x in ("current" if r["current"] else "", "pinned" if r["pinned"] else "") if x
+        )
+        con.print(f"[lw.accent]{r['snapshot']}[/] {r['built_at']} [lw.ok]{flags}[/]")
+
+
+@base_app.command("pin")
+def base_pin(
+    ctx: typer.Context,
+    snapshot: Annotated[
+        str | None, typer.Argument(help="Snapshot id; default is the current base.")
+    ] = None,
+    clear: Annotated[bool, typer.Option("--clear", help="Follow the current base again.")] = False,
+) -> None:
+    """Pin the active workspace to a snapshot so results never shift under you.
+
+    Example: langsuite base pin base-4fe788452522
+    """
+    ws = Workspace.open()
+    if clear:
+        ws.unpin()
+        msg = f"Workspace {ws.slug} follows the current base."
+        pinned = None
+    else:
+        pinned = ws.pin(snapshot)
+        msg = f"Workspace {ws.slug} pinned to {pinned}."
+    if _json(ctx):
+        _emit("pin", {"workspace": ws.slug, "snapshot": pinned})
+        return
+    _console(ctx).print(f"[lw.ok]{msg}[/]")
+
+
+for _name in ("pull", "changelog"):
     _planned(_name)

@@ -72,6 +72,12 @@ def built_home(tmp_path_factory: pytest.TempPathFactory) -> Path:
 
 
 @pytest.fixture
-def kb_home(built_home: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
-    monkeypatch.setenv("LANGSUITE_HOME", str(built_home))
-    return built_home
+def kb_home(built_home: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    """A private copy of the fixture base, so workspace writes never leak between tests."""
+    import shutil
+
+    home = tmp_path / "kbhome"
+    shutil.copytree(built_home, home)
+    monkeypatch.setenv("LANGSUITE_HOME", str(home))
+    monkeypatch.delenv("LANGSUITE_WORKSPACE", raising=False)
+    return home

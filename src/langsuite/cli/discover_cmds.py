@@ -13,8 +13,8 @@ from langsuite.cli.kb_cmds import _console, _emit, _json, _mode, _year
 from langsuite.core import query as q
 from langsuite.core import similarity as sim
 from langsuite.core.errors import NoResultError, NotBuiltYetError
-from langsuite.core.kb import KnowledgeBase
 from langsuite.core.modes import Mode
+from langsuite.core.workspace import Workspace, open_kb, remember
 
 
 class By(StrEnum):
@@ -29,13 +29,22 @@ def query(
         str, typer.Argument(help='Filter, e.g. "eval=lazy and typing=static top=5".')
     ] = "",
     top: Annotated[int | None, typer.Option("--top", "-n", min=1, help="Max rows.")] = None,
+    save: Annotated[
+        str | None, typer.Option("--save", help="Also save this query under a name.")
+    ] = None,
+    saved: Annotated[str | None, typer.Option("--saved", help="Run a saved query by name.")] = None,
 ) -> None:
     """Filter languages with the query DSL.
 
-    Example: langsuite query "homoiconicity year<1990 sort=year"
+    Example: langsuite query "homoiconicity year<1990 sort=year" --save old-lisps
     """
-    with KnowledgeBase() as kb:
+    if saved:
+        text = Workspace.open().saved_query(saved)
+    if save:
+        Workspace.open().save_query(save, text)
+    with open_kb() as kb:
         result = q.run(kb, text, top=top)
+        remember("query", {"text": text, "top": top})
         if _json(ctx):
             _emit("query", result.to_json())
             if not result.rows:
@@ -94,15 +103,20 @@ def similar(
     """
     if by is not By.FEATURES:
         raise NotBuiltYetError(f"similar --by {by.value}", "M5")
-    with KnowledgeBase() as kb:
+    with open_kb() as kb:
         if against:
             pair = sim.compare_pair(kb, lang, against)
+            remember("pair", {"a": kb.resolve(lang).id, "b": pair.id})
             if _json(ctx):
                 _emit("similar-pair", {"method": sim.METHOD, **pair.to_json()})
                 return
             _print_pair(ctx, kb.resolve(lang).name, pair)
             return
         result = sim.similar(kb, lang, k=k, min_traits=min_traits, baseline=baseline)
+        remember(
+            "similar",
+            {"lang": result.query.id, "k": k, "min_traits": min_traits, "baseline": baseline},
+        )
         if _json(ctx):
             _emit("similar", result.to_json())
             if not result.neighbours:

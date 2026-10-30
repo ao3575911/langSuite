@@ -1,0 +1,20 @@
+# Own data for `langsuite workspace import examples/own-data.yml` (SPEC §10 M3).
+# Languages get new ids; traits use feature ids from `langsuite feature list --all`.
+languages:
+  - id: quill
+    name: Quill
+    appeared: 2026
+    extensions: [qul]
+    influenced_by: [scheme, racket]
+    source: https://example.org/quill
+    traits:
+      homoiconicity: yes
+      macros: yes
+      prefix-notation: yes
+      modules: yes
+      line-comments: yes
+      comments: yes
+      strings: yes
+      garbage-collection: yes
+assertions:
+  - {lang: python, feature: macros, value: no, source: "https://docs.python.org/3/reference/"}
