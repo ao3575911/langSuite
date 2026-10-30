@@ -1,6 +1,11 @@
 # Changelog
 
 ## Unreleased
+### Added
+- M5: code similarity from the Rosetta pack (`code-shingles-jaccard/1`): `similar --by code|both`, `like <task> --as <lang> --in <lang>`, `diff <task> --lang a,b`; feature/code disagreements listed on the dashboard.
+- M5b: `cluster` / `dashboard`: deterministic k-medoids over rarity-weighted traits, k by silhouette (4 to 12) or `--k`, bootstrap support per cluster, labels = top 3 traits by lift with evidence ids, `dashboard rename <medoid> <name>` per workspace; `influence <lang> --depth N`.
+- M5c: `rank` / `compare`: transparent scores from `criteria/1` (safety, expressiveness, modularity, popularity, maturity), grades A ≥ 85, B ≥ 70, C ≥ 55, D ≥ 40, else E; missing criteria lower confidence and never count as zero; `--by custom --profile`, `--filter "grade>=B paradigm=functional"`.
+- Dashboard and Analyse panes run these commands in-process with presets.
 
 ## 1.0.0 — release candidate (not tagged or published)
 ### Release

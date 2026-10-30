@@ -214,11 +214,9 @@ def test_cli_similar_pair(kb_home: Path, capsys: pytest.CaptureFixture[str]) -> 
     assert json.loads(out)["data"]["baseline"]["z"] >= 3
 
 
-def test_cli_similar_code_lens_is_planned(
-    kb_home: Path, capsys: pytest.CaptureFixture[str]
-) -> None:
-    code, _, err = run(["--plain", "similar", "scheme", "--by", "code"], capsys)
-    assert code == 2 and "M5" in err
+def test_cli_similar_code_lens(kb_home: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    code, out, _ = run(["--plain", "similar", "scheme", "--by", "code"], capsys)
+    assert code == 0 and "Rosetta" in out
 
 
 def test_cli_similar_too_strict(kb_home: Path, capsys: pytest.CaptureFixture[str]) -> None:

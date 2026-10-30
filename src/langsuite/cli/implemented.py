@@ -7,6 +7,15 @@ from typing import Any
 
 import typer
 
+from langsuite.cli.analyse_cmds import (
+    cluster,
+    compare,
+    dashboard_app,
+    diff,
+    influence,
+    like,
+    rank,
+)
 from langsuite.cli.bot_cmds import bot_app
 from langsuite.cli.discover_cmds import query, similar
 from langsuite.cli.kb_cmds import base_app, feature_app, lang_app
@@ -21,12 +30,19 @@ COMMAND_FUNCS: dict[str, Callable[..., Any]] = {
     "extract": extract,
     "verify": verify,
     "snippet": snippet,
+    "cluster": cluster,
+    "influence": influence,
+    "like": like,
+    "rank": rank,
+    "compare": compare,
+    "diff": diff,
 }
 GROUP_APPS: dict[str, typer.Typer] = {
     "lang": lang_app,
     "feature": feature_app,
     "base": base_app,
     "bot": bot_app,
+    "dashboard": dashboard_app,
     "finding": finding_app,
     "note": note_app,
     "workspace": workspace_app,
