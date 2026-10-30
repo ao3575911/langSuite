@@ -196,6 +196,8 @@ def test_build_application_offline() -> None:
     application = tg.build_application("123456:TEST-not-a-real-token", _bot(runner=FakeRunner()))
     assert isinstance(application, Application)
     assert len(application.handlers[0]) == 3  # commands, buttons, inline queries
+    assert application.job_queue is not None
+    assert [j.name for j in application.job_queue.jobs()] == ["digests"]
     names = [n for n, _ in tg.menu()]
     assert "similar" in names and "role" in names and all(len(h) <= 60 for _, h in tg.menu())
 
@@ -339,7 +341,7 @@ def test_onboarding_private_handle_and_workspace(kb_home: Any) -> None:
     assert start.buttons[0] == ("ada_l", "/handle ada_l")
     assert bot.handle("/space", ada).plain.startswith("Pick a handle first")  # type: ignore[union-attr]
     for bad, why in [("ab", "3-20"), ("admin", "reserved"), ("l4ngsuite", "reserved"),
-                     ("langsuíte", "3-20")]:  # fmt: skip
+                     ("langsuíte", "look-alike")]:  # fmt: skip
         assert why in bot.handle(f"/handle {bad}", ada).plain  # type: ignore[union-attr]
     claimed = bot.handle("/handle ada_l", ada)
     assert claimed is not None and claimed.buttons[0] == ("main", "/space main")

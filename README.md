@@ -21,13 +21,13 @@ A research knowledge base of programming languages: how they work, how they rela
 | Workspaces: findings re-runnable bit-for-bit on their pinned snapshot, notes, saved queries, own-data overlay (custom languages), `base pin`; Workspace pane with `Ctrl+S` to save | Built (M3) |
 | Telegram bot (`langsuite bot run`): same commands and aliases as the CLI, a workspace per chat, admin/contributor/viewer roles, findings with authors, rate limits, code runs off unless an admin enables them; `bot try` and the Account pane simulate it offline | Built (M5e) |
 | Bot `/ask`, `/guide`, `/mode`, `/digest` schedules, inline mode; signed outbound `webhook`s; `mcp` stdio server for agents | Built (M5d, M5h) |
-| Accounts, handles (`$langsuite/<user>/<ws>`), opt-in gamification | Planned (M5g) |
+| `account` handles (`$langsuite/<user>/<ws>`): nominations, look-alike/profanity checks, 30-day renames with 180-day redirect hold, privacy, `/link` to Telegram; `badges`, `streak`, `settings gamification` | Built (M5g); local registry until hosted accounts (M5i) |
 | `mode` per workspace or global (flag > workspace > global) | Built (M5h); LLM output bounds wait for xAI answers |
 | Hosted SaaS, `workspace sync`, billing | Planned (M5i) |
 | Release prep: 1.0.0, release notes, PyPI trusted-publishing workflow (tag-triggered; nothing tagged or published yet) | Built (M6, release prep) |
 | xAI explanations with citations, hosted `serve`, a11y audit, sync bundle, GIFs | Planned (M6, after 1.0.0) |
 
-> **Status: 1.0.0 release candidate, built through M5h; M5f, M5g and M5i are in progress. Published to PyPI from signed tags ([`docs/RELEASING.md`](docs/RELEASING.md)).** Release notes: [`docs/RELEASE_NOTES_1.0.0.md`](docs/RELEASE_NOTES_1.0.0.md). Planned commands are listed and say which milestone brings them. Spec: [`docs/SPEC.md`](docs/SPEC.md).
+> **Status: 1.0.0 release candidate, built through M5h and M5g; M5f and M5i are in progress. Published to PyPI from signed tags ([`docs/RELEASING.md`](docs/RELEASING.md)).** Release notes: [`docs/RELEASE_NOTES_1.0.0.md`](docs/RELEASE_NOTES_1.0.0.md). Planned commands are listed and say which milestone brings them. Spec: [`docs/SPEC.md`](docs/SPEC.md).
 
 ## Install
 

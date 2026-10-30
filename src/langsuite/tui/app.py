@@ -27,12 +27,12 @@ MODES: tuple[str, ...] = tuple(m.value for m in Mode)
 
 
 def _default_handle() -> str:
-    """`$langsuite/guest/<active workspace>` until accounts land (M5g)."""
+    """`$langsuite/<handle>/<active workspace>`; guest until a handle is claimed (M5g)."""
+    from langsuite.cli.account_cmds import display
     from langsuite.core.errors import LangsuiteError
-    from langsuite.core.workspace import active_slug
 
     try:
-        return f"$langsuite/guest/{active_slug()}"
+        return display()
     except LangsuiteError:
         return "$langsuite/guest/default"
 

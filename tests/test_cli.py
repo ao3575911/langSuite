@@ -100,7 +100,7 @@ def test_stub_and_alias_exit_no_result(cmd: object, capsys: pytest.CaptureFixtur
 
 def test_json_error_envelope(capsys: pytest.CaptureFixture[str]) -> None:
     with pytest.raises(SystemExit) as ex:
-        main(["--json", "badges"])
+        main(["--json", "usage"])
     assert ex.value.code == 2
     payload = json.loads(capsys.readouterr().out)
     assert payload["schema"] == 1 and payload["kind"] == "error"
@@ -111,7 +111,7 @@ def test_debug_reraises() -> None:
     from langsuite.core.errors import NotBuiltYetError
 
     with pytest.raises(NotBuiltYetError):
-        main(["--debug", "badges"])
+        main(["--debug", "usage"])
 
 
 def test_version_and_usage_error(capsys: pytest.CaptureFixture[str]) -> None:

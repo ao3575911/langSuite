@@ -135,6 +135,8 @@ BOT_COMMANDS: tuple[BotCommand, ...] = (
     BotCommand("ask", "a", "cited answer, or none: /a does haskell have type inference",
                {"": READ}),
     BotCommand("guide", "g", "start with a language: /g scheme", {"": READ}),
+    BotCommand("badges", "bg", "badges earned in this chat's workspace", {"": READ}),
+    BotCommand("streak", "st", "days in a row this workspace was used", {"": READ}),
     BotCommand("cluster", "c", "language families: /c --langs scheme,racket,ml --k 2",
                {"": READ}),
     BotCommand("dashboard", "db", "clusters, labels and evidence: /db --top 60",
@@ -159,12 +161,16 @@ NOT_IN_BOT: dict[str, str] = {
     "mode": "each chat keeps its own: /mode concise",
     "mcp": "an MCP server talks stdio to local agents, not to chats",
     "webhook": "the signing secret would show in the chat; set up with the CLI",
+    "account": "use /handle, /link and /private here",
+    "settings": "here /settings is per chat; the CLI one sets this machine's preferences",
 }
 BOT_ONLY = {
     "start": "set up: pick a handle and a workspace",
     "handle": "claim or change your handle: /handle ada_l",
     "space": "create or switch workspace: /space notes",
     "help": "commands",
+    "link": "link this chat to your CLI account: /link CODE (from `langsuite account link`)",
+    "private": "hide your handle from non-members: /private on",
     "role": "admins: reply to someone with /role contributor",
     "settings": "chat settings: /settings coderuns on|off (admins)",
     "mode": "reply length: /mode concise|default|thorough",
@@ -420,6 +426,8 @@ class Bot:
         role = role_of(chat, state)
         if name == "help":
             return _reply(help_text(), code_block=False)
+        if name in ("link", "private"):
+            return self._account(name, args, chat, role)
         if name in ("start", "handle", "space"):
             return self._onboard(name, args, chat, role)
         if name == "role":
@@ -486,6 +494,29 @@ class Bot:
         new = want not in owner.workspaces
         verb = "Created and switched to" if new else "Switched to"
         return _text_reply(f"{verb} {reg.get(key).display}. Try /q homoiconicity or /help.")
+
+    def _account(self, name: str, args: list[str], chat: Chat, role: Role) -> Reply:
+        if chat.group and role is not Role.ADMIN:
+            return _text_reply("Not allowed: only group admins can change the group's account.")
+        reg, key = self.registry, chat.owner_key
+        if name == "private":
+            if not args or args[0] not in ("on", "off"):
+                state = "on" if reg.get(key).private else "off"
+                return _text_reply(f"Private is {state}. Use /private on or /private off.")
+            reg.set_private(key, args[0] == "on")
+            return _text_reply(f"Private: {args[0]}.")
+        if not args:
+            return _text_reply("Run `langsuite account link` on your computer, then send "
+                               "/link CODE here.")  # fmt: skip
+        why = reg.redeem(args[0], key)
+        if why:
+            return _text_reply(f"Could not link: {why}.")
+        owner = reg.get(key)
+        return _text_reply(
+            "Linked. This chat now uses your account: "
+            + (owner.display or "no handle yet; /handle name")
+            + "."
+        )
 
     # -- admin commands
 
