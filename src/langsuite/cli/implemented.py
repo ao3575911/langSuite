@@ -7,6 +7,7 @@ from typing import Any
 
 import typer
 
+from langsuite.cli.account_cmds import account_app, badges, settings_app, streak
 from langsuite.cli.analyse_cmds import (
     cluster,
     compare,
@@ -43,6 +44,8 @@ COMMAND_FUNCS: dict[str, Callable[..., Any]] = {
     "guide": guide,
     "mode": mode,
     "mcp": mcp,
+    "badges": badges,
+    "streak": streak,
 }
 GROUP_APPS: dict[str, typer.Typer] = {
     "lang": lang_app,
@@ -54,4 +57,6 @@ GROUP_APPS: dict[str, typer.Typer] = {
     "note": note_app,
     "workspace": workspace_app,
     "webhook": webhook_app,
+    "account": account_app,
+    "settings": settings_app,
 }

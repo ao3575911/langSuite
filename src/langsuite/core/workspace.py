@@ -499,12 +499,13 @@ class Workspace:
 
     def event(self, kind: str, data: dict[str, Any]) -> None:
         """Append to the workspace event log and notify webhooks (best effort)."""
-        from langsuite.core import webhooks
+        from langsuite.core import settings, webhooks
 
         author = CURRENT_AUTHOR.get() or {}
         row = {"at": _now(), "kind": kind, "user": author.get("id"), "data": data}
-        with (self.path / "events.jsonl").open("a", encoding="utf-8") as fh:
-            fh.write(json.dumps(row, sort_keys=True) + "\n")
+        if settings.load(self.home)["gamification"]:  # off: no new events (M5g)
+            with (self.path / "events.jsonl").open("a", encoding="utf-8") as fh:
+                fh.write(json.dumps(row, sort_keys=True) + "\n")
         if kind in webhooks.EVENTS:
             webhooks.deliver(self.path, kind, {"workspace": self.slug, **data})
 
@@ -562,6 +563,7 @@ class Workspace:
         n = max((int(x.id[1:]) for x in notes), default=0) + 1
         note = Note(id=f"n{n}", text=text[:4000], created_at=_now(), on=on)
         _write(self.path / "notes.json", [x.to_json() for x in [*notes, note]])
+        self.event("note.added", {"id": note.id})
         return note
 
     def remove_note(self, note_id: str) -> Note:
@@ -715,4 +717,6 @@ def open_kb(home: Path | None = None) -> KnowledgeBase:
 def remember(kind: str, args: dict[str, Any], home: Path | None = None) -> None:
     """Best effort: record the last result for `extract last`; never fail the command."""
     with contextlib.suppress(OSError, LangsuiteError):
-        Workspace.open(home).remember(kind, args)
+        ws = Workspace.open(home)
+        ws.remember(kind, args)
+        ws.event("command.run", {"kind": kind})

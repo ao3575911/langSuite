@@ -157,17 +157,16 @@ def make_inline_handler(core: Bot) -> Any:
     return on_inline
 
 
-async def digest_loop(app: Any, core: Bot, every: float = 60.0) -> None:  # pragma: no cover
-    """Send digests whose time has come; checks once a minute."""
+async def digest_job(context: Any) -> None:  # pragma: no cover - needs a live bot
+    """JobQueue callback: send digests whose time has come (runs once a minute)."""
     from datetime import UTC, datetime
 
-    while True:
-        try:
-            for chat_id, reply in await asyncio.to_thread(core.due_digests, datetime.now(UTC)):
-                await app.bot.send_message(chat_id, reply.plain[:4000])
-        except Exception:
-            log.exception("digest run failed")
-        await asyncio.sleep(every)
+    core: Bot = context.job.data
+    try:
+        for chat_id, reply in await asyncio.to_thread(core.due_digests, datetime.now(UTC)):
+            await context.bot.send_message(chat_id, reply.plain[:4000])
+    except Exception:
+        log.exception("digest run failed")
 
 
 def build_application(token: str, core: Bot | None = None) -> Any:
@@ -185,7 +184,6 @@ def build_application(token: str, core: Bot | None = None) -> Any:
         await app.bot.set_my_commands([TgCommand(n, h) for n, h in menu()])
         await app.bot.set_my_description(DESCRIPTION)
         await app.bot.set_my_short_description(SHORT_DESCRIPTION)
-        app.create_task(digest_loop(app, core_))
         me = await app.bot.get_me()
         logging.getLogger("langsuite.bot").warning("langsuite bot started as @%s", me.username)
 
@@ -196,6 +194,8 @@ def build_application(token: str, core: Bot | None = None) -> Any:
     app.add_handler(MessageHandler(filters.COMMAND, make_handler(core_)))
     app.add_handler(CallbackQueryHandler(make_button_handler(core_)))
     app.add_handler(InlineQueryHandler(make_inline_handler(core_)))
+    assert app.job_queue is not None  # the [job-queue] extra is a dependency
+    app.job_queue.run_repeating(digest_job, interval=60, first=15, data=core_, name="digests")
     return app
 
 
