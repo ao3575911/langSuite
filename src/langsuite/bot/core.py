@@ -166,6 +166,9 @@ NOT_IN_BOT: dict[str, str] = {
     "mcp": "an MCP server talks stdio to local agents, not to chats",
     "webhook": "the signing secret would show in the chat; set up with the CLI",
     "account": "use /handle, /link and /private here",
+    "login": "device sign-in happens on the machine running the CLI",
+    "logout": "the token lives on the CLI machine; chats never hold it",
+    "usage": "plan usage is per CLI install; run `langsuite usage`",
     "settings": "here /settings is per chat; the CLI one sets this machine's preferences",
 }
 BOT_ONLY = {

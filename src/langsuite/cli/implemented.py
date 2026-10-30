@@ -23,6 +23,7 @@ from langsuite.cli.discover_cmds import query, similar
 from langsuite.cli.docs_cmds import docs_app, inclusion_app
 from langsuite.cli.kb_cmds import base_app, feature_app, lang_app
 from langsuite.cli.mcp_server import mcp
+from langsuite.cli.saas_cmds import login, logout, usage
 from langsuite.cli.system_cmds import mode, webhook_app
 from langsuite.cli.ui_cmd import ui
 from langsuite.cli.verify_cmds import snippet, verify
@@ -47,6 +48,9 @@ COMMAND_FUNCS: dict[str, Callable[..., Any]] = {
     "mcp": mcp,
     "badges": badges,
     "streak": streak,
+    "login": login,
+    "logout": logout,
+    "usage": usage,
 }
 GROUP_APPS: dict[str, typer.Typer] = {
     "lang": lang_app,
