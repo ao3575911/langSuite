@@ -2,6 +2,8 @@
 
 **Tagline:** A research knowledge base of programming languages: how they work, how they relate, with evidence.
 
+**Positioning:** a fully featured, top-of-market, state-of-the-art tool for language researchers and developers in training; flexible across CLI, TUI and the langsuite Telegram bot. Claims in README and marketing must match shipped features; anything unbuilt is labelled planned.
+
 ## Vision
 > A highly valuable resource you can explore to discover, and extract your findings from into your workspace, from research done by analysis and by querying the resource. It writes snippets on demand, explains how to use different languages and when, and answers simple and advanced questions on languages and syntax.
 

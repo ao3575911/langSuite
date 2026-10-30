@@ -3,6 +3,7 @@
 ## Unreleased
 ### Added
 - Renamed langwish → langsuite.
+- README and spec positioning: audience, aim, built-vs-planned table.
 - M0: uv/Python 3.12 package layout (`core`, `cli`, `tui`, `bot`, `api`, `ingest`, `verify`, `score`, `discover`, `saas`).
 - Typer CLI: 31 commands grouped by pillar, one alias each, stubs that exit 2 naming their milestone.
 - Typed errors with SPEC §7 exit codes; `--json`, `--plain`, `NO_COLOR`, `-m/--mode`, `--debug`.
