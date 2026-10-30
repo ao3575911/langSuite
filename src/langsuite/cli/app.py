@@ -23,6 +23,7 @@ class Ctx:
     plain: bool
     local: bool
     debug: bool
+    plain_flag: bool = False
 
 
 app = typer.Typer(
@@ -55,7 +56,7 @@ def root(
         typer.Option("--version", callback=_version, is_eager=True, help="Show version."),
     ] = None,
 ) -> None:
-    ctx.obj = Ctx(resolve_mode(mode), json_, plain_wanted(plain), local, debug)
+    ctx.obj = Ctx(resolve_mode(mode), json_, plain_wanted(plain), local, debug, plain)
 
 
 def _make_stub(cmd: Command) -> Callable[[typer.Context], None]:
@@ -66,15 +67,32 @@ def _make_stub(cmd: Command) -> Callable[[typer.Context], None]:
     return stub
 
 
-for _cmd in COMMANDS:
-    _fn = _make_stub(_cmd)
-    app.command(_cmd.name, help=help_line(_cmd), rich_help_panel=_cmd.panel)(_fn)
-    app.command(_cmd.alias, help=f"Alias of {_cmd.name}.", hidden=True)(_fn)
+def _register() -> None:
+    from langsuite.cli.implemented import COMMAND_FUNCS, GROUP_APPS
+
+    for cmd in COMMANDS:
+        if cmd.name in GROUP_APPS:
+            sub = GROUP_APPS[cmd.name]
+            app.add_typer(sub, name=cmd.name, help=help_line(cmd), rich_help_panel=cmd.panel)
+            app.add_typer(sub, name=cmd.alias, help=f"Alias of {cmd.name}.", hidden=True)
+            continue
+        fn = COMMAND_FUNCS.get(cmd.name) or _make_stub(cmd)
+        app.command(cmd.name, help=help_line(cmd), rich_help_panel=cmd.panel)(fn)
+        app.command(cmd.alias, help=f"Alias of {cmd.name}.", hidden=True)(fn)
+
+
+_register()
+
+
+def _interactive() -> bool:
+    return sys.stdin.isatty() and sys.stdout.isatty()
 
 
 def main(argv: list[str] | None = None) -> None:
     """Entry point with typed error handling: short messages, no tracebacks unless --debug."""
     args = sys.argv[1:] if argv is None else argv
+    if not args and _interactive():
+        args = ["ui"]
     debug = "--debug" in args
     try:
         app(args=args, prog_name="langsuite")

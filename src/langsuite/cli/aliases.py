@@ -54,7 +54,7 @@ COMMANDS: tuple[Command, ...] = (
     Command("streak", "st", ACCOUNT, "Your streak", "M5g"),
     Command("settings", "set", SYSTEM, "Preferences such as gamification", "M5g"),
     Command("mode", "m", SYSTEM, "Show or set output mode", "M5h"),
-    Command("tui", "t", SYSTEM, "Open the terminal UI", "M6"),
+    Command("ui", "t", SYSTEM, "Open the app (terminal or browser)", "M0b"),
 )
 
 SUB_ALIASES: dict[str, str] = {"ls": "list", "sh": "show", "rm": "remove"}

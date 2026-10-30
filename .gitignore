@@ -5,3 +5,4 @@ __pycache__/
 .*_cache/
 .coverage
 *.egg-info/
+snapshot_report.html

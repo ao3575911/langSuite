@@ -1,0 +1,18 @@
+Screen { layout: vertical; }
+HeaderBar { height: 1; background: $panel; }
+HeaderBar > Static { width: auto; padding: 0 1; }
+#handle { color: $accent; width: 1fr; text-style: bold; }
+#mode { color: $secondary; text-style: bold; }
+#base { color: $text-muted; }
+#body { height: 1fr; }
+#nav { width: 16; border-right: solid $primary 40%; }
+#nav > ListItem { padding: 0 1; }
+#main { width: 1fr; }
+.pane { padding: 1 2; }
+.pane-title { text-style: bold; color: $primary; margin-bottom: 1; }
+.pane-status { color: $warning; margin: 1 0; }
+.pane-cmds { color: $text-muted; }
+#leader { dock: bottom; height: 1; display: none; background: $secondary 30%; padding: 0 1; }
+#leader.-active { display: block; }
+.-plain #nav { border-right: none; }
+.-plain DataTable, .-plain Input, .-plain TabbedContent { border: none; }
