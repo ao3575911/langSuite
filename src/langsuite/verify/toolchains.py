@@ -27,6 +27,8 @@ class Toolchain:
     # Each (text, unless) pair is prepended when `unless` does not occur in the code;
     # applied last-first, so the first pair ends up on top.
     preludes: tuple[tuple[str, str], ...] = ()
+    # Default memory cap override; compilers that cache to the /tmp tmpfs need more.
+    memory: str = ""
 
     def prepare(self, code: str) -> str:
         for text, unless in reversed(self.preludes):
@@ -42,6 +44,9 @@ class Toolchain:
     def pinned(self) -> str:
         return f"{self.image}@{self.digest}"
 
+    def with_memory(self, memory: str) -> Toolchain:
+        return replace(self, memory=memory)
+
     def with_prelude(self, *pairs: tuple[str, str]) -> Toolchain:
         return replace(self, preludes=pairs)
 
@@ -52,6 +57,7 @@ class Toolchain:
             "image": self.ref,
             "digest": self.digest,
             "timeout_s": self.timeout_s,
+            "memory": self.memory or "256m",
         }
 
 
@@ -102,7 +108,8 @@ TOOLCHAINS: tuple[Toolchain, ...] = (
     _tc("go", "Go 1.23", "golang:1.23-alpine",
         "sha256:383395b794dffa5b53012a212365d40c8e37109a626ca30d6151c8348d380b5f",
         "main.go", "cd /tmp && go run /src/main.go", 60.0,
-        GOCACHE="/tmp/gocache", GOPATH="/tmp/go", GOFLAGS="-mod=mod", GO111MODULE="off"),
+        GOCACHE="/tmp/gocache", GOPATH="/tmp/go", GOFLAGS="-mod=mod -p=1", GO111MODULE="off",
+        GOMAXPROCS="1").with_memory("512m"),  # go's build cache lives on the /tmp tmpfs
     _tc("rust", "Rust 1.83", "rust:1.83-alpine",
         "sha256:0ac946ed7597a9f053a1be2ce38c09aa88b3d7079a91ea491493615294b1f699",
         "main.rs", "rustc -O -o /tmp/a.out /src/main.rs && /tmp/a.out", 60.0),

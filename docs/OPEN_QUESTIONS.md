@@ -24,3 +24,4 @@
 | 20 | M4 | Rosetta blocks often need boilerplate or are for old runtimes. Racket gets `#lang racket` and Erlang an escript header when missing; up to 5 variants per language are tried. On the 7-task pack, 99 of 134 solutions across the 20 toolchains verify; the rest fail honestly (e.g. Rust FizzBuzz printing lowercase). | Logged |
 | 21 | M4 | `verify` exits 1 when code fails, a code not in SPEC §7; 3 when the sandbox refuses (no Docker, digest mismatch). | Deviation, logged |
 | 22 | M4 | Common Lisp uses `clfoundation/sbcl:latest` pinned by digest: the project publishes no versioned tags that include an amd64 and arm64 manifest. | Logged |
+| 23 | M4 | Go gets a 512 MB cap and `GOMAXPROCS=1`: its build cache lives on the in-memory /tmp, and CI runners report many cores. All other toolchains keep 256 MB. | Logged |

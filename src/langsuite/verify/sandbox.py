@@ -312,7 +312,7 @@ def run_code(
 ) -> VerifyResult:
     """Verify `code` with toolchain `tc`. Results are cached by content hash."""
     docker = _docker(docker)
-    limits = limits or Limits()
+    limits = limits or Limits(memory=tc.memory or MEMORY)
     key = cache_key(tc, code, stdin, expected, limits)
     cfile = cache_dir(home) / f"{key}.json"
     if use_cache and cfile.exists():
