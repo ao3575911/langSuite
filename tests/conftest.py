@@ -63,6 +63,7 @@ def _isolated_home(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     # renders do not depend on whether the machine has Docker.
     monkeypatch.setenv("LANGSUITE_DOCKER", "langsuite-no-docker-in-tests")
     monkeypatch.delenv("LANGSUITE_PACKS", raising=False)
+    monkeypatch.delenv("LANGSUITE_TELEGRAM_TOKEN", raising=False)
     return home
 
 

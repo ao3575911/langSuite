@@ -162,6 +162,8 @@ def finding_markdown(f: Finding, notes: list[str] | None = None) -> str:
         f"- result sha256: `{f.result_sha256}`",
         f"- saved: {f.created_at}",
     ]
+    if f.author:
+        lines.append(f"- author: {f.author.get('name', '?')} ({f.author.get('via', '')})")
     if f.overlay:
         n = len(f.overlay.get("languages", []))
         lines.append(f"- own data: {n} language{'s' if n != 1 else ''} overlaid")

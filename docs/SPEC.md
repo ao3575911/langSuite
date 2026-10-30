@@ -296,6 +296,7 @@ The Textual app is the primary interactive interface; the CLI is its scriptable 
 | inclusion | inc | account | ac | badges | bg |
 | streak | st | settings | set | usage | u |
 | login | li | logout | lo | ui | t |
+| bot | bt | | | | |
 | mode | m | | | | |
 Subcommands keep their names (`f ls` = `finding list`; `ls`, `sh`, `rm` are universal sub-aliases). A test asserts every command has exactly one alias, no alias equals another command or alias, and `--help` lists both. Telegram uses the same aliases (`/a`, `/q`, `/s`…).
 

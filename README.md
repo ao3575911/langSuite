@@ -17,10 +17,11 @@ A research knowledge base of programming languages: how they work, how they rela
 | Cited answers, how/when guides | Planned (M5d) |
 | Signed snapshots: `base pull`, `base changelog`, data CI | Planned (M5f) |
 | Workspaces: findings re-runnable bit-for-bit on their pinned snapshot, notes, saved queries, own-data overlay (custom languages), `base pin`; Workspace pane with `Ctrl+S` to save | Built (M3) |
-| Telegram bot with group workspaces | Planned (M5e) |
+| Telegram bot (`langsuite bot run`): same commands and aliases as the CLI, a workspace per chat, admin/contributor/viewer roles, findings with authors, rate limits, code runs off unless an admin enables them; `bot try` and the Account pane simulate it offline | Built (M5e) |
+| Bot extras: `/ask`, inline mode, digests, webhooks, MCP | Planned (M5d, M5h) |
 | Hosted SaaS | Planned (M5i) |
 
-> **Status: pre-1.0, built through M4.** Planned commands are listed and say which milestone brings them. Spec: [`docs/SPEC.md`](docs/SPEC.md).
+> **Status: pre-1.0, built through M4 plus the Telegram bot (M5e).** Planned commands are listed and say which milestone brings them. Spec: [`docs/SPEC.md`](docs/SPEC.md).
 
 ## Install
 
@@ -100,6 +101,18 @@ langsuite snippet --fetch                       # fetch the default tasks into y
 ```
 
 Code runs in Docker with no network, a read-only root, a non-root user, all capabilities dropped, 256 MB memory, 64 processes, 1 CPU and a timeout. Images are pulled by digest; a local tag pointing at another digest is refused, never run. A snippet is marked **verified** only when it ran and (for tasks with a fixed answer) its output matched; without Docker every snippet says **unverified**. Results are cached by code hash and carry an evidence id (`vr-…`) that findings cite. Rosetta Code solutions are share-alike, kept in `data-packs/rosetta/` or your data dir, and always shown with their attribution line. In the app, press `6` for the Write pane (Snippet and Verify tabs, `Ctrl+R` runs, `Ctrl+S` saves a finding).
+
+## Telegram bot
+
+```sh
+export LANGSUITE_TELEGRAM_TOKEN=...        # from @BotFather; never printed or logged
+langsuite bot run                          # long polling; Ctrl+C stops
+langsuite bot try "/s scheme --k 3"        # answer locally exactly as the bot would (no token)
+langsuite bot try "/x pick" --group --role viewer   # → Not allowed
+langsuite bot commands                     # commands, aliases, token set / not set
+```
+
+In Telegram: `/q homoiconicity year<1990` (no quotes needed), `/s scheme`, `/l show haskell`, `/sn fizzbuzz --lang python`, `/x My title` saves the last result, `/f ls`, `/n add …`, `/b status`. Each chat gets its own workspace (`tg-u<id>` private, `tg-g<id>` group). In groups, Telegram admins are admins, everyone else starts as viewer; an admin replies to someone with `/role contributor`. Findings record the author. `/v python` with code on the next lines runs only after an admin sends `/settings coderuns on`; snippets are shown unverified until then. Limits: 20 commands a minute per user, 60 per group. Long replies arrive as a file. The bot only reads commands (privacy mode). Press `7` in the app for the bot pane: token status, the command list and a local chat to try commands.
 
 ## Use
 
