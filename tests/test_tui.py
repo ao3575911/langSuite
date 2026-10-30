@@ -261,12 +261,12 @@ async def test_query_pane_validates_as_you_type(kb_home: Any) -> None:
         assert not app.query_one("#query-input").has_class("-invalid")
 
 
-async def test_query_pane_planned_field_and_header_sort(kb_home: Any) -> None:
+async def test_query_pane_score_field_and_header_sort(kb_home: Any) -> None:
     app = LangsuiteApp()
     async with app.run_test(size=(120, 40)) as pilot:
         await _query_ready(pilot)
         await _type_query(pilot, "score>=70")
-        assert "M5c" in str(app.query_one("#query-status").render())
+        assert "score field" in str(app.query_one("#query-status").render())
         await _type_query(pilot, "kind=pl")
         pane = app.query_one(QueryPane)
         table = app.query_one("#query-table", DataTable)

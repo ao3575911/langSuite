@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
-from typing import Annotated
+from typing import TYPE_CHECKING, Annotated
 
 import typer
 from rich.markup import escape
@@ -14,10 +14,10 @@ from rich.table import Table
 from langsuite.cli.kb_cmds import _console, _emit, _json, _mode
 from langsuite.core import saas
 from langsuite.core.errors import DataError, ExitCode, UsageError
+from langsuite.core.lazy import lazy
 from langsuite.core.modes import Mode
 from langsuite.core.workspace import open_kb, remember
 from langsuite.verify import evidence as vev
-from langsuite.verify import rosetta
 from langsuite.verify.sandbox import (
     DockerUnavailableError,
     Limits,
@@ -27,6 +27,12 @@ from langsuite.verify.sandbox import (
     run_code,
 )
 from langsuite.verify.toolchains import BY_LANG, TOOLCHAINS, Toolchain, toolchain_for
+
+if TYPE_CHECKING:
+    from langsuite.verify import rosetta
+else:
+    rosetta = lazy("langsuite.verify.rosetta")
+
 
 FAILED_EXIT = 1  # the code ran and failed (like a test runner); refusals exit 3
 _STYLE = {

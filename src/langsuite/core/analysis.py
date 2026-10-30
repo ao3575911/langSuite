@@ -18,14 +18,15 @@ import numpy as np
 import yaml
 from numpy.typing import NDArray
 
+from langsuite.core import defaults
 from langsuite.core.errors import DataError, NoResultError, UsageError
 from langsuite.core.kb import KnowledgeBase, Language
 
 CLUSTER_METHOD = "k-medoids/idf-jaccard/1"
 CODE_METHOD = "code-shingles-jaccard/1"
-DEFAULT_TOP = 150
-DEFAULT_BOOT = 100
-DEFAULT_SEED = 1729
+DEFAULT_TOP = defaults.ANALYSIS_TOP
+DEFAULT_BOOT = defaults.ANALYSIS_BOOT
+DEFAULT_SEED = defaults.ANALYSIS_SEED
 MATCH = 0.75  # a bootstrap cluster "is" the original if member Jaccard >= this
 
 # ----- feature similarity matrix ---------------------------------------------------------
@@ -545,6 +546,7 @@ def paradigms(values: dict[str, str]) -> list[str]:
 
 _GRADE_FILTER = re.compile(r"grade(>=|<=|=|>|<)([A-Ea-e])")
 _SCORE_FILTER = re.compile(r"score(>=|<=|=|>|<)(\d+(?:\.\d+)?)")
+_BAD_SCORE_FILTER = re.compile(r"\b(?:grade|score)\s*(?:>=|<=|=|>|<)?\S*")
 _PARADIGM_FILTER = re.compile(r"paradigm=([a-z-]+)")
 
 
@@ -591,6 +593,12 @@ def rank(
         for mt in rx.finditer(filter_text):
             conds.append((kind, mt.group(1), mt.group(2)))
         rest = rx.sub(" ", rest)
+    bad = _BAD_SCORE_FILTER.search(rest)
+    if bad:
+        raise UsageError(
+            f"Bad filter `{bad.group(0)}`.",
+            hint="Grades run A to E (grade>=B); scores are numbers (score>=70).",
+        )
     para = _PARADIGM_FILTER.findall(rest)
     rest = _PARADIGM_FILTER.sub(" ", rest).strip()
     if by == "custom" and not profile:

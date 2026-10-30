@@ -2,12 +2,16 @@
 
 from __future__ import annotations
 
+import os
 import sys
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Annotated
+from typing import Annotated, NoReturn
 
 import typer
+from rich.markup import escape
+from typer import Abort
+from typer._click.exceptions import ClickException, NoArgsIsHelpError, UsageError
 
 from langsuite import __version__
 from langsuite.cli.aliases import COMMANDS, SUB_ALIASES, Command, help_line
@@ -101,6 +105,23 @@ def _interactive() -> bool:
     return sys.stdin.isatty() and sys.stdout.isatty()
 
 
+ISSUES_URL = "https://github.com/ao3575911/langsuite/issues/new/choose"
+EXIT_INTERRUPTED = 130
+EXIT_INTERNAL = 70
+
+
+def _fail(args: list[str], message: str, hint: str | None, code: int) -> NoReturn:
+    """One friendly line (plus a hint) on stderr, or a JSON error object with --json."""
+    if "--json" in args:
+        typer.echo(to_json("error", {"error": message, "hint": hint, "exit": code}))
+    else:
+        console = make_console(plain=plain_wanted("--plain" in args), stderr=True)
+        console.print(f"[lw.error]error:[/] {escape(message)}")
+        if hint:
+            console.print(f"[lw.muted]hint: {escape(hint)}[/]")
+    raise SystemExit(code)
+
+
 def main(argv: list[str] | None = None) -> None:
     """Entry point with typed error handling: short messages, no tracebacks unless --debug."""
     args = sys.argv[1:] if argv is None else argv
@@ -108,16 +129,41 @@ def main(argv: list[str] | None = None) -> None:
         args = ["ui"]
     debug = "--debug" in args
     try:
-        app(args=args, prog_name="langsuite")
+        rv = app(args=args, prog_name="langsuite", standalone_mode=False)
     except LangsuiteError as err:
         if debug:
             raise
-        if "--json" in args:
-            payload = {"error": err.message, "hint": err.hint, "exit": int(err.exit_code)}
-            typer.echo(to_json("error", payload))
-        else:
-            console = make_console(plain=plain_wanted("--plain" in args), stderr=True)
-            console.print(f"[lw.error]error:[/] {err.message}")
-            if err.hint:
-                console.print(f"[lw.muted]hint: {err.hint}[/]")
-        raise SystemExit(int(err.exit_code)) from None
+        _fail(args, err.message, err.hint, int(err.exit_code))
+    except NoArgsIsHelpError as err:
+        err.show()
+        raise SystemExit(err.exit_code) from None
+    except UsageError as err:
+        if debug:
+            raise
+        path = err.ctx.command_path if err.ctx else "langsuite"
+        _fail(args, err.format_message(), f"See `{path} -h`.", err.exit_code)
+    except ClickException as err:
+        if debug:
+            raise
+        _fail(args, err.format_message(), None, err.exit_code)
+    except (KeyboardInterrupt, Abort):
+        if debug:
+            raise
+        _fail(args, "Interrupted.", None, EXIT_INTERRUPTED)
+    except BrokenPipeError:
+        # Output piped into `head` and friends: stop quietly, like other CLI tools.
+        devnull = os.open(os.devnull, os.O_WRONLY)
+        os.dup2(devnull, sys.stdout.fileno())
+        raise SystemExit(0) from None
+    except Exception as err:
+        if debug:
+            raise
+        _fail(
+            args,
+            f"Unexpected {type(err).__name__}: {err}".rstrip(": "),
+            f"Re-run with --debug for details, and report it at {ISSUES_URL}",
+            EXIT_INTERNAL,
+        )
+    if rv == EXIT_INTERRUPTED:  # typer turns Ctrl-C into Exit(130)
+        _fail(args, "Interrupted.", None, EXIT_INTERRUPTED)
+    raise SystemExit(rv if isinstance(rv, int) else 0)

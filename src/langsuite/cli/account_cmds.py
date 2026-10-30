@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import getpass
 import json
+import sys
 import uuid
 from pathlib import Path
 from typing import Annotated, Any
@@ -31,7 +32,14 @@ def local_key(home: Path | None = None) -> str:
     path = (home or data_home()) / "account.json"
     try:
         return str(json.loads(path.read_text(encoding="utf-8"))["key"])
-    except (OSError, ValueError, KeyError):
+    except (OSError, ValueError, KeyError, TypeError):
+        if path.exists():  # unreadable: keep it for recovery rather than overwrite it
+            path.replace(path.with_suffix(".json.bad"))
+            print(
+                f"warning: {path} was unreadable; moved it to account.json.bad and "
+                "started a new guest account. Restore it to get your handle back.",
+                file=sys.stderr,
+            )
         path.parent.mkdir(parents=True, exist_ok=True)
         key = "c" + uuid.uuid4().hex[:12]
         path.write_text(json.dumps({"key": key}) + "\n", encoding="utf-8")

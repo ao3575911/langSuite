@@ -346,7 +346,11 @@ def run_cli(
                     os.environ.pop(k, None)
                 else:
                     os.environ[k] = v
-    return code, out.getvalue().rstrip()
+    text = _CLI_HELP_HINT.sub("Try /help.", out.getvalue().rstrip())
+    return code, text
+
+
+_CLI_HELP_HINT = re.compile(r"See `langsuite [^`]*-h`\.")
 
 
 Runner = Callable[[list[str], str, dict[str, Any] | None], tuple[int, str]]

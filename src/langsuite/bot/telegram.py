@@ -8,6 +8,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import os
+from collections.abc import Awaitable, Callable
 from typing import Any
 
 from langsuite.bot.core import BOT_COMMANDS, BOT_ONLY, Bot, Chat, Reply
@@ -21,6 +22,7 @@ DESCRIPTION = (
 )
 SHORT_DESCRIPTION = "Programming languages, with evidence: query, compare, cite."
 log = logging.getLogger("langsuite.bot")
+HANDLE_TIMEOUT = 120.0  # seconds for one command; the error handler answers on timeout
 TOKEN_ENV = "LANGSUITE_TELEGRAM_TOKEN"  # noqa: S105 - the variable name, not a token
 
 
@@ -86,19 +88,69 @@ async def chat_from_update(update: Any, bot: Any, text: str = "") -> Chat | None
     return Chat(chat.id, user.id, user.full_name, group, admin, reply_to, username, title)
 
 
+TRIES = 3
+SORRY = "Sorry, something went wrong on my side. Please try again in a moment."
+
+
+async def with_retries(call: Callable[[], Awaitable[Any]], what: str) -> Any:
+    """Run one Telegram API call, retrying flood waits and network blips (3 tries)."""
+    from telegram.error import NetworkError, RetryAfter, TimedOut
+
+    for attempt in range(1, TRIES + 1):
+        try:
+            return await call()
+        except RetryAfter as err:
+            if attempt == TRIES:
+                raise
+            wait = err.retry_after
+            delay = wait.total_seconds() if hasattr(wait, "total_seconds") else float(wait)
+        except (TimedOut, NetworkError) as err:
+            if attempt == TRIES or "parse entities" in str(err).lower():
+                raise
+            delay = float(2 ** (attempt - 1))
+        log.warning("%s failed (try %d/%d); retrying in %.0fs", what, attempt, TRIES, delay)
+        await asyncio.sleep(min(delay, 30.0))
+    raise AssertionError("unreachable")
+
+
 async def send_reply(msg: Any, reply: Reply) -> None:
     from telegram import InlineKeyboardButton, InlineKeyboardMarkup, InputFile
     from telegram.constants import ParseMode
+    from telegram.error import BadRequest
 
     markup = None
     if reply.buttons:
         markup = InlineKeyboardMarkup(
             [[InlineKeyboardButton(label, callback_data=cmd[:64])] for label, cmd in reply.buttons]
         )
-    await msg.reply_text(reply.text, parse_mode=ParseMode.MARKDOWN_V2, reply_markup=markup)
+    try:
+        await with_retries(
+            lambda: msg.reply_text(
+                reply.text, parse_mode=ParseMode.MARKDOWN_V2, reply_markup=markup
+            ),
+            "reply",
+        )
+    except BadRequest as err:
+        # Markdown that Telegram will not parse: send the same reply as plain text instead.
+        log.warning("formatted reply refused (%s); sending plain text", err)
+        await with_retries(
+            lambda: msg.reply_text(reply.plain[:4000], reply_markup=markup), "plain reply"
+        )
     if reply.document is not None:
         name, data = reply.document
-        await msg.reply_document(InputFile(data, filename=name))
+        await with_retries(lambda: msg.reply_document(InputFile(data, filename=name)), "file")
+
+
+async def on_error(update: object, context: Any) -> None:
+    """Global PTB error handler: log without the token, and always answer the person."""
+    log.error("update failed: %s", type(context.error).__name__, exc_info=context.error)
+    msg = getattr(update, "effective_message", None)
+    if msg is None:
+        return
+    try:
+        await msg.reply_text(SORRY)
+    except Exception:  # nothing more we can do for this update
+        log.warning("could not send the error reply")
 
 
 def make_handler(core: Bot) -> Any:
@@ -108,7 +160,7 @@ def make_handler(core: Bot) -> Any:
             return
         text = update.effective_message.text
         log.info("chat %s user %s: %s", chat.chat_id, chat.user_id, text.split(None, 1)[0][:32])
-        reply = await asyncio.to_thread(core.handle, text, chat)
+        reply = await asyncio.wait_for(asyncio.to_thread(core.handle, text, chat), HANDLE_TIMEOUT)
         if reply is not None:
             await send_reply(update.effective_message, reply)
 
@@ -122,11 +174,13 @@ def make_button_handler(core: Bot) -> Any:
         query = update.callback_query
         if query is None or not query.data:
             return
-        await query.answer()
+        await with_retries(query.answer, "button ack")
         chat = await chat_from_update(update, context.bot, text=query.data)
         if chat is None or query.message is None:
             return
-        reply = await asyncio.to_thread(core.handle, query.data, chat)
+        reply = await asyncio.wait_for(
+            asyncio.to_thread(core.handle, query.data, chat), HANDLE_TIMEOUT
+        )
         if reply is not None:
             await send_reply(query.message, reply)
 
@@ -164,7 +218,12 @@ async def digest_job(context: Any) -> None:  # pragma: no cover - needs a live b
     core: Bot = context.job.data
     try:
         for chat_id, reply in await asyncio.to_thread(core.due_digests, datetime.now(UTC)):
-            await context.bot.send_message(chat_id, reply.plain[:4000])
+            text = reply.plain[:4000]
+
+            async def send(c: int = chat_id, t: str = text) -> Any:
+                return await context.bot.send_message(c, t)
+
+            await with_retries(send, "digest")
     except Exception:
         log.exception("digest run failed")
 
@@ -191,7 +250,18 @@ def build_application(token: str, core: Bot | None = None) -> Any:
     logging.getLogger("apscheduler").setLevel(logging.WARNING)  # one line a minute otherwise
     logging.getLogger("httpx").addFilter(_Redact(token))
     core_ = core or Bot()
-    app = Application.builder().token(token).post_init(post_init).build()
+    app = (
+        Application.builder()
+        .token(token)
+        .post_init(post_init)
+        .connect_timeout(10)
+        .read_timeout(20)
+        .write_timeout(30)
+        .pool_timeout(10)
+        .get_updates_read_timeout(40)
+        .build()
+    )
+    app.add_error_handler(on_error)
     app.add_handler(MessageHandler(filters.COMMAND, make_handler(core_)))
     app.add_handler(CallbackQueryHandler(make_button_handler(core_)))
     app.add_handler(InlineQueryHandler(make_inline_handler(core_)))

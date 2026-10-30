@@ -19,10 +19,9 @@ from contextvars import ContextVar
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from langsuite.core import query as q
-from langsuite.core import similarity as sim
 from langsuite.core.errors import DataError, LangsuiteError, NoResultError, UsageError
 from langsuite.core.kb import (
     Assertion,
@@ -32,7 +31,14 @@ from langsuite.core.kb import (
     Overlay,
     read_manifest,
 )
+from langsuite.core.lazy import lazy
 from langsuite.core.paths import data_home
+
+if TYPE_CHECKING:
+    from langsuite.core import similarity as sim
+else:
+    sim = lazy("langsuite.core.similarity")
+
 
 SCHEMA = 1
 DEFAULT = "default"
@@ -198,16 +204,17 @@ class Verification:
 def command_line(kind: str, args: dict[str, Any]) -> str:
     if kind == "query":
         top = f" --top {args['top']}" if args.get("top") else ""
-        return f"langsuite query {json.dumps(args['text'])}{top}"
+        return f"langsuite query {json.dumps(args['text'], ensure_ascii=False)}{top}"
     if kind == "similar":
         extra = "" if args.get("baseline", True) else " --no-baseline"
         return f"langsuite similar {args['lang']} --k {args.get('k', 10)}{extra}"
     if kind == "pair":
         return f"langsuite similar {args['a']} --vs {args['b']}"
     if kind == "snippet":
-        return f"langsuite snippet {json.dumps(args['task'])} --lang {args['lang']}"
+        task = json.dumps(args["task"], ensure_ascii=False)
+        return f"langsuite snippet {task} --lang {args['lang']}"
     if kind == "ask":
-        return f"langsuite ask {json.dumps(args['question'])}"
+        return f"langsuite ask {json.dumps(args['question'], ensure_ascii=False)}"
     if kind == "guide":
         return f"langsuite guide {args['lang']}"
     if kind == "verify":

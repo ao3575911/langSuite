@@ -276,7 +276,7 @@ def test_cli_bot_try_commands_and_run(kb_home: Any) -> None:
     r = CliRunner().invoke(app, ["--plain", "bt", "try", "/x hi", "--group", "--role", "viewer"])
     assert r.exit_code == 1 and "Not allowed" in r.output
     r = CliRunner().invoke(app, ["--plain", "bt", "try", "hello"])
-    assert r.exit_code == 0 and r.output == ""
+    assert r.exit_code == 0 and "no reply" in r.output
     r = CliRunner().invoke(app, ["--json", "bt", "try", "/help", "--markdown"])
     assert '"kind": "bot-reply"' in r.output
     r = CliRunner().invoke(app, ["--plain", "bt", "try", "/help", "--markdown"])

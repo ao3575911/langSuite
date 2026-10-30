@@ -27,7 +27,7 @@ A research knowledge base of programming languages: how they work, how they rela
 | Release prep: 1.0.0, release notes, PyPI trusted-publishing workflow (tag-triggered; 1.0.0 published 30 Oct 2026) | Built (M6, release prep) |
 | xAI explanations with citations, hosted `serve`, a11y audit, sync bundle, GIFs | Planned (M6, after 1.0.0) |
 
-> **Status: 1.0.0, released on PyPI; built through M5i on the client side; the hosted service is not deployed. PyPI releases are published from signed tags ([`docs/RELEASING.md`](RELEASING.md)).** Release notes: [`docs/RELEASE_NOTES_1.0.0.md`](RELEASE_NOTES_1.0.0.md). Planned commands are listed and say which milestone brings them. Spec: [`docs/SPEC.md`](SPEC.md).
+> **Status: 1.0.0, released on PyPI; built through M5i on the client side; the hosted service is not deployed. PyPI releases are published from signed tags ([`docs/RELEASING.md`](RELEASING.md)).** Release notes: [`1.0.1`](RELEASE_NOTES_1.0.1.md), [`1.0.0`](RELEASE_NOTES_1.0.0.md). Planned commands are listed and say which milestone brings them. Spec: [`docs/SPEC.md`](SPEC.md).
 
 ## Install
 
@@ -127,7 +127,7 @@ langsuite -m concise ...  # modes: default | concise | thorough
 langsuite --json ...      # stable JSON; --plain for no colour
 ```
 
-Exit codes: `0` ok · `1` verification failed · `2` no result · `3` data error · `4` auth · `5` quota.
+Exit codes: `0` ok · `1` verification failed · `2` no result or bad input · `3` data error · `4` auth · `5` quota · `70` unexpected internal error (rerun with `--debug` and report it) · `130` interrupted (Ctrl-C). Errors print one `error:` line and a `hint:` line on stderr; `--debug` shows the traceback.
 
 ## Develop
 

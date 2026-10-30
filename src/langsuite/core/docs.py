@@ -11,8 +11,6 @@ from __future__ import annotations
 import hashlib
 import json
 import re
-import urllib.error
-import urllib.request
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
@@ -44,6 +42,9 @@ Fetcher = Callable[[str, str | None], Fetch]
 
 
 def http_fetch(url: str, etag: str | None) -> Fetch:  # pragma: no cover - network
+    import urllib.error
+    import urllib.request
+
     from langsuite.ingest.fetch import USER_AGENT
 
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})  # noqa: S310

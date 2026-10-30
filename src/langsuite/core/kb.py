@@ -247,7 +247,7 @@ def prune_snapshots(home: Path | None, keep: int, pinned: set[str]) -> list[str]
 def no_base_error() -> DataError:
     return DataError(
         "No knowledge base yet.",
-        hint="Run `langsuite base build` (about 15 MB download, under a minute).",
+        hint="Run `langsuite base build` (about 11 MB download, under a minute).",
     )
 
 
@@ -282,6 +282,7 @@ class KnowledgeBase:
         import duckdb
 
         self._trait_matrix: TraitMatrix | None = None
+        self.home = home
         self.overlay = overlay or Overlay()
         folder = base_dir(home)
         db = folder / DB_NAME

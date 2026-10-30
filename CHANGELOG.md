@@ -1,6 +1,27 @@
 # Changelog
 
-## Unreleased
+## 1.0.1 — hardening
+
+### Fixed
+- Every CLI error is now one `error:` line plus a `hint:` line, with no Click boxes or tracebacks (use `--debug` for those). Bad options exit 2; Ctrl-C prints "Interrupted." and exits 130; an unexpected crash exits 70 with a link to report it; a closed pipe (`| head`) exits quietly.
+- `query "score>=70"` and `rank --filter "grade>=Z"` gave a stale "not built yet (M5c)" error; they now explain score fields and valid grades.
+- The Explore pane listed Docs, Score and Snippets as "planned"; they are built.
+- Finding commands kept `\uXXXX` escapes for non-ASCII text; they now show the text.
+- An unreadable `account.json` was silently replaced; it is now kept as `account.json.bad` with a warning.
+- `dashboard rename 3 x` now explains that rename takes the medoid language, not a cluster number.
+- The no-base hint said a 15 MB download; it is about 11 MB.
+- `bot try` with a non-command now says the bot answers only /commands.
+
+### Bot
+- Global error handler: any failure is logged (token redacted) and the person always gets a reply.
+- Telegram calls have connect/read/write timeouts and retry flood waits and network errors (3 tries); a reply Telegram will not parse as MarkdownV2 is resent as plain text; one command is capped at 120 s.
+- CLI usage errors in the bot point to /help instead of `-h`.
+
+### Performance
+- Lazy imports: numpy, telegram, textual and urllib load only when a command needs them; `import langsuite.cli.app` went from about 228 ms to 125 ms, and `--version` from 312 ms to 236 ms.
+- Similarity baselines are cached on disk per base snapshot (`<home>/cache/baselines/`), so repeat `similar`/`compare` runs skip the permutation baseline; `similar` went from 529 ms to 385 ms.
+
+## 1.0.0 — 30 Oct 2026
 ### Added
 - M5f: `docs search|quote|ingest` over registered official docs (ETag/hash re-ingest; verbatim quotes with link, version and anchor; UNKNOWN licence gives a 200-character excerpt and link); `inclusion`, `inclusion check|list` (dead links flagged, archived after 14 days with 3 failures, still readable); `base publish` and `base pull` with cosign-compatible ECDSA P-256 signatures (tampered or unsigned bundles refused); `base changelog [--check]` (every fact and score change, stale fields, a gate on score moves over 15); `.github/workflows/data.yml` (weekly rebuild, gate, issue on block, signing when a key secret exists). Bot `/docs`, `/inclusion`, `/base changelog`.
 - Docs: minimal README with PyPI badge, install section and GIFs (`docs/media/cli.gif` recorded with vhs from the real CLI and app; `docs/media/bot.gif` is a labelled mock-up of real `bot try` replies); full guide moved to `docs/guide.md`; MkDocs site deployed to GitHub Pages by `.github/workflows/pages.yml`.
@@ -16,7 +37,6 @@
 - M5h: `mode [concise|default|thorough] [--global|--reset]`; `webhook add|list|remove|test` (HTTPS only, private IPs refused, HMAC-SHA256 with timestamp, retries, auto-disable after 5 failures) firing on `finding.saved` and `digest.ready`; workspace event log (`events.jsonl`); `mcp`: stdio MCP server with `similar`, `ask`, `lang_show`, `query`, `rank`.
 - Bot: `/ask`, `/guide`, `/mode`, `/digest daily|weekly …` (Australia/Perth, checked each minute), inline mode (`@langsuite_bot similar haskell`).
 
-## 1.0.0 — release candidate (not tagged or published)
 ### Release
 - Version 1.0.0; PyPI metadata (classifiers, project URLs, keywords).
 - `.github/workflows/release.yml`: on a `v*.*.*` tag only, checks tag = package version, runs lint, types and tests, builds, runs the licence-pack and `twine check`, then publishes with PyPI trusted publishing (OIDC, `pypi` environment, no stored token).

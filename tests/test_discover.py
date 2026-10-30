@@ -12,7 +12,7 @@ import pytest
 from langsuite.cli.app import main
 from langsuite.core import query as q
 from langsuite.core import similarity as sim
-from langsuite.core.errors import NoResultError, NotBuiltYetError
+from langsuite.core.errors import NoResultError
 from langsuite.core.kb import KnowledgeBase
 
 # Golden pairs: (language, expected neighbour). On fixtures only Scheme/Racket exists;
@@ -177,10 +177,11 @@ def test_query_errors_point_at_problem(
     assert info.value.hint is not None and info.value.hint.endswith("^")
 
 
-def test_planned_fields_say_when(kb: KnowledgeBase) -> None:
-    with pytest.raises(NotBuiltYetError, match="M5c"):
+def test_score_fields_point_to_rank(kb: KnowledgeBase) -> None:
+    with pytest.raises(q.QueryError, match="score field") as info:
         q.run(kb, "score>=70")
-    with pytest.raises(NotBuiltYetError, match="M5c"):
+    assert "langsuite rank" in (info.value.hint or "")
+    with pytest.raises(q.QueryError, match="sort a query"):
         q.run(kb, "sort=-score")
 
 

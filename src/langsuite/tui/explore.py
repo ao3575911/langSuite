@@ -22,7 +22,6 @@ from langsuite.tui.sections import Section
 
 DEBOUNCE_S = 0.12
 ROW_LIMIT = 200
-PLANNED_TABS = (("Docs", "M5e"), ("Score", "M5c"), ("Snippets", "M4"))
 
 
 class ExplorePane(Vertical):
@@ -52,9 +51,6 @@ class ExplorePane(Vertical):
                     yield VerticalScroll(Static(id="detail-similar"))
                 with TabPane("Evidence", id="tab-evidence"):
                     yield VerticalScroll(Static(id="detail-evidence"))
-                for name, milestone in PLANNED_TABS:
-                    with TabPane(name, id=f"tab-{name.lower()}"):
-                        yield Static(f"Planned for milestone {milestone}.", classes="pane-status")
 
     def on_mount(self) -> None:
         table = self.query_one(DataTable)

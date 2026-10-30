@@ -2,15 +2,21 @@
 
 from __future__ import annotations
 
-from typing import Annotated
+from typing import TYPE_CHECKING, Annotated
 
 import typer
 from rich.markup import escape
 from rich.table import Table
 
-from langsuite.bot import telegram as tg
 from langsuite.bot.core import BOT_COMMANDS, BOT_ONLY, Bot, Chat, ChatState, Role, save_state
 from langsuite.cli.kb_cmds import _console, _emit, _json
+from langsuite.core.lazy import lazy
+
+if TYPE_CHECKING:
+    from langsuite.bot import telegram as tg
+else:
+    tg = lazy("langsuite.bot.telegram")
+
 
 bot_app = typer.Typer(help="Telegram bot.", no_args_is_help=True)
 
@@ -45,6 +51,7 @@ def bot_try(
         save_state(chat_id, ChatState({str(user): role.value}))
     reply = Bot().handle(text.replace("\\n", "\n"), Chat(chat_id, user, "you", group))
     if reply is None:
+        _console(ctx).print("(no reply: the bot answers only /commands, e.g. /help)")
         raise typer.Exit(0)
     if _json(ctx):
         doc = reply.document[0] if reply.document else None
