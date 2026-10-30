@@ -1,5 +1,7 @@
 # langsuite
 
+[![PyPI](https://img.shields.io/pypi/v/langsuite)](https://pypi.org/project/langsuite/) [![CI](https://github.com/ao3575911/langsuite/actions/workflows/ci.yml/badge.svg)](https://github.com/ao3575911/langsuite/actions/workflows/ci.yml)
+
 A research knowledge base of programming languages: how they work, how they relate, with evidence.
 
 **For** language researchers and developers in training.
@@ -12,29 +14,29 @@ A research knowledge base of programming languages: how they work, how they rela
 | Licence-separated data packs, enforced in CI | Built (M0) |
 | Knowledge base of 5,000+ languages (PLDB + Linguist) with sourced evidence: `base build/status`, `lang list/show --evidence`, `feature list/show`, Explore pane with live search | Built (M1) |
 | Structured `query` DSL and feature `similar` with a shuffled-feature baseline (z-scores); Query pane and Similar tab | Built (M2) |
-| Code similarity, clusters, scores and grades | Planned (M5–M5c) |
+| Code similarity, clusters, scores and grades | Planned (M5, M5b, M5c) |
 | Verified snippets: `verify` runs code in a digest-pinned, offline Docker sandbox (20 toolchains); `snippet` shows attributed Rosetta Code solutions marked verified only when they ran; Write pane | Built (M4) |
 | Cited answers, how/when guides | Planned (M5d) |
 | Signed snapshots: `base pull`, `base changelog`, data CI | Planned (M5f) |
 | Workspaces: findings re-runnable bit-for-bit on their pinned snapshot, notes, saved queries, own-data overlay (custom languages), `base pin`; Workspace pane with `Ctrl+S` to save | Built (M3) |
 | Telegram bot (`langsuite bot run`): same commands and aliases as the CLI, a workspace per chat, admin/contributor/viewer roles, findings with authors, rate limits, code runs off unless an admin enables them; `bot try` and the Account pane simulate it offline | Built (M5e) |
 | Bot extras: `/ask`, inline mode, digests, webhooks, MCP | Planned (M5d, M5h) |
-| Hosted SaaS | Planned (M5i) |
+| Accounts, handles (`$langsuite/<user>/<ws>`), opt-in gamification | Planned (M5g) |
+| CLI modes (concise/teach/expert) and LLM output bounds | Planned (M5h) |
+| Hosted SaaS, `workspace sync`, billing | Planned (M5i) |
+| Release prep: 1.0.0, release notes, PyPI trusted-publishing workflow (tag-triggered; nothing tagged or published yet) | Built (M6, release prep) |
+| xAI explanations with citations, hosted `serve`, a11y audit, sync bundle, GIFs | Planned (M6, after 1.0.0) |
 
-> **Status: pre-1.0, built through M4 plus the Telegram bot (M5e).** Planned commands are listed and say which milestone brings them. Spec: [`docs/SPEC.md`](docs/SPEC.md).
+> **Status: 1.0.0 release candidate, built through M4 plus the Telegram bot (M5e); M5, M5b, M5c, M5d, M5f, M5g, M5h and M5i are planned. Published to PyPI from signed tags ([`docs/RELEASING.md`](docs/RELEASING.md)).** Release notes: [`docs/RELEASE_NOTES_1.0.0.md`](docs/RELEASE_NOTES_1.0.0.md). Planned commands are listed and say which milestone brings them. Spec: [`docs/SPEC.md`](docs/SPEC.md).
 
 ## Install
 
-Not on PyPI yet. From source:
-
 ```sh
-# prerequisites: Python 3.12+, uv (https://docs.astral.sh/uv/)
-git clone https://github.com/ao3575911/langsuite && cd langsuite
-uv sync
-uv run langsuite --help
+pipx install langsuite        # or: uv tool install langsuite
+langsuite --help
 ```
 
-Planned one-liner once published: `pipx install langsuite && langsuite login`.
+Python 3.12+. Docker is optional and only used by `verify`. From source: `git clone https://github.com/ao3575911/langsuite && cd langsuite && uv sync && uv run langsuite --help`.
 
 ## App
 

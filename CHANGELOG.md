@@ -1,6 +1,13 @@
 # Changelog
 
 ## Unreleased
+
+## 1.0.0 — release candidate (not tagged or published)
+### Release
+- Version 1.0.0; PyPI metadata (classifiers, project URLs, keywords).
+- `.github/workflows/release.yml`: on a `v*.*.*` tag only, checks tag = package version, runs lint, types and tests, builds, runs the licence-pack and `twine check`, then publishes with PyPI trusted publishing (OIDC, `pypi` environment, no stored token).
+- Release notes (`docs/RELEASE_NOTES_1.0.0.md`) and maintainer steps (`docs/RELEASING.md`).
+- README marks M5, M5b, M5c, M5d, M5f, M5g, M5h, M5i and the rest of M6 as planned.
 ### Added
 - M5e: Telegram bot on python-telegram-bot 22.8: `bot run` (token from `LANGSUITE_TELEGRAM_TOKEN`, redacted from logs), `bot try` (offline), `bot commands`. Commands mirror the CLI and its aliases (`/q`, `/s`, `/l`, `/ft`, `/sn`, `/v`, `/f`, `/x`, `/n`, `/b`) and run the same code path, so `/q` prints what `langsuite q` prints. Per-chat workspaces; admin/contributor/viewer roles (`/role`), `/settings coderuns on|off`; findings store their author; token-bucket rate limits with a polite reply; central MarkdownV2 escaping; long output as a file; risky options (`-o`, `--fetch`, `--from`, `--debug`) refused.
 - M5e: onboarding: `/start` suggests three handles as buttons, and `/handle` claims or renames one (lowercase ASCII, unique ignoring case and look-alikes, reserved words refused). `/space` creates or switches workspace. Replies are headed `$langsuite/<handle>/<workspace>`. Group admins set a group handle. `setMyDescription` and short description are set at start-up. `scripts/run_bot_forever.sh` provides a restart loop.
