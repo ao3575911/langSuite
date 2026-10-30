@@ -2,6 +2,20 @@
 
 A research knowledge base of programming languages: how they work, how they relate, with evidence.
 
+**For** language researchers and developers in training.
+**Aim:** a fully featured, state-of-the-art research tool, usable from the CLI, a TUI, or the langsuite Telegram bot.
+
+| Capability | Status |
+|---|---|
+| CLI: grouped help, one alias per command, `--json` / `--plain`, exit codes | Built (M0) |
+| Licence-separated data packs, enforced in CI | Built (M0) |
+| Knowledge base of 800+ languages with sourced evidence | Planned (M1) |
+| Query, similarity, clusters, scores and grades | Planned (M2–M5c) |
+| Verified snippets, cited answers, how/when guides | Planned (M4, M5d) |
+| Workspace: findings, notes, `extract` | Planned (M3) |
+| Telegram bot with group workspaces | Planned (M5e) |
+| Hosted SaaS, TUI | Planned (M5i, M6) |
+
 > **Status: M0 scaffold.** Commands are listed but not built yet; each one says which milestone brings it. Spec: [`docs/SPEC.md`](docs/SPEC.md).
 
 ## Install
