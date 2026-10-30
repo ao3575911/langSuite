@@ -38,3 +38,17 @@ HeaderBar > Static { width: auto; padding: 0 1; }
 #ws-tabs { width: 3fr; }
 #ws-tabs Static { padding: 0 1; }
 #ws-help { color: $text-muted; height: auto; padding: 0 1; }
+
+.writepane { padding: 0 1; }
+#write-inputs, #verify-inputs { height: auto; }
+#write-task { width: 1fr; }
+#write-langs { width: 1fr; }
+#verify-lang { width: 24; }
+#verify-expect { width: 1fr; }
+#write-status, #verify-status { color: $text-muted; height: auto; padding: 0 1; }
+#write-status.-error, #verify-status.-error { color: $warning; }
+#write-body { height: 1fr; }
+#write-tasks { width: 34; }
+#write-results { width: 1fr; padding: 0 1; }
+#verify-code { height: 1fr; }
+#write-help { color: $text-muted; height: auto; padding: 0 1; }

@@ -509,3 +509,79 @@ def test_workspace_snapshot(
         await _settle(pilot)
 
     assert snap_compare(app, terminal_size=(120, 40), run_before=setup)
+
+
+def _fake_result(lang: str, ok: bool) -> Any:
+    from langsuite.verify.sandbox import Status, VerifyResult
+
+    status = Status.PASS if ok else Status.FAIL
+    return VerifyResult(
+        status,
+        lang,
+        "fake",
+        "img",
+        "sha256:0",
+        "0" * 64,
+        0,
+        "Hello world!\n",
+        "",
+        5,
+        True,
+        reason="output matches" if ok else "output differs",
+    )
+
+
+async def test_write_pane_snippet_and_verify(kb_home: Any, monkeypatch: Any) -> None:
+    from langsuite.tui import write_pane
+    from langsuite.verify import evidence
+
+    def fake_check(task: Any, lang: str, **_: Any) -> Any:
+        ok = lang == "python"
+        return evidence.SolutionCheck(task, lang, 0 if ok else None, 1, _fake_result(lang, ok))
+
+    monkeypatch.setattr(write_pane, "docker_available", lambda: True)
+    monkeypatch.setattr(evidence, "check_solution", fake_check)
+    monkeypatch.setattr(
+        write_pane, "_default_runner", lambda lang, code, exp: _fake_result(lang, True)
+    )
+    app = LangsuiteApp()
+    async with app.run_test(size=(120, 40)) as pilot:
+        await pilot.press("6")
+        await pilot.app.workers.wait_for_complete()
+        await pilot.pause()
+        pane = app.query_one(write_pane.WritePane)
+        assert "tasks · Docker sandbox ready" in str(app.query_one("#write-status").render())
+        pane.show_snippets("fizzbuzz", "python,haskell")
+        await pilot.app.workers.wait_for_complete()
+        await pilot.pause()
+        assert "1 of 2 verified" in str(app.query_one("#write-status").render())
+        assert pane.current == ("FizzBuzz", "python")
+        pane.action_run_code()
+        await pilot.app.workers.wait_for_complete()
+        await pilot.pause()
+        status = str(app.query_one("#verify-status").render())
+        assert "verified" in status.lower() or "✓" in status
+        assert pane.last_run is not None and pane.last_run[0] == "python"
+
+
+async def test_write_pane_without_docker(kb_home: Any, monkeypatch: Any) -> None:
+    from langsuite.tui import write_pane
+
+    monkeypatch.setattr(write_pane, "docker_available", lambda: False)
+    app = LangsuiteApp()
+    async with app.run_test(size=(120, 40)) as pilot:
+        await pilot.press("6")
+        await pilot.app.workers.wait_for_complete()
+        await pilot.pause()
+        assert "snippets unverified" in str(app.query_one("#write-status").render())
+        pane = app.query_one(write_pane.WritePane)
+        pane.show_snippets("fizzbuzz", "python")
+        await pilot.app.workers.wait_for_complete()
+        await pilot.pause()
+        assert "0 of 1 verified" in str(app.query_one("#write-status").render())
+        pane.action_run_code()
+        await pilot.pause()
+        assert "Docker is not available" in str(app.query_one("#verify-status").render())
+        pane.show_snippets("no such task zz", "python")
+        await pilot.pause()
+        assert app.query_one("#write-status").has_class("-error")

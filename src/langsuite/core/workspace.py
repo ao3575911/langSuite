@@ -35,7 +35,7 @@ from langsuite.core.paths import data_home
 
 SCHEMA = 1
 DEFAULT = "default"
-KINDS = ("query", "similar", "pair", "lang")
+KINDS = ("query", "similar", "pair", "lang", "snippet", "verify")
 OVERLAY_SOURCE = "user"
 _SLUG = re.compile(r"^[a-z][a-z0-9_-]{0,31}$")  # SPEC §6g workspace slug
 _LANG_ID = re.compile(r"^[a-z0-9][a-z0-9_.+#-]{0,47}$")
@@ -202,6 +202,10 @@ def command_line(kind: str, args: dict[str, Any]) -> str:
         return f"langsuite similar {args['lang']} --k {args.get('k', 10)}{extra}"
     if kind == "pair":
         return f"langsuite similar {args['a']} --vs {args['b']}"
+    if kind == "snippet":
+        return f"langsuite snippet {json.dumps(args['task'])} --lang {args['lang']}"
+    if kind == "verify":
+        return f"langsuite verify <code {str(args['code_sha256'])[:12]}> --lang {args['lang']}"
     return f"langsuite lang show {args['lang']}"
 
 
@@ -243,7 +247,30 @@ def run_recorded(kb: KnowledgeBase, kind: str, args: dict[str, Any]) -> tuple[An
             "snapshot": kb.manifest.snapshot_id,
         }
         return data, sorted({a.evidence_id for a in rows}), f"{lang.name} profile"
+    if kind in {"snippet", "verify"}:
+        return _run_verify(kb, kind, args)
     raise UsageError(f"Unknown finding kind `{kind}`.", hint=f"Use one of {', '.join(KINDS)}.")
+
+
+def _run_verify(kb: KnowledgeBase, kind: str, args: dict[str, Any]) -> tuple[Any, list[str], str]:
+    """Re-check code in the sandbox; the content-hash cache makes this reproducible."""
+    from langsuite.verify import evidence as vev
+    from langsuite.verify import rosetta
+    from langsuite.verify.sandbox import run_code
+    from langsuite.verify.toolchains import toolchain_for
+
+    lang = kb.resolve(str(args["lang"])).id
+    if kind == "snippet":
+        task = rosetta.find_task(rosetta.load_tasks(), str(args["task"]))
+        if lang not in task.solutions:
+            raise UsageError(f"Rosetta task `{task.title}` has no {lang} solution.")
+        check = vev.check_solution(task, lang)
+        data = {**check.to_json(), "result": check.result.canonical(), "code": check.code}
+        mark = "verified" if check.verified else "not verified"
+        return data, [check.result.evidence_id], f"{task.title} in {lang}: {mark}"
+    tc = toolchain_for(lang)
+    res = run_code(tc, str(args["code"]), expected=args.get("expected"))
+    return res.canonical(), [res.evidence_id], f"Verify {lang} code: {res.status.value}"
 
 
 def _evidence(kb: KnowledgeBase, lang_ids: list[str], features: set[str]) -> list[str]:

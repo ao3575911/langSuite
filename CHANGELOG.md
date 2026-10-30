@@ -2,6 +2,11 @@
 
 ## Unreleased
 ### Added
+- M4: `verify [FILE|-] --lang --expect --stdin --timeout`: runs code in a Docker sandbox (no network, read-only root, uid 65534, no capabilities, no-new-privileges, 256 MB, 64 pids, 1 CPU, file-size and timeout caps, 64 KB output). 20 toolchains pinned by image digest (`verify --toolchains`); tag/digest mismatch is refused. Results cached by code hash with evidence ids (`vr-…`).
+- M4: `snippet TASK --lang a,b`: Rosetta Code solutions (up to 5 variants per language, tried in order), each verified in the sandbox; fixed-output tasks are checked against an oracle; attribution and licence on every snippet; unverified when Docker is absent. `snippet --tasks`, `snippet --fetch`. Findings: `finding save snippet|verify`.
+- M4: Write pane (Snippet and Verify tabs).
+- M4: `data-packs/rosetta/` with 7 tasks (renamed from `rosetta-gfdl`); the licence name now comes from pack data and the wiki's siteinfo, so the wheel has none.
+- Decision: `base pull` and `base changelog` are assigned to M5f (signed snapshots, data CI).
 - M3: workspaces (`workspace init|use|list|show|import|export|forget-data`; `sync` planned M5i). Findings (`finding save|list|show|verify|export|remove`, `extract last|<id>`) record command, snapshot, own-data copy, evidence ids and a result SHA-256; `--verify` re-runs bit-for-bit on the original snapshot. Notes (`note add|list|remove`, optionally `--on` a finding or language). Saved queries (`query --save/--saved`).
 - M3: own-data overlay: import custom languages, traits and influence edges from YAML/JSON (`examples/own-data.yml`); they appear in `lang`, `query`, `similar` and the app for that workspace only, with validation against the base and the feature vocabulary.
 - M3: snapshot retention: every build keeps its snapshot under `base/snapshots/`; the newest five plus any pinned or cited by a finding are kept. `base pin [ID] [--clear]` and `base snapshots`.

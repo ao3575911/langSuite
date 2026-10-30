@@ -59,6 +59,10 @@ def _isolated_home(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     """Every test gets an empty LANGSUITE_HOME so a developer's real base never leaks in."""
     home = tmp_path / "home"
     monkeypatch.setenv("LANGSUITE_HOME", str(home))
+    # No Docker unless a test asks for it (tests/test_verify.py `docker` marker), so
+    # renders do not depend on whether the machine has Docker.
+    monkeypatch.setenv("LANGSUITE_DOCKER", "langsuite-no-docker-in-tests")
+    monkeypatch.delenv("LANGSUITE_PACKS", raising=False)
     return home
 
 

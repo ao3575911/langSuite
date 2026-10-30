@@ -10,6 +10,7 @@ import typer
 from langsuite.cli.discover_cmds import query, similar
 from langsuite.cli.kb_cmds import base_app, feature_app, lang_app
 from langsuite.cli.ui_cmd import ui
+from langsuite.cli.verify_cmds import snippet, verify
 from langsuite.cli.workspace_cmds import extract, finding_app, note_app, workspace_app
 
 COMMAND_FUNCS: dict[str, Callable[..., Any]] = {
@@ -17,6 +18,8 @@ COMMAND_FUNCS: dict[str, Callable[..., Any]] = {
     "query": query,
     "similar": similar,
     "extract": extract,
+    "verify": verify,
+    "snippet": snippet,
 }
 GROUP_APPS: dict[str, typer.Typer] = {
     "lang": lang_app,

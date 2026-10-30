@@ -1,0 +1,2038 @@
+{
+ "attribution": "Rosetta Code, “FizzBuzz” (rev 416978), by Rosetta Code contributors, https://rosettacode.org/wiki/FizzBuzz?oldid=416978 · GFDL-1.2",
+ "expected": "1\n2\nFizz\n4\nBuzz\nFizz\n7\n8\nFizz\nBuzz\n11\nFizz\n13\n14\nFizzBuzz\n16\n17\nFizz\n19\nBuzz\nFizz\n22\n23\nFizz\nBuzz\n26\nFizz\n28\n29\nFizzBuzz\n31\n32\nFizz\n34\nBuzz\nFizz\n37\n38\nFizz\nBuzz\n41\nFizz\n43\n44\nFizzBuzz\n46\n47\nFizz\n49\nBuzz\nFizz\n52\n53\nFizz\nBuzz\n56\nFizz\n58\n59\nFizzBuzz\n61\n62\nFizz\n64\nBuzz\nFizz\n67\n68\nFizz\nBuzz\n71\nFizz\n73\n74\nFizzBuzz\n76\n77\nFizz\n79\nBuzz\nFizz\n82\n83\nFizz\nBuzz\n86\nFizz\n88\n89\nFizzBuzz\n91\n92\nFizz\n94\nBuzz\nFizz\n97\n98\nFizz\nBuzz",
+ "licence": "GFDL-1.2",
+ "licence_url": "https://www.gnu.org/licenses/old-licenses/fdl-1.2.html",
+ "retrieved_at": "2026-10-30T03:55:46Z",
+ "revid": 416978,
+ "solutions": {
+  "8th": {
+   "header": "8th",
+   "lang": "8th",
+   "variants": [
+    "with: n\n\n: num?  \\ n f --   ) \n\tif drop else . then ;\n\n\\ is m mod n 0? leave the result twice on the stack\n: div? \\ m n -- f f\n\tmod 0 = dup ;\n\n: fizz? \\ n -- n f\n\tdup 3 \n\tdiv? if \"Fizz\" .  then ;\n\n: buzz? \\ n f -- n f\n\tover 5 \n\tdiv? if \"Buzz\" .  then or ;\n\n\\ print a message as appropriate for the given number:\n: fizzbuzz  \\ n --\n\tfizz? buzz? num? \n\tspace ;\n\n\\ iterate from 1 to 100:\n' fizzbuzz 1 100 loop \ncr bye\n"
+   ]
+  },
+  "abap": {
+   "header": "ABAP",
+   "lang": "abap",
+   "variants": [
+    "DATA: tab TYPE TABLE OF string.\n\ntab = VALUE #(\n  FOR i = 1 WHILE i <= 100 (\n    COND string( LET r3 = i MOD 3\n                     r5 = i MOD 5 IN\n                 WHEN r3 = 0 AND r5 = 0 THEN |FIZZBUZZ|\n                 WHEN r3 = 0            THEN |FIZZ|\n                 WHEN r5 = 0            THEN |BUZZ|\n                 ELSE i ) ) ).\n\ncl_demo_output=>write( tab ).\ncl_demo_output=>display( ).\n",
+    "cl_demo_output=>display( value stringtab( for i = 1 until i > 100\n                                          let fizz = cond #( when i mod 3 = 0 then |fizz| else space )\n                                              buzz = cond #( when i mod 5 = 0 then |buzz| else space )\n                                              fb   = |{ fizz }{ buzz }| in\n                                         ( switch #( fb when space then i else fb ) ) ) ).\n"
+   ]
+  },
+  "abc": {
+   "header": "ABC",
+   "lang": "abc",
+   "variants": [
+    "HOW TO RETURN fizzbuzz num:\n    PUT \"\" IN result\n    PUT {[3]: \"Fizz\"; [5]: \"Buzz\"} IN divwords\n    FOR div IN keys divwords:\n        IF num mod div=0:\n            PUT result^divwords[div] IN result\n    IF result=\"\":\n        PUT num>>0 IN result\n    RETURN result\n\nFOR i IN {1..100}:\n    WRITE fizzbuzz i/\n"
+   ]
+  },
+  "acl2": {
+   "header": "ACL2",
+   "lang": "acl2",
+   "variants": [
+    "(defun fizzbuzz-r (i)\n   (declare (xargs :measure (nfix (- 100 i))))\n   (prog2$\n    (cond ((= (mod i 15) 0) (cw \"FizzBuzz~%\"))\n          ((= (mod i 5) 0) (cw \"Buzz~%\"))\n          ((= (mod i 3) 0) (cw \"Fizz~%\"))\n          (t (cw \"~x0~%\" i)))\n    (if (zp (- 100 i))\n        nil\n        (fizzbuzz-r (1+ i)))))\n\n(defun fizzbuzz () (fizzbuzz-r 1))\n"
+   ]
+  },
+  "action": {
+   "header": "Action!",
+   "lang": "action",
+   "variants": [
+    "PROC Main()\n  BYTE i,d3,d5\n\n  d3=1 d5=1\n  FOR i=1 TO 100\n  DO\n    IF d3=0 AND d5=0 THEN\n      Print(\"FizzBuzz\")\n    ELSEIF d3=0 THEN\n      Print(\"Fizz\")\n    ELSEIF d5=0 THEN\n      Print(\"Buzz\")\n    ELSE\n      PrintB(i)\n    FI\n    Put(32)\n    \n    d3==+1 d5==+1\n    IF d3=3 THEN d3=0 FI\n    IF d5=5 THEN d5=0 FI\n  OD\nRETURN\n"
+   ]
+  },
+  "actionscript": {
+   "header": "ActionScript",
+   "lang": "actionscript",
+   "variants": [
+    "for (var i:int = 1; i <= 100; i++) {\n  if (i % 15 == 0)\n    trace('FizzBuzz');\n  else if (i % 5 == 0)\n    trace('Buzz');\n  else if (i % 3 == 0)\n    trace('Fizz');\n  else\n    trace(i);\n}\n"
+   ]
+  },
+  "ada": {
+   "header": "Ada",
+   "lang": "ada",
+   "variants": [
+    "with Ada.Text_IO; use Ada.Text_IO;\n \nprocedure Fizzbuzz is\nbegin\n   for I in 1..100 loop\n      if I mod 15 = 0 then\n         Put_Line(\"FizzBuzz\");\n      elsif I mod 5 = 0 then\n         Put_Line(\"Buzz\");\n      elsif I mod 3 = 0 then\n         Put_Line(\"Fizz\");\n      else\n         Put_Line(Integer'Image(I));\n      end if;\n   end loop;\nend Fizzbuzz;\n"
+   ]
+  },
+  "agda": {
+   "header": "Agda",
+   "lang": "agda",
+   "variants": [
+    "module FizzBuzz where\n\nopen import Agda.Builtin.IO using (IO)\n\nopen import Agda.Builtin.Unit renaming (⊤ to Unit)\n\nopen import Data.Bool using (Bool ; false ; true ; if_then_else_)\n\nopen import Data.Nat using (ℕ ; zero ; suc ; _≡ᵇ_ ; _%_)\n\nopen import Data.Nat.Show using (show)\n\nopen import Data.List using (List ; [] ; _∷_ ; map)\n\nopen import Data.String using (String ; _++_ ; unlines)\n\npostulate putStrLn : String -> IO Unit\n{-# FOREIGN GHC import qualified Data.Text as T #-}\n{-# COMPILE GHC putStrLn = putStrLn . T.unpack #-}\n\nfizz : String\nfizz = \"Fizz\"\n\nbuzz : String\nbuzz = \"Buzz\"\n\n_isDivisibleBy_ : (n : ℕ) -> (m : ℕ) -> Bool\nn isDivisibleBy zero = false\nn isDivisibleBy (suc k) = ((n % (suc k)) ≡ᵇ 0)\n\ngetTerm : (n : ℕ) -> String\ngetTerm n =\n  if (n isDivisibleBy 15) then (fizz ++ buzz)\n  else if (n isDivisibleBy 3) then fizz\n  else if (n isDivisibleBy 5) then buzz\n  else (show n)\n\nrange : (a : ℕ) -> (b : ℕ) -> List (ℕ)\nrange k zero = []\nrange k (suc m) = k ∷ (range (suc k) m)\n\ngetTerms : (n : ℕ) -> List (String)\ngetTerms n = map getTerm (range 1 n)\n\nfizzBuzz : String\nfizzBuzz = unlines (getTerms 100)\n\nmain : IO Unit\nmain = putStrLn fizzBuzz\n"
+   ]
+  },
+  "algol-68": {
+   "header": "ALGOL 68",
+   "lang": "algol-68",
+   "variants": [
+    "main:(\n  FOR i TO 100 DO\n    printf(($gl$,\n      IF i %* 15 = 0 THEN\n        \"FizzBuzz\"\n      ELIF i %* 3 = 0 THEN\n        \"Fizz\"\n      ELIF i %* 5 = 0 THEN\n        \"Buzz\"\n      ELSE\n        i\n      FI\n    ))\n  OD\n)\n",
+    "FOR i TO 100 DO print(((i%*15=0|\"FizzBuzz\"|:i%*3=0|\"Fizz\"|:i%*5=0|\"Buzz\"|i),new line)) OD\n",
+    "FOR i TO 100 DO\n    IF  IF i MOD 3 = 0 THEN print( \"Fizz\" ); FALSE ELSE TRUE FI\n    AND IF i MOD 5 = 0 THEN print( \"Buzz\" ); FALSE ELSE TRUE FI\n    THEN\n        print( ( whole( i, 0 ) ) )\n    FI;\n    print( ( newline ) )\nOD\n"
+   ]
+  },
+  "algol-w": {
+   "header": "ALGOL W",
+   "lang": "algol-w",
+   "variants": [
+    "begin\n    i_w := 1; % set integers to print in minimum space %\n    for i := 1 until 100 do begin\n        if      i rem 15 = 0 then write( \"FizzBuzz\" )\n        else if i rem  5 = 0 then write( \"Buzz\" )\n        else if i rem  3 = 0 then write( \"Fizz\" )\n        else                      write( i )\n    end for_i\nend.\n"
+   ]
+  },
+  "apex": {
+   "header": "APEX",
+   "lang": "apex",
+   "variants": [
+    "for(integer i=1; i <= 100; i++){\n    String output = '';\n    if(math.mod(i, 3) == 0) output += 'Fizz';\n    if(math.mod(i, 5) == 0) output += 'Buzz';\n    if(output != ''){\n        System.debug(output);\n    } else {\n        System.debug(i);\n    }\n}\n"
+   ]
+  },
+  "apl": {
+   "header": "APL",
+   "lang": "apl",
+   "variants": [
+    "⎕io←1\n{⎕←∊'Fizz' 'Buzz'⍵/⍨d,⍱/d←0=3 5|⍵}¨⍳100\n",
+    "{⍵ 'Fizz' 'Buzz' 'FizzBuzz'[2⊥0=5 3|⍵]}¨1+⍳100\n",
+    "{('FizzBuzz' 'Fizz' 'Buzz',⍵)[(0=15 3 5|⍵)⍳1]}¨⍳100\n",
+    "⎕IO←0\nA[I]←1+I←(0⍷A)/⍳⍴A←('FIZZBUZZ' 'FIZZ' 'BUZZ' 0)[2⊥¨×(⊂3 5)|¨1+⍳100]\n",
+    "⎕IO←0\n(L,'Fizz' 'Buzz' 'FizzBuzz')[¯1+(L×W=0)+W←(100×0≠W)+W←⊃+/1 2×0=3 5|⊂L←1+⍳100]\n"
+   ]
+  },
+  "applescript": {
+   "header": "AppleScript",
+   "lang": "applescript",
+   "variants": [
+    "property outputText: \"\"\nrepeat with i from 1 to 100\n  if i mod 15 = 0 then\n    set outputText to outputText & \"FizzBuzz\"\n  else if i mod 3 = 0 then\n    set outputText to outputText & \"Fizz\"\n  else if i mod 5 = 0 then\n    set outputText to outputText & \"Buzz\"\n  else\n    set outputText to outputText & i\n  end if\n  set outputText to outputText & linefeed\nend repeat\noutputText\n",
+    "on fizzBuzz(n)\n    script o\n        property output : {}\n    end script\n    \n    repeat with i from 1 to n\n        if (i mod 3 = 0) then\n            if (i mod 15 = 0) then\n                set end of o's output to \"FizzBuzz\"\n            else\n                set end of o's output to \"Fizz\"\n            end if\n        else if (i mod 5 = 0) then\n            set end of o's output to \"Buzz\"\n        else\n            set end of o's output to i\n        end if\n    end repeat\n    \n    set astid to AppleScript's text item delimiters\n    set AppleScript's text item delimiters to linefeed\n    set output to o's output as text\n    set AppleScript's text item delimiters to astid\n    \n    return output\nend fizzBuzz\n\nfizzBuzz(100)\n",
+    "on fizzBuzz(n)\n    script o\n        property output : {}\n    end script\n    \n    repeat with i from 1 to n\n        set end of o's output to i\n    end repeat\n    repeat with x in {{3, \"Fizz\"}, {5, \"Buzz\"}, {15, \"FizzBuzz\"}}\n        set {m, t} to x\n        repeat with i from m to n by m\n            set item i of o's output to t\n        end repeat\n    end repeat\n    \n    set astid to AppleScript's text item delimiters\n    set AppleScript's text item delimiters to linefeed\n    set output to o's output as text\n    set AppleScript's text item delimiters to astid\n    \n    return output\nend fizzBuzz\n\nfizzBuzz(100)\n",
+    "------------------------- FIZZBUZZ -------------------------\n\n-- fizz :: Int -> Bool\non fizz(n)\n    n mod 3 = 0\nend fizz\n\n-- buzz :: Int -> Bool\non buzz(n)\n    n mod 5 = 0\nend buzz\n\n-- fizzAndBuzz :: Int -> Bool\non fizzAndBuzz(n)\n    n mod 15 = 0\nend fizzAndBuzz\n\n-- fizzBuzz :: Int -> String\non fizzBuzz(x)\n    caseOf(x, [[my fizzAndBuzz, \"FizzBuzz\"], ¬\n        [my fizz, \"Fizz\"], ¬\n        [my buzz, \"Buzz\"]], x as string)\nend fizzBuzz\n\n\n--------------------------- TEST ---------------------------\non run\n    \n    intercalate(linefeed, ¬\n        map(fizzBuzz, enumFromTo(1, 100)))\n    \nend run\n\n\n-------------------- GENERIC FUNCTIONS ---------------------\n\n-- caseOf :: a -> [(predicate, b)] -> Maybe b -> Maybe b\non caseOf(e, lstPV, default)\n    repeat with lstCase in lstPV\n        set {p, v} to contents of lstCase\n        if mReturn(p)'s |λ|(e) then return v\n    end repeat\n    return default\nend caseOf\n\n\n-- enumFromTo :: Int -> Int -> [Int]\non enumFromTo(m, n)\n    if m > n then\n        set d to -1\n    else\n        set d to 1\n    end if\n    set lst to {}\n    repeat with i from m to n by d\n        set end of lst to i\n    end repeat\n    return lst\nend enumFromTo\n\n\n-- intercalate :: Text -> [Text] -> Text\non intercalate(strText, lstText)\n    set {dlm, my text item delimiters} to {my text item delimiters, strText}\n    set strJoined to lstText as text\n    set my text item delimiters to dlm\n    return strJoined\nend intercalate\n\n\n-- map :: (a -> b) -> [a] -> [b]\non map(f, xs)\n    tell mReturn(f)\n        set lng to length of xs\n        set lst to {}\n        repeat with i from 1 to lng\n            set end of lst to |λ|(item i of xs, i, xs)\n        end repeat\n        return lst\n    end tell\nend map\n\n\n-- Lift 2nd class handler function into 1st class script wrapper \n-- mReturn :: Handler -> Script\non mReturn(f)\n    if class of f is script then\n        f\n    else\n        script\n            property |λ| : f\n        end script\n    end if\nend mReturn\n"
+   ]
+  },
+  "arc": {
+   "header": "Arc",
+   "lang": "arc",
+   "variants": [
+    "(for n 1 100\n  (prn:if\n    (multiple n 15) 'FizzBuzz\n    (multiple n 5) 'Buzz\n    (multiple n 3) 'Fizz\n    n))\n",
+    "(for n 1 100 \n     (prn:check (string (when (multiple n 3) 'Fizz) \n                        (when (multiple n 5) 'Buzz)) \n                ~empty n)) ; check created string not empty, else return n\n",
+    "(for n 1 100\n  (prn:case (gcd n 15)\n    1 n\n    3 'Fizz\n    5 'Buzz\n      'FizzBuzz))\n"
+   ]
+  },
+  "arkscript": {
+   "header": "ArkScript",
+   "lang": "arkscript",
+   "variants": [
+    "(import std.Range)\n\n(let r (range:range 0 100))\n(range:forEach r\n  (fun (e)\n    (if (= 0 (mod e 15))\n      (print \"FizzBuzz\")\n      (if (= 0 (mod e 3))\n        (print \"Fizz\")\n        (if (= 0 (mod e 5))\n          (print \"Buzz\")\n          (print e))))))\n"
+   ]
+  },
+  "arturo": {
+   "header": "Arturo",
+   "lang": "arturo",
+   "variants": [
+    "loop 1..100 [x][\n\twhen [\n\t\tzero? x % 15 \t-> print \"FizzBuzz\"\n\t\tzero? x % 3\t\t-> print \"Fizz\"\n\t\tzero? x % 5  \t-> print \"Buzz\"\n\t\ttrue   \t\t\t-> print x\n\t]\n]\n"
+   ]
+  },
+  "asymptote": {
+   "header": "Asymptote",
+   "lang": "asymptote",
+   "variants": [
+    "for(int number = 1; number <= 100; ++number) {\n    if (number % 15 == 0) {\n        write(\"FizzBuzz\");\n    } else {\n      if (number % 3 == 0) {\n        write(\"Fizz\");\n    } else {\n        if (number % 5 == 0) {\n        write(\"Buzz\");\n    } else {\n        write(number);\n           }\n        }\n    }\n}\n"
+   ]
+  },
+  "ats": {
+   "header": "ATS",
+   "lang": "ats",
+   "variants": [
+    "#include \"share/atspre_staload.hats\"\n\nimplement main0() = loop(1, 100) where {\n  fun loop(from: int, to: int): void =\n    if from > to then () else\n    let\n      val by3 = (from % 3 = 0)\n      val by5 = (from % 5 = 0)\n    in\n      case+ (by3, by5) of\n      | (true, true) => print_string(\"FizzBuzz\")\n      | (true, false) => print_string(\"Fizz\")\n      | (false, true) => print_string(\"Buzz\")\n      | (false, false) => print_int(from);\n      print_newline();\n      loop(from+1, to)\n    end\n}\n"
+   ]
+  },
+  "autohotkey": {
+   "header": "AutoHotkey",
+   "lang": "autohotkey",
+   "variants": [
+    "Loop, 100\n{\n  If (Mod(A_Index, 15) = 0)\n    output .= \"FizzBuzz`n\"\n  Else If (Mod(A_Index, 3) = 0)\n    output .= \"Fizz`n\"\n  Else If (Mod(A_Index, 5) = 0)\n    output .= \"Buzz`n\"\n  Else\n    output .= A_Index \"`n\"\n}\nFileDelete, output.txt\nFileAppend, %output%, output.txt\nRun, cmd /k type output.txt\n",
+    "Gui, Add, Edit, r20\nGui,Show\nLoop, 100\n  Send, % (!Mod(A_Index, 15) ? \"FizzBuzz\" : !Mod(A_Index, 3) ? \"Fizz\" : !Mod(A_Index, 5) ? \"Buzz\" : A_Index) \"`n\"\nReturn\nEsc::\nExitApp\n"
+   ]
+  },
+  "autoit": {
+   "header": "AutoIt",
+   "lang": "autoit",
+   "variants": [
+    "For $i = 1 To 100\n\tIf Mod($i, 15) = 0 Then\n\t\tMsgBox(0, \"FizzBuzz\", \"FizzBuzz\")\n\tElseIf Mod($i, 5) = 0 Then\n\t\tMsgBox(0, \"FizzBuzz\", \"Buzz\")\n\tElseIf Mod($i, 3) = 0 Then\n\t\tMsgBox(0, \"FizzBuzz\", \"Fizz\")\n\tElse\n\t\tMsgBox(0, \"FizzBuzz\", $i)\n\tEndIf\nNext\n",
+    "#include <Constants.au3>\n\n; uncomment how you want to do the output\nFunc Out($Msg)\n\tConsoleWrite($Msg & @CRLF)\n\n;~\tFileWriteLine(\"FizzBuzz.Log\", $Msg)\n\n;~ \t$Btn = MsgBox($MB_OKCANCEL + $MB_ICONINFORMATION, \"FizzBuzz\", $Msg)\n;~ \tIf $Btn > 1 Then Exit\t; Pressing 'Cancel'-button aborts the program\nEndFunc   ;==>Out\n\nOut(\"# FizzBuzz:\")\nFor $i = 1 To 100\n\tIf Mod($i, 15) = 0 Then\n\t\tOut(\"FizzBuzz\")\n\tElseIf Mod($i, 5) = 0 Then\n\t\tOut(\"Buzz\")\n\tElseIf Mod($i, 3) = 0 Then\n\t\tOut(\"Fizz\")\n\tElse\n\t\tOut($i)\n\tEndIf\nNext\nOut(\"# Done.\")\n"
+   ]
+  },
+  "avail": {
+   "header": "Avail",
+   "lang": "avail",
+   "variants": [
+    "For each i from 1 to 100 do [\n    Print:\n        if i mod 15 = 0 then [\"FizzBuzz\"]\n        else if i mod 3 = 0 then [\"Fizz\"]\n        else if i mod 5 = 0 then [\"Buzz\"]\n        else [“i”]\n        ++ \"\\n\";\n];\n"
+   ]
+  },
+  "babel": {
+   "header": "Babel",
+   "lang": "babel",
+   "variants": [
+    "main: \n     { { iter 1 + dup\n        \n        15 %\n            { \"FizzBuzz\" << \n                zap }\n            { dup\n            3 % \n                { \"Fizz\" << \n                    zap }\n                { dup\n                5 % \n                    { \"Buzz\" << \n                        zap}\n                    { %d << }\n                if }\n            if }\n        if\n\n        \"\\n\" << }\n\n    100 times }\n"
+   ]
+  },
+  "ballerina": {
+   "header": "Ballerina",
+   "lang": "ballerina",
+   "variants": [
+    "// https://rosettacode.org/wiki/FizzBuzz\nimport ballerina/io;\n\npublic function main() {\n    foreach int i in int:range(1,101,1) {\n        if i % 15 == 0 {\n            io:println(\"FizzBuzz\");\n        } else if i % 5 == 0 {\n            io:println(\"Buzz\");\n        } else if i % 3 == 0 {\n            io:println(\"Fizz\");\n        } else {\n            io:println(i);\n        }\n    }\n}\n"
+   ]
+  },
+  "bash": {
+   "header": "bash",
+   "lang": "bash",
+   "variants": [
+    "for n in {1..100}; do ((( n % 15 == 0 )) && echo 'FizzBuzz') || ((( n % 5 == 0 )) && echo 'Buzz') || ((( n % 3 == 0 )) && echo 'Fizz') || echo $n; done\n",
+    "for n in {1..100}; do\n  ((( n % 15 == 0 )) && echo 'FizzBuzz') ||\n  ((( n % 5 == 0 )) && echo 'Buzz') ||\n  ((( n % 3 == 0 )) && echo 'Fizz') ||\n  echo $n;\ndone\n",
+    "for i in {1..100};do((i%3))&&x=||x=Fizz;((i%5))||x+=Buzz;echo ${x:-$i};done\n",
+    "# FizzBuzz in Bash.  A concise version, but with verbose comments.\nfor i in {1..100} # Use i to loop from \"1\" to \"100\", inclusive.\ndo  ((i % 3)) &&  # If i is not divisible by 3...\n        x= ||     # ...blank out x (yes, \"x= \" does that).  Otherwise,...\n        x=Fizz    # ...set (not append) x to the string \"Fizz\".\n    ((i % 5)) ||  # If i is not divisible by 5, skip (there's no \"&&\")...\n        x+=Buzz   # ...Otherwise, append (not set) the string \"Buzz\" to x.\n   echo ${x:-$i}  # Print x unless it is blanked out.  Otherwise, print i.\ndone\n"
+   ]
+  },
+  "bc": {
+   "header": "bc",
+   "lang": "bc",
+   "variants": [
+    "for (i = 1; i <= 100; i++) {\n\tw = 0\n\tif (i % 3 == 0) { \"Fizz\"; w = 1; }\n\tif (i % 5 == 0) { \"Buzz\"; w = 1; }\n\tif (w == 0) i\n\tif (w == 1) \"\n\"\n}\nquit\n"
+   ]
+  },
+  "bcpl": {
+   "header": "BCPL",
+   "lang": "bcpl",
+   "variants": [
+    "GET \"libhdr\"\n\nLET start() BE $(\n\n    FOR i=1 TO 100 DO $(\n\n        TEST (i REM 15) = 0 THEN\n            writes(\"FizzBuzz\")\n        ELSE TEST (i REM 3) = 0 THEN\n            writes(\"Fizz\")\n        ELSE TEST (i REM 5) = 0 THEN\n            writes(\"Buzz\")\n        ELSE\n            writen(i, 0)\n\n        newline()\n    $)\n$)\n"
+   ]
+  },
+  "blz": {
+   "header": "blz",
+   "lang": "blz",
+   "variants": [
+    "for i = 0; i <= 100; i++\n    out = \"\"\n    if i % 3 == 0\n        out = \"Fizz\"\n    end\n    if i % 5 == 0\n        out = out + \"Buzz\"\n    end\n    if out == \"\"\n        out = i\n    end\n    print(out)\nend\n"
+   ]
+  },
+  "boo": {
+   "header": "Boo",
+   "lang": "boo",
+   "variants": [
+    "def fizzbuzz(size):\n    for i in range(1, size):\n        if i%15 == 0:\n            print 'FizzBuzz'\n        elif i%5 == 0:\n            print 'Buzz'\n        elif i%3 == 0:\n            print 'Fizz'\n        else:\n            print i\n\nfizzbuzz(101)\n"
+   ]
+  },
+  "bqn": {
+   "header": "BQN",
+   "lang": "bqn",
+   "variants": [
+    "(∾´∾⟜\"Fizz\"‿\"Buzz\"/˜·(¬∨´)⊸∾0=3‿5|⊢)¨1+↕100\n",
+    "((∾´\"fizz\"‿\"buzz\"/˜0=3‿5|⊢)⎊⊢)¨1+↕100\n",
+    "(3‿5 (0=|)◶[⊢‿\"fizz\",\"buzz\"‿\"fizzbuzz\"] ⊢)¨ 1+↕100\n"
+   ]
+  },
+  "bruijn": {
+   "header": "Bruijn",
+   "lang": "bruijn",
+   "variants": [
+    ":import std/Combinator .\n:import std/String .\n:import std/Number .\n\nmain [y [[0 =? (+101) case-end case-rec]] (+1)]\n\tcase-rec str ++ \"\\n\" ++ (1 ++0)\n\t\tstr fizzbuzz \"FizzBuzz\" (fizz \"Fizz\" (buzz \"Buzz\" (number→string 0)))\n\t\t\tfizz =?(0 % (+3))\n\t\t\tbuzz =?(0 % (+5))\n\t\t\tfizzbuzz fizz buzz fizz\n\tcase-end empty\n"
+   ]
+  },
+  "c": {
+   "header": "C",
+   "lang": "c",
+   "variants": [
+    "  int i = 0 ;  char B[88] ;\n  while ( i++ < 100 )\n    !sprintf( B, \"%s%s\", i%3 ? \"\":\"Fizz\", i%5 ? \"\":\"Buzz\" )\n    ? sprintf( B, \"%d\", i ):0, printf( \", %s\", B );\n",
+    "  int i = 0 ;  char B[88] ;\n  while ( i++ < 100 )\n    !sprintf( B, \"%s%s%s%s\", \n       i%3 ? \"\":\"Fiz\", i%5 ? \"\":\"Buz\", i%7 ? \"\":\"Goz\", i%11 ? \"\":\"Kaz\" )\n    ? sprintf( B, \"%d\", i ):0, printf( \", %s\", B );\n",
+    "Output: ..., 89, FizBuz, Goz, 92, Fiz, 94, Buz, Fiz, 97, Goz, FizKaz, Buz\n",
+    "#include <stdio.h>\n\nint main() {\n  for (int i=1; i<=105; i++) if (i%3 && i%5) printf(\"%3d \", i); else printf(\"%s%s%s\", i%3?\"\":\"Fizz\", i%5?\"\":\"Buzz\", i%15?\" \":\"\\n\");\n}\n",
+    "#include<stdio.h>\n \nint main ()\n{\n  int i;\n  const char *s[] = { \"%d\\n\", \"Fizz\\n\", s[3] + 4, \"FizzBuzz\\n\" };\n  for (i = 1; i <= 100; i++)\n    printf(s[!(i % 3) + 2 * !(i % 5)], i);\n  return 0;\n}\n"
+   ]
+  },
+  "c3": {
+   "header": "C3",
+   "lang": "c3",
+   "variants": [
+    "module rosettacode;\n\nimport std::io;\n\nfn int main(String[] args)\n{\n\tfor (int i = 1; i <= 100; i++)\n\t{\n\t\tif (i % 15 == 0)\n\t\t{\n\t\t\tio::printn(\"FizzBuzz\");\n\t\t}\n\t\telse if (i % 5 == 0)\n\t\t{\n\t\t\tio::printn(\"Buzz\");\n\t\t}\n\t\telse if (i % 3 == 0)\n\t\t{\n\t\t\tio::printn(\"Fizz\");\n\t\t}\n\t\telse\n\t\t{\n\t\t\tio::printn(i);\n\t\t}\n\t}\n\treturn 0;\n}\n"
+   ]
+  },
+  "carp": {
+   "header": "Carp",
+   "lang": "carp",
+   "variants": [
+    "(defn main []\n  (for [n 1 101]\n    (cond\n      (= (mod n 15) 0) (println* \"FizzBuzz\")\n      (= (mod n 3) 0) (println* \"Fizz\")\n      (= (mod n 5) 0) (println* \"Buzz\")\n      (println* n))))\n"
+   ]
+  },
+  "ceylon": {
+   "header": "Ceylon",
+   "lang": "ceylon",
+   "variants": [
+    "shared void run() => {for (i in 1..100) {for (j->k in [3->\"Fizz\", 5->\"Buzz\"]) if (j.divides(i)) k}.reduce(plus) else i}.each(print);\n"
+   ]
+  },
+  "chapel": {
+   "header": "Chapel",
+   "lang": "chapel",
+   "variants": [
+    "proc fizzbuzz(n) {\n\tfor i in 1..n do\n\t\tif i % 15 == 0 then\n\t\t\twriteln(\"FizzBuzz\");\n\t\telse if i % 5 == 0 then\n\t\t\twriteln(\"Buzz\");\n\t\telse if i % 3 == 0 then\n\t\t\twriteln(\"Fizz\");\n\t\telse\n\t\t\twriteln(i);\n}\n\nfizzbuzz(100);\n"
+   ]
+  },
+  "clay": {
+   "header": "Clay",
+   "lang": "clay",
+   "variants": [
+    "main() {\n    for(i in range(1,100)) {\n        if(i % 3 == 0 and i % 5 == 0) println(\"fizzbuzz\");\n        else if(i % 3 == 0) println(\"fizz\");\n        else if(i % 5 == 0) println(\"buzz\");\n        else print(i);\n    }\n}\n"
+   ]
+  },
+  "clipper": {
+   "header": "Clipper",
+   "lang": "clipper",
+   "variants": [
+    "PROCEDURE Main()\n\n   LOCAL n\n   LOCAL cFB \n\n   FOR n := 1 TO 100\n      cFB := \"\"\n      AEval( { { 3, \"Fizz\" }, { 5, \"Buzz\" } }, {|x| cFB += iif( ( n % x[ 1 ] ) == 0, x[ 2 ], \"\" ) } )\n      ?? iif( cFB == \"\", LTrim( Str( n ) ), cFB ) + iif( n == 100, \".\", \", \" )\n   NEXT\n\n   RETURN\n"
+   ]
+  },
+  "clips": {
+   "header": "CLIPS",
+   "lang": "clips",
+   "variants": [
+    "(deffacts count\n          (count-to 100))\n\n(defrule print-numbers\n         (count-to ?max)\n         =>\n         (loop-for-count (?num ?max) do\n        (if (and (= (mod ?num 3) 0) (= (mod ?num 5) 0) ) then\n                (printout t \"FizzBuzz\" crlf)\n         else (if (= (mod ?num 3) 0) then\n                      (printout t \"Fizz\" crlf)\n               else (if (= (mod ?num 5) 0) then\n                             (printout t \"Buzz\" crlf)\n                     else\n                             (printout t ?num crlf))))))\n"
+   ]
+  },
+  "clojure": {
+   "header": "Clojure",
+   "lang": "clojure",
+   "variants": [
+    "(doseq [x (range 1 101)] (println x (str (when (zero? (mod x 3)) \"fizz\") (when (zero? (mod x 5)) \"buzz\"))))\n",
+    "(defn fizzbuzz [start finish] \n  (map (fn [n]\n\t(cond\n\t\t(zero? (mod n 15)) \"FizzBuzz\"\n\t\t(zero? (mod n 3)) \"Fizz\"\n\t\t(zero? (mod n 5)) \"Buzz\"\n\t\t:else n))\n\t(range start finish)))\n(fizzbuzz 1 100)\n",
+    "(map (fn [x] (cond (zero? (mod x 15)) \"FizzBuzz\" \n                   (zero? (mod x 5)) \"Buzz\"\n                   (zero? (mod x 3)) \"Fizz\"\n\t\t     :else x))\n     (range 1 101))\n",
+    "(map #(let [s (str (if (zero? (mod % 3)) \"Fizz\") (if (zero? (mod % 5)) \"Buzz\"))] (if (empty? s) % s)) (range 1 101))\n",
+    "(def fizzbuzz (map \n  #(cond (zero? (mod % 15)) \"FizzBuzz\"\n         (zero? (mod % 5)) \"Buzz\"\n         (zero? (mod % 3)) \"Fizz\"\n               :else %)\n  (iterate inc 1)))\n"
+   ]
+  },
+  "clu": {
+   "header": "CLU",
+   "lang": "clu",
+   "variants": [
+    "start_up = proc ()\n    po: stream := stream$primary_output()\n \n    for i: int in int$from_to(1, 100) do\n        out: string := \"\"\n        if i // 3 = 0 then out := out || \"Fizz\" end\n        if i // 5 = 0 then out := out || \"Buzz\" end\n        if string$empty(out) then out := int$unparse(i) end\n        stream$putl(po, out)\n    end\nend start_up\n"
+   ]
+  },
+  "cmake": {
+   "header": "CMake",
+   "lang": "cmake",
+   "variants": [
+    "foreach(i RANGE 1 100)\n  math(EXPR off3 \"${i} % 3\")\n  math(EXPR off5 \"${i} % 5\")\n  if(NOT off3 AND NOT off5)\n    message(FizzBuzz)\n  elseif(NOT off3)\n    message(Fizz)\n  elseif(NOT off5)\n    message(Buzz)\n  else()\n    message(${i})\n  endif()\nendforeach(i)\n"
+   ]
+  },
+  "cobol": {
+   "header": "COBOL",
+   "lang": "cobol",
+   "variants": [
+    "      * FIZZBUZZ.COB\n      * cobc -x -g FIZZBUZZ.COB\n      *\n       IDENTIFICATION        DIVISION.\n       PROGRAM-ID.           fizzbuzz.\n       DATA                  DIVISION.\n       WORKING-STORAGE       SECTION.\n       01 CNT      PIC 9(03) VALUE 1.\n       01 REM      PIC 9(03) VALUE 0.\n       01 QUOTIENT PIC 9(03) VALUE 0.\n       PROCEDURE             DIVISION.\n      *\n       PERFORM UNTIL CNT > 100\n         DIVIDE 15 INTO CNT GIVING QUOTIENT REMAINDER REM\n         IF REM = 0\n           THEN\n             DISPLAY \"FizzBuzz \" WITH NO ADVANCING\n           ELSE\n             DIVIDE 3 INTO CNT GIVING QUOTIENT REMAINDER REM\n             IF REM = 0\n               THEN\n                 DISPLAY \"Fizz \" WITH NO ADVANCING\n               ELSE\n                 DIVIDE 5 INTO CNT GIVING QUOTIENT REMAINDER REM\n                 IF REM = 0\n                   THEN\n                     DISPLAY \"Buzz \" WITH NO ADVANCING\n                   ELSE\n                     DISPLAY CNT \" \" WITH NO ADVANCING\n                 END-IF\n             END-IF\n         END-IF\n         ADD 1 TO CNT\n       END-PERFORM\n       DISPLAY \"\"\n       STOP RUN.\n",
+    "Identification division.\nProgram-id. fizz-buzz.\n\nData division.\nWorking-storage section.\n\n01 num pic 999.\n\nProcedure division.\n    Perform varying num from 1 by 1 until num > 100\n        if function mod (num, 15) = 0 then display \"fizzbuzz\"\n        else if function mod (num, 3) = 0 then display \"fizz\"\n        else if function mod (num, 5) = 0 then display \"buzz\"\n        else display num\n    end-perform.\n    Stop run.\n",
+    "       IDENTIFICATION DIVISION.\n       PROGRAM-ID.  FIZZBUZZ.\n       ENVIRONMENT DIVISION.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01  X PIC 999.\n       01  Y PIC 999.\n       01  REM3 PIC 999.\n       01  REM5 PIC 999.\n       PROCEDURE DIVISION.\n           PERFORM VARYING X FROM 1 BY 1 UNTIL X > 100\n               DIVIDE X BY 3 GIVING Y REMAINDER REM3\n               DIVIDE X BY 5 GIVING Y REMAINDER REM5\n            EVALUATE REM3 ALSO REM5\n              WHEN ZERO ALSO ZERO\n                DISPLAY \"FizzBuzz\"\n              WHEN ZERO ALSO ANY\n                DISPLAY \"Fizz\"\n              WHEN ANY ALSO ZERO\n                DISPLAY \"Buzz\"\n              WHEN OTHER\n                DISPLAY X\n            END-EVALUATE\n           END-PERFORM\n           STOP RUN\n           .\n",
+    "         >>SOURCE FORMAT FREE\nidentification division.\nprogram-id. fizzbuzz.\ndata division.\nworking-storage section.\n01  i pic 999.\n01  fizz pic 999 value 3.\n01  buzz pic 999 value 5.\nprocedure division.\nstart-fizzbuzz.\n    perform varying i from 1 by 1 until i > 100 \n        evaluate i also i\n        when fizz also buzz\n            display 'fizzbuzz'\n            add 3 to fizz\n            add 5 to buzz\n        when fizz also any\n            display 'fizz'\n            add 3 to fizz\n        when buzz also any\n            display 'buzz'\n            add 5 to buzz\n        when other\n            display i\n        end-evaluate\n    end-perform\n    stop run\n    .\nend program fizzbuzz.\n"
+   ]
+  },
+  "coco": {
+   "header": "Coco",
+   "lang": "coco",
+   "variants": [
+    "for i from 1 to 100\n    console.log do\n       if      i % 15 == 0 then 'FizzBuzz'\n       else if i % 3 == 0 then 'Fizz'\n       else if i % 5 == 0 then 'Buzz'\n       else i\n",
+    "for i from 1 to 100\n    console.log(['Fizz' unless i % 3] + ['Buzz' unless i % 5] or String(i))\n"
+   ]
+  },
+  "coconut": {
+   "header": "Coconut",
+   "lang": "coconut",
+   "variants": [
+    "def fizzbuzz(n):\n      case (n % 3, n % 5):\n          match (0, 0): return \"FizzBuzz\"\n          match (0, _): return \"Fizz\"\n          match (_, 0): return \"Buzz\"\n      else: return n |> str\nrange(1,101)|> map$(fizzbuzz)|> x -> '\\n'.join(x)|> print\n"
+   ]
+  },
+  "coffeescript": {
+   "header": "CoffeeScript",
+   "lang": "coffeescript",
+   "variants": [
+    "for i in [1..100]\n  if i % 15 is 0\n    console.log \"FizzBuzz\"\n  else if i % 3 is 0\n    console.log \"Fizz\"\n  else if i % 5 is 0\n    console.log \"Buzz\"\n  else\n    console.log i\n",
+    "for i in [1..100]\n  console.log \\\n    if i % 15 is 0\n      \"FizzBuzz\"\n    else if i % 3 is 0\n      \"Fizz\"\n    else if i % 5 is 0\n      \"Buzz\"\n    else\n      i\n",
+    "for i in [1..100]\n  console.log(['Fizz' if i % 3 is 0] + ['Buzz' if i % 5 is 0] or i)\n"
+   ]
+  },
+  "cognate": {
+   "header": "Cognate",
+   "lang": "cognate",
+   "variants": [
+    "Def Fizzbuzz (\n\tLet N be Of (Integer?);\n\tDef Multiple as (Zero? Modulo Swap N);\n\n\tIf Multiple of 15 then \"fizzbuzz\"\n\tIf Multiple of 3  then \"fizz\"\n\tIf Multiple of 5  then \"buzz\"\n\t                  else N\n);\n\nFor each in Range 1 to 100 (Print Fizzbuzz);\n"
+   ]
+  },
+  "coldfusion": {
+   "header": "ColdFusion",
+   "lang": "coldfusion",
+   "variants": [
+    "<Cfloop from=\"1\" to=\"100\" index=\"i\">\n  <Cfif i mod 15 eq 0>FizzBuzz\n  <Cfelseif i mod 5 eq 0>Fizz\n  <Cfelseif i mod 3 eq 0>Buzz\n  <Cfelse><Cfoutput>#i# </Cfoutput>\n  </Cfif>      \n</Cfloop>\n",
+    "<cfscript>\nresult = \"\";\n  for(i=1;i<=100;i++){\n    result=ListAppend(result, (i%15==0) ? \"FizzBuzz\": (i%5==0) ? \"Buzz\" : (i%3 eq 0)? \"Fizz\" : i );\n  }\n  WriteOutput(result);\n</cfscript>\n"
+   ]
+  },
+  "comal": {
+   "header": "Comal",
+   "lang": "comal",
+   "variants": [
+    "0010 FOR i#:=1 TO 100 DO\n0020   IF i# MOD 15=0 THEN\n0030     PRINT \"FizzBuzz\"\n0040   ELIF i# MOD 5=0 THEN\n0050     PRINT \"Buzz\"\n0060   ELIF i# MOD 3=0 THEN\n0070     PRINT \"Fizz\"\n0080   ELSE\n0090     PRINT i#\n0100   ENDIF\n0110 ENDFOR i#\n0120 END\n"
+   ]
+  },
+  "common-lisp": {
+   "header": "Common Lisp",
+   "lang": "common-lisp",
+   "variants": [
+    "(defun fizzbuzz ()\n  (loop for x from 1 to 100 do\n    (princ (cond ((zerop (mod x 15)) \"FizzBuzz\")\n                 ((zerop (mod x 3))  \"Fizz\")\n                 ((zerop (mod x 5))  \"Buzz\")\n                 (t                  x)))\n    (terpri)))\n",
+    "(defun fizzbuzz ()\n  (loop for x from 1 to 100 do\n    (format t \"~&~{~A~}\"\n      (or (append (when (zerop (mod x 3)) '(\"Fizz\"))\n                  (when (zerop (mod x 5)) '(\"Buzz\")))\n          (list x)))))\n",
+    "(defun fizzbuzz ()\n  (loop for n from 1 to 100\n     do (format t \"~&~[~[FizzBuzz~:;Fizz~]~*~:;~[Buzz~*~:;~D~]~]~%\"\n                (mod n 3) (mod n 5) n)))\n",
+    "(loop as n from 1 to 100\n      as fizz = (zerop (mod n 3))\n      as buzz = (zerop (mod n 5))\n      as numb = (not (or fizz buzz))\n      do\n  (format t\n   \"~&~:[~;Fizz~]~:[~;Buzz~]~:[~;~D~]~%\"\n   fizz buzz numb n))\n",
+    "(format t \"~{~:[~&~;~:*~:(~a~)~]~}\"\n  (loop as n from 1 to 100\n        as f = (zerop (mod n 3))\n        as b = (zerop (mod n 5))\n        collect nil\n        if f collect 'fizz\n        if b collect 'buzz\n        if (not (or f b)) collect n))\n"
+   ]
+  },
+  "cpp": {
+   "header": "C++",
+   "lang": "cpp",
+   "variants": [
+    "#include <iostream>\n#include <chrono>\n\nint main()\n{\n\n\tint fizz = 0, buzz = 0, fizzbuzz = 0;\n\n\tbool isFizz = false;\n\n\tauto startTime = std::chrono::high_resolution_clock::now();\n\n\tfor (unsigned int i = 1; i <= 4000000000; i++) {\n\t\tisFizz = false;\n\n\t\tif (i % 3 == 0) {\n\t\t\tisFizz = true;\n\t\t\tfizz++;\n\t\t}\n\n\t\tif (i % 5 == 0) {\n\t\t\tif (isFizz) {\n\t\t\t\tfizz--;\n\t\t\t\tfizzbuzz++;\n\t\t\t}\n\t\t\telse {\n\t\t\t\tbuzz++;\n\t\t\t}\n\t\t}\n\n\t}\n\n\tauto endTime = std::chrono::high_resolution_clock::now();\n\tauto totalTime = endTime - startTime;\n\n\tprintf(\"\\t fizz : %d, buzz: %d, fizzbuzz: %d, duration %lld milliseconds\\n\", fizz, buzz, fizzbuzz, (totalTime / std::chrono::milliseconds(1)));\n\n\treturn 0;\n}\n",
+    "#include <iostream>\n\nusing namespace std;\nint main ()\n{\n       for (int i = 1; i <= 100; i++) \n       {\n               if ((i % 15) == 0)\n                       cout << \"FizzBuzz\\n\";\n               else if ((i % 3) == 0)\n                       cout << \"Fizz\\n\";\n               else if ((i % 5) == 0)\n                       cout << \"Buzz\\n\";\n               else\n                       cout << i << \"\\n\";\n       }\n       return 0;\n}\n",
+    "#include <iostream>\nusing namespace std;\n\nint main()\n{\n  for (int i = 0; i <= 100; ++i)\n  {\n    bool fizz = (i % 3) == 0;\n    bool buzz = (i % 5) == 0;\n    if (fizz)\n      cout << \"Fizz\";\n    if (buzz)\n      cout << \"Buzz\";\n    if (!fizz && !buzz)\n      cout << i;\n    cout << \"\\n\";\n  }\n  return 0;\n}\n",
+    "#include <iostream>\n\nint main()\n{\n    int i, f = 2, b = 4; \n\n    for ( i = 1 ; i <= 100 ; ++i, --f, --b )\n    {\n        if ( f && b ) { std::cout << i;             }\n        if ( !f )     { std::cout << \"Fizz\"; f = 3; }\n        if ( !b )     { std::cout << \"Buzz\"; b = 5; }\n        std::cout << std::endl;\n    }\n\n    return 0;\n}\n",
+    "#include <iostream>                                                                                                     \n#include <algorithm>\n#include <vector>\n\nint main()\n{\n  std::vector<int> range(100);\n  std::iota(range.begin(), range.end(), 1);\n\n  std::vector<std::string> values;\n  values.resize(range.size());\n\n  auto fizzbuzz = [](int i) -> std::string {\n    if ((i%15) == 0) return \"FizzBuzz\";\n    if ((i%5) == 0)  return \"Buzz\";\n    if ((i%3) == 0)  return \"Fizz\";\n    return std::to_string(i);\n  };\n\n  std::transform(range.begin(), range.end(), values.begin(), fizzbuzz);\n\n  for (auto& str: values) std::cout << str << std::endl;\n\n  return 0;\n}\n"
+   ]
+  },
+  "crystal": {
+   "header": "Crystal",
+   "lang": "crystal",
+   "variants": [
+    "1.upto(100) do |v|\n  p fizz_buzz(v)\nend\n\ndef fizz_buzz(value)\n  word = \"\"\n  word += \"fizz\" if value % 3 == 0\n  word += \"buzz\" if value % 5 == 0\n  word += value.to_s if word.empty?\n  word\nend\n",
+    "1.upto(100) do |n|\n  case\n  when n % 15 == 0\n    puts \"FizzBuzz\" \n  when n % 5 == 0\n    puts \"Buzz\"\n  when n % 3 == 0\n    puts \"Fizz\"\n  else\n    puts n\n  end\nend\n"
+   ]
+  },
+  "d": {
+   "header": "D",
+   "lang": "d",
+   "variants": [
+    "import std.stdio, std.algorithm, std.conv;\n\n/// With if-else.\nvoid fizzBuzz(in uint n) {\n    foreach (immutable i; 1 .. n + 1)\n        if (!(i % 15))\n            \"FizzBuzz\".writeln;\n        else if (!(i % 3))\n            \"Fizz\".writeln;\n        else if (!(i % 5))\n            \"Buzz\".writeln;\n        else\n            i.writeln;\n}\n\n/// With switch case.\nvoid fizzBuzzSwitch(in uint n) {\n    foreach (immutable i; 1 .. n + 1)\n        switch (i % 15) {\n            case 0:\n                \"FizzBuzz\".writeln;\n                break;\n            case 3, 6, 9, 12:\n                \"Fizz\".writeln;\n                break;\n            case 5, 10:\n                \"Buzz\".writeln;\n                break;\n            default:\n                i.writeln;\n        }\n}\n\nvoid fizzBuzzSwitch2(in uint n) {\n    foreach (immutable i; 1 .. n + 1)\n        (i % 15).predSwitch(\n        0,       \"FizzBuzz\",\n        3,       \"Fizz\",\n        5,       \"Buzz\",\n        6,       \"Fizz\",\n        9,       \"Fizz\",\n        10,      \"Buzz\",\n        12,      \"Fizz\",\n        /*else*/ i.text).writeln;\n}\n\nvoid main() {\n    100.fizzBuzz;\n    writeln;\n    100.fizzBuzzSwitch;\n    writeln;\n    100.fizzBuzzSwitch2;\n}\n",
+    "import std;\n\nvoid main()\n{\n    auto fizzbuzz(in uint i)\n    {\n        string r;\n        if (i % 3 == 0) r ~= \"fizz\";\n        if (i % 5 == 0) r ~= \"buzz\";\n        if (r.length == 0) r ~= i.to!string;\n        return r;\n    }\n    \n    enum r = 1.iota(101).map!fizzbuzz;\n\n    r.each!writeln;\n}\n"
+   ]
+  },
+  "dart": {
+   "header": "Dart",
+   "lang": "dart",
+   "variants": [
+    "main() {\n  for (int i = 1; i <= 100; i++) {\n    List<String> out = [];\n    if (i % 3 == 0)\n      out.add(\"Fizz\");\n    if (i % 5 == 0)\n      out.add(\"Buzz\");\n    print(out.length > 0 ? out.join(\"\") : i);\n  }\n}\n"
+   ]
+  },
+  "dc": {
+   "header": "dc",
+   "lang": "dc",
+   "variants": [
+    "[[Fizz]P 1 sw]sF\n[[Buzz]P 1 sw]sB\n[li p sz]sN\n[[\n]P]sW\n[\n 0 sw         [w = 0]sz\n li 3 % 0 =F  [Fizz if 0 == i % 3]sz\n li 5 % 0 =B  [Buzz if 0 == i % 5]sz\n lw 0 =N      [print Number if 0 == w]sz\n lw 1 =W      [print neWline if 1 == w]sz\n li 1 + si    [i += 1]sz\n li 100 !<L   [continue Loop if 100 >= i]sz \n]sL\n1 si          [i = 1]sz\n0 0 =L        [enter Loop]sz\n",
+    "# dc is stack based, so we use the stack instead of a variable for our \n# current number.\n\n1                       # Number = 1\n[[Fizz]n 1 sw]sF        # Prints \"Fizz\" prevents Number from printing\n[[Buzz]n 1 sw]sB        # Prints \"Buzz\" prevents Number from printing\n[dn]sN                  # Prints Number\n[\n        dd              # Put two extra copies of Number on stack\n        0 sw            # w = 0\n        3% 0=F          # Fizz if 0 == Number % 3 (destroys 1st copy)\n        5% 0=B          # Buzz if 0 == Number % 5 (destroys 2nd copy)\n        lw 0=N          # Print Number if 0 == w\n        [\n]n                      # Print new line\n        1+d             # Number += 1 and put extra copy on stack\n        100!<L          # Continue Loop if 100 >= Number (destroys copy)\n]dsLx                   # Enter Loop\n"
+   ]
+  },
+  "delphi": {
+   "header": "Delphi",
+   "lang": "delphi",
+   "variants": [
+    "program FizzBuzz;\n\n{$APPTYPE CONSOLE}\n\nuses SysUtils;\n\nvar\n  i: Integer;\nbegin\n  for i := 1 to 100 do\n  begin\n    if i mod 15 = 0 then\n      Writeln('FizzBuzz')\n    else if i mod 3 = 0 then\n      Writeln('Fizz')\n    else if i mod 5 = 0 then\n      Writeln('Buzz')\n    else\n      Writeln(i);\n  end;\nend.\n"
+   ]
+  },
+  "draco-programming-language": {
+   "header": "Draco",
+   "lang": "draco-programming-language",
+   "variants": [
+    "proc nonrec main() void:\n    byte i;\n    for i from 1 upto 100 do\n        if i % 15 = 0 then writeln(\"FizzBuzz\")\n        elif i % 5 = 0 then writeln(\"Buzz\")\n        elif i % 3 = 0 then writeln(\"Fizz\")\n        else writeln(i)\n        fi\n    od\ncorp\n"
+   ]
+  },
+  "e": {
+   "header": "E",
+   "lang": "e",
+   "variants": [
+    "for i in 1..100 {\n   println(switch ([i % 3, i % 5]) {\n     match [==0, ==0] { \"FizzBuzz\" }\n     match [==0, _  ] { \"Fizz\" }\n     match [_,   ==0] { \"Buzz\" }\n     match _          { i }\n   })\n }\n"
+   ]
+  },
+  "ecl": {
+   "header": "ECL",
+   "lang": "ecl",
+   "variants": [
+    "DataRec := RECORD\n    STRING  s;\nEND;\n\nDataRec MakeDataRec(UNSIGNED c) := TRANSFORM\n    SELF.s := MAP\n        (\n            c % 15 = 0  =>  'FizzBuzz',\n            c % 3 = 0   =>  'Fizz',\n            c % 5 = 0   =>  'Buzz',\n            (STRING)c\n        );\nEND;\n\nd := DATASET(100,MakeDataRec(COUNTER));\n\nOUTPUT(d);\n"
+   ]
+  },
+  "ed-editor": {
+   "header": "Ed",
+   "lang": "ed-editor",
+   "variants": [
+    "H\na\n100\n.\n# iota.ed\ng/[^0-9]{1,}/s///g\n,p\n# decimal -> unary\ng/^0+([0-9])/s//\\1/\ng/^9([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiiiiiii/\ng/^8([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiiiiii/\ng/^7([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiiiii/\ng/^6([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiiii/\ng/^5([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiii/\ng/^4([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiii/\ng/^3([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iii/\ng/^2([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2ii/\ng/^1([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2i/\ng/^0([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2/\ng/^9([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiiiiiii/\ng/^8([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiiiiii/\ng/^7([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiiiii/\ng/^6([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiiii/\ng/^5([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiii/\ng/^4([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiii/\ng/^3([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iii/\ng/^2([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2ii/\ng/^1([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2i/\ng/^0([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2/\ng/^9([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiiiiiii/\ng/^8([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiiiiii/\ng/^7([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiiiii/\ng/^6([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiiii/\ng/^5([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiii/\ng/^4([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiii/\ng/^3([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iii/\ng/^2([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2ii/\ng/^1([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2i/\ng/^0([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2/\ng/^9([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiiiiiii/\ng/^8([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiiiiii/\ng/^7([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiiiii/\ng/^6([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiiii/\ng/^5([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiii/\ng/^4([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiii/\ng/^3([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iii/\ng/^2([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2ii/\ng/^1([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2i/\ng/^0([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2/\ng/^9([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiiiiiii/\ng/^8([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiiiiii/\ng/^7([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiiiii/\ng/^6([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiiii/\ng/^5([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiiii/\ng/^4([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iiii/\ng/^3([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2iii/\ng/^2([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2ii/\ng/^1([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2i/\ng/^0([0-9]*)(i*)/s//\\1\\2\\2\\2\\2\\2\\2\\2\\2\\2\\2/\n# iota logic\ns/\\B/\\\n/g\na\n\n.\ny\nd\ng/i/x\\\ns/.*/&i/\\\n-1d\\\ny\n# fizzbuzz\ng/^(i{15})+$/s//FizzBuzz/\ng/^(i{5})+$/s//Buzz/\ng/^(i{3})+$/s//Fizz/\n# unary -> decimal (for 0-10000 range)\ng/i{9000}(i{0,999})/s//9\\1/\ng/i{8000}(i{0,999})/s//8\\1/\ng/i{7000}(i{0,999})/s//7\\1/\ng/i{6000}(i{0,999})/s//6\\1/\ng/i{5000}(i{0,999})/s//5\\1/\ng/i{4000}(i{0,999})/s//4\\1/\ng/i{3000}(i{0,999})/s//3\\1/\ng/i{2000}(i{0,999})/s//2\\1/\ng/i{1000}(i{0,999})/s//1\\1/\nv/^[0-9]i*$/s/.*/0&/\ng/i{900}(i{0,99})/s//9\\1/\ng/i{800}(i{0,99})/s//8\\1/\ng/i{700}(i{0,99})/s//7\\1/\ng/i{600}(i{0,99})/s//6\\1/\ng/i{500}(i{0,99})/s//5\\1/\ng/i{400}(i{0,99})/s//4\\1/\ng/i{300}(i{0,99})/s//3\\1/\ng/i{200}(i{0,99})/s//2\\1/\ng/i{100}(i{0,99})/s//1\\1/\nv/^[0-9]{2}i*$/s/^([0-9])(i*)$/\\10\\2/\ng/i{90}(i{0,9})/s//9\\1/\ng/i{80}(i{0,9})/s//8\\1/\ng/i{70}(i{0,9})/s//7\\1/\ng/i{60}(i{0,9})/s//6\\1/\ng/i{50}(i{0,9})/s//5\\1/\ng/i{40}(i{0,9})/s//4\\1/\ng/i{30}(i{0,9})/s//3\\1/\ng/i{20}(i{0,9})/s//2\\1/\ng/i{10}(i{0,9})/s//1\\1/\nv/^[0-9]{3}i*$/s/^([0-9]{2})(i*)$/\\10\\2/\ng/i{9}/s//9/\ng/i{8}/s//8/\ng/i{7}/s//7/\ng/i{6}/s//6/\ng/i{5}/s//5/\ng/i{4}/s//4/\ng/i{3}/s//3/\ng/i{2}/s//2/\ng/i{1}/s//1/\nv/^[0-9]{4}i*$/s/^([0-9]{3})(i*)$/\\10\\2/\ng/^0+([0-9])/s//\\1/\ng/0F1zz/s//Fizz/\ng/0Buzz/s//Buzz/\n,p\nQ\n"
+   ]
+  },
+  "egel": {
+   "header": "Egel",
+   "lang": "egel",
+   "variants": [
+    "import \"prelude.eg\"\nimport \"io.ego\"\n\nusing System\nusing IO\n\ndef fizzbuzz =\n    [ 100 -> print \"100\\n\"\n    | N -> \n        if and ((N%3) == 0) ((N%5) == 0) then \n            let _ = print \"fizz buzz, \" in fizzbuzz (N+1)\n        else if (N%3) == 0 then\n            let _ = print \"fizz, \" in fizzbuzz (N+1)\n        else if (N%5) == 0 then\n            let _ = print \"buzz, \" in fizzbuzz (N+1)\n        else\n            let _ = print N \", \" in fizzbuzz (N+1) ]\n\ndef main = fizzbuzz 1\n"
+   ]
+  },
+  "eiffel": {
+   "header": "Eiffel",
+   "lang": "eiffel",
+   "variants": [
+    "class\n\tAPPLICATION\n\ncreate\n\tmake\n\nfeature\n\n\tmake\n\t\tdo\n\t\t\tfizzbuzz\n\t\tend\n\n\tfizzbuzz\n\t        --Numbers up to 100, prints \"Fizz\" instead of multiples of 3, and \"Buzz\" for multiples of 5.\n\t        --For multiples of both 3 and 5 prints \"FizzBuzz\".\n\t\tdo\n\t\t\tacross\n\t\t\t\t1 |..| 100 as c\n\t\t\tloop\n\t\t\t\tif c.item \\\\ 15 = 0 then\n\t\t\t\t\tio.put_string (\"FIZZBUZZ%N\")\n\t\t\t\telseif c.item \\\\ 3 = 0 then\n\t\t\t\t\tio.put_string (\"FIZZ%N\")\n\t\t\t\telseif c.item \\\\ 5 = 0 then\n\t\t\t\t\tio.put_string (\"BUZZ%N\")\n\t\t\t\telse\n\t\t\t\t\tio.put_string (c.item.out + \"%N\")\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\nend\n"
+   ]
+  },
+  "elixir": {
+   "header": "Elixir",
+   "lang": "elixir",
+   "variants": [
+    "Enum.each 1..100, fn x ->\n  IO.puts(case { rem(x,3) == 0, rem(x,5) == 0 } do\n    { true, true }   -> \"FizzBuzz\"\n    { true, false }  -> \"Fizz\"\n    { false, true }  -> \"Buzz\"\n    { false, false } -> x\n  end)\nend\n",
+    "#!/usr/bin/env elixir\n1..100 |> Enum.map(fn i ->\n  cond do\n    rem(i,3*5) == 0 -> \"FizzBuzz\"\n    rem(i,3) == 0   -> \"Fizz\"\n    rem(i,5) == 0   -> \"Buzz\"\n    true            -> i\n  end\nend) |> Enum.each(fn i -> IO.puts i end)\n",
+    "defmodule RC do\n  def fizzbuzz(limit \\\\ 100) do\n    fizz = Stream.cycle([\"\", \"\", \"Fizz\"])\n    buzz = Stream.cycle([\"\", \"\", \"\", \"\", \"Buzz\"])\n    Stream.zip(fizz, buzz)\n    |> Enum.take(limit)\n    |> Enum.with_index\n    |> Enum.each(fn {{f,b},i} ->\n         IO.puts if f<>b==\"\", do: i+1, else: f<>b\n       end)\n  end\nend\n\nRC.fizzbuzz\n",
+    "defmodule FizzBuzz do\n  def fizzbuzz(n) when rem(n, 15) == 0, do: \"FizzBuzz\"\n  def fizzbuzz(n) when rem(n,  5) == 0, do: \"Buzz\"\n  def fizzbuzz(n) when rem(n,  3) == 0, do: \"Fizz\"\n  def fizzbuzz(n),                      do: n  \nend\n\nEnum.each(1..100, &IO.puts FizzBuzz.fizzbuzz &1)\n",
+    "f = fn(n) when rem(n,15)==0 -> \"FizzBuzz\"\n      (n) when rem(n,5)==0  -> \"Fizz\"\n      (n) when rem(n,3)==0  -> \"Buzz\"\n      (n)                   -> n\nend\n\nfor n <- 1..100, do: IO.puts f.(n)\n"
+   ]
+  },
+  "elm": {
+   "header": "Elm",
+   "lang": "elm",
+   "variants": [
+    "import Html exposing (text)\nimport List exposing (map)\n\nmain =\n  [1..100] |> map getWordForNum |> text\n\ngetWordForNum num =\n  if num % 15 == 0 then\n    \"FizzBuzz\"\n  else if num % 3 == 0 then\n    \"Fizz\"\n  else if num % 5 == 0 then\n    \"Buzz\"\n  else\n    String.fromInt num\n",
+    "import Html exposing (text)\nimport List exposing (map)\nimport String exposing (join, fromInt)\n\nmain : Html.Html\nmain =\n  [1..100] |> map fizzbuzz |> join \" \" |> text\n\nfizzbuzz : Int -> String\nfizzbuzz num =\n  let\n    fizz = if num % 3 == 0 then \"Fizz\" else \"\"\n    buzz = if num % 5 == 0 then \"Buzz\" else \"\"\n  in\n    if fizz == buzz then\n      fromInt num\n    else\n      fizz ++ buzz\n"
+   ]
+  },
+  "emacs-lisp": {
+   "header": "Emacs Lisp",
+   "lang": "emacs-lisp",
+   "variants": [
+    "(defun fizzbuzz (n) \n  (cond ((and (zerop (% n 5)) (zerop (% n 3))) \"FizzBuzz\") \n\t((zerop (% n 3)) \"Fizz\") \n\t((zerop (% n 5)) \"Buzz\") \n\t(t n)))\n\n;; loop & print from 0 to 100\n(dotimes (i 101)\n  (message \"%s\" (fizzbuzz i)))\n"
+   ]
+  },
+  "emojicode": {
+   "header": "Emojicode",
+   "lang": "emojicode",
+   "variants": [
+    "🏁🍇\n  🔂 i 🆕⏩ 1 101 1 ❗ 🍇\n    ↪️ i 🚮 15 🙌 0 🍇\n      😀 🔤FizzBuzz🔤 ❗\n    🍉\n    🙅↪️ i 🚮 3 🙌 0 🍇\n      😀 🔤Fizz🔤 ❗\n    🍉\n    🙅↪️ i 🚮 5 🙌 0 🍇\n      😀 🔤Buzz🔤 ❗\n    🍉🙅🍇\n      😀 🔤🧲i🧲🔤 ❗\n    🍉\n  🍉\n🍉\n",
+    "🏁🍇\n  🔂 i 🆕⏩ 1 101 1 ❗ 🍇\n    🔤🔤 ➡️ 🖍🆕 msg\n    ↪️ i 🚮 3 🙌 0 🍇\n      🔤Fizz🔤 ➡️ 🖍 msg\n    🍉\n    ↪️ i 🚮 5 🙌 0 🍇\n      🔤🧲msg🧲Buzz🔤 ➡️ 🖍 msg\n    🍉\n    ↪️ msg 🙌 🔤🔤 🍇\n      😀 🔤🧲i🧲🔤 ❗\n    🍉🙅🍇\n      😀 🔤🧲msg🧲🔤 ❗\n    🍉\n  🍉\n🍉\n"
+   ]
+  },
+  "erlang": {
+   "header": "Erlang",
+   "lang": "erlang",
+   "variants": [
+    "-spec fizzbuzz() -> Result :: string().\nfizzbuzz() ->\n    F = fun(N) when N rem 15 == 0 -> \"FizzBuzz\";\n           (N) when N rem 3 == 0  -> \"Fizz\";\n           (N) when N rem 5 == 0  -> \"Buzz\";\n           (N) -> integer_to_list(N)\n        end,\n    lists:flatten([[F(N)] ++ [\"\\n\"] || N <- lists:seq(1,100)]).\n",
+    "-module(fizzbuzz).\n-export([start/1, count/2, display/0]).\n\nfizzbuzz(N) when N rem 15 == 0 -> fizzbuzz;\nfizzbuzz(N) when N rem 5  == 0 -> buzz;\nfizzbuzz(N) when N rem 3  == 0 -> fizz;\nfizzbuzz(N) -> N.\n\ncount(N, Limit) when N==Limit ->\n    display ! fizzbuzz(N),\n    display ! finished;\ncount(N, Limit) when N<Limit ->\n    display ! fizzbuzz(N),\n    count(N+1, Limit).\n\ndisplay() ->\n    receive\n        finished -> io:format(\"end!\\n\");\n        fizzbuzz -> io:format(\"FizzBuzz!\\n\"), display();\n        buzz     -> io:format(\"Buzz!\\n\"), display();\n        fizz     -> io:format(\"Fizz!\\n\"), display();\n        N        -> io:format(\"~p\\n\", [N]), display()\n    end.\n\nstart(Max) ->\n    register(display, spawn(fizzbuzz, display, [])),\n    count(1, Max).\n"
+   ]
+  },
+  "euphoria": {
+   "header": "Euphoria",
+   "lang": "euphoria",
+   "variants": [
+    "include std/utils.e\n\nfunction fb( atom n )\n\tsequence fb\n\tif remainder( n, 15 ) = 0 then\n\t\tfb = \"FizzBuzz\"\n\telsif remainder( n, 5 ) = 0 then\n\t\tfb = \"Fizz\"\n\telsif remainder( n, 3 ) = 0 then\n\t\tfb = \"Buzz\"\n\telse\n\t\tfb = sprintf( \"%d\", n )\n\tend if\n\treturn fb\nend function\n \nfunction fb2( atom n )\n\treturn iif( remainder(n, 15) = 0, \"FizzBuzz\", \n\t\tiif( remainder( n, 5 ) = 0, \"Fizz\", \n\t\tiif( remainder( n, 3) = 0, \"Buzz\", sprintf( \"%d\", n ) ) ) ) \nend function\n\nfor i = 1 to 30 do\n\tprintf( 1, \"%s \", { fb( i ) } )\nend for\n\nputs( 1, \"\\n\" )\n\nfor i = 1 to 30 do\n\tprintf( 1, \"%s \", { fb2( i ) } )\nend for\n\nputs( 1, \"\\n\" )\n"
+   ]
+  },
+  "f-sharp": {
+   "header": "F Sharp",
+   "lang": "f-sharp",
+   "variants": [
+    "let fizzbuzz n =\n    match n%3 = 0, n%5 = 0 with\n    | true, false -> \"fizz\"\n    | false, true -> \"buzz\"\n    | true, true  -> \"fizzbuzz\"\n    | _ -> string n\n\nlet printFizzbuzz() =\n    [1..100] |> List.iter (fizzbuzz >> printfn \"%s\")\n",
+    "[1..100] \n|> List.map (fun x ->\n            match x with \n            | _ when x % 15 = 0 ->\"fizzbuzz\"\n            | _ when x % 5 = 0 -> \"buzz\"\n            | _ when x % 3 = 0 -> \"fizz\"\n            | _ ->  x.ToString())\n|> List.iter (fun x -> printfn \"%s\" x)    \n",
+    "let (|MultipleOf|_|) divisors number =\n    if Seq.exists ((%) number >> (<>) 0) divisors\n    then None\n    else Some ()\n\nlet fizzbuzz = function\n| MultipleOf [3; 5] -> \"fizzbuzz\"\n| MultipleOf [3]    -> \"fizz\"\n| MultipleOf [5]    -> \"buzz\"\n| n                 -> string n\n\n{ 1 .. 100 }\n|> Seq.iter (fizzbuzz >> printfn \"%s\")\n"
+   ]
+  },
+  "factor": {
+   "header": "Factor",
+   "lang": "factor",
+   "variants": [
+    "USE: math.parser\n100 [1..b] [ { \"Fizz\" \"Buzz\" } { 3 5 } [ overd mod 0 = swap and ] 2map concat swap >dec or print ] each\n",
+    "USING: math kernel io math.functions math.parser math.ranges ;\nIN: fizzbuzz\n: fizz ( n -- str ) 3 divisor? \"Fizz\" \"\" ? ;\n: buzz ( n -- str ) 5 divisor? \"Buzz\" \"\" ? ;\n: fizzbuzz ( n -- str ) dup [ fizz ] [ buzz ] bi append [ number>string ] [ nip ] if-empty ;\n: main ( -- ) 100 [1,b] [ fizzbuzz print ] each ;\nMAIN: main\n",
+    "USING: kernel sequences arrays generalizations fry math math.parser prettyprint ;\nIN: fizzbuzz\n\n: zz ( m seq -- v ) dup length 1 <array> V{ } clone 4 -nrot 1 4 -nrot 3 nrot\n '[ dup _ <= ]\n  3 -nrot\n '[\n    \"\" _ [ _ [ swap execute( str n -- str n ) ] change-nth ] each-index\n    dup empty? [ drop dup number>string ] [ ] if swapd suffix! swap 1 +\n  ]\n  while drop ;\n\n: fizz ( str n -- str n ) dup 3 < [ 1 + ] [ drop \"Fizz\" append 1 ] if ;\n: buzz ( str n -- str n ) dup 5 < [ 1 + ] [ drop \"Buzz\" append 1 ] if ;\n: quxx ( str n -- str n ) dup 7 < [ 1 + ] [ drop \"Quxx\" append 1 ] if ;\n: FizzBuzzQuxx ( m -- v ) { fizz buzz quxx } zz ;\n: FizzBuzzQuxx-100 ( -- ) 100 FizzBuzzQuxx . ;\n\nMAIN: FizzBuzzQuxx-100\n",
+    "USING: io kernel math math.functions math.parser ranges\nsequences ;\nIN: rosetta-code.fizz-buzz\n\nPREDICATE: fizz < integer 3 divisor? ;\nPREDICATE: buzz < integer 5 divisor? ;\n\nINTERSECTION: fizzbuzz fizz buzz ;\n\nGENERIC: fizzbuzz>string ( n -- str )\n\nM: fizz fizzbuzz>string \n    drop \"Fizz\" ;\n\nM: buzz fizzbuzz>string\n    drop \"Buzz\" ;\n\nM: fizzbuzz fizzbuzz>string \n    drop \"FizzBuzz\" ;\n\nM: integer fizzbuzz>string\n    number>string ;\n\nMAIN: [ 1 100 [a..b] [ fizzbuzz>string print ] each ]\n"
+   ]
+  },
+  "falcon": {
+   "header": "Falcon",
+   "lang": "falcon",
+   "variants": [
+    "for i in [1:101]\n    switch i % 15\n    case 0        : > \"FizzBuzz\"\n    case 5,10     : > \"Buzz\"\n    case 3,6,9,12 : > \"Fizz\"\n    default       : > i\n    end\nend\n"
+   ]
+  },
+  "fantom": {
+   "header": "Fantom",
+   "lang": "fantom",
+   "variants": [
+    "class FizzBuzz\n{\n  public static Void main ()\n  {\n    for (Int i:=1; i <= 100; ++i)\n    {\n      if (i % 15 == 0)\n        echo (\"FizzBuzz\")\n      else if (i % 3 == 0)\n        echo (\"Fizz\")\n      else if (i % 5 == 0) \n        echo (\"Buzz\") \n      else\n        echo (i)\n    }\n  }\n}\n"
+   ]
+  },
+  "fe": {
+   "header": "Fe",
+   "lang": "fe",
+   "variants": [
+    "static fe_Object *mod(fe_Context *ctx, fe_Object *args) {\n  fe_Number n = fe_tonumber(ctx, fe_nextarg(ctx, &args));\n  return fe_number(ctx, fmod(n, fe_tonumber(ctx, fe_nextarg(ctx, &args))));\n}\n",
+    "(= i 0)\n(while (< i 100)\n  (= i (+ i 1))\n  (print\n    (if (is (mod i 15) 0) \"FizzBuzz\"\n        (is (mod i  3) 0) \"Fizz\"\n        (is (mod i  5) 0) \"Buzz\"\n        i)))\n",
+    "(= i 0)\n(= fizz 0)\n(= buzz 0)\n(= fizzbuzz 0)\n\n(while (< i 100)\n  (= i (+ i 1))\n  (= fizz (+ fizz 1))\n  (= buzz (+ buzz 1))\n  (= fizzbuzz (+ fizzbuzz 1))\n  ; check and reset counters\n  (print\n    (if (is fizzbuzz 15) (do (= fizzbuzz 0) (= fizz 0) (= buzz 0) \"fizzbuzz\")\n        (is fizz 3) (do (= fizz 0) \"fizz\")\n        (is buzz 5) (do (= buzz 0) \"buzz\")\n        i)))\n"
+   ]
+  },
+  "fennel": {
+   "header": "Fennel",
+   "lang": "fennel",
+   "variants": [
+    "(for [i 1 100]\n  (print (if (= (% i 15) 0) :FizzBuzz\n             (= (% i 3) 0) :Fizz\n             (= (% i 5) 0) :Buzz\n             i)))\n",
+    "(fn fizz-buzz [from to]\n  (print (match [(% from 3) (% from 5)]\n           [0 0] :FizzBuzz\n           [0 _] :Fizz\n           [_ 0] :Buzz\n           _     from))\n  (when (< from to)\n    (fizz-buzz (+ from 1) to)))\n\n(fizz-buzz 1 100)\n",
+    "(for [i 1 100]\n  (print (match (% i 15)\n           0                     :FizzBuzz\n           (where (or 3 6 9 12)) :Fizz\n           (where (or 5 10)      :Buzz\n           _                      i)))\n"
+   ]
+  },
+  "flang": {
+   "header": "Flang",
+   "lang": "flang",
+   "variants": [
+    "модуль «Физз-базз»\n\nтотальная функция «Приписать в начало»\n  принимает первое: число, элементы: список числа\n  возвращает список числа\n  пример «В пустой»\n    дано первое равно 1\n    дано элементы равно пустой список\n    ожидается [1]\n  свёртка элементы начиная с [первое] как акк и эл → добавить эл к акк\n\nтотальная функция «Слово для числа»\n  принимает н: число\n  возвращает строка\n  пример «Кратно трём»\n    дано н равно 9\n    ожидается \"Fizz\"\n  пример «Кратно пяти»\n    дано н равно 10\n    ожидается \"Buzz\"\n  пример «Кратно пятнадцати»\n    дано н равно 15\n    ожидается \"FizzBuzz\"\n  пример «Ни то ни другое»\n    дано н равно 7\n    ожидается \"7\"\n  если (н остаток от 15) равен 0\n    то \"FizzBuzz\"\n    иначе\n      если (н остаток от 3) равен 0\n        то \"Fizz\"\n        иначе\n          если (н остаток от 5) равен 0\n            то \"Buzz\"\n            иначе к строке н\n\nтотальная функция «Физз-базз списка»\n  принимает элементы: список числа\n  возвращает список строки\n  пример «Первая дюжина»\n    дано элементы равно [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]\n    ожидается [\"1\", \"2\", \"Fizz\", \"4\", \"Buzz\", \"Fizz\", \"7\", \"8\", \"Fizz\", \"Buzz\", \"11\", \"Fizz\"]\n  пример «Пустой список»\n    дано элементы равно пустой список\n    ожидается пустой список\n  отобразить элементы как эл → «Слово для числа» от эл\n\nфункция «Числа от и до»\n  принимает начало: число, конец: число\n  возвращает список числа\n  пример «От одного до пяти»\n    дано начало равно 1\n    дано конец равно 5\n    ожидается [1, 2, 3, 4, 5]\n  пример «Пустой промежуток»\n    дано начало равно 5\n    дано конец равно 1\n    ожидается пустой список\n  если начало больше конец\n    то пустой список\n    иначе «Приписать в начало» от начало и («Числа от и до» от (начало плюс 1) и конец)\n\nфункция «Физз-базз»\n  принимает предел: число\n  возвращает список строки\n  пример «Условие задачи: до ста»\n    дано предел равно 100\n    ожидается [\"1\", \"2\", \"Fizz\", \"4\", \"Buzz\", \"Fizz\", \"7\", \"8\", \"Fizz\", \"Buzz\", \"11\", \"Fizz\", \"13\", \"14\", \"FizzBuzz\", \"16\", \"17\", \"Fizz\", \"19\", \"Buzz\", \"Fizz\", \"22\", \"23\", \"Fizz\", \"Buzz\", \"26\", \"Fizz\", \"28\", \"29\", \"FizzBuzz\", \"31\", \"32\", \"Fizz\", \"34\", \"Buzz\", \"Fizz\", \"37\", \"38\", \"Fizz\", \"Buzz\", \"41\", \"Fizz\", \"43\", \"44\", \"FizzBuzz\", \"46\", \"47\", \"Fizz\", \"49\", \"Buzz\", \"Fizz\", \"52\", \"53\", \"Fizz\", \"Buzz\", \"56\", \"Fizz\", \"58\", \"59\", \"FizzBuzz\", \"61\", \"62\", \"Fizz\", \"64\", \"Buzz\", \"Fizz\", \"67\", \"68\", \"Fizz\", \"Buzz\", \"71\", \"Fizz\", \"73\", \"74\", \"FizzBuzz\", \"76\", \"77\", \"Fizz\", \"79\", \"Buzz\", \"Fizz\", \"82\", \"83\", \"Fizz\", \"Buzz\", \"86\", \"Fizz\", \"88\", \"89\", \"FizzBuzz\", \"91\", \"92\", \"Fizz\", \"94\", \"Buzz\", \"Fizz\", \"97\", \"98\", \"Fizz\", \"Buzz\"]\n  «Физз-базз списка» от («Числа от и до» от 1 и предел)\n",
+    "module «FizzBuzz»\n\ntotal function «Prepend»\n  accepts element: number, items: list of number\n  returns list of number\n  example «Into an empty list»\n    given element equals 1\n    given items equals empty list\n    expected [1]\n  fold items starting with [element] as acc and elem → add elem to acc\n\ntotal function «Word for number»\n  accepts n: number\n  returns string\n  example «Divisible by three»\n    given n equals 9\n    expected \"Fizz\"\n  example «Divisible by five»\n    given n equals 10\n    expected \"Buzz\"\n  example «Divisible by fifteen»\n    given n equals 15\n    expected \"FizzBuzz\"\n  example «Neither»\n    given n equals 7\n    expected \"7\"\n  if (n modulo 15) equals 0\n    then \"FizzBuzz\"\n    else\n      if (n modulo 3) equals 0\n        then \"Fizz\"\n        else\n          if (n modulo 5) equals 0\n            then \"Buzz\"\n            else to text n\n\ntotal function «FizzBuzz of list»\n  accepts items: list of number\n  returns list of string\n  example «First dozen»\n    given items equals [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]\n    expected [\"1\", \"2\", \"Fizz\", \"4\", \"Buzz\", \"Fizz\", \"7\", \"8\", \"Fizz\", \"Buzz\", \"11\", \"Fizz\"]\n  example «Empty list»\n    given items equals empty list\n    expected empty list\n  map items as elem → «Word for number» of elem\n\nfunction «Numbers from and to»\n  accepts start: number, finish: number\n  returns list of number\n  example «One to five»\n    given start equals 1\n    given finish equals 5\n    expected [1, 2, 3, 4, 5]\n  example «Empty range»\n    given start equals 5\n    given finish equals 1\n    expected empty list\n  if start is greater than finish\n    then empty list\n    else «Prepend» of start and («Numbers from and to» of (start plus 1) and finish)\n\nfunction «FizzBuzz»\n  accepts limit: number\n  returns list of string\n  example «The task: up to one hundred»\n    given limit equals 100\n    expected [\"1\", \"2\", \"Fizz\", \"4\", \"Buzz\", \"Fizz\", \"7\", \"8\", \"Fizz\", \"Buzz\", \"11\", \"Fizz\", \"13\", \"14\", \"FizzBuzz\", \"16\", \"17\", \"Fizz\", \"19\", \"Buzz\", \"Fizz\", \"22\", \"23\", \"Fizz\", \"Buzz\", \"26\", \"Fizz\", \"28\", \"29\", \"FizzBuzz\", \"31\", \"32\", \"Fizz\", \"34\", \"Buzz\", \"Fizz\", \"37\", \"38\", \"Fizz\", \"Buzz\", \"41\", \"Fizz\", \"43\", \"44\", \"FizzBuzz\", \"46\", \"47\", \"Fizz\", \"49\", \"Buzz\", \"Fizz\", \"52\", \"53\", \"Fizz\", \"Buzz\", \"56\", \"Fizz\", \"58\", \"59\", \"FizzBuzz\", \"61\", \"62\", \"Fizz\", \"64\", \"Buzz\", \"Fizz\", \"67\", \"68\", \"Fizz\", \"Buzz\", \"71\", \"Fizz\", \"73\", \"74\", \"FizzBuzz\", \"76\", \"77\", \"Fizz\", \"79\", \"Buzz\", \"Fizz\", \"82\", \"83\", \"Fizz\", \"Buzz\", \"86\", \"Fizz\", \"88\", \"89\", \"FizzBuzz\", \"91\", \"92\", \"Fizz\", \"94\", \"Buzz\", \"Fizz\", \"97\", \"98\", \"Fizz\", \"Buzz\"]\n  «FizzBuzz of list» of («Numbers from and to» of 1 and limit)\n"
+   ]
+  },
+  "focal": {
+   "header": "FOCAL",
+   "lang": "focal",
+   "variants": [
+    "01.10 FOR I=1,100; DO 2.0\n01.20 QUIT\n\n02.10 SET ZB=I/15 - FITR(I/15)\n02.20 IF (ZB) 2.4, 2.3, 2.4\n02.30 TYPE \"FizzBuzz\" !\n02.35 RETURN\n02.40 SET Z=I/3 - FITR(I/3)\n02.50 IF (Z) 2.7, 2.6, 2.7\n02.60 TYPE \"Fizz\" !\n02.65 RETURN\n02.70 SET B=I/5 - FITR(I/5)\n02.80 IF (B) 2.99, 2.9, 2.99\n02.90 TYPE \"Buzz\" !\n02.95 RETURN\n02.99 TYPE %3, I, !\n"
+   ]
+  },
+  "forth": {
+   "header": "Forth",
+   "lang": "forth",
+   "variants": [
+    ": fizz ( n -- ) drop .\" Fizz\" ;\n: buzz ( n -- ) drop .\" Buzz\" ;\n: fb   ( n -- ) drop .\" FizzBuzz\" ;\n: vector create does> ( n -- )\n  over 15 mod cells + @ execute ;\nvector .fizzbuzz\n  ' fb   , ' . ,    ' . ,\n  ' fizz , ' . ,    ' buzz ,\n  ' fizz , ' . ,    ' . ,\n  ' fizz , ' buzz , ' . ,\n  ' fizz , ' . ,    ' . ,\n",
+    ": .fizzbuzz ( n -- )\n  0 pad c!\n  dup 3 mod 0= if s\" Fizz\" pad  place then\n  dup 5 mod 0= if s\" Buzz\" pad +place then\n  pad c@ if drop pad count type else . then ;\n\n: zz ( n -- )\n  1+ 1 do i .fizzbuzz cr loop ;\n100 zz\n",
+    "SYNONYM NOT INVERT \\ Bitwise boolean not\n\n: Fizz?  ( n -- ? )  3 MOD 0=  DUP IF .\" Fizz\" THEN ;\n: Buzz?  ( n -- ? )  5 MOD 0=  DUP IF .\" Buzz\" THEN ;\n: ?print  ( n ? -- )  IF . THEN ;\n: FizzBuzz  ( -- )\n   101 1 DO CR  I  DUP Fizz? OVER Buzz? OR  NOT ?print  LOOP ;\n\nFizzBuzz\n",
+    ": n     ( n -- n+1 )    dup .         1+ ;\n: f     ( n -- n+1 )    .\" Fizz \"     1+ ;\n: b     ( n -- n+1 )    .\" Buzz \"     1+ ;\n: fb    ( n -- n+1 )    .\" FizzBuzz \" 1+ ;\n: fb10  ( n -- n+10 )   n n f n b f n n f b ;\n: fb15  ( n -- n+15 )   fb10 n f n n fb ;\n: fb100 ( n -- n+100 )  fb15 fb15 fb15 fb15 fb15 fb15 fb10 ;\n: .fizzbuzz ( -- )      1 fb100 drop ;\n",
+    ": | >r >r dup r> mod 0= if r> count type drop then r> drop ;\n: fizzbuzz1 15 c\" FizzBuzz \" | 3 c\" Fizz \" | 5 c\" Buzz \" | . ;\n: fizzbuzz 101 1 do i fizzbuzz1 loop ;\nfizzbuzz\n"
+   ]
+  },
+  "fortran": {
+   "header": "Fortran",
+   "lang": "fortran",
+   "variants": [
+    "program fizzbuzz_if\n   integer :: i\n   \n   do i = 1, 100\n      if     (mod(i,15) == 0) then; print *, 'FizzBuzz'\n      else if (mod(i,3) == 0) then; print *, 'Fizz'\n      else if (mod(i,5) == 0) then; print *, 'Buzz'\n      else;                         print *, i\n      end if\n   end do\nend program fizzbuzz_if\n",
+    "program FizzBuzz\nimplicit none\ninteger :: i = 1\n\ndo i = 1, 100\n    if (Mod(i,3) == 0)write(*,\"(A)\",advance='no')  \"Fizz\"\n    if (Mod(i,5) == 0)write(*,\"(A)\",advance='no') \"Buzz\"\n    if (Mod(i,3) /= 0 .and. Mod(i,5) /=0 )write(*,\"(I3)\",advance='no') i\n    print *, \"\"\nend do\nend program FizzBuzz\n",
+    "program fizzbuzz_select\n    integer :: i\n    \n    do i = 1, 100\n       select case (mod(i,15))\n          case 0;        print *, 'FizzBuzz'\n          case 3,6,9,12; print *, 'Fizz'\n          case 5,10;     print *, 'Buzz'\n          case default;  print *, i\n       end select\n    end do\n end program fizzbuzz_select\n"
+   ]
+  },
+  "frege": {
+   "header": "Frege",
+   "lang": "frege",
+   "variants": [
+    "gen n word = cycle (take (n - 1) (repeat \"\") ++ [word])\npattern = zipWith (++) (gen 3 \"fizz\") (gen 5 \"buzz\")\nfizzbuzz = zipWith combine pattern [1..] where\n    combine word number = if null word\n                             then show number\n                             else word\nshow $ take 100 fizzbuzz\n"
+   ]
+  },
+  "frink": {
+   "header": "Frink",
+   "lang": "frink",
+   "variants": [
+    "for i = 1 to 100\n{\n   flag = false\n   if i mod 3 == 0\n   {\n      flag = true\n      print[\"Fizz\"]\n   }\n   \n   if i mod 5 == 0\n   {\n      flag = true\n      print[\"Buzz\"]\n   }\n\n   if flag == false\n      print[i]\n\n   println[]\n}\n"
+   ]
+  },
+  "futurebasic": {
+   "header": "FutureBasic",
+   "lang": "futurebasic",
+   "variants": [
+    "include \"NSLog.incl\"\n\nlong fizz, buzz, i\n\nfor i = 1 to 100\n  fizz = (i % 3 )\n  buzz = (i % 5 )\n  if fizz + buzz == 0 then NSLog(@\"FizzBuzz\") : continue\n  if fizz == 0 then NSLog(@\"Fizz\") : continue\n  if buzz == 0 then NSLog(@\"Buzz\") : continue\n  NSLog(@\"%ld\",i)\nnext i\n\nHandleEvents\n"
+   ]
+  },
+  "gambas": {
+   "header": "Gambas",
+   "lang": "gambas",
+   "variants": [
+    "Public Sub Main()\nDim siCount As Short\nDim sText As String\n\nFor siCount = 1 To 100\n  sText = \"\"\n  If siCount Mod 3 = 0 Then sText = \"Fizz\"\n  If siCount Mod 5 = 0 Then sText = \"Buzz\"\n  If siCount Mod 15 = 0 Then sText = \"FizzBuzz\"\n  If sText Then Print sText Else Print siCount\nNext\n\nEnd\n"
+   ]
+  },
+  "gap": {
+   "header": "GAP",
+   "lang": "gap",
+   "variants": [
+    "FizzBuzz := function()\n\tlocal i;\n\tfor i in [1 .. 100] do\n\t\tif RemInt(i, 15) = 0 then\n\t\t\tPrint(\"FizzBuzz\\n\");\n\t\telif RemInt(i, 3) = 0 then\n\t\t\tPrint(\"Fizz\\n\");\n\t\telif RemInt(i, 5) = 0 then\n\t\t\tPrint(\"Buzz\\n\");\n\t\telse\n\t\t\tPrint(i, \"\\n\");\n\t\tfi;\n\tod;\nend;\n"
+   ]
+  },
+  "gdscript": {
+   "header": "GDScript",
+   "lang": "gdscript",
+   "variants": [
+    "extends Node\n\nfunc _ready():\n\tfor i in range(1, 101):\n\t\tif i % 15 == 0:\n\t\t\tprint(\"FizzBuzz\")\n\t\telif i % 3 == 0:\n\t\t\tprint(\"Fizz\")\n\t\telif i % 5 == 0:\n\t\t\tprint(\"Buzz\")\n\t\telse:\n\t\t\tprint(i)\n\n\tget_tree().quit()\n"
+   ]
+  },
+  "gfa-basic": {
+   "header": "GFA Basic",
+   "lang": "gfa-basic",
+   "variants": [
+    "' Fizz Buzz\n'\nFOR i%=1 TO 100\n  IF i% MOD 15=0\n    PRINT \"FizzBuzz\"\n  ELSE IF i% MOD 3=0\n    PRINT \"Fizz\"\n  ELSE IF i% MOD 5=0\n    PRINT \"Buzz\"\n  ELSE\n    PRINT i%\n  ENDIF\nNEXT i%\n"
+   ]
+  },
+  "gleam": {
+   "header": "Gleam",
+   "lang": "gleam",
+   "variants": [
+    "import gleam/int\nimport gleam/io\nimport gleam/list\n\npub fn main() {\n  int.range(100, 0, [], list.prepend)\n  |> list.map(fizz_buzz)\n  |> list.each(io.println)\n}\n\npub fn fizz_buzz(i) {\n  case i % 3, i % 5 {\n    0, 0 -> \"FizzBuzz\"\n    0, _ -> \"Fizz\"\n    _, 0 -> \"Buzz\"\n    _, _ -> int.to_string(i)\n  }\n}\n"
+   ]
+  },
+  "go": {
+   "header": "Go",
+   "lang": "go",
+   "variants": [
+    "package main\n\nimport \"fmt\"\n\nfunc main() {\n    for i := 1; i <= 100; i++ {\n        switch {\n        case i%15==0:\n            fmt.Println(\"FizzBuzz\")\n        case i%3==0:\n            fmt.Println(\"Fizz\")\n        case i%5==0:\n            fmt.Println(\"Buzz\")\n        default: \n            fmt.Println(i)\n        }\n    }\n}\n",
+    "package main\n\nimport \"fmt\"\n\nfunc main() {\n    for i := 1; i <= 100; i++ {\n        fmt.Println(map[bool]map[bool]interface{}{\n            false: {false: i, true: \"Fizz\"}, true: {false: \"Buzz\", true: \"FizzBuzz\"},\n        }[i%5 == 0][i%3 == 0])\n    }\n}\n"
+   ]
+  },
+  "golfscript": {
+   "header": "Golfscript",
+   "lang": "golfscript",
+   "variants": [
+    "100,{)6,{.(&},{1$1$%{;}{4*35+6875*25base{90\\-}%}if}%\\or}%n*\n"
+   ]
+  },
+  "golo": {
+   "header": "Golo",
+   "lang": "golo",
+   "variants": [
+    "module FizzBuzz\n\naugment java.lang.Integer {\n\tfunction getFizzAndOrBuzz = |this| -> match {\n\t\twhen this % 15 == 0 then \"FizzBuzz\"\n\t\twhen this % 3 == 0 then \"Fizz\"\n\t\twhen this % 5 == 0 then \"Buzz\"\n\t\totherwise this\n\t}\n}\n\nfunction main = |args| {\n  foreach i in [1..101] {\n\tprintln(i: getFizzAndOrBuzz())\n  }\n}\n"
+   ]
+  },
+  "gosu": {
+   "header": "Gosu",
+   "lang": "gosu",
+   "variants": [
+    "for (i in 1..100) {\n    \n    if (i % 3 == 0 && i % 5 == 0) {\n        print(\"FizzBuzz\")\n        continue\n    }\n    \n    if (i % 3 == 0) {\n        print(\"Fizz\")\n        continue\n    }\n    \n    if (i % 5 == 0) {\n        print(\"Buzz\")\n        continue\n    }\n    \n    // default\n    print(i)\n    \n}\n",
+    "// note that compiler reports error (I don't know why) but still it's working\nfor (i in 1..100) { \n    print(i % 5 == 0 ? i % 3 == 0 ? \"FizzBuzz\" : \"Buzz\" : i % 3 == 0 ? \"Fizz\" : i)\n}\n"
+   ]
+  },
+  "groovy": {
+   "header": "Groovy",
+   "lang": "groovy",
+   "variants": [
+    "1.upto(100) { i -> println \"${i % 3 ? '' : 'Fizz'}${i % 5 ? '' : 'Buzz'}\" ?: i }\n"
+   ]
+  },
+  "hare": {
+   "header": "Hare",
+   "lang": "hare",
+   "variants": [
+    "use fmt;\n\nexport fn main() void = {\n\tfor (let i = 1z; i <= 100; i += 1) {\n\t\tfmt::println(\n\t\t\tif (i % 15 == 0) \"FizzBuzz\"\n\t\t\telse if (i % 3 == 0) \"Fizz\"\n\t\t\telse if (i % 5 == 0) \"Buzz\"\n\t\t\telse i\n\t\t)!;\n\t};\n};\n"
+   ]
+  },
+  "haskell": {
+   "header": "Haskell",
+   "lang": "haskell",
+   "variants": [
+    "fizzbuzz :: Int -> String\nfizzbuzz x\n  | f 15 = \"FizzBuzz\"\n  | f 3 = \"Fizz\"\n  | f 5 = \"Buzz\"\n  | otherwise = show x\n  where\n    f = (0 ==) . rem x\n\nmain :: IO ()\nmain = mapM_ (putStrLn . fizzbuzz) [1 .. 100]\n",
+    "fizzbuzz :: Int -> String\nfizzbuzz n =\n  '\\n' :\n  if null (fizz ++ buzz)\n    then show n\n    else fizz ++ buzz\n  where\n    fizz =\n      if mod n 3 == 0\n        then \"Fizz\"\n        else \"\"\n    buzz =\n      if mod n 5 == 0\n        then \"Buzz\"\n        else \"\"\n\nmain :: IO ()\nmain = putStr $ concatMap fizzbuzz [1 .. 100]\n",
+    "main = mapM_ (putStrLn . fizzbuzz) [1..100]\n\nfizzbuzz n = \n    show n <|> [fizz| n `mod` 3 == 0] ++ \n               [buzz| n `mod` 5 == 0]\n\n-- A simple default choice operator. \n-- Defaults if both fizz and buzz fail, concats if any succeed.\ninfixr 0 <|>\nd <|> [] = d\n_ <|> x = concat x\n\nfizz = \"Fizz\"\nbuzz = \"Buzz\"\n",
+    "main = mapM_ putStrLn $ take 100 $ zipWith show_number_or_fizzbuzz [1..] fizz_buzz_list           \n\nshow_number_or_fizzbuzz x y = if null y then show x else y\n\nfizz_buzz_list = zipWith (++) (cycle [\"\",\"\",\"Fizz\"]) (cycle [\"\",\"\",\"\",\"\",\"Buzz\"])\n",
+    "import Control.Applicative ( ZipList(ZipList, getZipList) )\n\nfizzBuzz :: [String]\nfizzBuzz =\n  getZipList $ go <$> \n    ZipList (cycle $ replicate 2 [] <> [\"fizz\"]) <*>\n    ZipList (cycle $ replicate 4 [] <> [\"buzz\"]) <*>\n    ZipList (show <$> [1 ..])\n\ngo :: String -> String -> String -> String\ngo f b n\n  | null f && null b = n\n  | otherwise = f <> b\n\n\nmain :: IO ()\nmain = mapM_ putStrLn $ take 100 fizzBuzz\n"
+   ]
+  },
+  "hobbes": {
+   "header": "Hobbes",
+   "lang": "hobbes",
+   "variants": [
+    "[putStrLn(if (n%15==0) then \"FizzBuzz\"\n          else if (n%3==0) then \"Fizz\"\n          else if (n%5==0) then \"Buzz\"\n          else show(n))\n | n <- [1..100]]\n",
+    "fizzbuzz :: int -> [char]\nfizzbuzz n =\n  match (n % 3, n % 5) with\n  | (0, 0) -> \"FizzBuzz\"\n  | (0, _) -> \"Fizz\"\n  | (_, 0) -> \"Buzz\"\n  | _      -> show(n)\n\n// Usage: [putStrLn(fizzbuzz(n)) | n <- [1..100]]\n"
+   ]
+  },
+  "holyc": {
+   "header": "HolyC",
+   "lang": "holyc",
+   "variants": [
+    "U8 i;\nfor (i = 1; i <= 100; i++) {\n  if (!(i % 15))\n    Print(\"FizzBuzz\");\n  else if (!(i % 3))\n    Print(\"Fizz\");\n  else if (!(i % 5))\n    Print(\"Buzz\");\n  else\n    Print(\"%d\", i);\n  Print(\"\\n\");\n}\n"
+   ]
+  },
+  "hoon": {
+   "header": "Hoon",
+   "lang": "hoon",
+   "variants": [
+    ":-  %say\n|=  [^ ~ ~]\n  :-  %noun\n  %+  turn   (gulf [1 101])\n  |=  a=@\n    =+  q=[=(0 (mod a 3)) =(0 (mod a 5))]\n    ?+  q  <a>\n      [& &]  \"FizzBuzz\"\n      [& |]  \"Fizz\"\n      [| &]  \"Buzz\"\n    ==\n"
+   ]
+  },
+  "huginn": {
+   "header": "Huginn",
+   "lang": "huginn",
+   "variants": [
+    "import Algorithms as algo;\n\nmain( argv_ ) {\n\tif ( size( argv_ ) < 2 ) {\n\t\tthrow Exception( \"usage: fizzbuzz {NUM}\" );\n\t}\n\ttop = integer( argv_[1] );\n\tfor ( i : algo.range( 1, top + 1 ) ) {\n\t\tby3 = ( i % 3 ) == 0;\n\t\tby5 = ( i % 5 ) == 0;\n\t\tif ( by3 ) {\n\t\t\tprint( \"fizz\" );\n\t\t}\n\t\tif ( by5 ) {\n\t\t\tprint( \"buzz\" );\n\t\t}\n\t\tif ( ! ( by3 || by5 ) ) {\n\t\t\tprint( i );\n\t\t}\n\t\tprint( \"\\n\" );\n\t}\n\treturn ( 0 );\n}\n"
+   ]
+  },
+  "hy": {
+   "header": "Hy",
+   "lang": "hy",
+   "variants": [
+    "(for [i (range 1 101)] (print (cond\n  [(not (% i 15)) \"FizzBuzz\"]\n  [(not (% i  5)) \"Buzz\"]\n  [(not (% i  3)) \"Fizz\"]\n  [True           i])))\n"
+   ]
+  },
+  "hybrix": {
+   "header": "Hybrix",
+   "lang": "hybrix",
+   "variants": [
+    "module main\n  func start()\n    # Minimal initialization of the Hybrix framework console\n    console::init(io::tilemap_a)\n    var font_layer: tile_layer\n    font_layer <- new tile_layer(io::tilemap_a, io::tileset_a_addresses)\n    font_layer.load_tileset(art::fonts[0])\n\n    var i: int\n    i <- 1\n    loop\n      if i % 15 = 0 then\n        console::print(\"FizzBuzz\")\n      elsif i % 3 = 0 then\n        console::print(\"Fizz\")\n      elsif i % 5 = 0 then\n        console::print(\"Buzz\")\n      else\n        console::print_int(i)\n      end if\n\n      # The output must fit on a 40x28 text console\n      if i % 5 = 0 then\n        console::print(\"{n}\")\n      else\n        console::print(\" \")\n      end if\n\n      if i = 100\n      do drop\n\n      i <- i + 1\n    end loop\n  end func\nend module\n"
+   ]
+  },
+  "i": {
+   "header": "i",
+   "lang": "i",
+   "variants": [
+    "software {\n\tfor each 1 to 100\t\t\n\t\tif i % 15 = 0\n\t\t\tprint(\"FizzBuzz\")\n\t\telse if i % 3 = 0\n\t\t\tprint(\"Fizz\")\n\t\telse if i % 5 = 0\n\t\t\tprint(\"Buzz\")\n\t\telse\n\t\t\tprint(i)\n\t\tend\n\tend\n}\n"
+   ]
+  },
+  "icon": {
+   "header": "Icon",
+   "lang": "icon",
+   "variants": [
+    "# straight-forward modulo tester\nprocedure main()\n    every i := 1 to 100 do\n        if i % 15 = 0 then\n            write(\"FizzBuzz\")\n        else if i % 5 = 0 then\n            write(\"Buzz\")\n        else if i % 3 = 0 then\n            write(\"Fizz\")\n        else\n            write(i)\nend\n",
+    "# idiomatic modulo tester, 1st alternative\nprocedure main()\n    every i := 1 to 100 do\n        write((i % 15 = 0 & \"FizzBuzz\") | (i % 5 = 0 & \"Buzz\") | (i % 3 = 0 & \"Fizz\") | i)\nend\n",
+    "# idiomatic modulo tester, 2nd alternative\nprocedure main()\n    every i := 1 to 100 do\n        write(case 0 of {\n                 i % 15 : \"FizzBuzz\"\n                 i % 5  : \"Buzz\"\n                 i % 3  : \"Fizz\"\n                 default: i\n        })\nend\n",
+    "# straight-forward buffer builder\nprocedure main()\n    every i := 1 to 100 do {\n        s := \"\"\n        if i % 3 = 0 then\n            s ||:= \"Fizz\"\n        if i % 5 = 0 then\n            s ||:= \"Buzz\"\n        if s == \"\" then\n            s := i\n        write(s)\n    }\nend\n",
+    "# idiomatic buffer builder, 1st alternative\nprocedure main()\n    every i := 1 to 100 do\n        write(\"\" ~== (if i % 3 = 0 then \"Fizz\" else \"\") || (if i % 5 == 0 then \"Buzz\" else \"\") | i)\nend\n"
+   ]
+  },
+  "idris": {
+   "header": "Idris",
+   "lang": "idris",
+   "variants": [
+    "partial\nfizzBuzz : Nat -> String\nfizzBuzz n = if (n `modNat` 15) == 0 then \"FizzBuzz\"\n             else if (n `modNat` 3) == 0 then \"Fizz\"\n             else if (n `modNat` 5)  == 0 then \"Buzz\"\n             else show n\n\nmain : IO ()\nmain = sequence_ $ map (putStrLn . fizzBuzz) [1..100]\n"
+   ]
+  },
+  "inform": {
+   "header": "Inform 7",
+   "lang": "inform",
+   "variants": [
+    "Home is a room.\n\nWhen play begins:\n\trepeat with N running from 1 to 100:\n\t\tlet printed be false;\n\t\tif the remainder after dividing N by 3 is 0:\n\t\t\tsay \"Fizz\";\n\t\t\tnow printed is true;\n\t\tif the remainder after dividing N by 5 is 0:\n\t\t\tsay \"Buzz\";\n\t\t\tnow printed is true;\n\t\tif printed is false, say N;\n\t\tsay \".\";\n\tend the story.\n",
+    "The space is a room.  An item is a kind of thing.  In the space are 100 items.\n\nTo say the name:\n\tlet the count be the number of items carried by the player;\n\tsay \"[if the count is the count to the nearest 15]fizzbuzz.[otherwise if the count is the count to the nearest 3]fizz.[otherwise if the count is the count to the nearest 5]buzz.[otherwise][the count in words].\".\n\nTo count:\n\tif an item is in the space\n\tbegin;\n\t\tlet the next one be a random item in the space; silently try taking the next one;\n\t\tsay \"[the name]\" in sentence case;\n\t\tcount;\n\t\tend the story;\n\tend if.\n\t\t\nWhen play begins: count.  Use no scoring.\n"
+   ]
+  },
+  "insitux": {
+   "header": "Insitux",
+   "lang": "insitux",
+   "variants": [
+    "(function fizzbuzz n\n  (match (map (rem n) [3 5])\n    [0 0] \"FizzBuzz\"\n    [0 _] \"Fizz\"\n    [_ 0] \"Buzz\"\n    n))\n\n(loop 100 i\n  (-> i inc fizzbuzz print))\n"
+   ]
+  },
+  "io": {
+   "header": "Io",
+   "lang": "io",
+   "variants": [
+    "for(a,1,100,\n   if(a % 15 == 0) then(\n      \"FizzBuzz\" println\n   ) elseif(a % 3 == 0) then(\n      \"Fizz\" println\n   ) elseif(a % 5 == 0) then(\n      \"Buzz\" println\n   ) else (\n      a println\n   )\n)\n",
+    "a := 0; b := 0\nfor(n, 1, 100,\n    if(a = (n % 3) == 0, \"Fizz\" print);\n    if(b = (n % 5) == 0, \"Buzz\" print);\n    if(a not and b not, n print);\n    \"\\n\" print\n)\n",
+    "for (n, 1, 100,\n    fb := list (\n        if (n % 3 == 0, \"Fizz\"),\n        if (n % 5 == 0, \"Buzz\")) select (isTrue)\n    \n    if (fb isEmpty, n, fb join) println\n)\n"
+   ]
+  },
+  "ioke": {
+   "header": "Ioke",
+   "lang": "ioke",
+   "variants": [
+    "(1..100) each(x,\n  cond(\n    (x % 15) zero?, \"FizzBuzz\" println,\n    (x % 3) zero?, \"Fizz\" println,\n    (x % 5) zero?, \"Buzz\" println\n  )\n)\n"
+   ]
+  },
+  "iptscrae": {
+   "header": "Iptscrae",
+   "lang": "iptscrae",
+   "variants": [
+    "; FizzBuzz in Iptscrae\n1 a =\n{\n   \"\" b =\n   { \"fizz\" b &= } a 3 % 0 == IF\n   { \"buzz\" b &= } a 5 % 0 == IF\n   { a ITOA LOGMSG } { b LOGMSG } b STRLEN 0 == IFELSE\n   a ++\n}\n{ a 100 <= } WHILE\n"
+   ]
+  },
+  "j": {
+   "header": "J",
+   "lang": "j",
+   "variants": [
+    "(\":[^:(0=#@])Fizz`Buzz;@#~0=3 5&|)\"0>:i.100\n",
+    "((+:/,])@(0=3 5&|);@#Fizz`Buzz;~\":)\"0>:i.100\n",
+    ">((2#.0=5 3|]){Fizz`Buzz`FizzBuzz;~\":)&>1+i.100\n",
+    ">((2#.3 q:15&+.){(|.(;~;);:'Fizz Buzz');~\":)&>1+i.100\n",
+    "\":`('Fizz'\"_)`('Buzz'\"_)`('FizzBuzz'\"_)@.(2#.0=5 3&|)\"0>:i.100\n"
+   ]
+  },
+  "janet": {
+   "header": "Janet",
+   "lang": "janet",
+   "variants": [
+    "(loop [i :range [1 101]\n       :let [fizz (zero? (% i 3))\n             buzz (zero? (% i 5))]]\n  (print (cond\n           (and fizz buzz) \"fizzbuzz\"\n           fizz \"fizz\"\n           buzz \"buzz\"\n           i)))\n"
+   ]
+  },
+  "java": {
+   "header": "Java",
+   "lang": "java",
+   "variants": [
+    "public class FizzBuzz {\n    public static void main(String[] args) {\n        for (int number = 1; number <= 100; number++) {\n            if (number % 15 == 0) {\n                System.out.println(\"FizzBuzz\");\n            } else if (number % 3 == 0) {\n                System.out.println(\"Fizz\");\n            } else if (number % 5 == 0) {\n                System.out.println(\"Buzz\");\n            } else {\n                System.out.println(number);\n            }\n        }\n    }\n}\n",
+    "public class FizzBuzz {\n    public static void main(String[] args) {\n        int number = 1;\n        while (number <= 100) {\n            if (number % 15 == 0) {\n                System.out.println(\"FizzBuzz\");\n            } else if (number % 3 == 0) {\n                System.out.println(\"Fizz\");\n            } else if (number % 5 == 0) {\n                System.out.println(\"Buzz\");\n            } else {\n                System.out.println(number);\n            }\n            number++;\n        }\n    }\n}\n",
+    "public class FizzBuzz {\n    public static void main(String[] args) {\n        int number = 1;\n        while (number <= 100) {\n            System.out.println(number % 15 == 0 ? \"FizzBuzz\" : number % 3 == 0 ? \"Fizz\" : number % 5 == 0 ? \"Buzz\" : number);\n            number++;\n        }\n    }\n}\n",
+    "import java.util.stream.IntStream;\nclass FizzBuzzJdk12 {\n    public static void main(String[] args) {\n        IntStream.range(1,101)\n        .mapToObj(i->switch (i%15) {\n            case 0 -> \"FizzBuzz\";\n            case 3, 6, 9, 12 -> \"Fizz\";\n            case 5, 10 -> \"Buzz\";\n            default -> Integer.toString(i);\n        })\n        .forEach(System.out::println)\n        ;\n    }\n}\n",
+    "import java.util.stream.IntStream;\n\nclass FizzBuzzJdk12 {\n    static final int FIZZ_FLAG = 0x8000_0000;\n    static final int BUZZ_FLAG = 0x4000_0000;\n    static final int FIZZ_BUZZ_FLAG = FIZZ_FLAG|BUZZ_FLAG;\n    static final int[] FLAGS = new int[] {\n        FIZZ_BUZZ_FLAG|0, 1, 2, FIZZ_FLAG|3, 4, \n        BUZZ_FLAG|5, FIZZ_FLAG|6, 7, 8, FIZZ_FLAG|9,\n        BUZZ_FLAG|10, 11, FIZZ_FLAG|12, 13, 14\n    };\n    public static void main(String[] args) {\n    IntStream.iterate(0,i->++i)\n       .flatMap(i -> IntStream.range(0,15).map(j->FLAGS[j]+15*i))\n       .mapToObj(\n        // JDK12 switch expression ...\n        n-> switch(n & FIZZ_BUZZ_FLAG) {\n            case FIZZ_BUZZ_FLAG -> \"fizzbuzz\";\n            case FIZZ_FLAG -> \"fizz\";\n            case BUZZ_FLAG -> \"buzz\";\n            default -> Integer.toString(~FIZZ_BUZZ_FLAG & n);\n            }\n       )\n       .skip(1)\n       .limit(100)\n       .forEach(System.out::println)\n       ;\n    }\n}\n"
+   ]
+  },
+  "javascript": {
+   "header": "JavaScript",
+   "lang": "javascript",
+   "variants": [
+    "var fizzBuzz = function () {\n  var i, output;\n  for (i = 1; i < 101; i += 1) {\n    output = '';\n    if (!(i % 3)) { output += 'Fizz'; }\n    if (!(i % 5)) { output += 'Buzz'; }\n    console.log(output || i);//empty string is false, so we short-circuit\n  }\n};\n",
+    "for (var i = 1; i <= 100; i++) {\n  console.log({\n    truefalse: 'Fizz', \n    falsetrue: 'Buzz', \n    truetrue: 'FizzBuzz'\n  }[(i%3==0) + '' + (i%5==0)] || i)\n}\n",
+    "for(i=1;i<101;i++)console.log((x=(i%3?'':'Fizz')+(i%5?'':'Buzz'))?x:i);\n",
+    "for(i=1;i<101;i++)console.log((i%3?'':'Fizz')+(i%5?'':'Buzz')||i)\n",
+    "(function rng(i) {\n    return i ? rng(i - 1).concat(i) : []\n})(100).map(\n    function (n) {\n        return n % 3 ? (\n            n % 5 ? n : \"Buzz\"\n        ) : (\n            n % 5 ? \"Fizz\" : \"FizzBuzz\"\n        )\n    }\n).join(' ')\n"
+   ]
+  },
+  "jolie": {
+   "header": "Ol",
+   "lang": "jolie",
+   "variants": [
+    "(for-each (lambda (x)\n      (print (cond\n         ((and (zero? (mod x 3)) (zero? (mod x 5)))\n            \"FizzBuzz\")\n         ((zero? (mod x 3))\n            \"Fizz\")\n         ((zero? (mod x 5))\n            \"Buzz\")\n         (else\n            x))))\n   (iota 100))\n"
+   ]
+  },
+  "joy": {
+   "header": "Joy",
+   "lang": "joy",
+   "variants": [
+    "DEFINE out == [[[15 rem null] \"FizzBuzz\"]\n[[ 3 rem null] \"Fizz\"]\n[[ 5 rem null] \"Buzz\"]\n[]] cond\n[putchars pop] [put] ifstring '\\n putch.\n\n100 [] [out] primrec.\n"
+   ]
+  },
+  "jq": {
+   "header": "jq",
+   "lang": "jq",
+   "variants": [
+    "range(1;101)\n  | if   . % 15 == 0 then \"FizzBuzz\"\n    elif . % 5  == 0 then \"Buzz\"\n    elif . % 3  == 0 then \"Fizz\"\n    else .\n    end\n",
+    "range(100) + 1 | [(\n\t(select(. % 3 == 0) | \"Fizz\"),\n\t(select(. % 5 == 0) | \"Buzz\")\n) // tostring] | join(\"\")\n"
+   ]
+  },
+  "julia": {
+   "header": "Julia",
+   "lang": "julia",
+   "variants": [
+    "for i in 1:100\n    if i % 15 == 0\n        println(\"FizzBuzz\")\n    elseif i % 3 == 0\n        println(\"Fizz\")\n    elseif i % 5 == 0\n        println(\"Buzz\")\n    else\n        println(i)\n    end\nend\n",
+    "collect(i % 15 == 0 ? \"FizzBuzz\" : i % 5 == 0 ? \"Buzz\" : i % 3 == 0 ? \"Fizz\" : i for i in 1:100) |> println\n",
+    "fb(i::Integer) = \"Fizz\" ^ (i % 3 == 0) * \"Buzz\" ^ (i % 5 == 0) * string(i) ^ (i % 3 != 0 && i % 5 != 0)\nfor i in 1:100 println(fb(i)) end\n",
+    "println.(map(fb, 1:100))\n",
+    "for i in 1:100\n    msg = \"Fizz\" ^ (i % 3 == 0) * \"Buzz\" ^ (i % 5 == 0)\n    println(isempty(msg) ? i : msg)\nend\n"
+   ]
+  },
+  "k": {
+   "header": "K",
+   "lang": "k",
+   "variants": [
+    "{,/$(s;x)@~#s:`Fizz`Buzz@&~x!'3 5}'1+!30\n",
+    "  {:[0=x!15;`0:,\"FizzBuzz\";0=x!3;`0:,\"Fizz\";0=x!5;`0:,\"Buzz\";`0:,$x]}'1+!100\n",
+    "`0:\\:{:[0=#a:{,/$(:[0=x!3;\"Fizz\"];:[0=x!5;\"Buzz\"])}@x;$x;a]}'1_!101\n",
+    "fizzbuzz:{\n  v:1+!x\n  i:(&0=)'v!/:3 5 15\n  r:@[v;i 0;{\"Fizz\"}]\n  r:@[r;i 1;{\"Buzz\"}]\n  @[r;i 2;{\"FizzBuzz\"}]}\n\n`0:$fizzbuzz 100\n"
+   ]
+  },
+  "kaikai": {
+   "header": "Kaikai",
+   "lang": "kaikai",
+   "variants": [
+    "type Tag\n  = Both\n  | Fizz\n  | Buzz\n  | Other(Int)\n\nfn classify(n: Int) : Tag = match n {\n  n if n % 15 == 0 -> Both\n  n if n % 3 == 0 -> Fizz\n  n if n % 5 == 0 -> Buzz\n  n -> Other(n)\n}\n\nfn label(c: Tag) : String = match c {\n  Both -> \"FizzBuzz\"\n  Fizz -> \"Fizz\"\n  Buzz -> \"Buzz\"\n  Other(n) -> \"#{n}\"\n}\n\nfn main() {\n  [1..100]\n    | classify\n    | label\n    |> list.foreach(println)\n}\n"
+   ]
+  },
+  "kl1": {
+   "header": "KL1",
+   "lang": "kl1",
+   "variants": [
+    ":- module main.\n\nmain :-\n    nats(100, Nats),\n    fizzbuzz(Nats, Output),\n    display(Output).\n\nnats(Max, Out) :-\n    nats(Max, 1, Out).\nnats(Max, Count, Out) :- Count =< Max |\n    Out = [Count|NewOut],\n    NewCount := Count + 1,\n    nats(Max, NewCount, NewOut).\nnats(Max, Count, Out) :- Count > Max |\n    Out = [].\n\nfizzbuzz([N|Rest], Out) :- N mod 3 =:= 0, N mod 5 =:= 0 |\n    Out = ['FizzBuzz' | NewOut],\n    fizzbuzz(Rest, NewOut).\nfizzbuzz([], Out) :-\n    Out = [].\nalternatively.\nfizzbuzz([N|Rest], Out) :- N mod 3 =:= 0 |\n    Out = ['Fizz' | NewOut],\n    fizzbuzz(Rest, NewOut).\nfizzbuzz([N|Rest], Out) :- N mod 5 =:= 0 |\n    Out = ['Buzz' | NewOut],\n    fizzbuzz(Rest, NewOut).\nalternatively.\nfizzbuzz([N|Rest], Out) :-\n    Out = [N | NewOut],\n    fizzbuzz(Rest, NewOut).\n\ndisplay([Message|Rest]) :-\n    io:outstream([print(Message), nl]),\n    display(Rest).\ndisplay([]).\n"
+   ]
+  },
+  "klong": {
+   "header": "Klong",
+   "lang": "klong",
+   "variants": [
+    "{:[0=x!15;:FizzBuzz:|0=x!5;:Buzz:|0=x!3;:Fizz;x]}'1+!100\n"
+   ]
+  },
+  "kotlin": {
+   "header": "Kotlin",
+   "lang": "kotlin",
+   "variants": [
+    "fun fizzBuzz() {\n    for (number in 1..100) {\n        println(\n            when {\n                number % 15 == 0 -> \"FizzBuzz\"\n                number % 3 == 0 -> \"Fizz\"\n                number % 5 == 0 -> \"Buzz\"\n                else -> number\n            }\n        )\n    }\n}\n",
+    "fun fizzBuzz1() {\n    fun fizzBuzz(x: Int) = if (x % 15 == 0) \"FizzBuzz\" else x.toString()\n    fun fizz(x: Any) = if (x is Int && x % 3 == 0) \"Buzz\" else x\n    fun buzz(x: Any) = if (x is Int && x.toInt() % 5 == 0) \"Fizz\" else x\n\n    (1..100).map { fizzBuzz(it) }.map { fizz(it) }.map { buzz(it) }.forEach { println(it) }\n}\n",
+    "fun fizzBuzz2() {\n    fun fizz(x: Pair<Int, StringBuilder>) = if(x.first % 3 == 0) x.apply { second.append(\"Fizz\") } else x\n    fun buzz(x: Pair<Int, StringBuilder>) = if(x.first % 5 == 0) x.apply { second.append(\"Buzz\") } else x\n    fun none(x: Pair<Int, StringBuilder>) = if(x.second.isBlank()) x.second.apply { append(x.first) } else x.second\n\n    (1..100).map { Pair(it, StringBuilder()) }\n            .map { fizz(it) }\n            .map { buzz(it) }\n            .map { none(it) }\n            .forEach { println(it) }\n}\n",
+    "fun fizzBuzz() {\n    (1..100).forEach { println(mapOf(0 to it, it % 3 to \"Fizz\", it % 5 to \"Buzz\", it % 15 to \"FizzBuzz\")[0]) }\n}\n"
+   ]
+  },
+  "kusto": {
+   "header": "KQL",
+   "lang": "kusto",
+   "variants": [
+    "range i from 1 to 100 step 1\n| project Result =\n    case(\n        i % 15 == 0, \"FizzBuzz\",\n        i % 3 == 0, \"Fizz\",\n        i % 5 == 0, \"Buzz\",\n        tostring(i)\n    )\n"
+   ]
+  },
+  "lasso": {
+   "header": "Lasso",
+   "lang": "lasso",
+   "variants": [
+    "with i in generateSeries(1, 100)\nselect ((#i % 3 == 0 ? 'Fizz' | '') + (#i % 5 == 0 ? 'Buzz' | '') || #i)\n"
+   ]
+  },
+  "latex": {
+   "header": "LaTeX",
+   "lang": "latex",
+   "variants": [
+    "\\documentclass{minimal}\n\\usepackage{ifthen}\n\\usepackage{intcalc}\n\\newcounter{mycount}\n\\newboolean{fizzOrBuzz}\n\\newcommand\\fizzBuzz[1]{%\n\\setcounter{mycount}{1}\\whiledo{\\value{mycount}<#1}\n    {\n    \\setboolean{fizzOrBuzz}{false}\n    \\ifthenelse{\\equal{\\intcalcMod{\\themycount}{3}}{0}}{\\setboolean{fizzOrBuzz}{true}Fizz}{}\n    \\ifthenelse{\\equal{\\intcalcMod{\\themycount}{5}}{0}}{\\setboolean{fizzOrBuzz}{true}Buzz}{}\n    \\ifthenelse{\\boolean{fizzOrBuzz}}{}{\\themycount}\n    \\stepcounter{mycount}\n    \\\\\n    }\n}\n\\begin{document}\n\\fizzBuzz{101}\n\\end{document}\n"
+   ]
+  },
+  "ldpl": {
+   "header": "LDPL",
+   "lang": "ldpl",
+   "variants": [
+    "data:\ni is number\nn is number\n\nprocedure:\nfor i from 1 to 101 step 1 do\n    modulo i by 15 in n\n    if n is equal to 0 then\n        display \"FizzBuzz\" lf\n        continue\n    end if\n    modulo i by 5 in n\n    if n is equal to 0 then\n        display \"Buzz\" lf\n        continue\n    end if\n    modulo i by 3 in n\n    if n is equal to 0 then\n        display \"Fizz\" lf\n        continue\n    end if\n    display i lf\nrepeat\n"
+   ]
+  },
+  "lean": {
+   "header": "Lean",
+   "lang": "lean",
+   "variants": [
+    "def fizz : String :=\n  \"Fizz\"\n\ndef buzz : String :=\n  \"Buzz\"\n\ndef newLine : String :=\n  \"\\n\"\n\ndef isDivisibleBy (n : Nat) (m : Nat) : Bool :=\n  match m with\n  | 0 => false\n  | (k + 1) => (n % (k + 1)) = 0\n\ndef getTerm (n : Nat) : String :=\n  if (isDivisibleBy n 15) then (fizz ++ buzz)\n  else if (isDivisibleBy n 3) then fizz\n  else if (isDivisibleBy n 5) then buzz\n  else toString (n)\n\ndef range (a : Nat) (b : Nat) : List (Nat) :=\n  match b with\n  | 0 => []\n  | m + 1 => a :: (range (a + 1) m)\n\ndef getTerms (n : Nat) : List (String) :=\n  (range 1 n).map (getTerm) \n\ndef addNewLine (accum : String) (elem : String) : String :=\n  accum ++ elem ++ newLine\n\ndef fizzBuzz : String :=\n  (getTerms 100).foldl (addNewLine) (\"\")\n\ndef main : IO Unit :=\n  IO.println (fizzBuzz)\n\n#eval main\n"
+   ]
+  },
+  "lil": {
+   "header": "LIL",
+   "lang": "lil",
+   "variants": [
+    "# fizzbuzz in LIL\nfor {set i 1} {$i <= 100} {inc i} {\n    set show \"\"\n    if {[expr $i % 3 == 0]} {set show \"Fizz\"}\n    if {[expr $i % 5 == 0]} {set show $show\"Buzz\"}\n    if {[expr [length $show] == 0]} {set show $i}\n    print $show\n}\n"
+   ]
+  },
+  "livecode": {
+   "header": "LiveCode",
+   "lang": "livecode",
+   "variants": [
+    "repeat with i = 1 to 100\n    switch\n        case i mod 15 = 0\n            put \"FizzBuzz\" & cr after fizzbuzz\n            break\n        case i mod 5 = 0\n            put \"Buzz\" & cr after fizzbuzz\n            break\n        case i mod 3 = 0\n            put \"Fizz\" & cr after fizzbuzz\n            break\n        default\n            put i & cr after fizzbuzz\n    end switch \nend repeat\nput fizzbuzz\n"
+   ]
+  },
+  "livescript": {
+   "header": "LiveScript",
+   "lang": "livescript",
+   "variants": [
+    "[1 to 100] map -> [k + \\zz for k, v of {Fi: 3, Bu: 5} | it % v < 1] * '' || it\n"
+   ]
+  },
+  "llvmir": {
+   "header": "LLVM",
+   "lang": "llvmir",
+   "variants": [
+    "; ModuleID = 'fizzbuzz.c'\n; source_filename = \"fizzbuzz.c\"\n; target datalayout = \"e-m:w-i64:64-f80:128-n8:16:32:64-S128\"\n; target triple = \"x86_64-pc-windows-msvc19.21.27702\"\n \n; This is not strictly LLVM, as it uses the C library function \"printf\".\n; LLVM does not provide a way to print values, so the alternative would be\n; to just load the string into memory, and that would be boring.\n\n; Additional comments have been inserted, as well as changes made from the output produced by clang such as putting more meaningful labels for the jumps\n\n$\"\\01??_C@_09NODAFEIA@FizzBuzz?6?$AA@\" = comdat any\n$\"\\01??_C@_05KEBFOHOF@Fizz?6?$AA@\" = comdat any\n$\"\\01??_C@_05JKJENPHA@Buzz?6?$AA@\" = comdat any\n$\"\\01??_C@_03PMGGPEJJ@?$CFd?6?$AA@\" = comdat any\n\n;--- String constant defintions\n@\"\\01??_C@_09NODAFEIA@FizzBuzz?6?$AA@\" = linkonce_odr unnamed_addr constant [10 x i8] c\"FizzBuzz\\0A\\00\", comdat, align 1\n@\"\\01??_C@_05KEBFOHOF@Fizz?6?$AA@\" = linkonce_odr unnamed_addr constant [6 x i8] c\"Fizz\\0A\\00\", comdat, align 1\n@\"\\01??_C@_05JKJENPHA@Buzz?6?$AA@\" = linkonce_odr unnamed_addr constant [6 x i8] c\"Buzz\\0A\\00\", comdat, align 1\n@\"\\01??_C@_03PMGGPEJJ@?$CFd?6?$AA@\" = linkonce_odr unnamed_addr constant [4 x i8] c\"%d\\0A\\00\", comdat, align 1\n\n;--- The declaration for the external C printf function.\ndeclare i32 @printf(i8*, ...)\n\n; Function Attrs: noinline nounwind optnone uwtable\ndefine i32 @main() #0 {\n  %1 = alloca i32, align 4\n  store i32 1, i32* %1, align 4\n;--- It does not seem like this branch can be removed\n  br label %loop\n\n;--- while (i <= 100)\nloop:\n  %2 = load i32, i32* %1, align 4\n  %3 = icmp sle i32 %2, 100\n  br i1 %3, label %divisible_15, label %finished\n\n;--- if (i % 15 == 0)\ndivisible_15:\n  %4 = load i32, i32* %1, align 4\n  %5 = srem i32 %4, 15\n  %6 = icmp eq i32 %5, 0\n  br i1 %6, label %print_fizzbuzz, label %divisible_3\n\n;--- Print 'FizzBuzz'\nprint_fizzbuzz:\n  %7 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([10 x i8], [10 x i8]* @\"\\01??_C@_09NODAFEIA@FizzBuzz?6?$AA@\", i32 0, i32 0))\n  br label %next\n\n;--- if (i % 3 == 0)\ndivisible_3:\n  %8 = load i32, i32* %1, align 4\n  %9 = srem i32 %8, 3\n  %10 = icmp eq i32 %9, 0\n  br i1 %10, label %print_fizz, label %divisible_5\n\n;--- Print 'Fizz'\nprint_fizz:\n  %11 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @\"\\01??_C@_05KEBFOHOF@Fizz?6?$AA@\", i32 0, i32 0))\n  br label %next\n\n;--- if (i % 5 == 0)\ndivisible_5:\n  %12 = load i32, i32* %1, align 4\n  %13 = srem i32 %12, 5\n  %14 = icmp eq i32 %13, 0\n  br i1 %14, label %print_buzz, label %print_number\n\n;--- Print 'Buzz'\nprint_buzz:\n  %15 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @\"\\01??_C@_05JKJENPHA@Buzz?6?$AA@\", i32 0, i32 0))\n  br label %next\n\n;--- Print the number\nprint_number:\n  %16 = load i32, i32* %1, align 4\n  %17 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @\"\\01??_C@_03PMGGPEJJ@?$CFd?6?$AA@\", i32 0, i32 0), i32 %16)\n;--- It does not seem like this branch can be removed\n  br label %next\n\n;--- i = i + 1\nnext:\n  %18 = load i32, i32* %1, align 4\n  %19 = add nsw i32 %18, 1\n  store i32 %19, i32* %1, align 4\n  br label %loop\n\n;--- exit main\nfinished:\n  ret i32 0\n}\n\nattributes #0 = { noinline nounwind optnone uwtable \"correctly-rounded-divide-sqrt-fp-math\"=\"false\" \"disable-tail-calls\"=\"false\" \"less-precise-fpmad\"=\"false\" \"no-frame-pointer-elim\"=\"false\" \"no-infs-fp-math\"=\"false\" \"no-jump-tables\"=\"false\" \"no-nans-fp-math\"=\"false\" \"no-signed-zeros-fp-math\"=\"false\" \"no-trapping-math\"=\"false\" \"stack-protector-buffer-size\"=\"8\" \"target-cpu\"=\"x86-64\" \"target-features\"=\"+fxsr,+mmx,+sse,+sse2,+x87\" \"unsafe-fp-math\"=\"false\" \"use-soft-float\"=\"false\" }\n\n!llvm.module.flags = !{!0, !1}\n!llvm.ident = !{!2}\n\n!0 = !{i32 1, !\"wchar_size\", i32 2}\n!1 = !{i32 7, !\"PIC Level\", i32 2}\n!2 = !{!\"clang version 6.0.1 (tags/RELEASE_601/final)\"}\n"
+   ]
+  },
+  "lobster": {
+   "header": "Lobster",
+   "lang": "lobster",
+   "variants": [
+    "include \"std.lobster\"\n\nforbias(100, 1) i:\n    fb := (i % 3 == 0 and \"fizz\" or \"\") +\n          (i % 5 == 0 and \"buzz\" or \"\")\n    print fb.length and fb or \"\" + i\n"
+   ]
+  },
+  "logo": {
+   "header": "Logo",
+   "lang": "logo",
+   "variants": [
+    "to fizzbuzz :n\n  output cond [ [[equal? 0 modulo :n 15] \"FizzBuzz]\n                [[equal? 0 modulo :n  5] \"Buzz]\n                [[equal? 0 modulo :n  3] \"Fizz]\n                [else :n] ]\nend\n\nrepeat 100 [print fizzbuzz #]\n",
+    "to fizzbuzz :n\n make \"c \"\n  if equal? 0 modulo :n 5 [make \"c \"Buzz]\n  if equal? 0 modulo :n 3 [make \"c word \"Fizz :c]\n output ifelse equal? :c \" [:n] [:c]\nend\n\nrepeat 100 [print fizzbuzz repcount]\n"
+   ]
+  },
+  "lse": {
+   "header": "LSE",
+   "lang": "lse",
+   "variants": [
+    "1* FIZZBUZZ en L.S.E. \n10 CHAINE FB\n20 FAIRE 45 POUR I_1 JUSQUA 100 \n30 FB_SI &MOD(I,3)=0 ALORS SI &MOD(I,5)=0 ALORS 'FIZZBUZZ' SINON 'FIZZ' SINON SI &MOD(I,5)=0 ALORS 'BUZZ' SINON ''\n40 AFFICHER[U,/] SI FB='' ALORS I SINON FB\n45*FIN BOUCLE\n50 TERMINER\n100 PROCEDURE &MOD(A,B) LOCAL A,B\n110 RESULTAT A-B*ENT(A/B)\n"
+   ]
+  },
+  "lua": {
+   "header": "Lua",
+   "lang": "lua",
+   "variants": [
+    "for i = 1, 100 do\n\tif i % 15 == 0 then\n\t\tprint(\"FizzBuzz\")\n\telseif i % 3 == 0 then\n\t\tprint(\"Fizz\")\n\telseif i % 5 == 0 then\n\t\tprint(\"Buzz\")\n\telse\n\t\tprint(i)\n\tend\nend\n",
+    "for i = 1, 100 do\n\toutput = \"\"\n\tif i % 3 == 0 then\n\t\toutput = output..\"Fizz\"\n\tend\n\tif i % 5 == 0 then\n\t\toutput = output..\"Buzz\"\n\tend\n\tif(output == \"\") then\n\t\toutput = i\n\tend\n\tprint(output)\nend\n",
+    "word = {\"Fizz\", \"Buzz\", \"FizzBuzz\"}\n\nfor i = 1, 100 do\n        print(word[(i % 3 == 0 and 1 or 0) + (i % 5 == 0 and 2 or 0)] or i)\nend\n",
+    "local t = {\n        [0]  = \"FizzBuzz\",\n        [3]  = \"Fizz\",\n        [5]  = \"Buzz\",\n        [6]  = \"Fizz\",\n        [9]  = \"Fizz\",\n        [10] = \"Buzz\",\n        [12] = \"Fizz\"\n}\n\nfor i = 1, 100 do\n        print(t[i%15] or i)\nend\n",
+    "local mt = {\n\t__newindex = (function (t, k, v)\n\t\tif type(k) ~= \"number\" then\trawset(t, k, v)\n\t\telseif 0 == (k % 15) then\trawset(t, k, \"fizzbuzz\") \n\t\telseif 0 == (k % 5) then\trawset(t, k, \"fizz\") \n\t\telseif 0 == (k % 3) then\trawset(t, k, \"buzz\") \n\t\telse \t\t\t\t\t\trawset(t, k, k) end\n\t\treturn t[k]\nend)\n}\n\nlocal fizzbuzz = {}\nsetmetatable(fizzbuzz, mt)\n\nfor i=1,100 do fizzbuzz[i] = i end\nfor i=1,100 do print(fizzbuzz[i]) end\n"
+   ]
+  },
+  "m4": {
+   "header": "M4",
+   "lang": "m4",
+   "variants": [
+    "define(`for',\n   `ifelse($#,0,``$0'',\n   `ifelse(eval($2<=$3),1,\n   `pushdef(`$1',$2)$5`'popdef(`$1')$0(`$1',eval($2+$4),$3,$4,`$5')')')')\n\nfor(`x',1,100,1,\n   `ifelse(eval(x%15==0),1,FizzBuzz,\n   `ifelse(eval(x%3==0),1,Fizz,\n   `ifelse(eval(x%5==0),1,Buzz,x)')')\n')\n"
+   ]
+  },
+  "macro-11": {
+   "header": "MACRO-11",
+   "lang": "macro-11",
+   "variants": [
+    "        .TITLE  FIZBUZ\n        .MCALL  .TTYOUT,.EXIT\nFIZBUZ::MOV     #1,R2           ; COUNTER\n        MOV     #3,R3           ; FIZZ COUNTER\n        MOV     #5,R4           ; BUZZ COUNTER\nNUMBER: CLR     R5\nCHKFIZ: DEC     R3\n        BNE     CHKBUZ\n        MOV     #FIZZ,R1\n        JSR     PC,PRSTR\n        MOV     #3,R3\n        INC     R5\nCHKBUZ: DEC     R4\n        BNE     CHKNUM\n        MOV     #BUZZ,R1\n        JSR     PC,PRSTR\n        MOV     #5,R4\n        INC     R5\nCHKNUM: TST     R5\n        BNE     NEXNUM\n        MOV     R2,R0\n        JSR     PC,PR0\nNEXNUM: MOV     #NL,R1\n        JSR     PC,PRSTR\n        INC     R2\n        CMP     R2,#^D100\n        BLE     NUMBER\n        .EXIT\n        ; STRING DATA\nFIZZ:   .ASCIZ  /FIZZ/\nBUZZ:   .ASCIZ  /BUZZ/\nNL:     .BYTE   15,12,0\n        .EVEN\n        ; PRINT NUMBER IN R0 AS DECIMAL\nPR0:    MOV     R2,-(SP)\n        MOV     #4$,R1\n1$:     MOV     #-1,R2\n2$:     INC     R2\n        SUB     #12,R0\n        BCC     2$\n        ADD     #72,R0\n        MOVB    R0,-(R1)\n        MOV     R2,R0\n        BNE     1$\n3$:     MOVB    (R1)+,R0\n        .TTYOUT\n        BNE     3$\n        MOV     (SP)+,R2\n        RTS     PC\n        .ASCII  /...../\n4$:     .BYTE   0\n        ; PRINT STRING IN R1\nPRSTR:  MOVB    (R1)+,R0\n        .TTYOUT\n        BNE     PRSTR\n        RTS     PC\n        .END FIZBUZ\n"
+   ]
+  },
+  "mad": {
+   "header": "MAD",
+   "lang": "mad",
+   "variants": [
+    "            NORMAL MODE IS INTEGER\n            VECTOR VALUES FIZZ = $4HFIZZ*$\n            VECTOR VALUES BUZZ = $4HBUZZ*$\n            VECTOR VALUES FIBU = $8HFIZZBUZZ*$\n            VECTOR VALUES NUM  = $I2*$\n\n            INTERNAL FUNCTION REM.(A,B) = A-(A/B)*B\n\n            THROUGH LOOP, FOR I = 1, 1, I .G. 100\n            WHENEVER REM.(I,15).E.0\n                PRINT FORMAT FIBU\n            OR WHENEVER REM.(I,5).E.0\n                PRINT FORMAT BUZZ\n            OR WHENEVER REM.(I,3).E.0\n                PRINT FORMAT FIZZ\n            OTHERWISE\n                PRINT FORMAT NUM,I\nLOOP        END OF CONDITIONAL\n\n            END OF PROGRAM\n"
+   ]
+  },
+  "make": {
+   "header": "make",
+   "lang": "make",
+   "variants": [
+    "MOD3 = 0\nMOD5 = 0\nALL != jot 100\n\nall: say-100\n\n.for NUMBER in $(ALL)\n\nMOD3 != expr \\( $(MOD3) + 1 \\) % 3; true\nMOD5 != expr \\( $(MOD5) + 1 \\) % 5; true\n\n. if \"$(NUMBER)\" > 1\nPRED != expr $(NUMBER) - 1\nsay-$(NUMBER): say-$(PRED)\n. else\nsay-$(NUMBER):\n. endif\n. if \"$(MOD3)$(MOD5)\" == \"00\"\n\t@echo FizzBuzz\n. elif \"$(MOD3)\" == \"0\"\n\t@echo Fizz\n. elif \"$(MOD5)\" == \"0\"\n\t@echo Buzz\n. else\n\t@echo $(NUMBER)\n. endif\n\n.endfor\n"
+   ]
+  },
+  "maple": {
+   "header": "Maple",
+   "lang": "maple",
+   "variants": [
+    "seq(print(`if`(modp(n,3)=0,`if`(modp(n,15)=0,\"FizzBuzz\",\"Fizz\"),`if`(modp(n,5)=0,\"Buzz\",n))),n=1..100):\n",
+    "fizzbuzz1 := n->`if`(modp(n,3)=0,`if`(modp(n,15)=0,\"FizzBuzz\",\"Fizz\"),`if`(modp(n,5)=0,\"Buzz\",n)):\nfor i to 100 do fizzbuzz1(i); od;\n",
+    "fizzbuzz2 := n->piecewise(modp(n,15)=0,\"FizzBuzz\",modp(n,3)=0,\"Fizz\",modp(n,5)=0,\"Buzz\",n):\nfor i to 100 do fizzbuzz2(i); od;\n",
+    "fizzbuzz3 := proc(n) local r;\n  r:=map2(modp,n,[3,5]);\n  if r=[0,0] then \"FizzBuzz\"\n  elif r[1]=0 then \"Fizz\"\n  elif r[2]=0 then \"Buzz\"\n  else n fi;\nend proc:\nfor i to 100 do fizzbuzz3(i); od;\n"
+   ]
+  },
+  "mathematica": {
+   "header": "Mathematica",
+   "lang": "mathematica",
+   "variants": [
+    "Do[Print[Which[Mod[i, 15] == 0, \"FizzBuzz\", Mod[i, 5] == 0, \"Buzz\", Mod[i, 3] == 0, \"Fizz\", True, i]], {i, 100}]\n",
+    "fizz[i_] := Mod[i, 3] == 0\nbuzz[i_] := Mod[i, 5] == 0\nRange[100] /. {i_ /; fizz[i]&&buzz[i] :> \"FizzBuzz\", \\\n               i_?fizz :> \"Fizz\", i_?buzz :> \"Buzz\"}\n",
+    "SetAttributes[f,Listable]\nf[n_ /; Mod[n, 15] == 0] := \"FizzBuzz\";\nf[n_ /; Mod[n, 3] == 0] := \"Fizz\";\nf[n_ /; Mod[n, 5] == 0] := \"Buzz\";\nf[n_] := n;\n\nf[Range[100]]\n",
+    "Table[If[# === \"\", i, #]&@StringJoin[\n   Table[If[Divisible[i, First@nw], Last@nw, \"\"], \n         {nw, {{3, \"Fizz\"}, {5, \"Buzz\"}}}]], \n      {i, 1, 100}]\n",
+    " Which[ Mod[#,15] == 0, \"FizzBuzz\", Mod[#, 3] == 0, \"Fizz\", Mod[#,5]==0, \"Buzz\",  True, #]& /@ Range[1,100] \n"
+   ]
+  },
+  "matlab": {
+   "header": "MATLAB",
+   "lang": "matlab",
+   "variants": [
+    "function fizzBuzz() \n    for i = (1:100)\n        if mod(i,15) == 0\n           fprintf('FizzBuzz ')\n        elseif mod(i,3) == 0\n           fprintf('Fizz ')\n        elseif mod(i,5) == 0\n           fprintf('Buzz ')\n        else\n           fprintf('%i ',i)) \n        end\n    end\n    fprintf('\\n');    \nend\n",
+    "function out = fizzbuzzS()\n\tnums = [3, 5];\n\twords = {'fizz', 'buzz'};\n\tfor (n=1:100)\n\t\ttempstr = '';\n\t\tfor (i = 1:2)\n\t\t\tif mod(n,nums(i))==0\n\t\t\t\ttempstr = [tempstr,  words{i}];\n\t\t\tend\n\t\tend\n\t\tif length(tempstr) == 0 \n\t\t\tdisp(n);\n\t\telse \n\t\t\tdisp(tempstr);\n\t\tend\n\tend\nend\n",
+    "x            = string(1:100);\nx(3:3:$)     = 'Fizz';\nx(5:5:$)     = 'Buzz';\nx(3*5:3*5:$) = 'FizzBuzz'\n"
+   ]
+  },
+  "maxima": {
+   "header": "Maxima",
+   "lang": "maxima",
+   "variants": [
+    "for n:1 thru 100 do\n   if mod(n, 15) = 0 then (sprint(\"FizzBuzz\"), newline())\n   elseif mod(n, 3) = 0 then (sprint(\"Fizz\"), newline())\n   elseif mod(n,5) = 0 then (sprint(\"Buzz\"), newline())\n   else (sprint(n), newline());\n"
+   ]
+  },
+  "maxscript": {
+   "header": "MAXScript",
+   "lang": "maxscript",
+   "variants": [
+    "for i in 1 to 100 do\n(\n    case of\n    (\n        (mod i 15 == 0): (print \"FizzBuzz\")\n        (mod i 5 == 0):  (print \"Buzz\")\n        (mod i 3 == 0):  (print \"Fizz\")\n        default:         (print i)\n    )\n)\n"
+   ]
+  },
+  "mercury": {
+   "header": "Mercury",
+   "lang": "mercury",
+   "variants": [
+    ":- module fizzbuzz.\n:- interface.\n:- import_module io.\n:- pred main(io::di, io::uo) is det.\n:- implementation.\n:- import_module int, string, bool.\n\n:- func fizz(int) = bool.\nfizz(N) = ( if N mod 3 = 0 then yes else no ).\n\n:- func buzz(int) = bool.\nbuzz(N) = ( if N mod 5 = 0 then yes else no ).\n\n%                N    3?    5?\n:- func fizzbuzz(int, bool, bool) = string.\nfizzbuzz(_, yes, yes) = \"FizzBuzz\".\nfizzbuzz(_, yes, no)  = \"Fizz\".\nfizzbuzz(_, no,  yes) = \"Buzz\".\nfizzbuzz(N, no,  no)  = from_int(N).\n\nmain(!IO) :- main(1, 100, !IO).\n\n:- pred main(int::in, int::in, io::di, io::uo) is det.\nmain(N, To, !IO) :-\n    io.write_string(fizzbuzz(N, fizz(N), buzz(N)), !IO),\n    io.nl(!IO),\n    ( if N < To then\n        main(N + 1, To, !IO)\n    else\n        true\n    ).\n"
+   ]
+  },
+  "metafont": {
+   "header": "Metafont",
+   "lang": "metafont",
+   "variants": [
+    "for i := 1 upto 100:\nmessage if i mod 15 = 0: \"FizzBuzz\" &\nelseif i mod 3 = 0: \"Fizz\" &\nelseif i mod 5 = 0: \"Buzz\" &\nelse: decimal i & fi \"\";\nendfor\nend\n"
+   ]
+  },
+  "microsoft-small-basic": {
+   "header": "Microsoft Small Basic",
+   "lang": "microsoft-small-basic",
+   "variants": [
+    "For n = 1 To 100\n  op = \"\"\n  If Math.Remainder(n, 3) = 0 Then\n    op = \"Fizz\"\n  EndIf  \n  IF Math.Remainder(n, 5) = 0 Then\n    op = text.Append(op, \"Buzz\")\n  EndIf\n  If op = \"\" Then \n    TextWindow.WriteLine(n)\n  Else \n    TextWindow.WriteLine(op)\n  EndIf  \nEndFor\n"
+   ]
+  },
+  "min": {
+   "header": "min",
+   "lang": "min",
+   "variants": [
+    "0 (\n  succ false :hit\n  (3 mod 0 ==) (\"Fizz\" print! true @hit) when\n  (5 mod 0 ==) (\"Buzz\" print! true @hit) when\n  (hit) (print) unless newline\n) 100 times\n"
+   ]
+  },
+  "miniscript": {
+   "header": "MiniScript",
+   "lang": "miniscript",
+   "variants": [
+    "for i in range(1,100)\n    if i % 15 == 0 then\n        print \"FizzBuzz\"\n    else if i % 3 == 0 then\n        print \"Fizz\"\n    else if i % 5 == 0 then\n        print \"Buzz\"\n    else\n        print i\n    end if\nend for\n"
+   ]
+  },
+  "mirah": {
+   "header": "Mirah",
+   "lang": "mirah",
+   "variants": [
+    "1.upto(100) do |n|\n    print \"Fizz\" if a = ((n % 3) == 0)\n    print \"Buzz\" if b = ((n % 5) == 0) \n    print n unless (a || b)\n    print \"\\n\"\nend\n",
+    "1.upto(100) do |n|\n    if (n % 15) == 0\n        puts \"FizzBuzz\"\n    elsif (n % 5) == 0\n        puts \"Buzz\"\n    elsif (n % 3) == 0\n        puts \"Fizz\"\n    else\n        puts n\n    end\nend\n"
+   ]
+  },
+  "miranda": {
+   "header": "Miranda",
+   "lang": "miranda",
+   "variants": [
+    "main :: [sys_message]\nmain = [Stdout (lay (map fizzbuzz [1..100]))]\n\nfizzbuzz :: num->[char]\nfizzbuzz n = \"FizzBuzz\", if n mod 15 = 0\n           = \"Fizz\",     if n mod 3  = 0\n           = \"Buzz\",     if n mod 5  = 0\n           = show n,     otherwise\n"
+   ]
+  },
+  "ml": {
+   "header": "ML",
+   "lang": "ml",
+   "variants": [
+    "local\n  fun fbstr i =\n      case (i mod 3 = 0, i mod 5 = 0) of\n          (true , true ) => \"FizzBuzz\"\n        | (true , false) => \"Fizz\"\n        | (false, true ) => \"Buzz\"\n        | (false, false) => Int.toString i\n\n  fun fizzbuzz' (n, j) =\n      if n = j then () else (print (fbstr j ^ \"\\n\"); fizzbuzz' (n, j+1))\nin\n  fun fizzbuzz n = fizzbuzz' (n, 1)\n  val _ = fizzbuzz 100\nend\n",
+    "local\n  fun fb i = let val fizz = i mod 3 = 0 andalso (print \"Fizz\"; true)\n                 val buzz = i mod 5 = 0 andalso (print \"Buzz\"; true)\n             in fizz orelse buzz orelse (print (Int.toString i); true) end\nin\n  fun fizzbuzz n = (List.tabulate (n, fn i => (fb (i+1); print \"\\n\")); ())\n  val _ = fizzbuzz 100\nend\n",
+    "local\n\tfun fizzbuzz' \n\t\t\t(x mod 15 = 0) = \"FizzBuzz\"\n\t\t|\t(x mod  5 = 0) = \"Buzz\"\n\t\t|\t(x mod  3 = 0) = \"Fizz\"\n\t\t|\tx = ntos x\nin\t\t\n\tfun fizzbuzz\n\t\t\t([], s) = rev s\n\t\t|\t(x :: xs, s) = fizzbuzz (xs, fizzbuzz' x :: s)\n\t\t|\t(x :: xs)    = fizzbuzz (x :: xs, [])\nend\n;\n\nprintln ` fizzbuzz ` iota 100;\n"
+   ]
+  },
+  "mmix": {
+   "header": "MMIX",
+   "lang": "mmix",
+   "variants": [
+    "t   IS $255\nJa  IS $127\n\n       LOC Data_Segment\ndata   GREG   @\n\nfizz   IS @-Data_Segment\n       BYTE \"Fizz\",0,0,0,0\n\nbuzz   IS @-Data_Segment\n       BYTE \"Buzz\",0,0,0,0\n\nnl     IS @-Data_Segment\n       BYTE #a,0,0,0,0,0,0,0\n\nbuffer IS @-Data_Segment\n\n\n\n       LOC #1000\n       GREG @\n\n% \"usual\" print integer subroutine\nprintnum LOC @\n       OR   $1,$0,0\n       SETL $2,buffer+64\n       ADDU $2,$2,data\n       XOR  $3,$3,$3\n       STBU $3,$2,1\nloop   DIV  $1,$1,10\n       GET  $3,rR\n       ADDU $3,$3,'0'\n       STBU $3,$2,0\n       SUBU $2,$2,1\n       PBNZ $1,loop\n       ADDU t,$2,1\n       TRAP 0,Fputs,StdOut\n       GO   Ja,Ja,0\n\nMain   SETL $0,1           % i = 1\n1H     SETL $2,0           % fizz not taken\n       CMP  $1,$0,100      % i <= 100\n       BP   $1,4F          % if no, go to end\n       DIV  $1,$0,3\n       GET  $1,rR          % $1 = mod(i,3)\n       CSZ  $2,$1,1        % $2 = Fizz taken?\n       BNZ  $1,2F          % $1 != 0? yes, then skip\n       ADDU t,data,fizz\n       TRAP 0,Fputs,StdOut % print \"Fizz\"\n2H     DIV  $1,$0,5\n       GET  $1,rR          % $1 = mod(i,5)\n       BNZ  $1,3F          % $1 != 0? yes, then skip\n       ADDU t,data,buzz\n       TRAP 0,Fputs,StdOut % print \"Buzz\"\n       JMP  5F             % skip print i\n3H     BP   $2,5F          % skip if Fizz was taken\n       GO   Ja,printnum    % print i\n5H     ADDU t,data,nl\n       TRAP 0,Fputs,StdOut % print newline\n       ADDU $0,$0,1\n       JMP  1B             % repeat for next i\n4H     XOR  t,t,t\n       TRAP 0,Halt,0       % exit(0)\n"
+   ]
+  },
+  "modula-2": {
+   "header": "Modula-2",
+   "lang": "modula-2",
+   "variants": [
+    "MODULE Fizzbuzz;\nFROM FormatString IMPORT FormatString;\nFROM Terminal IMPORT WriteString,WriteLn,ReadChar;\n\nTYPE CB = PROCEDURE(INTEGER);\n\nPROCEDURE Fizz(n : INTEGER);\nBEGIN\n    IF n MOD 3 = 0 THEN\n        WriteString(\"Fizz\");\n        Buzz(n,Newline)\n    ELSE\n        Buzz(n,WriteInt)\n    END\nEND Fizz;\n\nPROCEDURE Buzz(n : INTEGER; f : CB);\nBEGIN\n    IF n MOD 5 = 0 THEN\n        WriteString(\"Buzz\");\n        WriteLn\n    ELSE\n        f(n)\n    END\nEND Buzz;\n\nPROCEDURE WriteInt(n : INTEGER);\nVAR buf : ARRAY[0..9] OF CHAR;\nBEGIN\n    FormatString(\"%i\\n\", buf, n);\n    WriteString(buf)\nEND WriteInt;\n\nPROCEDURE Newline(n : INTEGER);\nBEGIN\n    WriteLn\nEND Newline;\n\nVAR i : INTEGER;\nBEGIN\n    FOR i:=1 TO 30 DO\n        Fizz(i)\n    END;\n\n    ReadChar\nEND Fizzbuzz.\n"
+   ]
+  },
+  "modula-3": {
+   "header": "Modula-3",
+   "lang": "modula-3",
+   "variants": [
+    "MODULE Fizzbuzz EXPORTS Main;\n\nIMPORT IO;\n\nBEGIN\n   FOR i := 1 TO 100 DO \n      IF i MOD 15 = 0 THEN \n         IO.Put(\"FizzBuzz\\n\");\n      ELSIF i MOD 5 = 0 THEN\n         IO.Put(\"Buzz\\n\");\n      ELSIF i MOD 3 = 0 THEN \n         IO.Put(\"Fizz\\n\");\n      ELSE \n         IO.PutInt(i);\n         IO.Put(\"\\n\");\n      END;\n   END;\nEND Fizzbuzz.\n"
+   ]
+  },
+  "monte": {
+   "header": "Monte",
+   "lang": "monte",
+   "variants": [
+    "def fizzBuzz(top):\n    var t := 1\n    while (t < top):\n        if ((t % 3 == 0) || (t % 5 == 0)):\n            if (t % 15 == 0):\n                traceln(`$t  FizzBuzz`)\n            else if (t % 3 == 0):\n                traceln(`$t  Fizz`)\n            else:\n                traceln(`$t  Buzz`)\n        t += 1\n\nfizzBuzz(100)\n"
+   ]
+  },
+  "moonscript": {
+   "header": "MoonScript",
+   "lang": "moonscript",
+   "variants": [
+    "for i = 1,100\n    print ((a) -> a == \"\" and i or a) table.concat {\n        i % 3 == 0 and \"Fizz\" or \"\"\n        i % 5 == 0 and \"Buzz\" or \"\"}\n"
+   ]
+  },
+  "mumps": {
+   "header": "MUMPS",
+   "lang": "mumps",
+   "variants": [
+    "FIZZBUZZ\n NEW I\n FOR I=1:1:100 WRITE !,$SELECT(('(I#3)&'(I#5)):\"FizzBuzz\",'(I#5):\"Buzz\",'(I#3):\"Fizz\",1:I)\n KILL I\n QUIT\n",
+    "fizzbuzz\n for i=1:1:100 do  write !\n . write:(i#3)&(i#5) i write:'(i#3) \"Fizz\" write:'(i#5) \"Buzz\"\n"
+   ]
+  },
+  "natural": {
+   "header": "NATURAL",
+   "lang": "natural",
+   "variants": [
+    "DEFINE DATA                               \nLOCAL                                     \n1 #I       (I4)                           \n1 #MODULO  (I4)                           \n1 #DIVISOR (I4)                           \n1 #OUT     (A10)                          \nEND-DEFINE                                \n*                                         \nFOR #I := 1 TO 100                        \n  #DIVISOR := 15                          \n  #OUT := 'FizzBuzz'                      \n  PERFORM MODULO                          \n*                                         \n  #DIVISOR := 5                           \n  #OUT := 'Buzz'                          \n  PERFORM MODULO                          \n*                                         \n  #DIVISOR := 3                           \n  #OUT := 'Fizz'                          \n  PERFORM MODULO                          \n*                                         \n  WRITE #I                                \nEND-FOR                                   \n*                                         \nDEFINE SUBROUTINE MODULO                  \n#MODULO := #I - (#I / #DIVISOR) * #DIVISOR\nIF #MODULO = 0                            \n  WRITE NOTITLE #OUT                      \n  ESCAPE TOP                              \nEND-IF                                    \nEND-SUBROUTINE                            \n*                                         \nEND                                       \n"
+   ]
+  },
+  "neko": {
+   "header": "Neko",
+   "lang": "neko",
+   "variants": [
+    "var i = 1\n\nwhile(i < 100) {\n\tif(i % 15 == 0) {\n\t\t$print(\"FizzBuzz\\n\");\n\t} else if(i % 3 == 0) {\n\t\t$print(\"Fizz\\n\");\n\t} else if(i % 5 == 0) {\n\t\t$print(\"Buzz\\n\");\n\t} else {\n\t\t$print(i + \"\\n\");\n\t}\n\n\ti ++= 1\n}\n"
+   ]
+  },
+  "nemerle": {
+   "header": "Nemerle",
+   "lang": "nemerle",
+   "variants": [
+    "using System;\nusing System.Console;\n\nmodule FizzBuzz\n{\n    FizzBuzz(x : int) : string\n    {\n        |x when x % 15 == 0 => \"FizzBuzz\"\n        |x when x %  5 == 0 => \"Buzz\"\n        |x when x %  3 == 0 => \"Fizz\"\n        |_                  => $\"$x\"\n    }\n    \n    Main() : void\n    {\n        foreach (i in [1 .. 100])\n            WriteLine($\"$(FizzBuzz(i))\")\n    }\n}\n"
+   ]
+  },
+  "netrexx": {
+   "header": "NetRexx",
+   "lang": "netrexx",
+   "variants": [
+    "loop j=1 for 100\n  select\n    when j//15==0 then say 'FizzBuzz'\n    when j//5==0  then say 'Buzz'\n    when j//3==0  then say 'Fizz'\n    otherwise say j.right(4)\n  end\nend\n"
+   ]
+  },
+  "never": {
+   "header": "Never",
+   "lang": "never",
+   "variants": [
+    "func fizz_buzz() -> int\n{\n    var i = 1;\n\n    for (i = 1; i <= 100; i = i + 1)\n    {\n        /* if (i % 15 == 0) */\n        if (i % 3 == 0 && i % 5 == 0)\n        {\n            prints(\"Fizz Buzz\\n\")\n        }\n        else if (i % 3 == 0)\n        {\n            prints(\"Fizz\\n\")\n        }\n        else if (i % 5 == 0)\n        {\n            prints(\"Buzz\\n\")\n        }\n        else\n        {\n            prints(i + \"\\n\")\n        }\n    };\n\n    0\n}\n\nfunc main() -> int {\n    fizz_buzz();\n\n    0\n}\n"
+   ]
+  },
+  "newlisp": {
+   "header": "NewLISP",
+   "lang": "newlisp",
+   "variants": [
+    "(dotimes (i 100)\n  (println\n   (cond\n    ((= 0 (% i 15)) \"FizzBuzz\")\n    ((= 0 (% i 3)) \"Fizz\")\n    ((= 0 (% i 5)) \"Buzz\")\n    ('t i))))\n",
+    "(define (try-all) ;; The arguments are in (args) or $args.\n  (let (cnt (length (filter true? $args)))\n    (if (zero? cnt) nil cnt)))\n\n(define (fizz)\n  (define (say? n s) (if (= 0 (% i n)) (print s))) ;; Dynamic scoping.\n  (for (i 1 21)\n    (unless\n      (try-all\n        (say? 3 'fizz)\n        (say? 5 'buzz)\n        (say? 7 'boom)\n        (say? 11 'crux))\n      (print i))\n    (println)))\n\n(fizz)\n\n1\n2\nfizz\n4\nbuzz\nfizz\nboom\n8\nfizz\nbuzz\ncrux\nfizz\n13\nboom\nfizzbuzz\n16\n17\nfizz\n19\nbuzz\nfizzboom\n",
+    "(define (m-prime-gen)\n  (fn ( , n)  ;; Unused parameter n is our local variable.\n    ;; Self-modifying code.\n    (until (= 1 (length (factor (setf n (++ 2))))))\n    n))\n\n(define (try-all) ;; The arguments are in (args) or $args.\n  (let (cnt (length (filter true? $args)))\n    (if (zero? cnt) nil cnt)))\n\n(define (fizz)\n  (define (say? n s) (if (= 0 (% i n)) (print s))) ;; Dynamic scoping.\n  (for (i 1 21)\n    (let (p (m-prime-gen))\n      (unless\n        (try-all\n          (say? (p) 'fizz)\n          (say? (p) 'buzz)\n          (say? (p) 'boom)\n          (say? (p) 'crux)\n          (say? (p) 'ZAP))\n        (print i))\n      (println))))\n\n(fizz)\n\n1\n2\nfizz\n4\nbuzz\nfizz\nboom\n8\nfizz\nbuzz\ncrux\nfizz\nZAP\nboom\nfizzbuzz\n16\n17\nfizz\n19\nbuzz\nfizzboom\n"
+   ]
+  },
+  "newtonscript": {
+   "header": "NewtonScript",
+   "lang": "newtonscript",
+   "variants": [
+    "for i := 1 to 100 do\nbegin\n\tif i mod 15 = 0 then\n\t\tprint(\"FizzBuzz\")\n\telse if i mod 3 = 0 then\n\t\tprint(\"Fizz\")\n\telse if i mod 5 = 0 then\n\t\tprint(\"Buzz\")\n\telse\n\t\tprint(i);\n\tprint(\"\\n\")\nend\n"
+   ]
+  },
+  "nickle": {
+   "header": "Nickle",
+   "lang": "nickle",
+   "variants": [
+    "/* Fizzbuzz in nickle */\n\nvoid function fizzbuzz(size) {\n    for (int i = 1; i < size; i++) {\n        if (i % 15 == 0) { printf(\"Fizzbuzz\\n\"); }\n        else if (i % 5 == 0) { printf(\"Buzz\\n\"); }\n        else if (i % 3 == 0) { printf(\"Fizz\\n\"); }\n        else { printf(\"%i\\n\", i); }\n    }\n}\n\nfizzbuzz(1000);\n"
+   ]
+  },
+  "nim": {
+   "header": "Nim",
+   "lang": "nim",
+   "variants": [
+    "for i in 1..100:\n  if i mod 15 == 0:\n    echo(\"FizzBuzz\")\n  elif i mod 3 == 0:\n    echo(\"Fizz\")\n  elif i mod 5 == 0:\n    echo(\"Buzz\")\n  else:\n    echo(i)\n",
+    "var messages = @[\"\", \"Fizz\", \"Buzz\", \"FizzBuzz\"]\nvar acc = 810092048\nfor i in 1..100:\n  var c = acc and 3\n  echo(if c == 0: $i else: messages[c])\n  acc = acc shr 2 or c shl 28\n",
+    "import macros\nmacro FizzBuzz(N): untyped =\n  var source = \"\"\n  for i in 1..N.intVal:\n    source &= \"echo \\\"\"\n    if i mod 15 == 0:\n      source &= \"FizzBuzz\"\n    elif i mod 3 == 0:\n      source &= \"Fizz\"\n    elif i mod 5 == 0:\n      source &= \"Buzz\"\n    else:\n      source &= $i\n    source &= \"\\\"\\n\"\n  result = parseStmt(source)\n\nFizzBuzz(100)\n"
+   ]
+  },
+  "nix": {
+   "header": "Nix",
+   "lang": "nix",
+   "variants": [
+    "with (import <nixpkgs> { }).lib;\nwith builtins;\nlet\n  fizzbuzz = { x ? 1 }:\n    ''\n      ${if (mod x 15 == 0) then\n        \"FizzBuzz\"\n      else if (mod x 3 == 0) then\n        \"Fizz\"\n      else if (mod x 5 == 0) then\n        \"Buzz\"\n      else\n        (toString x)}\n    '' + (if (x < 100) then\n      fizzbuzz { x = x + 1; } else \"\");\nin\nfizzbuzz { }\n"
+   ]
+  },
+  "nlp-plus-plus": {
+   "header": "NLP++",
+   "lang": "nlp-plus-plus",
+   "variants": [
+    "@CODE\nL(\"i\") = 1;\nwhile (L(\"i\") <= 100) {\n    if (L(\"i\") % 15 == 0)\n        cout() << \"FizzBuzz\\n\";\n    else if (L(\"i\") % 3 == 0)\n        cout() << \"Fizz\\n\";\n    else if (L(\"i\") % 5 == 0)\n        cout() << \"Buzz\\n\";\n    else\n        cout() << L(\"i\") << \"\\n\";\n    L(\"i\")++;\n}\n@@CODE\n"
+   ]
+  },
+  "nu": {
+   "header": "Nu",
+   "lang": "nu",
+   "variants": [
+    "1..100 | each {\n  { x: $in, mod3: ($in mod 3), mod5: ($in mod 5), }\n  | match $in {\n    { mod3: 0, mod5: 0, } => 'FizzBuz',\n    { mod3: 0, mod5: _, } => 'Fizz',\n    { mod3: _, mod5: 0, } => 'Buzz',\n                        _ => $in.x\n  }\n} | str join \"\\n\"\n",
+    "1..100 | each {\n  if $in mod 15 == 0 {'FizzBuzz'} else if $in mod 3 == 0 {'Fizz'} else if $in mod 5 == 0 {'Buzz'} else {$in}\n} | str join \"\\n\"\n",
+    "1..100 | each {(\n  if $in mod 15 == 0 {'FizzBuzz'}\n  else if $in mod 3 == 0 {'Fizz'}\n  else if $in mod 5 == 0 {'Buzz'}\n  else {$in}\n)} | str join \"\\n\"\n",
+    "(1..100\n| each {|i| $\"(if $i mod 3 == 0 {\"Fizz\"})(if $i mod 5 == 0 {\"Buzz\"})\"\n| if ($in == \"\") {$i} else {$in}}\n| str join \"\\n\")\n"
+   ]
+  },
+  "oberon-2": {
+   "header": "Oberon-2",
+   "lang": "oberon-2",
+   "variants": [
+    "MODULE FizzBuzz;\n\n   IMPORT Out;\n\n   VAR i: INTEGER;\n\nBEGIN\n   FOR i := 1 TO 100 DO \n      IF i MOD 15 = 0 THEN \n         Out.String(\"FizzBuzz\")\n      ELSIF i MOD 5 = 0 THEN\n         Out.String(\"Buzz\")\n      ELSIF i MOD 3 = 0 THEN \n         Out.String(\"Fizz\")\n      ELSE \n         Out.Int(i,0)\n      END;\n      Out.Ln\n   END\nEND FizzBuzz.\n"
+   ]
+  },
+  "objective-c": {
+   "header": "Objective-C",
+   "lang": "objective-c",
+   "variants": [
+    "// FizzBuzz in Objective-C\n#import <Foundation/Foundation.h>\n\nint main(int argc, char* argv[]) {\n\tfor (NSInteger i=1; I <= 101; i++) {\n\t\tif (i % 15 == 0) {\n\t\t    NSLog(@\"FizzBuzz\\n\");\n\t\t} else if (i % 3 == 0) {\n\t\t    NSLog(@\"Fizz\\n\");\n\t\t} else if (i % 5 == 0) {\n\t\t    NSLog(@\"Buzz\\n\");\n\t\t} else {\n\t\t    NSLog(@\"%li\\n\", i);\n\t\t}\n\t}\n}\n"
+   ]
+  },
+  "ocaml": {
+   "header": "OCaml",
+   "lang": "ocaml",
+   "variants": [
+    "let fizzbuzz i =\n  match i mod 3, i mod 5 with\n    0, 0 -> \"FizzBuzz\"\n  | 0, _ -> \"Fizz\"\n  | _, 0 -> \"Buzz\"\n  | _    -> string_of_int i\n \nlet _ =\n  for i = 1 to 100 do print_endline (fizzbuzz i) done\n",
+    "(* Useful rule declaration: \"cond => f\", 'cond'itionally applies 'f' to 'a'ccumulated value *)\nlet (=>) cond f a = if cond then f a else a\nlet append s a = a^s\n\nlet fizzbuzz i =\n  \"\" |> (i mod 3 = 0 => append \"Fizz\")\n     |> (i mod 5 = 0 => append \"Buzz\")\n     |> (function \"\" -> string_of_int i\n                | s  -> s)\n"
+   ]
+  },
+  "octave": {
+   "header": "Octave",
+   "lang": "octave",
+   "variants": [
+    "for i = 1:100\n  if ( mod(i,15) == 0 )\n    disp(\"FizzBuzz\");\n  elseif ( mod(i, 3) == 0 )\n    disp(\"Fizz\")\n  elseif ( mod(i, 5) == 0 )\n    disp(\"Buzz\")\n  else\n    disp(i)\n  endif\nendfor\n"
+   ]
+  },
+  "oforth": {
+   "header": "Oforth",
+   "lang": "oforth",
+   "variants": [
+    ": fizzbuzz\n| i |\n   100 loop: i [\n      null \n      i 3 mod ifZero: [ \"Fizz\" + ]\n      i 5 mod ifZero: [ \"Buzz\" + ]\n      dup ifNull: [ drop i ] . \n      ] ; \n"
+   ]
+  },
+  "oli": {
+   "header": "Oli",
+   "lang": "oli",
+   "variants": [
+    "$arr = {\"10\":\"Fizz\",\"01\":\"Buzz\",\"11\":\"FizzBuzz\",\"00\":\"\"}\n\nfor $i=1 to 100 do \n\t$arr[\"00\"] = $i\n\techo $arr[ INT(!($i%3)) .. INT(!($i%5)) ]\nendfor\n"
+   ]
+  },
+  "ooc": {
+   "header": "OOC",
+   "lang": "ooc",
+   "variants": [
+    "fizz: func (n: Int) -> Bool {\n  if(n % 3 == 0) {\n    printf(\"Fizz\")\n    return true\n  }\n  return false\n}\n\nbuzz: func (n: Int) -> Bool {\n  if(n % 5 == 0) {\n    printf(\"Buzz\")\n    return true\n  }\n  return false\n}\n\nmain: func {\n  for(n in 1..100) {\n    fizz:= fizz(n)\n    buzz:= buzz(n)\n    fizz || buzz || printf(\"%d\", n)\n    println()\n  }\n}\n"
+   ]
+  },
+  "order": {
+   "header": "Order",
+   "lang": "order",
+   "variants": [
+    "#include <order/interpreter.h>\n\n// Get FB for one number\n#define ORDER_PP_DEF_8fizzbuzz ORDER_PP_FN(            \\\n8fn(8N,                                                \\\n    8let((8F, 8fn(8N, 8G,                              \\\n                  8is_0(8remainder(8N, 8G)))),         \\\n         8cond((8ap(8F, 8N, 15), 8quote(fizzbuzz))     \\\n               (8ap(8F, 8N, 3), 8quote(fizz))          \\\n               (8ap(8F, 8N, 5), 8quote(buzz))          \\\n               (8else, 8N)))) )\n\n// Print E followed by a comma (composable, 8print is not a function)\n#define ORDER_PP_DEF_8print_el ORDER_PP_FN( \\\n8fn(8E, 8print(8E 8comma)) )\n\nORDER_PP(  // foreach instead of map, to print but return nothing\n  8seq_for_each(8compose(8print_el, 8fizzbuzz), 8seq_iota(1, 100))\n)\n"
+   ]
+  },
+  "pari-gp": {
+   "header": "PARI/GP",
+   "lang": "pari-gp",
+   "variants": [
+    "{for(n=1,100,\n  print(if(n%3,\n    if(n%5,\n      n\n    ,\n      \"Buzz\"\n    )\n  ,\n    if(n%5,\n      \"Fizz\"\n    ,\n      \"FizzBuzz\"\n    )\n  ))\n)}\n"
+   ]
+  },
+  "parrot-internal-representation": {
+   "header": "PIR",
+   "lang": "parrot-internal-representation",
+   "variants": [
+    ".sub main :main\n  .local int f\n  .local int mf\n  .local int skipnum\n  f = 1\nLOOP: \n  if f > 100 goto DONE\n  skipnum = 0\n  mf = f % 3\n  if mf == 0 goto FIZZ\nFIZZRET:\n  mf = f % 5\n  if mf == 0 goto BUZZ\nBUZZRET:\n  if skipnum > 0 goto SKIPNUM\n  print f\nSKIPNUM:\n  print \"\\n\"\n  inc f \n  goto LOOP\n  end\nFIZZ:\n  print \"Fizz\"\n  inc skipnum\n  goto FIZZRET\n  end\nBUZZ:\n  print \"Buzz\"\n  inc skipnum\n  goto BUZZRET\n  end\nDONE:\n  end\n.end\n"
+   ]
+  },
+  "pascal": {
+   "header": "Pascal",
+   "lang": "pascal",
+   "variants": [
+    "program fizzbuzz(output);\nvar\n  i: integer;\nbegin\n  for i := 1 to 100 do\n    if i mod 15 = 0 then\n      writeln('FizzBuzz')\n    else if i mod 3 = 0 then\n      writeln('Fizz')\n    else if i mod 5 = 0 then\n      writeln('Buzz')\n    else\n      writeln(i)\nend.\n",
+    "begin\n  for var i:=1 to 100 do\n    if i mod 15 = 0 then\n      Print('FizzBuzz')\n    else if i mod 3 = 0 then\n      Print('Fizz')   \n    else if i mod 5 = 0 then\n      Print('Buzz')   \n    else Print(i)   \nend.\n"
+   ]
+  },
+  "perl": {
+   "header": "Perl",
+   "lang": "perl",
+   "variants": [
+    "use strict;\nuse warnings;\nuse feature qw(say);\n\nfor my $i (1..100) {\n    say $i % 15 == 0 ? \"FizzBuzz\"\n      : $i %  3 == 0 ? \"Fizz\"\n      : $i %  5 == 0 ? \"Buzz\"\n      : $i;\n}\n",
+    "print 'Fizz'x!($_ % 3) . 'Buzz'x!($_ % 5) || $_, \"\\n\" for 1 .. 100;\n",
+    "print+(Fizz)[$_%3].(Buzz)[$_%5]||$_,$/for 1..1e2\n",
+    "map((Fizz)[$_%3].(Buzz)[$_%5]||$_,1..100);\n",
+    "use feature \"say\";\n\n@a = (\"FizzBuzz\", 0, 0, \"Fizz\", 0, \"Buzz\", \"Fizz\", 0, 0, \"Fizz\", \"Buzz\", 0, \"Fizz\");\n\nsay $a[$_ % 15] || $_ for 1..100;\n"
+   ]
+  },
+  "php": {
+   "header": "PHP",
+   "lang": "php",
+   "variants": [
+    "<?php\nfor ($i = 1; $i <= 100; $i++)\n{\n    if (!($i % 15))\n        echo \"FizzBuzz\\n\";\n    else if (!($i % 3))\n        echo \"Fizz\\n\";\n    else if (!($i % 5))\n        echo \"Buzz\\n\";\n    else\n        echo \"$i\\n\";\n}\n?>\n",
+    "<?php\nfor ( $i = 1; $i <= 100; ++$i )\n{\n     $str = \"\";\n\n     if (!($i % 3 ) )\n          $str .= \"Fizz\";\n\n     if (!($i % 5 ) )\n          $str .= \"Buzz\";\n\n     if ( empty( $str ) )\n          $str = $i;\n\n     echo $str . \"\\n\";\n}\n?>\n",
+    "<?php\nfor (\n    $i = 0;\n    $i++ < 100;\n    $o = ($i % 3 ? '' : 'Fizz') . ($i % 5 ? '' : 'Buzz')\n)\n    echo $o ? : $i, PHP_EOL;\n?>\n",
+    "<?php\nfor($i = 1; $i <= 100 and print(($i % 15 ? $i % 5 ? $i % 3 ? $i : 'Fizz' : 'Buzz' : 'FizzBuzz') . \"\\n\"); ++$i);\n?>\n",
+    "for($i=0;$i++<100;)echo($i%3?'':'Fizz').($i%5?'':'Buzz')?:$i,\"\\n\";\n"
+   ]
+  },
+  "picat": {
+   "header": "Picat",
+   "lang": "picat",
+   "variants": [
+    "fizzbuzz_map =>\n    println(fizzbuzz_map),\n    FB = [I : I in 1..100],\n    Map = [(3=\"Fizz\"),(5=\"Buzz\"),(15=\"FizzBuzz\")],\n    foreach(I in FB, K=V in Map) \n       if I mod K == 0 then\n          FB[I] := V\n       end\n    end,\n    println(FB).\n",
+    "fizzbuzz_template1 =>\n   println(fizzbuzz_template1),\n   N = 100,\n   F = [_,_,fizz,_,buzz,fizz,_,_,fizz,buzz,_,fizz,_,_,fizzbuzz],\n   FF = [F : _I in 1..1+N div F.length].flatten(),\n   foreach(I in 1..N)\n      (var(FF[I]) -> print(I) ; print(FF[I])),\n      print(\" \")\n   end,\n   nl.\n",
+    "fizzbuzz_template2 =>\n   println(fizzbuzz_template2),\n   N = 100,\n   F = new_list(N),\n   FV = [3,5,15],\n   FN = [\"Fizz\",\"Buzz\",\"FizzBuzz\"],\n   foreach(I in 1..N, {Val,Name} in zip(FV,FN)) \n      if I mod Val == 0 then F[I] := Name end\n   end,\n   foreach(I in 1..N)\n      printf(\"%w \", cond(var(F[I]),I, F[I]))\n   end,\n   nl.\n",
+    "fizzbuzz(Goal) => \n    println(Goal),\n    foreach(I in 1..100)\n       printf(\"%w \", apply(Goal,I))\n    end,\n    nl.\n",
+    "fb1(I) = V =>\n   V = I.to_string(),\n   if     I mod 15 == 0 then V := \"FizzBuzz\"\n   elseif I mod  3 == 0 then V := \"Fizz\" \n   elseif I mod  5 == 0 then V := \"Buzz\" \n   end.\n"
+   ]
+  },
+  "picolisp": {
+   "header": "PicoLisp",
+   "lang": "picolisp",
+   "variants": [
+    "(for N 100\n   (prinl\n      (or (pack (at (0 . 3) \"Fizz\") (at (0 . 5) \"Buzz\")) N) ) )\n\n# Above, we simply count till 100 'prin'-ting number 'at' 3rd ('Fizz'), 5th ('Buzz') and 'pack'-ing 15th number ('FizzBuzz').\n# Rest of the times 'N' is printed as it loops in 'for'.\n",
+    "(for N 100\n   (prinl\n      (cond\n         ((=0 (% N 15)) \"FizzBuzz\")\n         ((=0 (% N 3)) \"Fizz\")\n         ((=0 (% N 5)) \"Buzz\")\n         (T N) ) ) )\n"
+   ]
+  },
+  "pike": {
+   "header": "Pike",
+   "lang": "pike",
+   "variants": [
+    "int main(){\n   for(int i = 1; i <= 100; i++) {\n      if(i % 15 == 0) {\n         write(\"FizzBuzz\\n\");\n      } else if(i % 3 == 0) {\n         write(\"Fizz\\n\");\n      } else if(i % 5 == 0) {\n         write(\"Buzz\\n\");\n      } else {\n         write(i + \"\\n\");\n      }\n   }\n}\n"
+   ]
+  },
+  "pilot": {
+   "header": "PILOT",
+   "lang": "pilot",
+   "variants": [
+    "C  :i = 0\n*loop\nC  :i = i + 1\nJ ( i > 100 )    : *finished\nC  :modulo = i % 15\nJ ( modulo = 0 ) : *fizzbuzz\nC  :modulo = i % 3\nJ ( modulo = 0 ) : *fizz\nC  :modulo = i % 5\nJ ( modulo = 0 ) : *buzz\nT  :#i\nJ  : *loop\n*fizzbuzz\nT  :FizzBuzz\nJ  : *loop\n*fizz\nT  :Fizz\nJ  : *loop\n*buzz\nT  :Buzz\nJ  : *loop\n*finished\nEND:\n"
+   ]
+  },
+  "pl-i": {
+   "header": "PL/I",
+   "lang": "pl-i",
+   "variants": [
+    "do i = 1 to 100;\n   select;\n      when (mod(i,15) = 0) put skip list ('FizzBuzz');\n      when (mod(i,3)  = 0) put skip list ('Fizz');\n      when (mod(i,5)  = 0) put skip list ('Buzz');\n      otherwise put skip list (i);\n   end;\nend;\n"
+   ]
+  },
+  "pl-m": {
+   "header": "PL/M",
+   "lang": "pl-m",
+   "variants": [
+    "100H:\n\n/* DECLARE OUTPUT IN TERMS OF CP/M - \n   PL/M DOES NOT COME WITH ANY STANDARD LIBRARY */\nBDOS: PROCEDURE(FUNC, ARG);\n    DECLARE FUNC BYTE, ARG ADDRESS;\n    GO TO 5;\nEND BDOS;\n\nPUT$STRING: PROCEDURE(STR);\n    DECLARE STR ADDRESS;\n    CALL BDOS(9, STR);\n    CALL BDOS(9, .(13,10,'$'));\nEND PUT$STRING;\n\n/* PRINT A NUMBER */\nPUT$NUMBER: PROCEDURE(N);\n    DECLARE S (5) BYTE INITIAL ('...$');\n    DECLARE P ADDRESS;\n    DECLARE (N, D, C BASED P) BYTE;\n    P = .S(3);\nDIGIT:\n    P = P-1;\n    C = (N MOD 10) + '0';\n    N = N/10;\n    IF N > 0 THEN GO TO DIGIT;\n    CALL PUT$STRING(P);\nEND PUT$NUMBER;\n\n/* FIZZBUZZ */\nDECLARE N BYTE;\nDO N = 1 TO 100;\n    IF N MOD 15 = 0 THEN \n        CALL PUT$STRING(.'FIZZBUZZ$');\n    ELSE IF N MOD 5 = 0 THEN \n        CALL PUT$STRING(.'BUZZ$');\n    ELSE IF N MOD 3 = 0 THEN \n        CALL PUT$STRING(.'FIZZ$');\n    ELSE\n        CALL PUT$NUMBER(N);\nEND;\n\n/* EXIT TO CP/M */\nCALL BDOS(0,0);\nEOF\n"
+   ]
+  },
+  "pl-sql": {
+   "header": "PL/SQL",
+   "lang": "pl-sql",
+   "variants": [
+    "begin\n  for i in 1 .. 100\n  loop\n    case\n    when mod(i, 15) = 0 then\n      dbms_output.put_line('FizzBuzz');\n    when mod(i, 5) = 0 then\n      dbms_output.put_line('Buzz');\n    when mod(i, 3) = 0 then\n      dbms_output.put_line('Fizz');\n    else\n      dbms_output.put_line(i);\n    end case;\n  end loop;\nend;\n"
+   ]
+  },
+  "plain-english": {
+   "header": "Plain English",
+   "lang": "plain-english",
+   "variants": [
+    "To play FizzBuzz up to a number:\nPut \"\" into a string.\nLoop.\nIf a counter is past the number, exit.\nIf the counter is evenly divisible by 3, append \"Fizz\" to the string.\nIf the counter is evenly divisible by 5, append \"Buzz\" to the string.\nIf the string is blank, append the counter then \"\" to the string.\nWrite the string to the console.\nClear the string.\nRepeat.\n\nTo run:\nStart up.\nPlay FizzBuzz up to 100.\nWait for the escape key.\nShut down.\n"
+   ]
+  },
+  "pointless": {
+   "header": "Pointless",
+   "lang": "pointless",
+   "variants": [
+    "output =\n  range(1, 100)\n  |> map(fizzBuzz)\n  |> printLines\n\nfizzBuzz(n) =\n  if result == \"\" then n else result\n  where result = fizzBuzzString(n)\n\nfizzBuzzString(n) =\n  (if n % 3 == 0 then \"Fizz\" else \"\")\n  + (if n % 5 == 0 then \"Buzz\" else \"\")\n"
+   ]
+  },
+  "pony": {
+   "header": "Pony",
+   "lang": "pony",
+   "variants": [
+    "use \"collections\"\n \nactor Main\n  new create(env: Env) =>\n    for i in Range[I32](1, 100) do\n      env.out.print(fizzbuzz(i))\n    end\n \n  fun fizzbuzz(n: I32): String =>\n    if (n % 15) == 0 then\n      \"FizzBuzz\"\n    elseif (n % 5) == 0 then\n      \"Buzz\"\n    elseif (n % 3) == 0 then\n      \"Fizz\"\n    else\n      n.string()\n    end\n"
+   ]
+  },
+  "postscript": {
+   "header": "PostScript",
+   "lang": "postscript",
+   "variants": [
+    "1 1 100 { \n\t/c false def\n\tdup 3 mod 0 eq { (Fizz) print /c true def } if\n\tdup 5 mod 0 eq { (Buzz) print /c true def } if\n    c {pop}{(   ) cvs print} ifelse\n    (\\n) print\n} for\n",
+    "/fizzdict 100 dict def\nfizzdict begin\n/notmod{ (   ) cvs } def\n/mod15 { dup 15 mod 0 eq { (FizzBuzz)def }{pop}ifelse} def\n/mod3  { dup 3 mod 0 eq {(Fizz)def}{pop}ifelse} def\n/mod5  { dup 5 mod 0 eq {(Buzz)def}{pop}ifelse} def\n1 1 100 { mod3 } for \n1 1 100 { mod5 } for \n1 1 100 { mod15} for\n1 1 100 { dup currentdict exch known { currentdict exch get}{notmod} ifelse print (\\n) print} for\nend\n"
+   ]
+  },
+  "potion": {
+   "header": "Potion",
+   "lang": "potion",
+   "variants": [
+    "1 to 100 (a):\n  if (a % 15 == 0):\n    'FizzBuzz'.\n  elsif (a % 3 == 0):\n    'Fizz'.\n  elsif (a % 5 == 0):\n    'Buzz'.\n  else: a. string print\n  \"\\n\" print.\n"
+   ]
+  },
+  "powershell": {
+   "header": "PowerShell",
+   "lang": "powershell",
+   "variants": [
+    "for ($i = 1; $i -le 100; $i++) {\n    if ($i % 15 -eq 0) {\n        \"FizzBuzz\"\n    } elseif ($i % 5 -eq 0) {\n        \"Buzz\"\n    } elseif ($i % 3 -eq 0) {\n        \"Fizz\"\n    } else {\n        $i\n    }\n}\n",
+    "$txt=$null\n1..100 | ForEach-Object {\n    switch ($_) {\n        { $_ % 3 -eq 0 }  { $txt+=\"Fizz\" }\n        { $_ % 5 -eq 0 }  { $txt+=\"Buzz\" }\n        $_                { if($txt) { $txt } else { $_ }; $txt=$null }\n    }\n}\n",
+    "1..100 | ForEach-Object {\n    $s = ''\n    if ($_ % 3 -eq 0) { $s += \"Fizz\" }\n    if ($_ % 5 -eq 0) { $s += \"Buzz\" }\n    if (-not $s) { $s = $_ }\n    $s\n}\n",
+    "1..100 | % {write-host(\"$(if(($_ % 3 -ne 0) -and ($_ % 5 -ne 0)){$_})$(if($_ % 3 -eq 0){\"Fizz\"})$(if($_ % 5 -eq 0){\"Buzz\"})\")}\n",
+    "filter fizz-buzz{\n    @(\n        $_, \n        \"Fizz\", \n        \"Buzz\", \n        \"FizzBuzz\"\n    )[\n        2 * \n        ($_ -match '[05]$') + \n        ($_ -match '(^([369][0369]?|[258][147]|[147][258]))$')\n    ]\n}\n\n1..100 | fizz-buzz\n"
+   ]
+  },
+  "processing": {
+   "header": "Processing",
+   "lang": "processing",
+   "variants": [
+    "for (int i = 0; i < width; i++) {\n  if (i % 3 == 0 && i % 5 == 0) {\n    stroke(255, 255, 0);\n    println(\"FizzBuzz!\");\n  }\n  else if (i % 5 == 0) {\n    stroke(0, 255, 0);\n    println(\"Buzz\");\n  }\n  else if (i % 3 == 0) {\n    stroke(255, 0, 0);\n    println(\"Fizz\");\n  }\n  else {\n    stroke(0, 0, 255);\n    println(i);\n  } \n  line(i, 0, i, height);\n}\n",
+    "for (int i = 0; i < width; i++) {\n  stroke((i % 5 == 0 && i % 3 == 0) ? #FFFF00 : (i % 5 == 0) ? #00FF00 : (i % 3 == 0) ? #FF0000 : #0000FF);\n  line(i, 0, i, height);\n  println((i % 5 == 0 && i % 3 == 0) ? \"FizzBuzz!\" : (i % 5 == 0) ? \"Buzz\" : (i % 3 == 0) ? \"Fizz\" : i);\n}\n",
+    "for (int i = 1; i <= 100; i++) {\n  if (i % 3 == 0) {\n    print(\"Fizz\");\n  }\n  if (i % 5 == 0) {\n    print(\"Buzz\");\n  }\n  if (i % 3 != 0 && i % 5 != 0) {\n    print(i);\n  }\n  print(\"\\n\");\n}\n",
+    "for(int i = 1; i <= 100; i++){\n  String output = \"\";\n  \t\n  if(i % 3 == 0) output += \"Fizz\";\n  if(i % 5 == 0) output += \"Buzz\";\n  // copy & paste above line to add more tests\n  \n  if(output == \"\") output = str(i);\n  println(output);\n}\n"
+   ]
+  },
+  "prolog": {
+   "header": "Prolog",
+   "lang": "prolog",
+   "variants": [
+    "fizzbuzz :-\n   forall(between(1, 100, X), print_item(X)).\n\nprint_item(X) :-\n   (  X mod 15 =:= 0\n   -> write('FizzBuzz')\n   ;  X mod 3 =:= 0\n   -> write('Fizz')\n   ;  X mod 5 =:= 0\n   -> write('Buzz')\n   ;  write(X)\n   ),\n   nl.\n",
+    "fizzbuzz(X) :- X mod 15 =:= 0, !, write('FizzBuzz').\nfizzbuzz(X) :- X mod 3 =:= 0, !, write('Fizz').\nfizzbuzz(X) :- X mod 5 =:= 0, !, write('Buzz').\nfizzbuzz(X) :- write(X).\n\ndofizzbuzz :-between(1, 100, X), fizzbuzz(X), nl, fail.\ndofizzbuzz.\n",
+    "%        N  /3?  /5?  V\nfizzbuzz(_, yes, yes, 'FizzBuzz').\nfizzbuzz(_, yes, no,  'Fizz').\nfizzbuzz(_, no,  yes, 'Buzz').\nfizzbuzz(N, no,  no,  N).\n\n% Unifies V with 'yes' if D divides evenly into N, 'no' otherwise.\ndivisible_by(N, D, yes) :- N mod D =:= 0.\ndivisible_by(N, D, no) :- N mod D =\\= 0.\n\n% Print 'Fizz', 'Buzz', 'FizzBuzz' or N as appropriate.\nfizz_buzz_or_n(N) :- N > 100.\nfizz_buzz_or_n(N) :- N =< 100,\n   divisible_by(N, 3, Fizz),\n   divisible_by(N, 5, Buzz),\n   fizzbuzz(N, Fizz, Buzz, FB),\n   write(FB), nl,\n   M is N+1, fizz_buzz_or_n(M).\n\nmain :-\n   fizz_buzz_or_n(1).\n",
+    "% This implementation uses modern Prolog techniques\n% in order to be an idiomatic solution that uses logical purity, generality and determinism wherever possible:\n% - CLP(Z): constraint logic programming on integers.\n% - library(reif): efficient logical predicates based on 'Indexing dif/2'.\n:- module(fizz_buzz, [main/0, integer_fizzbuzz_below_100/2, integer_fizzbuzz/2]).\n\n:- use_module(library(reif)).\n\n% for Scryer-Prolog:\n:- use_module(library(clpz)).\n:- use_module(library(between)).\n:- use_module(library(iso_ext)).\n:- use_module(library(si)).\n\n% for SWI-Prolog:\n% :- use_module(library(clpfd)).\n\n% Prints all solutions to `integer_fizzbuzz_below_100` each on a separate line, in order.\n% Logically-impure shell, as currently there is no logically-pure way to write to a filestream.\nmain :-\n    forall(integer_fizzbuzz_below_100(_, FizzBuzz), write_line(FizzBuzz)).\n\nwrite_line(Value) :-\n    write(Value),\n    nl.\n\n% Constrains FizzBuzz results to the range 1 <= X <= 100,\n% and (for the 'most general query' where neither X or FizzBuzz is concrete)\n% ensures results are traversed in order low -> high X.\n%\n% ?- integer_fizzbuzz_below_100(X, FizzBuzz) % generate all the results in order\n% ?- integer_fizzbuzz_below_100(27, Result) % Find out what output `27` will produce (it's 'Fizz'.)\n% ?- integer_fizzbuzz_below_100(X, 'Fizz')   % generate all the numbers which would print 'Fizz' in order (3, 6, 9, etc).\n% ?- integer_fizzbuzz_below_100(X, Res), integer_si(Res) % generate all the numbers which would print themselves in order (1, 2, 4, 6, 7, 8, 11, etc).\n% ?- integer_fizzbuzz_below_100(X, Res), is_of_type(integer, Res) % SWI-Prolog version doing the same.\ninteger_fizzbuzz_below_100(X, FizzBuzz) :-\n    between(1, 100, X),\n    integer_fizzbuzz(X, FizzBuzz).\n\n% States the relationship between a number\n% and its FizzBuzz representation.\n%\n% Because constraints are propagated lazily,\n% prompting this predicate without having constrained `Num`\n% to a particular integer value will give you its definition back.\n% Put differently: This predicate returns the whole solution space at once,\n% and external labeling techniques are required to traverse and concretize this solution space\n% in an order that we like.\ninteger_fizzbuzz(Num, FizzBuzz) :-\n    if_(Num mod 15 #= 0, FizzBuzz = 'FizzBuzz',\n        if_(Num mod 5 #= 0, FizzBuzz = 'Buzz',\n            if_(Num mod 3 #= 0, FizzBuzz = 'Fizz',\n                Num = FizzBuzz)\n           )\n       ).\n\n% Reifiable `#=`.\n#=(X, Y, T) :-\n    X #= X1,\n    Y #= Y1,\n    zcompare(C, X1, Y1),\n    eq_t(C, T).\n\neq_t(=, true).\neq_t(<, false).\neq_t(>, false).\n"
+   ]
+  },
+  "pyret": {
+   "header": "Pyret",
+   "lang": "pyret",
+   "variants": [
+    "fun fizzbuzz(n :: NumPositive) -> String:\n  doc: ```For positive input which is multiples of three return 'Fizz', for the multiples of five return 'Buzz'. \n  For numbers which are multiples of both three and five return 'FizzBuzz'. Otherwise, return the number itself.```\n  ask:\n    | num-modulo(n, 15) == 0 then: \"FizzBuzz\"\n    | num-modulo(n, 3) == 0 then: \"Fizz\"\n    | num-modulo(n, 5) == 0 then: \"Buzz\"\n    | otherwise: num-to-string(n)\n  end\nwhere:\n  fizzbuzz(1) is \"1\"\n  fizzbuzz(101) is \"101\"\n  fizzbuzz(45) is \"FizzBuzz\"\n  fizzbuzz(33) is \"Fizz\"\n  fizzbuzz(25) is \"Buzz\"\nend\n\nrange(1, 101).map(fizzbuzz).each(print)\n"
+   ]
+  },
+  "python": {
+   "header": "Python",
+   "lang": "python",
+   "variants": [
+    "for i in range(1, 101):\n    if i % 15 == 0:\n        print \"FizzBuzz\"\n    elif i % 3 == 0:\n        print \"Fizz\"\n    elif i % 5 == 0:\n        print \"Buzz\"\n    else:\n        print i\n",
+    "for i in range(1, 101):\n    if i % 15 == 0:\n        print(\"FizzBuzz\")\n    elif i % 3 == 0:\n        print(\"Fizz\")\n    elif i % 5 == 0:\n        print(\"Buzz\")\n    else:\n        print(i)\n",
+    "for n in range(1,101):\n    response = ''\n\n    if not n%3:\n        response += 'Fizz'\n    if not n%5:\n        response += 'Buzz'\n\n    print(response or n)\n",
+    "for i in range(1,101): print(\"Fizz\"*(i%3==0) + \"Buzz\"*(i%5==0) or i)\n",
+    "for i in range(100):print(i%3//2*'Fizz'+i%5//4*'Buzz'or i+1)\n"
+   ]
+  },
+  "q": {
+   "header": "q",
+   "lang": "q",
+   "variants": [
+    "{(`$string x)^`fizzbuzz`buzz`fizz`(x mod\\:15 5 3)?'0}\n",
+    "q)/ Fizzbuzz\nq)fb:{(`$string x)^`fizzbuzz`buzz`fizz`(x mod\\:15 5 3)?'0}\nq)fb 1+til 20\n`1`2`fizz`4`buzz`fizz`7`8`fizz`buzz`11`fizz`13`14`fizzbuzz`16`17`fizz`19`buzz\n",
+    "q)show x:1+til 20\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20\nq)x mod\\:15 5 3\n1  1 1\n2  2 2\n3  3 0\n4  4 1\n5  0 2\n6  1 0\n..\nq)(x mod\\:15 5 3)?'0\n3 3 2 3 1 2 3 3 2 1 3 2 3 3 0 3 3 2 3 1\nq)`fizzbuzz`buzz`fizz`(x mod\\:15 5 3)?'0  / substitutions\n```fizz``buzz`fizz```fizz`buzz``fizz```fizzbuzz```fizz``buzz\nq)`$string x  / numbers => symbols\n`1`2`3`4`5`6`7`8`9`10`11`12`13`14`15`16`17`18`19`20\nq)(`$string x)^`fizzbuzz`buzz`fizz`(x mod\\:15 5 3)?'0  / replace nulls with numbers\n`1`2`fizz`4`buzz`fizz`7`8`fizz`buzz`11`fizz`13`14`fizzbuzz`16`17`fizz`19`buzz\n"
+   ]
+  },
+  "qb64": {
+   "header": "QB64",
+   "lang": "qb64",
+   "variants": [
+    "For n = 1 To 100\n    If n Mod 15 = 0 Then\n        Print \"FizzBuzz\"\n    ElseIf n Mod 5 = 0 Then\n        Print \"Buzz\"\n    ElseIf n Mod 3 = 0 Then\n        Print \"Fizz\"\n    Else\n        Print n\n    End If\nNext\n"
+   ]
+  },
+  "r": {
+   "header": "R",
+   "lang": "r",
+   "variants": [
+    "xx <- x <- 1:100\nxx[x %% 3 == 0] <- \"Fizz\"\nxx[x %% 5 == 0] <- \"Buzz\"\nxx[x %% 15 == 0] <- \"FizzBuzz\"\nxx\n",
+    "xx <- rep(\"\", 100)\nx <- 1:100\nxx[x %% 3 == 0] <- paste0(xx[x %% 3 == 0], \"Fizz\")\nxx[x %% 5 == 0] <- paste0(xx[x %% 5 == 0], \"Buzz\")\nxx[xx == \"\"] <- x[xx == \"\"]\nxx\n",
+    "x <- paste0(rep(\"\", 100), c(\"\", \"\", \"Fizz\"), c(\"\", \"\", \"\", \"\", \"Buzz\"))\ncat(ifelse(x == \"\", 1:100, x), sep = \"\\n\")\n",
+    "x <- paste0(rep(\"\", 100), rep(c(\"\", \"Fizz\"), times = c(2, 1)), rep(c(\"\", \"Buzz\"), times = c(4, 1)))\ncat(ifelse(x == \"\", 1:100, x), sep = \"\\n\")\n",
+    "x <- 1:100\nifelse(x %% 15 == 0, 'FizzBuzz',\n       ifelse(x %% 5 == 0, 'Buzz',\n              ifelse(x %% 3 == 0, 'Fizz', x)))\n"
+   ]
+  },
+  "racket": {
+   "header": "Racket",
+   "lang": "racket",
+   "variants": [
+    "#lang racket\n\n(for ([n (in-range 1 101)]) \n  (displayln \n   (match (gcd n 15) \n     [15 \"fizzbuzz\"] \n     [3 \"fizz\"] \n     [5 \"buzz\"] \n     [_ n])))\n"
+   ]
+  },
+  "raku": {
+   "header": "Raku",
+   "lang": "raku",
+   "variants": [
+    "for 1 .. 100 {\n    when $_ %% (3 & 5) { say 'FizzBuzz'; }\n    when $_ %% 3       { say 'Fizz'; }\n    when $_ %% 5       { say 'Buzz'; }\n    default            { .say; }\n}\n",
+    "multi sub fizzbuzz(Int $ where * %% 15) { 'FizzBuzz' }\nmulti sub fizzbuzz(Int $ where * %%  5) { 'Buzz' }\nmulti sub fizzbuzz(Int $ where * %%  3) { 'Fizz' }\nmulti sub fizzbuzz(Int $number        ) { $number }\n(1 .. 100)».&fizzbuzz.say;\n",
+    "[1..100].map({[~] ($_%%3, $_%%5) »||» \"\" Z&& <fizz buzz> or $_ })».say\n",
+    "say 'Fizz' x $_ %% 3 ~ 'Buzz' x $_ %% 5 || $_ for 1 .. 100;\n",
+    "say \"Fizz\"x$_%%3~\"Buzz\"x$_%%5||$_ for 1..100\n"
+   ]
+  },
+  "rapidq": {
+   "header": "RapidQ",
+   "lang": "rapidq",
+   "variants": [
+    "FOR i=1 TO 100\n    t$ = IIF(i MOD 3 = 0, \"Fizz\", \"\") + IIF(i MOD 5 = 0, \"Buzz\", \"\")\n    PRINT IIF(LEN(t$), t$, i)\nNEXT i\n"
+   ]
+  },
+  "rascal": {
+   "header": "Rascal",
+   "lang": "rascal",
+   "variants": [
+    "import IO;\n\npublic void fizzbuzz() {\n   for(int n <- [1 .. 100]){\n      fb = ((n % 3 == 0) ? \"Fizz\" : \"\") + ((n % 5 == 0) ? \"Buzz\" : \"\");\n      println((fb == \"\") ?\"<n>\" : fb);\n   }\n}\n"
+   ]
+  },
+  "reason": {
+   "header": "ReasonML",
+   "lang": "reason",
+   "variants": [
+    "let fizzbuzz i =>\n  switch (i mod 3, i mod 5) {\n  | (0, 0) => \"FizzBuzz\"\n  | (0, _) => \"Fizz\"\n  | (_, 0) => \"Buzz\"\n  | _ => string_of_int i\n  };\n\nfor i in 1 to 100 {\n  print_endline (fizzbuzz i)\n};\n"
+   ]
+  },
+  "rebol": {
+   "header": "Rebol",
+   "lang": "rebol",
+   "variants": [
+    "Rebol [\n\tTitle: \"FizzBuzz\"\n\tURL: http://rosettacode.org/wiki/FizzBuzz\n]\n\n; Concatenative. Note use of 'case/all' construct to evaluate all\n; conditions. I use 'copy' to allocate a new string each time through\n; the loop -- otherwise 'x' would get very long...\n\nrepeat i 100 [\n\tx: copy \"\"\n\tcase/all [\n\t\t0 = mod i 3 [append x \"Fizz\"]\n\t\t0 = mod i 5 [append x \"Buzz\"]\n\t\t\"\" = x      [x: mold i]\n\t]\n\tprint x\n]\n",
+    "repeat i 100 [\n    print switch/default 0 compose [\n        (mod i 15) [\"fizzbuzz\"]\n        (mod i 3)  [\"fizz\"]\n        (mod i 5)  [\"buzz\"]\n    ][i]\n]\n",
+    "repeat i 100[j:\"\"if i // 3 = 0[j:\"fizz\"]if i // 5 = 0[j: join j\"buzz\"]if\"\"= j[j: i]print j]\n",
+    "m: func [i d] [0 = mod i d]  \nspick: func [t x y][either any [not t  \"\" = t][y][x]]\nzz: func [i] [rejoin [spick m i 3 \"Fizz\" \"\"  spick m i 5 \"Buzz\" \"\"]]\nrepeat i 100 [print spick z: zz i z i]\n"
+   ]
+  },
+  "red": {
+   "header": "Red",
+   "lang": "red",
+   "variants": [
+    "Red [Title: \"FizzBuzz\"]\n\nrepeat i 100 [\n    print case [\n        i % 15 = 0 [\"FizzBuzz\"]\n        i % 5 = 0 [\"Buzz\"]\n        i % 3 = 0 [\"Fizz\"]\n        true [i]\n    ]\n]\n"
+   ]
+  },
+  "refal": {
+   "header": "Refal",
+   "lang": "refal",
+   "variants": [
+    "$ENTRY Go {\n    = <FizzBuzz 1>;\n};\n\nFizzBuzz {\n    101 = ;\n    s.N = <Prout <Item s.N>>\n          <FizzBuzz <+ 1 s.N>>;\n};\n\nItem {\n    s.N, <Mod s.N 15>: 0 = FizzBuzz;\n    s.N, <Mod s.N 5>: 0  = Buzz;\n    s.N, <Mod s.N 3>: 0  = Fizz;\n    s.N = s.N;\n};\n"
+   ]
+  },
+  "rexx": {
+   "header": "REXX",
+   "lang": "rexx",
+   "variants": [
+    "/*REXX program displays numbers  1 ──► 100  (some transformed) for the FizzBuzz problem.*/\n                                                 /*╔═══════════════════════════════════╗*/\n  do j=1  to 100;      z=  j                     /*║                                   ║*/\n  if j//3    ==0  then z= 'Fizz'                 /*║  The divisors  (//)  of the  IFs  ║*/\n  if j//5    ==0  then z= 'Buzz'                 /*║  must be in ascending order.      ║*/\n  if j//(3*5)==0  then z= 'FizzBuzz'             /*║                                   ║*/\n  say right(z, 8)                                /*╚═══════════════════════════════════╝*/\n  end   /*j*/                                    /*stick a fork in it,  we're all done. */\n",
+    "/*REXX program displays numbers  1 ──► 100  (some transformed) for the FizzBuzz problem.*/\n                                                 /*╔═══════════════════════════════════╗*/\n  do j=1  to 100                                 /*║                                   ║*/\n      select                                     /*║                                   ║*/\n      when j//15==0  then say 'FizzBuzz'         /*║ The divisors  (//)  of the  WHENs ║*/\n      when j//5 ==0  then say '    Buzz'         /*║ must be in  descending  order.    ║*/\n      when j//3 ==0  then say '    Fizz'         /*║                                   ║*/\n      otherwise           say right(j, 8)        /*╚═══════════════════════════════════╝*/\n      end   /*select*/\n  end       /*j*/                                /*stick a fork in it,  we're all done. */\n",
+    "/*REXX program displays numbers  1 ──► 100  (some transformed) for the FizzBuzz problem.*/\n\n   do j=1  for 100;  _=\n   if j//3 ==0  then _=_'Fizz'\n   if j//5 ==0  then _=_'Buzz'\n/* if j//7 ==0  then _=_'Jazz' */                /* ◄─── note that this is a comment.   */\n   say right(word(_ j,1),8)\n   end   /*j*/                                   /*stick a fork in it,  we're all done. */\n",
+    "/*REXX program displays numbers  1 ──► 100  (some transformed) for the FizzBuzz problem.*/\n                                                 /* [↓]  concise, but somewhat obtuse.  */\n  do j=1  for 100\n  say right(word(word('Fizz', 1+(j//3\\==0))word('Buzz', 1+(j//5\\==0)) j, 1), 8)\n  end   /*j*/\n                                                 /*stick a fork in it,  we're all done. */\n"
+   ]
+  },
+  "rhombus": {
+   "header": "Rhombus",
+   "lang": "rhombus",
+   "variants": [
+    "#lang rhombus/static\n\nfor (i in 1..=100):\n  match math.gcd(i, 15)\n  | 15: println(\"fizzbuzz\")\n  | 3:  println(\"fizz\")\n  | 5:  println(\"buzz\")\n  | _:  println(i)\n"
+   ]
+  },
+  "ring": {
+   "header": "Ring",
+   "lang": "ring",
+   "variants": [
+    "for n = 1 to 100\n    if n % 15 = 0 see \"\" + n + \" = \" + \"FizzBuzz\" + nl loop\n    but n % 3 = 0 see \"\" + n + \" = \" + \"Fizz\"+ nl\n    but n % 5 = 0 see \"\" + n + \" = \" + \"Buzz\" + nl\n    else see \"\" + n + \" = \" + n + nl ok\nnext\n"
+   ]
+  },
+  "roc": {
+   "header": "Roc",
+   "lang": "roc",
+   "variants": [
+    "main! = |_args| {\n\techo!(\n\t\t(1.I8..=100).iter().map(\n\t\t\t|i| match (if i % 3 == 0 \"Fizz\" else \"\").concat(if i % 5 == 0 \"Buzz\" else \"\") {\n\t\t\t\t\"\" => i.to_str()\n\t\t\t\ts => s\n\t\t\t},\n\t\t).fold(\"\", |a, b| \"${a}${b}\\n\"),\n\t)\n\tOk({})\n}\n",
+    "main! = |_args| {\n\tfor i in 1.I8..=100 {\n\t\tvar $printed = False\n\t\tif i % 3 == 0 {\n\t\t\techo!(\"Fizz\")\n\t\t\t$printed = True\n\t\t}\n\t\tif i % 5 == 0 {\n\t\t\techo!(\"Buzz\")\n\t\t\t$printed = True\n\t\t}\n\t\tif $printed == False {\n\t\t\techo!(i.to_str())\n\t\t}\n\t\techo!(\"\\n\")\n\t}\n\tOk({})\n}\n"
+   ]
+  },
+  "rocq-prover": {
+   "header": "Rocq",
+   "lang": "rocq-prover",
+   "variants": [
+    "Require Import Coq.Lists.List.\n(* https://coq.inria.fr/library/Coq.Lists.List.html *)\n\nRequire Import Coq.Strings.String.\n(* https://coq.inria.fr/library/Coq.Strings.String.html *)\n\nRequire Import Coq.Strings.Ascii.\n(* https://coq.inria.fr/library/Coq.Strings.Ascii.html *)\n\nRequire Import Coq.Init.Nat.\n(* https://coq.inria.fr/library/Coq.Init.Nat.html *)\n\n\n(** Definition of [string_of_nat] to convert natural numbers to strings. *)\n\nDefinition ascii_of_digit (n : nat) : ascii :=\n  ascii_of_nat (n + 48).\n\nDefinition is_digit (n : nat) : bool :=\n  andb (0 <=? n) (n <=? 9).\n\nFixpoint rec_string_of_nat (counter : nat) (n : nat) (acc : string) : string :=\n  match counter with\n    | 0 => EmptyString\n    | S c =>\n      if (is_digit n)\n      then String (ascii_of_digit n) acc\n      else rec_string_of_nat c (n / 10) (String (ascii_of_digit (n mod 10)) acc)\n  end.\n(** The counter is only used to ensure termination. *)\n\nDefinition string_of_nat (n : nat) : string :=\n  rec_string_of_nat n n EmptyString.\n\n\n(** The FizzBuzz problem. *)\n\nDefinition fizz : string :=\n  \"Fizz\".\n\nDefinition buzz : string :=\n  \"Buzz\".\n\nDefinition new_line : string :=\n  String (ascii_of_nat 10) EmptyString.\n\nDefinition is_divisible_by (n : nat) (k : nat) : bool :=\n  (n mod k) =? 0.\n\nDefinition get_term (n : nat) : string :=\n  if (is_divisible_by n 15) then fizz ++ buzz\n  else if (is_divisible_by n 3) then fizz\n  else if (is_divisible_by n 5) then buzz\n  else (string_of_nat n).\n\nDefinition range (a : nat) (b : nat) : list nat :=\n  seq a b.\n\nDefinition get_terms (n : nat) : list string :=\n  map get_term (range 1 n).\n\nDefinition fizz_buzz : string :=\n  concat new_line (get_terms 100).\n\n(** This shows the string. *)\nEval compute in fizz_buzz.\n"
+   ]
+  },
+  "ruby": {
+   "header": "Ruby",
+   "lang": "ruby",
+   "variants": [
+    "1.upto(100) do |n|\n  print \"Fizz\" if a = (n % 3).zero?\n  print \"Buzz\" if b = (n % 5).zero?\n  print n unless (a || b)\n  puts\nend\n",
+    "(1..100).each do |n|\n  puts if (n % 15).zero?\n    \"FizzBuzz\"\n  elsif (n % 5).zero?\n    \"Buzz\"\n  elsif (n % 3).zero?\n    \"Fizz\"\n  else\n    n\n  end\nend\n",
+    "class Enumerator::Lazy\n  def filter_map\n    Lazy.new(self) do |holder, *values|\n      result = yield *values\n      holder << result if result\n    end\n  end\nend\n \nclass Fizz\n  def initialize(head, tail)\n    @list = (head..Float::INFINITY).lazy.filter_map{|i| i if i % 3 == 0}.first(tail)\n  end\n \n  def fizz?(num)\n    search = @list\n    search.include?(num)\n  end\n \n  def drop(num)\n    list = @list\n    list.delete(num)\n  end\n \n  def to_a\n    @list.to_a\n  end\nend\n \nclass Buzz\n  def initialize(head, tail)\n    @list = (head..Float::INFINITY).lazy.filter_map{|i| i if i % 5 == 0}.first(tail)\n  end\n \n  def buzz?(num)\n    search = @list\n    search.include?(num)\n  end\n \n  def drop(num)\n    list = @list\n    list.delete(num)\n  end\n \n  def to_a\n    @list.to_a\n  end\nend\n \nclass FizzBuzz\n  def initialize(head, tail)\n    @list = (head..Float::INFINITY).lazy.filter_map{|i| i if i % 15 == 0}.first(tail)\n  end\n \n  def fizzbuzz?(num)\n    search = @list\n    search.include?(num)\n  end\n \n  def to_a\n    @list.to_a\n  end\n \n  def drop(num)\n    list = @list\n    list.delete(num)\n  end\nend\nstopper = 100\n@fizz = Fizz.new(1,100)\n@buzz = Buzz.new(1,100)\n@fizzbuzz = FizzBuzz.new(1,100)\ndef min(v, n)\n  if v == 1\n    puts \"Fizz: #{n}\"\n    @fizz::drop(n)\n  elsif v == 2\n    puts \"Buzz: #{n}\"\n    @buzz::drop(n)\n  else\n    puts \"FizzBuzz: #{n}\"\n    @fizzbuzz::drop(n)\n  end\nend\n(@fizz.to_a & @fizzbuzz.to_a).map{|d| @fizz::drop(d)}\n(@buzz.to_a & @fizzbuzz.to_a).map{|d| @buzz::drop(d)}\nwhile @fizz.to_a.min < stopper or @buzz.to_a.min < stopper or @fizzbuzz.to_a.min < stopper\n  f, b, fb = @fizz.to_a.min, @buzz.to_a.min, @fizzbuzz.to_a.min\n  min(1,f)  if f < fb and f < b\n  min(2,b)  if b < f and b < fb\n  min(0,fb) if fb < b and fb < f\nend\n",
+    "(1..100).each do |n|\n  v = \"#{\"Fizz\" if n % 3 == 0}#{\"Buzz\" if n % 5 == 0}\"\n  puts v.empty? ? n : v\nend\n",
+    "1.upto(100) { |n| puts \"#{'Fizz' if n % 3 == 0}#{'Buzz' if n % 5 == 0}#{n if n % 3 != 0 && n % 5 != 0}\" }\n"
+   ]
+  },
+  "rust": {
+   "header": "Rust",
+   "lang": "rust",
+   "variants": [
+    "fn main() {\n    for i in 1..=100 {\n        match (i % 3, i % 5) {\n            (0, 0) => println!(\"fizzbuzz\"),\n            (0, _) => println!(\"fizz\"),\n            (_, 0) => println!(\"buzz\"),\n            (_, _) => println!(\"{}\", i),\n        }\n    }\n}\n",
+    "use std::borrow::Cow;\n\nfn main() {\n    (1..=100)\n        .map(|n| match (n % 3, n % 5) {\n            (0, 0) => \"FizzBuzz\".into(),\n            (0, _) => \"Fizz\".into(),\n            (_, 0) => \"Buzz\".into(),\n            _ => Cow::from(n.to_string()),\n        })\n        .for_each(|n| println!(\"{:?}\", n));\n}\n",
+    "use std::fmt::Write;\n\nfn fizzbuzz() -> String {\n    (1..=100).fold(String::new(), |mut output, x| {\n        let fizz = if x % 3 == 0 { \"fizz\" } else { \"\" };\n        let buzz = if x % 5 == 0 { \"buzz\" } else { \"\" };\n        if fizz.len() + buzz.len() != 0 {\n            output + fizz + buzz + \"\\n\"\n        } else {\n            write!(&mut output, \"{}\", x).unwrap();\n            output + \"\\n\"\n        }\n    })\n}\n\nfn main() {\n    println!(\"{}\", fizzbuzz());\n}\n",
+    "#![no_std]\n#![feature(asm, lang_items, libc, no_std, start)]\n \nextern crate libc;\n \nconst LEN: usize = 413;\nstatic OUT: [u8; LEN] = *b\"\\\n    1\\n2\\nFizz\\n4\\nBuzz\\nFizz\\n7\\n8\\nFizz\\nBuzz\\n11\\nFizz\\n13\\n14\\nFizzBuzz\\n\\\n    16\\n17\\nFizz\\n19\\nBuzz\\nFizz\\n22\\n23\\nFizz\\nBuzz\\n26\\nFizz\\n28\\n29\\nFizzBuzz\\n\\\n    31\\n32\\nFizz\\n34\\nBuzz\\nFizz\\n37\\n38\\nFizz\\nBuzz\\n41\\nFizz\\n43\\n44\\nFizzBuzz\\n\\\n    46\\n47\\nFizz\\n49\\nBuzz\\nFizz\\n52\\n53\\nFizz\\nBuzz\\n56\\nFizz\\n58\\n59\\nFizzBuzz\\n\\\n    61\\n62\\nFizz\\n64\\nBuzz\\nFizz\\n67\\n68\\nFizz\\nBuzz\\n71\\nFizz\\n73\\n74\\nFizzBuzz\\n\\\n    76\\n77\\nFizz\\n79\\nBuzz\\nFizz\\n82\\n83\\nFizz\\nBuzz\\n86\\nFizz\\n88\\n89\\nFizzBuzz\\n\\\n    91\\n92\\nFizz\\n94\\nBuzz\\nFizz\\n97\\n98\\nFizz\\nBuzz\\n\";\n \n#[start]\nfn start(_argc: isize, _argv: *const *const u8) -> isize {\n    unsafe {\n        asm!(\n            \"\n            mov $$1, %rax\n            mov $$1, %rdi\n            mov $0, %rsi\n            mov $1, %rdx\n            syscall\n            \"\n            :\n            : \"r\" (&OUT[0]) \"r\" (LEN)\n            : \"rax\", \"rdi\", \"rsi\", \"rdx\"\n            :\n        );\n    }\n    0\n}\n \n#[lang = \"eh_personality\"] extern fn eh_personality() {}\n#[lang = \"panic_fmt\"] extern fn panic_fmt() {}\n"
+   ]
+  },
+  "sas": {
+   "header": "SAS",
+   "lang": "sas",
+   "variants": [
+    "data _null_;\n  do i=1 to 100;\n    if mod(i,15)=0 then put \"FizzBuzz\";\n    else if mod(i,5)=0 then put \"Buzz\";\n    else if mod(i,3)=0 then put \"Fizz\";\n    else put i;\n  end;\nrun;\n"
+   ]
+  },
+  "sather": {
+   "header": "Sather",
+   "lang": "sather",
+   "variants": [
+    "class MAIN is\n  main is\n    loop i ::= 1.upto!(100);\n      s:STR := \"\";\n      if i % 3 = 0 then s := \"Fizz\"; end;\n      if i % 5 = 0 then s := s + \"Buzz\"; end;\n      if s.length > 0 then\n        #OUT + s + \"\\n\";\n      else\n        #OUT + i + \"\\n\";\n      end;      \n    end;\n  end;\nend;\n"
+   ]
+  },
+  "scala": {
+   "header": "Scala",
+   "lang": "scala",
+   "variants": [
+    "object FizzBuzz extends App {\n  1 to 100 foreach { n =>\n    println((n % 3, n % 5) match {\n      case (0, 0) => \"FizzBuzz\"\n      case (0, _) => \"Fizz\"\n      case (_, 0) => \"Buzz\"\n      case _ => n\n    })\n  }\n}\n",
+    "def replaceMultiples(x: Int, rs: (Int, String)*): Either[Int, String] =\n  rs map { case (n, s) => Either cond(x % n == 0, s, x)} reduceLeft ((a, b) => \n    a fold(_ => b, s => b fold(_ => a, t => Right(s + t))))\n\ndef fizzbuzz = replaceMultiples(_: Int, 3 -> \"Fizz\", 5 -> \"Buzz\") fold(_.toString, identity)\n\n1 to 100 map fizzbuzz foreach println\n",
+    "def f(n: Int, div: Int, met: String, notMet: String): String = if (n % div == 0) met else notMet\nfor (i <- 1 to 100) println(f(i, 15, \"FizzBuzz\", f(i, 3, \"Fizz\", f(i, 5, \"Buzz\", i.toString))))\n",
+    "for (i <- 1 to 100) println(Seq(15 -> \"FizzBuzz\", 3 -> \"Fizz\", 5 -> \"Buzz\").find(i % _._1 == 0).map(_._2).getOrElse(i))\n",
+    "def fizzBuzzTerm(n: Int): String =\n  if (n % 15 == 0) \"FizzBuzz\"\n  else if (n % 3 == 0) \"Fizz\"\n  else if (n % 5 == 0) \"Buzz\"\n  else n.toString\n\ndef fizzBuzz(): Unit = LazyList.from(1).take(100).map(fizzBuzzTerm).foreach(println)\n"
+   ]
+  },
+  "scheme": {
+   "header": "Scheme",
+   "lang": "scheme",
+   "variants": [
+    "(do ((i 1 (+ i 1)))\n    ((> i 100))\n    (display\n      (cond ((= 0 (modulo i 15)) \"FizzBuzz\")\n            ((= 0 (modulo i 3))  \"Fizz\")\n            ((= 0 (modulo i 5))  \"Buzz\")\n            (else                i)))\n    (newline))\n",
+    "(define (fizzbuzz x y)\n  (println\n    (cond (( = (modulo x 15) 0 ) \"FizzBuzz\")\n          (( = (modulo x 3) 0 ) \"Fizz\")\n          (( = (modulo x 5) 0 ) \"Buzz\")\n          (else x)))\n\n    (if (< x y) (fizzbuzz (+ x 1) y)))\n\n(fizzbuzz 1 100)\n",
+    "(define (fizzbuzz x)\n  (let ([words '((3 . \"Fizz\")\n                 (5 . \"Buzz\"))])\n    (define (fbm x)\n      (let ([w (map cdr (filter (lambda (wo) (= 0 (modulo x (car wo)))) words))])\n        (if (null? w) x (apply string-append w))))\n    (for-each (cut format #t \"~a~%\" <>) (map fbm (iota x 1 1)))))\n\n(fizzbuzz 15)\n"
+   ]
+  },
+  "sed": {
+   "header": "Sed",
+   "lang": "sed",
+   "variants": [
+    "#n\n# doesn't work if there's no input\n# initialize counters (0 = empty) and value\ns/.*/  0/\n: loop\n# increment counters, set carry\ns/^\\(a*\\) \\(b*\\) \\([0-9][0-9]*\\)/\\1a \\2b \\3@/\n# propagate carry\n: carry\ns/ @/ 1/\ns/9@/@0/\ns/8@/9/\ns/7@/8/\ns/6@/7/\ns/5@/6/\ns/4@/5/\ns/3@/4/\ns/2@/3/\ns/1@/2/\ns/0@/1/\n/@/b carry\n# save state\nh\n# handle factors\ns/aaa/Fizz/\ns/bbbbb/Buzz/\n# strip value if any factor\n/z/s/[0-9]//g\n# strip counters and spaces\ns/[ab ]//g\n# output\np\n# restore state\ng\n# roll over counters\ns/aaa//\ns/bbbbb//\n# loop until value = 100\n/100/q\nb loop\n",
+    "seq 100 | sed '/.*[05]$/s//Buzz/;n;s//Buzz/;n;s//Buzz/;s/^[0-9]*/Fizz/'\n",
+    "seq 100 | sed '0~3 s/.*/Fizz/; 0~5 s/[0-9]*$/Buzz/'\n",
+    "yes | sed -n '0~3s/y/Fizz/;0~5s/y*$/Buzz/;tx;=;b;:x;p;100q'\n",
+    "sed -nz '0~3s/^/Fizz/;0~5s/$/Buzz/;tx;=;b;:x;p;100q' /dev/zero | sed 'y/\\c@/\\n/'\n"
+   ]
+  },
+  "seed7": {
+   "header": "Seed7",
+   "lang": "seed7",
+   "variants": [
+    "$ include \"seed7_05.s7i\";\n\nconst proc: main is func\n  local\n    var integer: number is 0;\n  begin\n    for number range 1 to 100 do\n      if number rem 15 = 0 then\n        writeln(\"FizzBuzz\");\n      elsif number rem 5 = 0 then\n        writeln(\"Buzz\");\n      elsif number rem 3 = 0 then\n        writeln(\"Fizz\");\n      else\n        writeln(number);\n      end if;\n    end for;\n  end func;\n"
+   ]
+  },
+  "sensetalk": {
+   "header": "SenseTalk",
+   "lang": "sensetalk",
+   "variants": [
+    "repeat 100\n\tput \"\" into output\n\tif the counter is a multiple of 3 then\n\t\tput \"Fizz\" after output\n\tend if\n\tif the counter is a multiple of 5 then\n\t\tput \"Buzz\" after output\n\tend if\n\tif output is empty then\n\t\tput the counter into output\n\tend if\n\tput output\nend repeat\n"
+   ]
+  },
+  "sequencel": {
+   "header": "SequenceL",
+   "lang": "sequencel",
+   "variants": [
+    "import <Utilities/Conversion.sl>;\nimport <Utilities/Sequence.sl>;\n\nmain(args(2)) := \n\tlet\n\t\tresult[i] := \n\t\t\t\t\"FizzBuzz\" when i mod 3 = 0 and i mod 5 = 0\n\t\t\telse\n\t\t\t\t\"Fizz\" when i mod 3 = 0\n\t\t\telse\n\t\t\t\t\"Buzz\" when i mod 5 = 0\n\t\t\telse\n\t\t\t\tintToString(i)\n\t\t\tforeach i within 1 ... 100;\n\tin\n\t\tdelimit(result, '\\n');\n"
+   ]
+  },
+  "setl": {
+   "header": "SETL",
+   "lang": "setl",
+   "variants": [
+    "program fizzbuzz;\n    loop for n in [1..100] do\n        print(fizzbuzz(n));\n    end loop;\n\n    proc fizzbuzz(n);\n        divs := [[3, \"Fizz\"], [5, \"Buzz\"]];\n        return +/[w : [d,w] in divs | n mod d=0] ? str n;\n    end proc;\nend program;\n"
+   ]
+  },
+  "shen": {
+   "header": "Shen",
+   "lang": "shen",
+   "variants": [
+    "(define fizzbuzz\n  101 -> (nl)\n  N -> (let divisible-by? (/. A B (integer? (/ A B)))\n         (cases (divisible-by? N 15) (do (output \"Fizzbuzz!~%\")\n                                         (fizzbuzz (+ N 1)))\n                (divisible-by? N 3) (do (output \"Fizz!~%\")\n                                        (fizzbuzz (+ N 1)))\n                (divisible-by? N 5) (do (output \"Buzz!~%\")\n                                        (fizzbuzz (+ N 1)))\n                true (do (output (str N)) \n                         (nl)\n                         (fizzbuzz (+ N 1))))))\n\n(fizzbuzz 1)\n",
+    "(defprolog fizz\n  0 <-- (is _ (output \"Fizz\"));\n  N <-- (when (> N 0)) (is N1 (- N 3)) (fizz N1);\n)\n\n(defprolog buzz\n  0 <-- (is _ (output \"Buzz\"));\n  N <-- (when (> N 0)) (is N1 (- N 5)) (buzz N1);\n)\n\n(define none\n  [] -> true\n  [true | _] -> false\n  [_ | B] -> (none B)\n)\n\n(define fizzbuzz\n  N M -> (nl) where (> N M)\n  N M -> (do\n    (if (none [(prolog? (receive N) (fizz N)) (prolog? (receive N) (buzz N))])\n      (output (str N))\n      (output \"!\")\n    )\n    (nl)\n    (fizzbuzz (+ N 1) M)\n  )\n)\n\n(fizzbuzz 1 100)\n"
+   ]
+  },
+  "simula": {
+   "header": "Simula",
+   "lang": "simula",
+   "variants": [
+    "begin\n    integer i;\n    for i := 1 step 1 until 100 do\n    begin\n        boolean fizzed;\n        fizzed := 0 = mod(i, 3);\n        if fizzed then\n            outtext(\"Fizz\");\n        if mod(i, 5) = 0 then\n            outtext(\"Buzz\")\n        else if not fizzed then\n            outint(i, 3);\n        outimage\n    end;\nend\n"
+   ]
+  },
+  "skookumscript": {
+   "header": "SkookumScript",
+   "lang": "skookumscript",
+   "variants": [
+    "1.to 100\n  [\n  println(\n    if idx.mod(15) = 0 [\"FizzBuzz\"]\n      idx.mod(3) = 0 [\"Fizz\"]\n      idx.mod(5) = 0 [\"Buzz\"]\n      else [idx])\n  ]\n",
+    "1.to 100\n  [\n  !str: \"\"\n  if idx.mod(3) = 0 [str += \"Fizz\"]\n  if idx.mod(5) = 0 [str += \"Buzz\"]\n  println(if str.empty? [idx] else [str])\n  ]\n",
+    "1.to 100\n  [\n  !str: if idx.mod(3) = 0 [\"Fizz\"] else [\"\"]\n  if idx.mod(5) = 0 [str += \"Buzz\"]\n  println(if str.empty? [idx] else [str])\n  ]\n"
+   ]
+  },
+  "slope": {
+   "header": "Slope",
+   "lang": "slope",
+   "variants": [
+    "(define fizz-buzz\n  (lambda (x) \n      (define ret \"\") \n      (if (zero? (% x 3))(set! ret (append ret \"fizz\")))\n      (if (zero? (% x 5))(set! ret (append ret \"buzz\")))\n      (if (equal? ret \"\") (set! ret (append ret x)))\n      ret))\n(apply display-lines (list-join (map fizz-buzz (range 100 1))))\n"
+   ]
+  },
+  "smalltalk": {
+   "header": "Smalltalk",
+   "lang": "smalltalk",
+   "variants": [
+    "Integer extend [\n    fizzbuzz [\n        | fb |\n        fb := '%<Fizz|>1%<Buzz|>2' % {\n            self \\\\ 3 == 0.  self \\\\ 5 == 0 }.\n        ^fb isEmpty ifTrue: [ self ] ifFalse: [ fb ]\n    ]\n]\n1 to: 100 do: [ :i | i fizzbuzz displayNl ]\n",
+    "(1 to: 100) do:\n\t[:n | \n\t\t((n \\\\ 3)*(n \\\\ 5)) isZero \n                        ifFalse: [Transcript show: n].\n\t\t(n \\\\ 3) isZero\n\t\t\tifTrue: [Transcript show: 'Fizz'].\n\t\t(n \\\\ 5) isZero\n\t\t\tifTrue: [Transcript show: 'Buzz'].\n\t\tTranscript cr.]\n",
+    "fizzbuzz := Dictionary with: #(true true)->'FizzBuzz' \n                       with: #(true false)->'Fizz' \n                       with: #(false true)->'Buzz'.\n\n1 to: 100 do: \n\t[ :i | Transcript show: \n               (fizzbuzz at: {i isDivisibleBy: 3. i isDivisibleBy: 5} \n\t\t         ifAbsent: [ i ]); cr]\n",
+    "0 to: 100 do: [ :i |\n    (i \\\\ 3 = 0 and: [ i \\\\ 5 = 0 ])\n        ifTrue: [ Transcript show: 'FizzBuzz'; cr. ]\n        ifFalse: [\n            (i \\\\ 3 = 0)\n                ifTrue: [ Transcript show: 'Fizz'; cr. ].\n            (i \\\\ 5 = 0)\n                ifTrue: [ Transcript show: 'Buzz'; cr. ].\n            ((i \\\\ 3 ~= 0) and: [ i \\\\ 5 ~= 0 ])\n                ifTrue: [ Transcript show: i printString; cr. ].\n        ].\n].\n",
+    "1 to: 100 do: [:n | |r| \n\tr := n rem: 15.\n\tTranscript show: (r isZero \n\t   ifTrue:['fizzbuzz'] \n\t   ifFalse: [(#(3 6 9 12) includes: r) \n\t\tifTrue:['fizz'] \n\t\tifFalse:[((#(5 10) includes: r)) \n\t\t\tifTrue:['buzz'] \n\t\t\tifFalse:[n]]]); \n\tcr].\n"
+   ]
+  },
+  "snobol4": {
+   "header": "SNOBOL4",
+   "lang": "snobol4",
+   "variants": [
+    "        I = 1\nLOOP    FIZZBUZZ = \"\"\n        EQ(REMDR(I, 3), 0)              :F(TRY_5)\n        FIZZBUZZ = FIZZBUZZ \"FIZZ\"\nTRY_5   EQ(REMDR(I, 5), 0)              :F(DO_NUM)\n        FIZZBUZZ = FIZZBUZZ \"BUZZ\"      \nDO_NUM  IDENT(FIZZBUZZ, \"\")             :F(SHOW)\n        FIZZBUZZ = I\nSHOW    OUTPUT = FIZZBUZZ\n        I = I + 1\n        LE(I, 100)                      :S(LOOP)\nEND\n"
+   ]
+  },
+  "sql": {
+   "header": "SQL",
+   "lang": "sql",
+   "variants": [
+    "SELECT CASE\n    WHEN MOD(level,15)=0 THEN 'FizzBuzz'\n    WHEN MOD(level,3)=0 THEN 'Fizz'\n    WHEN MOD(level,5)=0 THEN 'Buzz'\n    ELSE TO_CHAR(level)\n    END FizzBuzz\n    FROM dual\n    CONNECT BY LEVEL <= 100;\n",
+    "SELECT nvl(decode(MOD(level,3),0,'Fizz')||decode(MOD(level,5),0,'Buzz'),level)\nFROM dual\nCONNECT BY level<=100;\n",
+    "SELECT i, fizzbuzz \n  FROM \n    (SELECT i, \n            CASE \n              WHEN i % 15 = 0 THEN 'FizzBuzz' \n              WHEN i %  5 = 0 THEN 'Buzz' \n              WHEN i %  3 = 0 THEN 'Fizz' \n              ELSE NULL \n            END AS fizzbuzz \n       FROM generate_series(1,100) AS i) AS fb \n WHERE fizzbuzz IS NOT NULL;\n",
+    "SELECT COALESCE(FIZZ || BUZZ, FIZZ, BUZZ, OUTPUT) AS FIZZBUZZ FROM\n(SELECT GENERATE_SERIES AS FULL_SERIES, TO_CHAR(GENERATE_SERIES,'99') AS OUTPUT \nFROM GENERATE_SERIES(1,100)) F LEFT JOIN \n(SELECT TEXT 'Fizz' AS FIZZ, GENERATE_SERIES AS FIZZ_SERIES FROM GENERATE_SERIES(0,100,3)) FIZZ ON\nFIZZ.FIZZ_SERIES = F.FULL_SERIES LEFT JOIN\n(SELECT TEXT 'Buzz' AS BUZZ, GENERATE_SERIES AS BUZZ_SERIES FROM GENERATE_SERIES(0,100,5)) BUZZ ON\nBUZZ.BUZZ_SERIES = F.FULL_SERIES;\n",
+    "WITH nums (n, fizzbuzz ) AS (\n\tSELECT 1, CONVERT(nvarchar, 1) UNION ALL\n\tSELECT\n\t\t(n + 1) as n1, \n\t\tCASE\n\t\t\tWHEN (n + 1) % 15 = 0 THEN 'FizzBuzz'\n\t\t\tWHEN (n + 1) % 3  = 0 THEN 'Fizz'\n\t\t\tWHEN (n + 1) % 5  = 0 THEN 'Buzz'\n\t\t\tELSE CONVERT(nvarchar, (n + 1))\n\t\tEND\n\tFROM nums WHERE n < 100\n)\nSELECT n, fizzbuzz FROM nums\nORDER BY n ASC\nOPTION ( MAXRECURSION 100 )\n"
+   ]
+  },
+  "squirrel": {
+   "header": "Squirrel",
+   "lang": "squirrel",
+   "variants": [
+    "function Fizzbuzz(n) {\n    for (local i = 1; i <= n; i += 1) {\n        if (i % 15 == 0)\n            print (\"FizzBuzz\\n\")\n        else if (i % 5 == 0)\n            print (\"Buzz\\n\")\n        else if (i % 3 == 0)\n            print (\"Fizz\\n\")\n        else {\n            print (i + \"\\n\")\n        }\n    }\n}\nFizzbuzz(100);\n"
+   ]
+  },
+  "stata": {
+   "header": "Stata",
+   "lang": "stata",
+   "variants": [
+    "program define fizzbuzz\n\targs n\n\tforvalues i = 1/`n' {\n\t\tif mod(`i',15) == 0 {\n\t\t\tdisplay \"FizzBuzz\"\n\t\t}\n\t\telse if mod(`i',5) == 0 {\n\t\t\tdisplay \"Buzz\"\n\t\t}\n\t\telse if mod(`i',3) == 0 {\n\t\t\tdisplay \"Fizz\"\n\t\t}\n\t\telse {\n\t\t\tdisplay `i'\n\t\t}\n\t}\nend\n"
+   ]
+  },
+  "swift": {
+   "header": "Swift",
+   "lang": "swift",
+   "variants": [
+    "for i in 1...100 {\n    switch (i % 3, i % 5) {\n    case (0, 0):\n        print(\"FizzBuzz\")\n    case (0, _):\n        print(\"Fizz\")\n    case (_, 0):\n        print(\"Buzz\")\n    default:\n        print(i)\n    }\n}\n",
+    "for i in 1...100{\n    var s:String?\n    if i%3==0{s=\"Fizz\"}\n    if i%5==0{s=(s ?? \"\")+\"Buzz\"}\n    print(s ?? i)\n}\n",
+    "import Foundation\n\nlet formats: [String] = [\n  \"%d\",\n  \"%d\",\n  \"fizz\",\n  \"%d\",\n  \"buzz\",\n  \"fizz\",\n  \"%d\",\n  \"%d\",\n  \"fizz\",\n  \"buzz\",\n  \"%d\",\n  \"fizz\",\n  \"%d\",\n  \"%d\",\n  \"fizzbuzz\",\n]\n\nvar count = 0\nvar index = 0\nwhile count < 100 {\n  count += 1\n  print(String(format: formats[index], count))\n  index += 1\n  index %= 15\n}\n"
+   ]
+  },
+  "tcl": {
+   "header": "Tcl",
+   "lang": "tcl",
+   "variants": [
+    "proc fizzbuzz {n {m1 3} {m2 5}} {\n    for {set i 1} {$i <= $n} {incr i} {\n        set ans \"\"\n        if {$i % $m1 == 0} {append ans Fizz}\n        if {$i % $m2 == 0} {append ans Buzz}\n        puts [expr {$ans eq \"\" ? $i : $ans}]\n    }\n}\nfizzbuzz 100\n",
+    "while {[incr i] < 101} {\n    set fb [if {$i % 3 == 0} {list Fizz}][if {$i % 5 == 0} {list Buzz}]\n    if {$fb ne \"\"} {puts $fb} {puts $i}\n}\n",
+    "set f [lrepeat 5 \"Fizz\" {$i} {$i}]\nforeach i {5 10} {lset f $i \"Buzz\"};lset f 0 \"FizzBuzz\"\nfor {set i 1} {$i <= 100} {incr i} {\n    puts [subst [lindex [set f [list {*}[lassign $f ff] $ff]] 0]]\n}\n"
+   ]
+  },
+  "turing": {
+   "header": "Turing",
+   "lang": "turing",
+   "variants": [
+    "for i : 1 .. 100\n    if i mod 15 = 0 then\n        put \"Fizzbuzz\"\n    elsif i mod 5 = 0 then\n        put \"Buzz\"\n    elsif i mod 3 = 0 then\n        put \"Fizz\"\n    else\n        put i\n    end if\nend for\n"
+   ]
+  },
+  "txr": {
+   "header": "TXR",
+   "lang": "txr",
+   "variants": [
+    "$ txr -p \"(mapcar (op if @1 @1 @2) (repeat '(nil nil fizz nil buzz fizz nil nil fizz buzz nil fizz nil nil fizzbuzz)) (range 1 100))\"\n"
+   ]
+  },
+  "uiua": {
+   "header": "Uiua",
+   "lang": "uiua",
+   "variants": [
+    "⨬(&p|&p\"Fizz\"|&p\"Buzz\"|&p\"Fizzbuzz\")°⋯⍉=0⊸⊞◿3_5+1⇡100\n"
+   ]
+  },
+  "v": {
+   "header": "V",
+   "lang": "v",
+   "variants": [
+    "[fizzbuzz\n    1 [>=] [\n     [[15 % zero?] ['fizzbuzz' puts]\n      [5 % zero?]  ['buzz' puts]\n      [3 % zero?]  ['fizz' puts]\n      [true] [dup puts]\n    ] when succ\n  ] while].\n |100 fizzbuzz\n",
+    "[seq [] swap dup [zero? not] [rolldown [dup] dip cons rollup pred] while pop pop].\n",
+    "[check [N X F : [[integer?] [[X % zero?] [N F cons] if] if]] view].\n",
+    "[func [[N F] : [dup N F check i] ] view map].\n",
+    "100 seq [\n        [15 [pop 'fizzbuzz' puts]]\n        [5  [pop 'buzz' puts]]\n        [3  [pop 'fizz' puts]] \n        [1  [puts]]] [func dup] step\n        [i true] map pop\n"
+   ]
+  },
+  "vala": {
+   "header": "Vala",
+   "lang": "vala",
+   "variants": [
+    "int main() {\n    for (int i = 1; i <= 100; i++) {\n        if (i % 3 == 0) stdout.printf(\"Fizz\\n\");\n        if (i % 5 == 0) stdout.printf(\"Buzz\\n\");\n        if (i % 15 == 0) stdout.printf(\"FizzBuzz\\n\");\n        if (i % 3 != 0 && i % 5 != 0) stdout.printf(\"%d\\n\", i);    \n          \n    }\nreturn 0;;\n}\n"
+   ]
+  },
+  "vale": {
+   "header": "Vale",
+   "lang": "vale",
+   "variants": [
+    "import stdlib.*;\n\nexported func main(){\n\tfizzBuzz(1, 100);\n}\n\nfunc fizzBuzz(i int, stop int) {\n\tresult = if i.mod(3) == 0 {\n\t\t\"Fizz\" } else { \"\"\n\t} + if i.mod(5) == 0 {\n\t\t\"Buzz\" } else { \"\"\n\t};\n\n\tprintln(if result == \"\" { i.str() } else { result });\n\n\tif i < stop {\n\t\treturn fizzBuzz(i + 1, stop);\n\t}\n}\n"
+   ]
+  },
+  "vba": {
+   "header": "VBA",
+   "lang": "vba",
+   "variants": [
+    "Option Explicit\n\nSub FizzBuzz()\nDim Tb(1 To 100) As Variant\nDim i As Integer\n    For i = 1 To 100\n        'Tb(i) = i ' move to Else\n        If i Mod 15 = 0 Then\n            Tb(i) = \"FizzBuzz\"\n        ElseIf i Mod 5 = 0 Then\n            Tb(i) = \"Buzz\"\n        ElseIf i Mod 3 = 0 Then\n            Tb(i) = \"Fizz\"\n        Else\n            Tb(i) = i\n        End If\n    Next\n    Debug.Print Join(Tb, vbCrLf)\nEnd Sub\n",
+    "Sub FizzBuzz()\n    Dim i As Integer\n    Dim T(1 To 99) As Variant\n    For i = 1 To 99 Step 3\n        T(i + 0) = IIf((i + 0) Mod 5 = 0, \"Buzz\", i)\n        T(i + 1) = IIf((i + 1) Mod 5 = 0, \"Buzz\", i + 1)\n        T(i + 2) = IIf((i + 2) Mod 5 = 0, \"FizzBuzz\", \"Fizz\")\n    Next i\n    Debug.Print Join(T, \", \") & \", Buzz\"\nEnd Sub\n"
+   ]
+  },
+  "vbscript": {
+   "header": "VBScript",
+   "lang": "vbscript",
+   "variants": [
+    "For i = 1 To 100\n\tIf i Mod 15 = 0 Then\n\t\tWScript.Echo \"FizzBuzz\"\n\tElseIf i Mod 5 = 0 Then\n\t\tWScript.Echo \"Buzz\"\n\tElseIf i Mod 3 = 0 Then\n\t\tWScript.Echo \"Fizz\"\n\tElse\n\t\tWScript.Echo i\n\tEnd If\nNext\n",
+    "With WScript.StdOut\n\tFor i = 1 To 100\n\t\tIf i Mod 3 = 0 Then .Write \"Fizz\"\n\t\tIf i Mod 5 = 0 Then .Write \"Buzz\"\n\t\tIf .Column = 1 Then .WriteLine i Else .WriteLine \"\"\n\tNext\nEnd With\n"
+   ]
+  },
+  "verilog": {
+   "header": "Verilog",
+   "lang": "verilog",
+   "variants": [
+    "module main;\n  integer  number;\n  \n  initial begin\n\n  for(number = 1; number < 100; number = number + 1) begin\n    if (number % 15 == 0) $display(\"FizzBuzz\");\n    else begin\n      if(number % 3 == 0) $display(\"Fizz\");\n      else begin\n        if(number % 5 == 0) $display(\"Buzz\");\n        else $display(number);\n      end\n    end\n  end\n  $finish;\n  end\nendmodule\n"
+   ]
+  },
+  "vhdl": {
+   "header": "VHDL",
+   "lang": "vhdl",
+   "variants": [
+    "entity fizzbuzz is\nend entity fizzbuzz;\n\narchitecture beh of fizzbuzz is\n\n\tprocedure fizzbuzz(num : natural) is\n\tbegin\n\t\tif num mod 15 = 0 then\n\t\t\treport \"FIZZBUZZ\";\n\t\telsif num mod 3 = 0 then\n\t\t\treport \"FIZZ\";\n\t\telsif num mod 5 = 0 then\n\t\t    report \"BUZZ\";\n\t\telse\n\t\t\treport to_string(num);\n\t\tend if;\n\tend procedure fizzbuzz;\n\nbegin\n\n\tp_fizz : process is\n\tbegin\n\t\tfor i in 1 to 100 loop\n\t\tfizzbuzz(i);\n\t\tend loop;\n\t\twait for 200 us;\n\tend process p_fizz;\n\nend architecture beh;\n"
+   ]
+  },
+  "vim-script": {
+   "header": "Vim Script",
+   "lang": "vim-script",
+   "variants": [
+    "for i in range(1, 100)\n    if i % 15 == 0\n        echo \"FizzBuzz\"\n    elseif i % 5 == 0\n        echo \"Buzz\"\n    elseif i % 3 == 0\n        echo \"Fizz\"\n    else\n        echo i\n    endif\nendfor\n"
+   ]
+  },
+  "visual-prolog": {
+   "header": "Visual Prolog",
+   "lang": "visual-prolog",
+   "variants": [
+    "implement main\n   open core, console\n\nclass predicates\n   fizzbuzz : (integer) -> string procedure (i).\n\nclauses\n    fizzbuzz(X) = S :- X mod 15 = 0, S = \"FizzBuzz\", !.\n    fizzbuzz(X) = S :- X mod 5 = 0, S = \"Buzz\", !.\n    fizzbuzz(X) = S :- X mod 3 = 0, S = \"Fizz\", !.\n    fizzbuzz(X) = S :- S = toString(X).\n\n    run() :-\n        foreach X = std::fromTo(1,100) do\n            write(fizzbuzz(X)), write(\"\\n\")\n        end foreach,\n        succeed.\n\nend implement main\n\ngoal\n    console::runUtf8(main::run).\n"
+   ]
+  },
+  "vtl": {
+   "header": "VTL-2",
+   "lang": "vtl",
+   "variants": [
+    "10 N=1\n20 #=30\n30 #=N/3*0+%=0*110\n40 #=N/5*0+%=0*130\n50 #=!+30\n60 ?=N\n70 ?=\"\"\n80 N=N+1\n90 #=100>N*20\n100 #=999\n110 ?=\"Fizz\";\n120 #=!\n130 ?=\"Buzz\";\n140 #=!\n180 #=70\n"
+   ]
+  },
+  "vyxal": {
+   "header": "Vyxal",
+   "lang": "vyxal",
+   "variants": [
+    "₁⟑₍₃₅kF½*∑∴,\n"
+   ]
+  },
+  "wart": {
+   "header": "Wart",
+   "lang": "wart",
+   "variants": [
+    "for i 1 (i <= 100) ++i\n  prn (if (divides i 15)\n            \"FizzBuzz\"\n          (divides i 3)\n            \"Fizz\"\n          (divides i 5)\n            \"Buzz\"\n          :else\n            i)\n"
+   ]
+  },
+  "wren": {
+   "header": "Wren",
+   "lang": "wren",
+   "variants": [
+    "for (i in 1..100) {\n    if (i % 15 == 0) {\n        System.print(\"FizzBuzz\")\n    } else if (i % 3 == 0) {\n        System.print(\"Fizz\")\n    } else if (i % 5 == 0) {\n        System.print(\"Buzz\")\n    } else {\n        System.print(i)\n    }\n}\n"
+   ]
+  },
+  "x86-assembly": {
+   "header": "X86 Assembly",
+   "lang": "x86-assembly",
+   "variants": [
+    "; x86_64 linux nasm\n\nsection .bss\nnumber resb 4\n\nsection .data\nfizz: db \"Fizz\"\nbuzz: db \"Buzz\"\nnewLine: db 10\n\nsection .text\nglobal _start\n\n_start:\n\n  mov rax, 1      ; initialize counter\n\n  loop:\n    push rax\n    call fizzBuzz\n    pop rax\n    inc rax\n    cmp rax, 100\n    jle loop\n\n  mov rax, 60\n  mov rdi, 0\n  syscall\n\nfizzBuzz:\n  mov r10, rax\n  mov r15, 0       ; boolean fizz or buzz\n  checkFizz:\n    xor rdx, rdx   ; clear rdx for division\n    mov rbx, 3\n    div rbx\n    cmp rdx, 0     ; modulo result here\n    jne checkBuzz\n    mov r15, 1\n    mov rsi, fizz\n    mov rdx, 4\n    mov rax, 1\n    mov rdi, 1\n    syscall\n  checkBuzz:\n    mov rax, r10\n    xor rdx, rdx\n    mov rbx, 5\n    div rbx\n    cmp rdx, 0\n    jne finishLine\n    mov r15, 1\n    mov rsi, buzz\n    mov rdx, 4\n    mov rax, 1\n    mov rdi, 1\n    syscall\n  finishLine:      ; print number if no fizz or buzz\n    cmp r15, 1\n    je nextLine\n    mov rax, r10\n    call printNum\n    ret\n    nextLine:\n      mov rsi, newLine\n      mov rdx, 1\n      mov rax, 1\n      mov rdi, 1\n      syscall\n      ret\n\nprintNum:          ; write proper digits into number buffer\n  cmp rax, 100\n  jl lessThanHundred\n  mov byte [number], 49\n  mov byte [number + 1], 48\n  mov byte [number + 2], 48\n  mov rdx, 3\n  jmp print\n\n  lessThanHundred: ; get digits to write through division \n    xor rdx, rdx\n    mov rbx, 10\n    div rbx\n    add rdx, 48\n    cmp rax, 0\n    je lessThanTen\n    add rax, 48\n    mov byte [number], al\n    mov byte [number + 1], dl\n    mov rdx, 2\n    jmp print\n\n  lessThanTen:\n    mov byte [number], dl\n    mov rdx, 1\n  print:\n    mov byte [number + rdx], 10   ; add newline\n    inc rdx\n    mov rax, 1\n    mov rdi, 1\n    mov rsi, number\n    syscall\n  ret\n"
+   ]
+  },
+  "xojo": {
+   "header": "Xojo",
+   "lang": "xojo",
+   "variants": [
+    "  For i As Integer = 1 To 100\n    If i Mod 3 = 0 And i Mod 5 = 0 Then\n      Print(\"FizzBuzz\")\n    ElseIf i Mod 3 = 0 Then\n      Print(\"Fizz\")\n    ElseIf i Mod 5 = 0 Then\n      Print(\"Buzz\")\n    Else\n      Print(Str(i))\n    End If\n  Next\n",
+    "  For i As Integer = 1 To 100\n    Select Case True\n      Case i Mod 3 = 0 And i Mod 5 = 0\n      Print(\"FizzBuzz\")\n    Case i Mod 3 = 0\n      Print(\"Fizz\")\n    Case i Mod 5 = 0\n      Print(\"Buzz\")\n    Else\n      Print(Str(i))\n    End Select\n  Next\n"
+   ]
+  },
+  "xpl0": {
+   "header": "XPL0",
+   "lang": "xpl0",
+   "variants": [
+    "code CrLf=9, IntOut=11, Text=12;\nint     N;\n[for N:= 1 to 100 do\n       [if rem(N/3)=0 then Text(0,\"Fizz\");\n        if rem(N/5)=0 then Text(0,\"Buzz\")\n        else if rem(N/3)#0 then IntOut(0,N);\n        CrLf(0);\n       ];\n]\n"
+   ]
+  },
+  "xslt": {
+   "header": "XSLT",
+   "lang": "xslt",
+   "variants": [
+    "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"1.0\">\n\t<xsl:output method=\"text\" encoding=\"utf-8\"/>\n\n\t<!-- Outputs a line for a single FizzBuzz iteration. -->\n\t<xsl:template name=\"fizzbuzz-single\">\n\t\t<xsl:param name=\"n\"/>\n\t\t\n\t\t<!-- $s will be \"\", \"Fizz\", \"Buzz\", or \"FizzBuzz\". -->\n\t\t<xsl:variable name=\"s\">\n\t\t\t<xsl:if test=\"$n mod 3 = 0\">Fizz</xsl:if>\n\t\t\t<xsl:if test=\"$n mod 5 = 0\">Buzz</xsl:if>\n\t\t</xsl:variable>\n\t\t\n\t\t<!-- Output $s. If $s is blank, also output $n. -->\n\t\t<xsl:value-of select=\"$s\"/>\n\t\t<xsl:if test=\"$s = ''\">\n\t\t\t<xsl:value-of select=\"$n\"/>\n\t\t</xsl:if>\n\t\t\n\t\t<!-- End line. -->\n\t\t<xsl:value-of select=\"'\n'\"/>\n\t</xsl:template>\n\t\n\t<!-- Calls fizzbuzz-single over each value in a range. -->\n\t<xsl:template name=\"fizzbuzz-range\">\n\t\t<!-- Default parameters: From 1 through 100 -->\n\t\t<xsl:param name=\"startAt\" select=\"1\"/>\n\t\t<xsl:param name=\"endAt\" select=\"$startAt + 99\"/>\n\t\t\n\t\t<!-- Simulate a loop with tail recursion. -->\n\t\t\n\t\t<!-- Loop condition -->\n\t\t<xsl:if test=\"$startAt <= $endAt\">\n\t\t\t<!-- Loop body -->\n\t\t\t<xsl:call-template name=\"fizzbuzz-single\">\n\t\t\t\t<xsl:with-param name=\"n\" select=\"$startAt\"/>\n\t\t\t</xsl:call-template>\n\n\t\t\t<!-- Increment counter, repeat -->\n\t\t\t<xsl:call-template name=\"fizzbuzz-range\">\n\t\t\t\t<xsl:with-param name=\"startAt\" select=\"$startAt + 1\"/>\n\t\t\t\t<xsl:with-param name=\"endAt\" select=\"$endAt\"/>\n\t\t\t</xsl:call-template>\n\t\t</xsl:if>\n\t</xsl:template>\n\t\n\t<!-- Main procedure -->\n\t<xsl:template match=\"/\">\n\t\t<!-- Default parameters are used -->\n\t\t<xsl:call-template name=\"fizzbuzz-range\"/>\n\t</xsl:template>\n</xsl:stylesheet>\n",
+    "<xsl:stylesheet version=\"1.0\"\n  xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"\n  xmlns:exsl=\"http://exslt.org/common\"\n  exclude-result-prefixes=\"xsl exsl\">\n<xsl:output method=\"text\"/>\n\n<xsl:template name=\"FizzBuzz\" match=\"/\">\n  <xsl:param name=\"n\" select=\"1\" />\n  <xsl:variable name=\"_\">\n    <_><xsl:value-of select=\"$n\" /></_>\n  </xsl:variable>  \n  <xsl:apply-templates select=\"exsl:node-set($_)/_\" />\n  <xsl:if test=\"$n < 100\">\n    <xsl:call-template name=\"FizzBuzz\">\n      <xsl:with-param name=\"n\" select=\"$n + 1\" />\n    </xsl:call-template>  \n  </xsl:if>  \n</xsl:template>\n      \n<xsl:template match=\"_[. mod 3 = 0]\">Fizz\n</xsl:template>\n      \n<xsl:template match=\"_[. mod 5 = 0]\">Buzz\n</xsl:template>\n      \n<xsl:template match=\"_[. mod 15 = 0]\" priority=\"1\">FizzBuzz\n</xsl:template>\n      \n<xsl:template match=\"_\">\n  <xsl:value-of select=\"concat(.,'\n')\" />\n</xsl:template>\n      \n</xsl:stylesheet>\n",
+    "<xsl:stylesheet version=\"2.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\n<xsl:output method=\"text\"/>\n\n<xsl:template match=\"/\">\n  <xsl:value-of separator=\"\n\" select=\"  \n    for $n in 1 to 100 return  \n      concat('fizz'[not($n mod 3)], 'buzz'[not($n mod 5)], $n[$n mod 15 = (1,2,4,7,8,11,13,14)])\"/>\n</xsl:template>\n\n</xsl:stylesheet>\n"
+   ]
+  },
+  "xtclang": {
+   "header": "Ecstasy",
+   "lang": "xtclang",
+   "variants": [
+    "module FizzBuzz {\n    void run() {\n        @Inject Console console;\n        for (Int x : 1..100) {\n            console.print(switch (x % 3, x % 5) {\n                case (0, 0): \"FizzBuzz\";\n                case (0, _): \"Fizz\";\n                case (_, 0): \"Buzz\";\n                case (_, _): x.toString();\n            });\n        }\n    }\n}\n"
+   ]
+  },
+  "yorick": {
+   "header": "Yorick",
+   "lang": "yorick",
+   "variants": [
+    "for(i = 1; i <= 100; i++) {\n    if(i % 3 == 0)\n        write, format=\"%s\", \"Fizz\";\n    if(i % 5 == 0)\n        write, format=\"%s\", \"Buzz\";\n    if(i % 3 && i % 5)\n        write, format=\"%d\", i;\n    write, \"\";\n}\n",
+    "output = swrite(format=\"%d\", indgen(100));\noutput(3::3) = \"Fizz\";\noutput(5::5) = \"Buzz\";\noutput(15::15) = \"FizzBuzz\";\nwrite, format=\"%s\\n\", output;\n"
+   ]
+  },
+  "zig": {
+   "header": "Zig",
+   "lang": "zig",
+   "variants": [
+    "const print = @import(\"std\").debug.print;\npub fn main() void {\n    \n    for(1..101) |i| {\n        if (i % 3 == 0 and i % 5 == 0) {\n            print(\"FizzBuzz\\n\", .{});\n        } else if (i % 3 == 0) {\n            print(\"Fizz\\n\", .{});\n        } else if (i % 5 == 0) {\n            print(\"Buzz\\n\", .{});\n        } else {\n            print(\"{}\\n\", .{i});\n        }\n    }\n}\n",
+    "const std = @import(\"std\");\n\nconst FizzBuzz = packed struct {\n    a: bool,\n    b: bool,\n\n    const fizz: FizzBuzz = .{ .a = true, .b = false };\n    const buzz: FizzBuzz = .{ .a = false, .b = true };\n    const fizzbuzz: FizzBuzz = .{ .a = true, .b = true };\n};\n\npub fn main(init: std.process.Init) !void {\n    const io = init.io;\n    var stdout_writer = std.Io.File.stdout().writer(io, &.{});\n    const stdout = &stdout_writer.interface;\n    for (1..101) |i| {\n        switch (FizzBuzz{ .a = i % 3 == 0, .b = i % 5 == 0 }) {\n            .fizzbuzz => try stdout.writeAll(\"FizzBuzz\\n\"),\n            .fizz => try stdout.writeAll(\"Fizz\\n\"),\n            .buzz => try stdout.writeAll(\"Buzz\\n\"),\n            else => try stdout.print(\"{d}\\n\", .{i}),\n        }\n    }\n}\n"
+   ]
+  }
+ },
+ "task": "FizzBuzz",
+ "url": "https://rosettacode.org/wiki/FizzBuzz?oldid=416978"
+}

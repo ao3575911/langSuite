@@ -1,0 +1,1005 @@
+{
+ "attribution": "Rosetta Code, “Loops/Downward for” (rev 412893), by Rosetta Code contributors, https://rosettacode.org/wiki/Loops/Downward_for?oldid=412893 · GFDL-1.2",
+ "expected": "10\n9\n8\n7\n6\n5\n4\n3\n2\n1\n0",
+ "licence": "GFDL-1.2",
+ "licence_url": "https://www.gnu.org/licenses/old-licenses/fdl-1.2.html",
+ "retrieved_at": "2026-10-30T03:55:48Z",
+ "revid": 412893,
+ "solutions": {
+  "ada": {
+   "header": "Ada",
+   "lang": "ada",
+   "variants": [
+    "for I in reverse 0..10 loop\n   Put_Line(Integer'Image(I));\nend loop;\n"
+   ]
+  },
+  "algol-60": {
+   "header": "ALGOL 60",
+   "lang": "algol-60",
+   "variants": [
+    "'BEGIN' 'COMMENT' Loops/Downward for - Algol60 - 23/06/2018;\n  'INTEGER' I;\n  'FOR' I := 10 'STEP' -1 'UNTIL' 0 'DO' \n    OUTINTEGER(1,I)\n'END'\n"
+   ]
+  },
+  "algol-68": {
+   "header": "ALGOL 68",
+   "lang": "algol-68",
+   "variants": [
+    "FOR i FROM 10 BY -1 TO 0 DO\n    print((i,new line))\nOD\n",
+    "FOR i FROM 10 DOWNTO 0 DO\n    print((i,new line))\nOD\n"
+   ]
+  },
+  "algol-w": {
+   "header": "ALGOL W",
+   "lang": "algol-w",
+   "variants": [
+    "begin\n    for i := 10 step -1 until 0 do\n    begin\n        write( i )\n    end\nend.\n"
+   ]
+  },
+  "applescript": {
+   "header": "AppleScript",
+   "lang": "applescript",
+   "variants": [
+    "repeat with i from 10 to 0 by -1\n  log i\nend repeat\n"
+   ]
+  },
+  "arturo": {
+   "header": "Arturo",
+   "lang": "arturo",
+   "variants": [
+    "loop 10..0 'i [\n\tprint i\n]\n"
+   ]
+  },
+  "asymptote": {
+   "header": "Asymptote",
+   "lang": "asymptote",
+   "variants": [
+    "for(int i = 10; i >=0; --i) {\n    write(i);\n}\n"
+   ]
+  },
+  "autohotkey": {
+   "header": "AutoHotkey",
+   "lang": "autohotkey",
+   "variants": [
+    "x := 10\nWhile (x >= 0)\n{\n  output .= \"`n\" . x\n  x--\n}\nMsgBox % output\n"
+   ]
+  },
+  "avail": {
+   "header": "Avail",
+   "lang": "avail",
+   "variants": [
+    "For each i from 10 to 0 by -1 do [Print: “i” ++ \"\\n\";];\n"
+   ]
+  },
+  "awk": {
+   "header": "AWK",
+   "lang": "awk",
+   "variants": [
+    "BEGIN {\n  for(i=10; i>=0; i--) {\n     print i\n  }\n}\n"
+   ]
+  },
+  "ballerina": {
+   "header": "Ballerina",
+   "lang": "ballerina",
+   "variants": [
+    "import ballerina/io;\n\npublic function main() {\n    foreach int i in int:range(10, -1, -1) {\n        io:print(i, \" \");\n    }\n    io:println();\n}\n"
+   ]
+  },
+  "bash": {
+   "header": "UNIX Shell",
+   "lang": "bash",
+   "variants": [
+    "i=10\nwhile test $i -ge 0; do\n\techo $i\n\ti=`expr $i - 1`\ndone\n\n# or\n\njot - 10 0 -1\n\n# or\n\nseq 10 -1 0\n",
+    "for(( Z=10; Z>=0; Z-- )); do\n    echo $Z\ndone\n\n#or\n\nfor Z in {10..0}; do\n    echo $Z\ndone\n"
+   ]
+  },
+  "basic": {
+   "header": "BASIC",
+   "lang": "basic",
+   "variants": [
+    "FOR I = 10 TO 0 STEP -1 : PRINT I : NEXT I\n",
+    "' Downward for\nFOR i = 10 DOWNTO 0 : PRINT i : NEXT\n",
+    "for i = 10 to 0 step -1\n\tprint i; \" \";\nnext i\nprint\nend\n",
+    "' ============================================\n' https://rosettacode.org/wiki/Loops/Downward_for\n' BazzBasic: https://github.com/EkBass/BazzBasic\n' ============================================\n[main]\n    FOR i$ = 10 TO 0 STEP -1\n        PRINT i$\n    NEXT\nEND\n\n' Output:\n' 10\n' 9\n' 8\n' 7\n' 6\n' 5\n' 4\n' 3\n' 2\n' 1\n' 0\n",
+    "      FOR i% = 10 TO 0 STEP -1\n        PRINT i%\n      NEXT\n"
+   ]
+  },
+  "bc": {
+   "header": "bc",
+   "lang": "bc",
+   "variants": [
+    "for (i = 10; i >= 0; i--) i\nquit\n"
+   ]
+  },
+  "befunge": {
+   "header": "Befunge",
+   "lang": "befunge",
+   "variants": [
+    "55+>:.:v\n@  ^ -1_\n"
+   ]
+  },
+  "bqn": {
+   "header": "BQN",
+   "lang": "bqn",
+   "variants": [
+    "•Show¨⌽↕11\n"
+   ]
+  },
+  "c": {
+   "header": "C",
+   "lang": "c",
+   "variants": [
+    "int i;\nfor(i = 10; i >= 0; --i)\n  printf(\"%d\\n\",i);\n"
+   ]
+  },
+  "c3": {
+   "header": "C3",
+   "lang": "c3",
+   "variants": [
+    "for (int i = 10; i >= 0; i--)\n{\n  io::printn(i);\n}\n"
+   ]
+  },
+  "ceylon": {
+   "header": "Ceylon",
+   "lang": "ceylon",
+   "variants": [
+    "for (i in 10..0) {\n    print(i);\n}\n"
+   ]
+  },
+  "chapel": {
+   "header": "Chapel",
+   "lang": "chapel",
+   "variants": [
+    "for i in 1..10 by -1 do\n\twriteln(i);\n",
+    "var r = 1..10;\nfor i in r by -1 do { ... }\n"
+   ]
+  },
+  "clipper": {
+   "header": "Clipper",
+   "lang": "clipper",
+   "variants": [
+    "   FOR i := 10 TO 0 STEP -1\n      ? i\n   NEXT\n"
+   ]
+  },
+  "clojure": {
+   "header": "Clojure",
+   "lang": "clojure",
+   "variants": [
+    "(doseq [x (range 10 -1 -1)] (println x))\n"
+   ]
+  },
+  "cobol": {
+   "header": "COBOL",
+   "lang": "cobol",
+   "variants": [
+    "identification division.\nprogram-id. countdown.\nenvironment division.\ndata division.\nworking-storage section.\n01\tcounter \t\tpic 99.\n\t88\tcounter-done\tvalue 0.\n01\tcounter-disp\tpic Z9.\nprocedure division.\n\tperform with test after varying counter from 10 by -1 until counter-done\n\t\tmove counter to counter-disp\n\t\tdisplay counter-disp\n\tend-perform\n\tstop run.\n"
+   ]
+  },
+  "coffeescript": {
+   "header": "CoffeeScript",
+   "lang": "coffeescript",
+   "variants": [
+    "# The more compact \"array comprehension\" style\nconsole.log i for i in [10..0]\n\n# The \"regular\" for loop style.\nfor i in [10..0]\n\tconsole.log i\n\n# More compact version of the above\nfor i in [10..0] then console.log i\n"
+   ]
+  },
+  "coldfusion": {
+   "header": "ColdFusion",
+   "lang": "coldfusion",
+   "variants": [
+    "<cfloop index = \"i\" from = \"10\" to = \"0\" step = \"-1\">\n  #i#\n</cfloop>\n",
+    "<cfscript>\n  for( i = 10; i <= 0; i-- )\n  {\n    writeOutput( i );\n  }\n</cfscript>\n"
+   ]
+  },
+  "common-lisp": {
+   "header": "Common Lisp",
+   "lang": "common-lisp",
+   "variants": [
+    "(loop for i from 10 downto 1 do\n  (print i))\n",
+    "(do ((n 10 (decf n)))\t\t\t; Initialize to 0 and downward in every loop\n    ((< n 0))\t\t\t\t; Break condition when negative\n  (print n))\t\t\t\t; On every loop print value\n",
+    "(let ((count 10))                ; Create local variable count = 10\n  (tagbody\n   dec                           ; Create tag dec\n    (print count)                ; Prints count\n    (decf count)                 ; Decreases count\n    (if (not (< count 0))        ; Ends loop when negative\n        (go dec))))              ; Loops back to tag dec\n",
+    "(defun down-to-0 (count)\n  (print count)\n  (if (not (zerop count))\n      (down-to-0 (1- count))))\n(down-to-0 10)\n"
+   ]
+  },
+  "cpp": {
+   "header": "C++",
+   "lang": "cpp",
+   "variants": [
+    "for(int i = 10; i >= 0; --i)\n  std::cout << i << \"\\n\";\n"
+   ]
+  },
+  "crystal": {
+   "header": "Crystal",
+   "lang": "crystal",
+   "variants": [
+    "10.step(to: 0, by: -1).each { |i|\n    puts i\n}\n"
+   ]
+  },
+  "d": {
+   "header": "D",
+   "lang": "d",
+   "variants": [
+    "import std.stdio: writeln;\n\nvoid main() {\n    for (int i = 10; i >= 0; --i)\n        writeln(i);\n    writeln();\n\n    foreach_reverse (i ; 0 .. 10 + 1)\n        writeln(i);\n}\n"
+   ]
+  },
+  "dart": {
+   "header": "Dart",
+   "lang": "dart",
+   "variants": [
+    "void main() {\n  for (var i = 10; i >= 0; --i) {\n    print(i);\n  }\n}\n"
+   ]
+  },
+  "dc": {
+   "header": "dc",
+   "lang": "dc",
+   "variants": [
+    "c\n\n[macro s(swap) - (a b : b a)]s.\n[Sa Sb La Lb] ss\n\n[macro d(2dup) - (a b : a b a b)]s.\n[Sa d Sb La d Lb lsx] sd\n\n[macro m(for) - ]s.\n[lfx 1 - ldx !<m ] sm\n\n0 10 ldx [p] sf !<m\nq\n",
+    "|dc < ./for.dc\n10\n9\n...\n0\n"
+   ]
+  },
+  "draco-programming-language": {
+   "header": "Draco",
+   "lang": "draco-programming-language",
+   "variants": [
+    "proc nonrec main() void:\n    byte i;\n    for i from 10 downto 0 do\n        write(i,\" \")\n    od\ncorp\n"
+   ]
+  },
+  "e": {
+   "header": "E",
+   "lang": "e",
+   "variants": [
+    "for i in (0..10).descending() { println(i) }\n"
+   ]
+  },
+  "egl": {
+   "header": "EGL",
+   "lang": "egl",
+   "variants": [
+    "for ( i int from 10 to 0 decrement by 1 )\n   SysLib.writeStdout( i );\nend\n"
+   ]
+  },
+  "elixir": {
+   "header": "Elixir",
+   "lang": "elixir",
+   "variants": [
+    "iex(1)> Enum.each(10..0, fn i -> IO.puts i end)\n10\n9\n8\n7\n6\n5\n4\n3\n2\n1\n0\n:ok\n"
+   ]
+  },
+  "erlang": {
+   "header": "Erlang",
+   "lang": "erlang",
+   "variants": [
+    "%% Implemented by Arjun Sunel\n-module(downward_loop).\n-export([main/0]).\n \nmain() ->\n\tfor_loop(10).    \n \n for_loop(N) ->\n \tif N > 0 ->\n\t\tio:format(\"~p~n\",[N] ),\n\t\tfor_loop(N-1);\n\ttrue ->\n\t\tio:format(\"~p~n\",[N])\n\tend.\t\n"
+   ]
+  },
+  "euphoria": {
+   "header": "Euphoria",
+   "lang": "euphoria",
+   "variants": [
+    "for i = 10 to 0 by -1 do\n    ? i\nend for\n"
+   ]
+  },
+  "f-sharp": {
+   "header": "F_Sharp",
+   "lang": "f-sharp",
+   "variants": [
+    "for i in 10..-1..0 do\n  printfn \"%d\" i\n",
+    "for i = 10 downto 0 do\n  printfn \"%d\" i\n"
+   ]
+  },
+  "factor": {
+   "header": "Factor",
+   "lang": "factor",
+   "variants": [
+    "11 <iota> <reversed> [ . ] each\n"
+   ]
+  },
+  "false": {
+   "header": "FALSE",
+   "lang": "false",
+   "variants": [
+    "10[$0>][$.\" \"1-]#.\n"
+   ]
+  },
+  "fantom": {
+   "header": "Fantom",
+   "lang": "fantom",
+   "variants": [
+    "class DownwardFor\n{\n  public static Void main ()\n  {\n    for (Int i := 10; i >= 0; i--)\n    {\n      echo (i)\n    }\n  }\n}\n"
+   ]
+  },
+  "forth": {
+   "header": "Forth",
+   "lang": "forth",
+   "variants": [
+    ": loop-down  0 10 do  i .  -1 +loop ;\n"
+   ]
+  },
+  "fortran": {
+   "header": "Fortran",
+   "lang": "fortran",
+   "variants": [
+    "DO i = 10, 0, -1\n  WRITE(*, *) i\nEND DO\n",
+    "      PROGRAM DOWNWARDFOR\nC Initialize the loop parameters.\n        INTEGER I, START, FINISH, STEP\n        PARAMETER (START = 10, FINISH = 0, STEP = -1)\n\nC If you were to leave off STEP, it would default to positive one.\n        DO 10 I = START, FINISH, STEP\n          WRITE (*,*) I\n   10   CONTINUE\n\n        STOP\n      END\n"
+   ]
+  },
+  "frink": {
+   "header": "Frink",
+   "lang": "frink",
+   "variants": [
+    "for i = 10 to 0 step -1\n   println[i]\n"
+   ]
+  },
+  "futurebasic": {
+   "header": "FutureBasic",
+   "lang": "futurebasic",
+   "variants": [
+    "window 1, @\"Countdown\", ( 0, 0, 400, 300 )\n\nNSInteger i\n\nfor i = 10 to 0 step -1\nprint i\nnext\n\nHandleEvents\n"
+   ]
+  },
+  "gap": {
+   "header": "GAP",
+   "lang": "gap",
+   "variants": [
+    "for i in [10, 9 .. 0] do\n    Print(i, \"\\n\");\nod;\n"
+   ]
+  },
+  "go": {
+   "header": "Go",
+   "lang": "go",
+   "variants": [
+    "for i := 10; i >= 0; i-- {\n  fmt.Println(i)\n}\n",
+    "package main\n\nimport \"fmt\"\nimport \"time\"\n\nfunc main() {\n\ti := 10\n\tfor i > 0 {\n\t\tfmt.Println(i)\n\t\ttime.Sleep(time.Second)\n\t\ti = i - 1\n\t}\n\tfmt.Println(\"blast off\")\n}\n"
+   ]
+  },
+  "groovy": {
+   "header": "Groovy",
+   "lang": "groovy",
+   "variants": [
+    "for (i in (10..0)) {\n    println i\n}\n"
+   ]
+  },
+  "harbour": {
+   "header": "Harbour",
+   "lang": "harbour",
+   "variants": [
+    "FOR i := 10 TO 0 STEP -1\n   ? i\nNEXT\n"
+   ]
+  },
+  "haskell": {
+   "header": "Haskell",
+   "lang": "haskell",
+   "variants": [
+    "import Control.Monad\n\nmain :: IO ()\nmain = forM_ [10,9 .. 0] print\n"
+   ]
+  },
+  "haxe": {
+   "header": "Haxe",
+   "lang": "haxe",
+   "variants": [
+    "class Step {\n  var end:Int;\n  var step:Int;\n  var index:Int;\n\n  public inline function new(start:Int, end:Int, step:Int) {\n    this.index = start;\n    this.end = end;\n    this.step = step;\n  }\n\n  public inline function hasNext() return step > 0 ? end >= index : index >= end;\n  public inline function next() return (index += step) - step;\n}\n\nclass Main {\n  static function main() {\n    for (i in new Step(10, 0, -1)) {\n      Sys.print('$i ');\n    }\n  }\n}\n"
+   ]
+  },
+  "holyc": {
+   "header": "HolyC",
+   "lang": "holyc",
+   "variants": [
+    "I8 i;\nfor (i = 10; i >= 0; --i)\n  Print(\"%d\\n\", i);\n"
+   ]
+  },
+  "ibm-gml": {
+   "header": "GML",
+   "lang": "ibm-gml",
+   "variants": [
+    "for(i = 10; i >= 0; i -= 1)\n    show_message(string(i))\n"
+   ]
+  },
+  "icon": {
+   "header": "Icon",
+   "lang": "icon",
+   "variants": [
+    "every i := 10 to 0 by -1 do {\n   # things to do within the loop\n   }\n"
+   ]
+  },
+  "idl": {
+   "header": "IDL",
+   "lang": "idl",
+   "variants": [
+    "for i=10,0,-1 do print,i\n",
+    "print,10-indgen(11)\n"
+   ]
+  },
+  "io": {
+   "header": "Io",
+   "lang": "io",
+   "variants": [
+    "for(i,10,0,-1,\n    i println\n)\n"
+   ]
+  },
+  "j": {
+   "header": "J",
+   "lang": "j",
+   "variants": [
+    "   ,. i. -11\n10\n 9\n 8\n 7\n 6\n 5\n 4\n 3\n 2\n 1\n 0\n",
+    "3 : 0 ] 11\n  for_i. i. - y do.\n    smoutput i\n  end.\n)\n",
+    "thru=: <. + i.@(+*)@-~\n",
+    "   10 thru 0\n10 9 8 7 6 5 4 3 2 1 0\n"
+   ]
+  },
+  "java": {
+   "header": "Java",
+   "lang": "java",
+   "variants": [
+    "for (int i = 10; i >= 0; i--) {\n    System.out.println(i);\n}\n"
+   ]
+  },
+  "javascript": {
+   "header": "JavaScript",
+   "lang": "javascript",
+   "variants": [
+    "for (var i=10; i>=0; --i) print(i);\n",
+    "for (var i = 11; i--;) console.log(i);\n",
+    "var i = 11;\nwhile (i--) console.log(i);\n",
+    "function range(m, n) {\n  return Array.apply(null, Array(n - m + 1)).map(\n    function (x, i) {\n      return m + i;\n    }\n  );\n}\n\nrange(0, 10).reverse().forEach(\n  function (x) {\n    console.log(x);\n  }\n);\n",
+    "console.log(\n  range(0, 10).reverse().map(\n    function (x) {\n      return x;\n    }\n  ).join('\\n')\n);\n"
+   ]
+  },
+  "jq": {
+   "header": "jq",
+   "lang": "jq",
+   "variants": [
+    "range(10;-1;-1)\n"
+   ]
+  },
+  "julia": {
+   "header": "Julia",
+   "lang": "julia",
+   "variants": [
+    "for i in 10:-1:0\n    println(i)\nend\n"
+   ]
+  },
+  "kotlin": {
+   "header": "Kotlin",
+   "lang": "kotlin",
+   "variants": [
+    "// version 1.3.61\n\nfun main() {\n    (10 downTo 0).forEach { println(it) }\n}\n"
+   ]
+  },
+  "lasso": {
+   "header": "Lasso",
+   "lang": "lasso",
+   "variants": [
+    "loop(-from=10, -to=0, -by=-1) => {^ loop_count + ' ' ^}\n"
+   ]
+  },
+  "ldpl": {
+   "header": "LDPL",
+   "lang": "ldpl",
+   "variants": [
+    "data:\ni is number\n\nprocedure:\nfor i from 10 to -1 step -1 do\n    display i lf\nrepeat\n"
+   ]
+  },
+  "lingo": {
+   "header": "Lingo",
+   "lang": "lingo",
+   "variants": [
+    "repeat with i = 10 down to 0\n  put i\nend repeat\n"
+   ]
+  },
+  "lisaac": {
+   "header": "Lisaac",
+   "lang": "lisaac",
+   "variants": [
+    "10.downto 0 do { i : INTEGER;\n  i.println;\n  \n};\n"
+   ]
+  },
+  "livecode": {
+   "header": "LiveCode",
+   "lang": "livecode",
+   "variants": [
+    "local x=10\nrepeat for 10 times                                                                                                   \n  put x & return                                                                                                        \n  add -1 to x                                                                                                           \nend repeat\n",
+    "repeat with n=10 down to 1\n  put n\nend repeat\n"
+   ]
+  },
+  "logo": {
+   "header": "Logo",
+   "lang": "logo",
+   "variants": [
+    "for [i 10 0] [print :i]\n"
+   ]
+  },
+  "lolcode": {
+   "header": "LOLCODE",
+   "lang": "lolcode",
+   "variants": [
+    "HAI 1.3\n\nIM IN YR DOWNLOOP NERFIN YR N TIL BOTH SAEM N AN -11\n    VISIBLE SUM OF N AN 10\nIM OUTTA YR DOWNLOOP\n\nKTHXBYE\n"
+   ]
+  },
+  "lua": {
+   "header": "Lua",
+   "lang": "lua",
+   "variants": [
+    "for i=10,0,-1 do\n  print(i)\nend\n"
+   ]
+  },
+  "m4": {
+   "header": "M4",
+   "lang": "m4",
+   "variants": [
+    "define(`for',\n   `ifelse($#,0,``$0'',\n   `ifelse(eval($2 $3),1,\n   `pushdef(`$1',$2)$5`'popdef(`$1')$0(`$1',eval($2+$4),$3,$4,`$5')')')')dnl\n\nfor(`x',`10',`>=0',`-1',`x\n')\n"
+   ]
+  },
+  "maple": {
+   "header": "Maple",
+   "lang": "maple",
+   "variants": [
+    "for i from 10 to 0 by -1 do print(i) end:\n",
+    "seq(print(i),i=10..0,-1)\n"
+   ]
+  },
+  "mathematica": {
+   "header": "Mathematica",
+   "lang": "mathematica",
+   "variants": [
+    "For[i = 10, i >= 0, i--, Print[i]]\n",
+    "Do[Print[i], {i, 10, 0, -1}]\n",
+    "Scan[Print, Range[10, 0, -1]]\n"
+   ]
+  },
+  "matlab": {
+   "header": "MATLAB",
+   "lang": "matlab",
+   "variants": [
+    "    for k = 10:-1:0,\n        printf('%d\\n',k)\n    end; \n",
+    "  printf('%d\\n',10:-1:0);  \n"
+   ]
+  },
+  "maxima": {
+   "header": "Maxima",
+   "lang": "maxima",
+   "variants": [
+    "for i from 10 thru 0 step -1 do print(i);\n"
+   ]
+  },
+  "maxscript": {
+   "header": "MAXScript",
+   "lang": "maxscript",
+   "variants": [
+    "for i in 10 to 0 by -1 do print i\n"
+   ]
+  },
+  "mercury": {
+   "header": "Mercury",
+   "lang": "mercury",
+   "variants": [
+    ":- module loops_downward_for.\n:- interface.\n\n:- import_module io.\n:- pred main(io::di, io::uo) is det.\n\n:- implementation.\n:- import_module int.\n\nmain(!IO) :-\n   Print = (pred(I::in, !.IO::di, !:IO::uo) is det :-\n       io.write_int(I, !IO), io.nl(!IO)\n   ),\n   int.fold_down(Print, 1, 10, !IO).\n"
+   ]
+  },
+  "metafont": {
+   "header": "Metafont",
+   "lang": "metafont",
+   "variants": [
+    "for i = 10 step -1 until 0: show i; endfor\nend\n",
+    "for i = 10 downto 0: show i; endfor end\n"
+   ]
+  },
+  "min": {
+   "header": "min",
+   "lang": "min",
+   "variants": [
+    "10 :n (n 0 >=) (n puts! n pred @n) while\n",
+    "10 (dup 0 <) 'pop (puts pred) () linrec\n"
+   ]
+  },
+  "miniscript": {
+   "header": "MiniScript",
+   "lang": "miniscript",
+   "variants": [
+    "for i in range(10, 0)\n    print i\nend for\n"
+   ]
+  },
+  "modula-2": {
+   "header": "Modula-2",
+   "lang": "modula-2",
+   "variants": [
+    "MODULE Downward;\n  IMPORT InOut;\n\n  VAR\n    i: INTEGER;\n\nBEGIN\n  FOR i := 10 TO 0 BY -1 DO\n    InOut.WriteInt(i, 2);\n    InOut.WriteLn\n  END\nEND Downward.\n"
+   ]
+  },
+  "modula-3": {
+   "header": "Modula-3",
+   "lang": "modula-3",
+   "variants": [
+    "FOR i := 10 TO 0 BY -1 DO\n  IO.PutInt(i);\nEND;\n"
+   ]
+  },
+  "mumps": {
+   "header": "MUMPS",
+   "lang": "mumps",
+   "variants": [
+    "LOOPDOWN\n NEW I FOR I=10:-1:1 WRITE I WRITE:I'=1 \", \"\n KILL I QUIT\n"
+   ]
+  },
+  "nemerle": {
+   "header": "Nemerle",
+   "lang": "nemerle",
+   "variants": [
+    "for (i = 10; i >= 0; i--) {WriteLine($\"$i\")}\n",
+    "foreach (i in [10, 9 .. 0]) {WriteLine($\"$i\")}\n"
+   ]
+  },
+  "netrexx": {
+   "header": "NetRexx",
+   "lang": "netrexx",
+   "variants": [
+    "/* NetRexx */\noptions replace format comments java crossref savelog symbols nobinary\n\n  say\n  say 'Loops/Downward for'\n\n  loop i_ = 10 to 0 by -1\n    say i_.right(2)\n    end i_\n"
+   ]
+  },
+  "newlisp": {
+   "header": "NewLISP",
+   "lang": "newlisp",
+   "variants": [
+    "(for (i 10 0)\n  (println i))\n"
+   ]
+  },
+  "nim": {
+   "header": "Nim",
+   "lang": "nim",
+   "variants": [
+    "for x in countdown(10,0): echo(x)\n"
+   ]
+  },
+  "nu": {
+   "header": "Nu",
+   "lang": "nu",
+   "variants": [
+    "for i in 10..0 {print $i}\n"
+   ]
+  },
+  "oberon-2": {
+   "header": "Oberon-2",
+   "lang": "oberon-2",
+   "variants": [
+    "FOR i := 10 TO 0 BY -1 DO\n  Out.Int(i,0);\nEND;\n"
+   ]
+  },
+  "ocaml": {
+   "header": "OCaml",
+   "lang": "ocaml",
+   "variants": [
+    "for i = 10 downto 0 do\n  Printf.printf \"%d\\n\" i\ndone\n"
+   ]
+  },
+  "octave": {
+   "header": "Octave",
+   "lang": "octave",
+   "variants": [
+    "for i = 10:-1:0\n  % ...\nendfor\n"
+   ]
+  },
+  "oforth": {
+   "header": "Oforth",
+   "lang": "oforth",
+   "variants": [
+    "10 0 -1 step: i [ i println ]\n"
+   ]
+  },
+  "oz": {
+   "header": "Oz",
+   "lang": "oz",
+   "variants": [
+    "for I in 10..0;~1 do\n   {Show I}\nend\n"
+   ]
+  },
+  "pari-gp": {
+   "header": "PARI/GP",
+   "lang": "pari-gp",
+   "variants": [
+    "forstep(n=10,0,-1,print(n))\n"
+   ]
+  },
+  "pascal": {
+   "header": "Pascal",
+   "lang": "pascal",
+   "variants": [
+    "for i := 10 downto 0 do\n  writeln(i);\n"
+   ]
+  },
+  "pascal-abc.net": {
+   "header": "PascalABC.NET",
+   "lang": "pascal-abc.net",
+   "variants": [
+    "##\nfor var i:=10 downto 0 do\n  Print(i);\n"
+   ]
+  },
+  "perl": {
+   "header": "Perl",
+   "lang": "perl",
+   "variants": [
+    "foreach (reverse 0..10) {\n  print \"$_\\n\";\n}\n"
+   ]
+  },
+  "php": {
+   "header": "PHP",
+   "lang": "php",
+   "variants": [
+    "for ($i = 10; $i >= 0; $i--)\n  echo \"$i\\n\";\n",
+    "foreach (range(10, 0) as $i)\n  echo \"$i\\n\";\n"
+   ]
+  },
+  "picolisp": {
+   "header": "PicoLisp",
+   "lang": "picolisp",
+   "variants": [
+    "(for (I 10 (ge0 I) (dec I))\n   (println I) )\n",
+    "(mapc println (range 10 0))\n"
+   ]
+  },
+  "pike": {
+   "header": "Pike",
+   "lang": "pike",
+   "variants": [
+    "int main(){\n   for(int i = 10; i >= 0; i--){\n      write(i + \"\\n\");\n   }\n}\n"
+   ]
+  },
+  "pl-0": {
+   "header": "PL/0",
+   "lang": "pl-0",
+   "variants": [
+    "var i;\nbegin\n  i := 10;\n  while i > -1 do\n  begin\n    ! i;\n    i := i - 1\n  end\nend.\n"
+   ]
+  },
+  "pl-i": {
+   "header": "PL/I",
+   "lang": "pl-i",
+   "variants": [
+    "do i = 10 to 0 by -1;\n   put skip list (i);\nend;\n"
+   ]
+  },
+  "plain-english": {
+   "header": "Plain English",
+   "lang": "plain-english",
+   "variants": [
+    "To run:\nStart up.\nPut 11 into a counter.\nLoop.\nIf the counter is below 0, break.\nConvert the counter to a string.\nWrite the string on the console.\nRepeat.\nWait for the escape key.\nShut down.\n\nTo decide if a counter is below a number:\nSubtract 1 from the counter.\nIf the counter is less than the number, say yes.\nSay no.\n"
+   ]
+  },
+  "powershell": {
+   "header": "PowerShell",
+   "lang": "powershell",
+   "variants": [
+    "for ($i = 10; $i -ge 0; $i--) {\n    $i\n}\n",
+    "10..0\n"
+   ]
+  },
+  "prolog": {
+   "header": "Prolog",
+   "lang": "prolog",
+   "variants": [
+    "rfor(Hi,Lo,Hi) :- Hi >= Lo.\nrfor(Hi,Lo,Val) :- Hi > Lo, H is Hi - 1, !, rfor(H,Lo,Val).\n\nreverse_iter :-\n  rfor(10,0,Val), write(Val), nl, fail.\nreverse_iter.\n"
+   ]
+  },
+  "python": {
+   "header": "Python",
+   "lang": "python",
+   "variants": [
+    "for i in range(10, -1, -1):\n    print(i)\n",
+    "[i for i in range(10, -1, -1)]\n",
+    "import pprint\npprint.pprint([i for i in range(10, -1, -1)])\n"
+   ]
+  },
+  "r": {
+   "header": "R",
+   "lang": "r",
+   "variants": [
+    "for(i in 10:0) {print(i)}\n"
+   ]
+  },
+  "racket": {
+   "header": "Racket",
+   "lang": "racket",
+   "variants": [
+    "#lang racket\n\n(for ([i (in-range 10 -1 -1)])\n  (displayln i))\n"
+   ]
+  },
+  "raku": {
+   "header": "Raku",
+   "lang": "raku",
+   "variants": [
+    "for 10 ... 0 {\n    .say;\n}\n"
+   ]
+  },
+  "rebol": {
+   "header": "Rebol",
+   "lang": "rebol",
+   "variants": [
+    "for i 10 0 -1 [print i]\n"
+   ]
+  },
+  "red": {
+   "header": "Red",
+   "lang": "red",
+   "variants": [
+    "i: 10  while [i > 0][print i  i: i - 1]\n",
+    "for: func [init [block!] cond [block!] step [block!] body [block!]] [ \n\tcompose/deep [ (init) while [(cond)] [(body) (step)] ]\n]\n",
+    "do for [i: 10][i > 0][i: i - 1][print i]\n",
+    "step: func [step [block!] body [block!]][ append copy body step ]\n",
+    "i: 10  while [i > 0] step [i: i - 1][print i]\n"
+   ]
+  },
+  "rexx": {
+   "header": "REXX",
+   "lang": "rexx",
+   "variants": [
+    "-- 13 Aug 2026\ninclude Setting\n\nsay 'LOOPS/DOWNWARD'\nsay version\nsay\ndo i=10 by -1 to 0\n   say i\nend i\nexit\n\ninclude Math\n"
+   ]
+  },
+  "ring": {
+   "header": "Ring",
+   "lang": "ring",
+   "variants": [
+    "for i = 10 to 0 step -1 see i + nl next\n"
+   ]
+  },
+  "ruby": {
+   "header": "Ruby",
+   "lang": "ruby",
+   "variants": [
+    "10.downto(0) do |i|\n   puts i\nend\n"
+   ]
+  },
+  "rust": {
+   "header": "Rust",
+   "lang": "rust",
+   "variants": [
+    "fn main() {\n    for i in (0..=10).rev() {\n        println!(\"{}\", i);\n    }\n}\n"
+   ]
+  },
+  "sather": {
+   "header": "Sather",
+   "lang": "sather",
+   "variants": [
+    "class MAIN is\n  main is\n    i:INT;\n    loop i := 10.downto!(0);\n       #OUT  + i + \"\\n\";\n    end;\n  end;\nend;\n"
+   ]
+  },
+  "scala": {
+   "header": "Scala",
+   "lang": "scala",
+   "variants": [
+    "for(i <- 10 to 0 by -1) println(i)\n//or\n10 to 0 by -1 foreach println\n"
+   ]
+  },
+  "scheme": {
+   "header": "Scheme",
+   "lang": "scheme",
+   "variants": [
+    "(do ((i 10 (- i 1)))\n    ((< i 0))\n    (display i)\n    (newline))\n"
+   ]
+  },
+  "scilab": {
+   "header": "Scilab",
+   "lang": "scilab",
+   "variants": [
+    "for i=10:-1:0\n    printf(\"%d\\n\",i)\nend\n"
+   ]
+  },
+  "seed7": {
+   "header": "Seed7",
+   "lang": "seed7",
+   "variants": [
+    "for i range 10 downto 0 do\n  writeln(i);\nend for;\n"
+   ]
+  },
+  "simula": {
+   "header": "Simula",
+   "lang": "simula",
+   "variants": [
+    "BEGIN\n    Integer i;\n    for i := 10 step -1 until 0 do\n    BEGIN\n        OutInt(i, 2);\n        OutImage\n    END\nEND\n"
+   ]
+  },
+  "smalltalk": {
+   "header": "Smalltalk",
+   "lang": "smalltalk",
+   "variants": [
+    "10 to: 0 by: -1 do:[:aNumber | \n  aNumber displayNl.\n].\n\n10 downTo: 0 do:[:eachNumber | \n  eachNumber displayNl.\n]\n",
+    "(10 to: 0 by: -1) do:[:eachNumber | \n  eachNumber displayNl.\n]\n",
+    "(10 to: 5 by: -1),(0 to: 4) do:[:eachNumber | \n  eachNumber displayNl.\n]\n",
+    "(10 to: 0 by: -2),#(99 999),(1 to: 9 by: 2) do:[:each | \n  each displayNl.\n]\n",
+    "(10 to: 0 by: -2),{ 10 factorial . 11 factorial},(1 to: 9 by: 2) do:[:each | \n  each displayNl.\n]\n"
+   ]
+  },
+  "snobol4": {
+   "header": "SNOBOL4",
+   "lang": "snobol4",
+   "variants": [
+    "        COUNT = 10\nLOOP    OUTPUT = COUNT\n        COUNT = COUNT - 1\n        GE(COUNT, 0)     :S(LOOP)\nEND\n"
+   ]
+  },
+  "spin": {
+   "header": "Spin",
+   "lang": "spin",
+   "variants": [
+    "con\n  _clkmode = xtal1 + pll16x\n  _clkfreq = 80_000_000\n\nobj\n  ser : \"FullDuplexSerial.spin\"\n\npub main | n\n  ser.start(31, 30, 0, 115200)\n\n  repeat n from 10 to 0\n    ser.dec(n)\n    ser.tx(32)\n\n  waitcnt(_clkfreq + cnt)\n  ser.stop\n  cogstop(0)\n"
+   ]
+  },
+  "spl": {
+   "header": "SPL",
+   "lang": "spl",
+   "variants": [
+    "> i, 10..0,-1\n  #.output(i)\n<\n"
+   ]
+  },
+  "stata": {
+   "header": "Stata",
+   "lang": "stata",
+   "variants": [
+    "forvalues n=10(-1)0 {\n        display `n'\n}\n\nforvalues n=10 9 to 0 {\n        display `n'\n}\n\nforeach n of numlist 10/0 {\n        display `n'\n}\n"
+   ]
+  },
+  "swift": {
+   "header": "Swift",
+   "lang": "swift",
+   "variants": [
+    "for i in stride(from: 10, through: 0, by: -1) {\n  println(i)\n}\n",
+    "for i in lazy(0...10).reverse() {\n  println(i)\n}\n",
+    "for i in reverse(0 ... 10) {\n  println(i)\n}\n",
+    "for var i = 10; i >= 0; i-- {\n  println(i)\n}\n",
+    "for i in (0...10).reversed() {\n    print(i)\n}\n"
+   ]
+  },
+  "tcl": {
+   "header": "Tcl",
+   "lang": "tcl",
+   "variants": [
+    "for {set i 10} {$i >= 0} {incr i -1} {\n    puts $i\n}\n# puts \"We have liftoff!\"\n"
+   ]
+  },
+  "v": {
+   "header": "V",
+   "lang": "v",
+   "variants": [
+    "10 \n[0 >]\n  [dup puts pred]\nwhile\n"
+   ]
+  },
+  "vala": {
+   "header": "Vala",
+   "lang": "vala",
+   "variants": [
+    "for (int i = 10; i >= 0; --i)\n    stdout.printf(\"%d\\n\", i);\n"
+   ]
+  },
+  "verilog": {
+   "header": "Verilog",
+   "lang": "verilog",
+   "variants": [
+    "module main;\n  integer  i;\n  \n  initial begin\n\n    for(i = 10; i >= 0; i = i - 1)  $write(i);\n  $finish ;\n  end\nendmodule\n"
+   ]
+  },
+  "wart": {
+   "header": "Wart",
+   "lang": "wart",
+   "variants": [
+    "for i 10 (i >= 0) --i\n  prn i\n"
+   ]
+  },
+  "wren": {
+   "header": "Wren",
+   "lang": "wren",
+   "variants": [
+    "for (i in 10..0) System.write(\"%(i) \")\nSystem.print()\n"
+   ]
+  },
+  "xpl0": {
+   "header": "XPL0",
+   "lang": "xpl0",
+   "variants": [
+    "include c:\\cxpl\\codes;          \\intrinsic 'code' declarations\nint I;\nfor I:= 10 downto 0 do\n        [IntOut(0, I); CrLf(0)]\n"
+   ]
+  },
+  "zig": {
+   "header": "Zig",
+   "lang": "zig",
+   "variants": [
+    "const std = @import(\"std\");\n\npub fn main() !void {\n    var i: u8 = 11;\n    while (i > 0) {\n        i -= 1;\n        try std.io.getStdOut().writer().print(\"{d}\\n\", .{i});\n    }\n}\n"
+   ]
+  }
+ },
+ "task": "Loops/Downward for",
+ "url": "https://rosettacode.org/wiki/Loops/Downward_for?oldid=412893"
+}

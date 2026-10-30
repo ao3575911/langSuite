@@ -1,0 +1,1317 @@
+{
+ "attribution": "Rosetta Code, “Loops/For” (rev 416344), by Rosetta Code contributors, https://rosettacode.org/wiki/Loops/For?oldid=416344 · GFDL-1.2",
+ "expected": "*\n**\n***\n****\n*****",
+ "licence": "GFDL-1.2",
+ "licence_url": "https://www.gnu.org/licenses/old-licenses/fdl-1.2.html",
+ "retrieved_at": "2026-10-30T03:55:47Z",
+ "revid": 416344,
+ "solutions": {
+  "8th": {
+   "header": "8th",
+   "lang": "8th",
+   "variants": [
+    "( ( '* putc ) swap times cr ) 1 5 loop \n"
+   ]
+  },
+  "abc": {
+   "header": "ABC",
+   "lang": "abc",
+   "variants": [
+    "FOR i IN {1..5}:\n    FOR j IN {1..i}:\n        WRITE '*'\n    WRITE /\n",
+    "FOR i IN {1..5}:\n    WRITE '*'^^i /\n"
+   ]
+  },
+  "action": {
+   "header": "Action!",
+   "lang": "action",
+   "variants": [
+    "Proc Main()\nbyte I,J\n\n For I=1 to 5\n  Do\n   For J=1 to I\n    Do\n     Print(\"*\")\n    Od\n   PrintE(\"\")\n  Od\n\nReturn\n"
+   ]
+  },
+  "actionscript": {
+   "header": "ActionScript",
+   "lang": "actionscript",
+   "variants": [
+    "var str:String = \"\";\nfor (var i:int = 1; i <= 5; i++) {\n\tfor (var j:int = 1; j <= i; j++)\n\t\tstr += \"*\";\n\ttrace(str);\n\tstr = \"\";\n}\n"
+   ]
+  },
+  "ada": {
+   "header": "Ada",
+   "lang": "ada",
+   "variants": [
+    "for I in 1..5 loop\n   for J in 1..I loop\n      Put(\"*\");\n   end loop;\n   New_Line;\nend loop;\n"
+   ]
+  },
+  "algol-60": {
+   "header": "ALGOL 60",
+   "lang": "algol-60",
+   "variants": [
+    "INTEGER I,J;\nFOR I:=1 STEP 1 UNTIL 5 DO\nBEGIN \n   FOR J:=1 STEP 1 UNTIL I DO\n      OUTTEXT(\"*\");\n   OUTLINE\nEND\n"
+   ]
+  },
+  "algol-68": {
+   "header": "ALGOL 68",
+   "lang": "algol-68",
+   "variants": [
+    "FOR i TO 5 DO\n   TO i DO\n      print(\"*\")\n   OD;\n  print(new line)\nOD\n"
+   ]
+  },
+  "algol-w": {
+   "header": "ALGOL W",
+   "lang": "algol-w",
+   "variants": [
+    "begin\n    for i := 1 until 5 do\n    begin\n        write( \"*\" );\n        for j := 2 until i do\n        begin\n            writeon( \"*\" )\n        end j\n    end i\nend.\n"
+   ]
+  },
+  "apex": {
+   "header": "Apex",
+   "lang": "apex",
+   "variants": [
+    "for (Integer i = 0; i < 5; i++) {\n    String line = '';\n\n    for (Integer j = 0; j < i; j++) {\n        line += '*';\n    }\n\n    System.debug(line);\n}\n\nList<String> lines = new List<String> {\n    '*',\n    '**',\n    '***',\n    '****',\n    '*****'\n};\n\nfor (String line : lines) {\n    System.debug(line);\n}\n"
+   ]
+  },
+  "apl": {
+   "header": "APL",
+   "lang": "apl",
+   "variants": [
+    "stars ← { ⍵ 1 ⍴ {⍵/'*'}¨⍳⍵ }\n",
+    "stars ← { ⍵ 1 ⍴ { {1⌷'*',⍵} ¨ ⍳⍵ } ¨ ⍳⍵ }\n",
+    "∇result ← stars count; i; j; vec\n vec ← ⍬\n :for i :in ⍳ count\n   vec ,← ⊂''\n   :for j :in ⍳ i\n     vec[i],←'*'\n   :endfor\n:endfor\nresult ← count 1 ⍴ vec\n∇\n"
+   ]
+  },
+  "applescript": {
+   "header": "AppleScript",
+   "lang": "applescript",
+   "variants": [
+    "set x to linefeed\nrepeat with i from 1 to 5\n\trepeat with j from 1 to i\n\t\tset x to x & \"*\"\n\tend repeat\n\tset x to x & linefeed\nend repeat\nreturn x\n"
+   ]
+  },
+  "arturo": {
+   "header": "Arturo",
+   "lang": "arturo",
+   "variants": [
+    "loop 0..5 'x [\n\tloop 0..x 'y [\n\t\tprints \"*\"\n\t]\n\tprint \"\"\n]\n"
+   ]
+  },
+  "asymptote": {
+   "header": "Asymptote",
+   "lang": "asymptote",
+   "variants": [
+    "for(int i = 0; i < 6; ++i) {\n  for(int j = 0; j < i; ++j) {\n    write(\"*\", suffix=none);\n  }\n    write(\"\");\n}\n"
+   ]
+  },
+  "autohotkey": {
+   "header": "AutoHotkey",
+   "lang": "autohotkey",
+   "variants": [
+    "Gui, Add, Edit, vOutput r5 w100 -VScroll ; Create an Edit-Control\nGui, Show ; Show the window\nLoop, 5 ; loop 5 times\n{\n  Loop, %A_Index% ; A_Index contains the Index of the current loop\n  {\n    output .= \"*\" ; append an \"*\" to the output var\n    GuiControl, , Output, %Output% ; update the Edit-Control with the new content\n    Sleep, 500 ; wait some(500ms) time, [just to show off]\n  }\n  Output .= (A_Index = 5) ? \"\" : \"`n\" ; append a new line to the output if A_Index is not \"5\"\n}\nReturn ; End of auto-execution section\n"
+   ]
+  },
+  "avail": {
+   "header": "Avail",
+   "lang": "avail",
+   "variants": [
+    "For each row from 1 to 5 do\n[\n    For each length from 1 to row do [Print: \"*\";];\n    Print: \"\\n\";\n];\n",
+    "For each row from 1 to 5 do\n[\n    From 1 to row do [Print: \"*\";];\n    Print: \"\\n\";\n];\n"
+   ]
+  },
+  "awk": {
+   "header": "AWK",
+   "lang": "awk",
+   "variants": [
+    "BEGIN {\n  for(i=1; i < 6; i++) {\n    for(j=1; j <= i; j++ ) {\n      printf \"*\"\n    }\n    print\n  }\n}\n"
+   ]
+  },
+  "babel": {
+   "header": "Babel",
+   "lang": "babel",
+   "variants": [
+    "((main { 10 star_triangle ! })\n\n(star_triangle { \n    dup\n    <- \n    { dup { \"*\" << } <-> \n            iter - 1 + \n        times \n        \"\\n\" << } \n    -> \n    times }))\n"
+   ]
+  },
+  "ballerina": {
+   "header": "Ballerina",
+   "lang": "ballerina",
+   "variants": [
+    "import ballerina/io;\n\npublic function main() {\n    foreach int i in 1...5 {\n        foreach int j in 1...i { io:print(\"*\"); }\n        io:println();\n    }\n}\n"
+   ]
+  },
+  "bash": {
+   "header": "UNIX Shell",
+   "lang": "bash",
+   "variants": [
+    "#!/bin/sh\n# Using a while control construct to emulate a for loop\n\nl=\"1\"                   # Set the counters to one\nwhile [ \"$l\" -le 5 ]    # Loop while the counter is less than five\n  do\n  m=\"1\"\n  while [ \"$m\" -le \"$l\" ]  # Loop while the counter is less than five\n    do\n    printf \"*\"\n    m=`expr \"$m\" + 1`   # Increment the inner counter\n  done\n  echo\n  l=`expr \"$l\" + 1`   # Increment the outer counter\ndone\n",
+    "for i in `jot 5`; do\n\tfor j in `jot $i`; do\n\t\tprintf \\*\n\tdone\n\techo\ndone\n",
+    "for i in {1..5}\ndo\n  for ((j=1; j<=i; j++));\n  do\n    echo -n \"*\"\n  done\n  echo\ndone\n",
+    "for (( x=1; $x<=5; x=$x+1 )); do \n  for (( y=1; y<=$x; y=$y+1 )); do \n    echo -n '*'\n  done\n  echo \"\"\ndone\n",
+    "foreach i (`jot 5`)\n\tforeach j (`jot $i`)\n\t\techo -n \\*\n\tend\n\techo \"\"\nend\n"
+   ]
+  },
+  "basic": {
+   "header": "BASIC",
+   "lang": "basic",
+   "variants": [
+    "for i = 1 to 5\n   for j = 1 to i\n      print \"*\";\n   next j\n   print\nnext i\n",
+    "FOR I = 1 TO 5 : FOR J = 1 TO I : PRINT \"*\"; : NEXT J : PRINT : NEXT\n",
+    "for i = 1 to 5\n\tfor j = 1 to i\n\t\tprint \"*\";\n\tnext j\n\tprint\nnext i\nend\n",
+    "FOR i = 1 TO 5\n    FOR j = 1 TO i\n        PRINT \"*\"\n    NEXT\n    PRINT\nNEXT\n",
+    "' ============================================\n' https://rosettacode.org/wiki/Loops/For\n' BazzBasic: https://github.com/EkBass/BazzBasic\n' ============================================\n\n[main]\n    FOR i$ = 1 TO 5\n        FOR j$ = 1 TO i$\n            PRINT \"*\";  ' keeps cursor at same line\n        NEXT\n        PRINT   ' new line\n    NEXT\nEND\n\n' Output:\n' *\n' **\n' ***\n' ****\n' *****\n"
+   ]
+  },
+  "bc": {
+   "header": "bc",
+   "lang": "bc",
+   "variants": [
+    "for (i = 1; i <= 5; i++) {\n\tfor (j = 1; j <= i; j++) \"*\"\n\t\"\n\"\n}\nquit\n"
+   ]
+  },
+  "bcpl": {
+   "header": "BCPL",
+   "lang": "bcpl",
+   "variants": [
+    "get \"libhdr\"\n\nlet start() be\n    for i = 1 to 5\n    $(  for j = 1 to i do wrch('**')\n        wrch('*N')\n    $)\n"
+   ]
+  },
+  "befunge": {
+   "header": "Befunge",
+   "lang": "befunge",
+   "variants": [
+    "1>:5`#@_:>\"*\",v\n         | :-1<\n ^+1,+5+5<\n"
+   ]
+  },
+  "blz": {
+   "header": "blz",
+   "lang": "blz",
+   "variants": [
+    "for i = 1; i <= 5; i++\n    line = \"\"\n    for (j = 1; j <= i; j++)\n        line = line + \"*\"\n    end\n    print(line)\nend\n"
+   ]
+  },
+  "c": {
+   "header": "C",
+   "lang": "c",
+   "variants": [
+    "int i, j;\nfor (i = 1; i <= 5; i++) {\n  for (j = 1; j <= i; j++)\n    putchar('*');\n  puts(\"\");\n}\n"
+   ]
+  },
+  "c3": {
+   "header": "C3",
+   "lang": "c3",
+   "variants": [
+    "for (int i = 0; i < 5; i++)\n{\n  for (int j = 1; j <= i; j++) io::print(\"*\");\n  io::printn(\"*\");\n}\n"
+   ]
+  },
+  "ceylon": {
+   "header": "Ceylon",
+   "lang": "ceylon",
+   "variants": [
+    "shared void run() {\n\t\n\tfor(i in 1..5) {\n\t\tfor(j in 1..i) {\n\t\t\tprocess.write(\"*\");\n\t\t}\n\t\tprint(\"\");\n\t}\n}\n"
+   ]
+  },
+  "chapel": {
+   "header": "Chapel",
+   "lang": "chapel",
+   "variants": [
+    "for i in 1..5 {\n        for 1..i do write('*');\n        writeln();\n}\n"
+   ]
+  },
+  "chef": {
+   "header": "Chef",
+   "lang": "chef",
+   "variants": [
+    "Asterisks Omelette.\n\nThis recipe prints a triangle of asterisks.\n\nIngredients.\n5 eggs\n1 onion\n1 potato\n42 ml water\n10 ml olive oil\n1 garlic\n\nMethod.\nPut eggs into the mixing bowl.\nFold onion into the mixing bowl.\nPut eggs into the mixing bowl.\nAdd garlic into the mixing bowl.\nFold eggs into the mixing bowl.\nChop onion.\nPut onion into the mixing bowl.\nFold potato into the mixing bowl.\nPut olive oil into the mixing bowl.\nMash potato.\nPut water into the mixing bowl.\nMash potato until mashed.\nChop onion until choped.\nPour contents of the mixing bowl into the baking dish.\n\nServes 1.\n"
+   ]
+  },
+  "clojure": {
+   "header": "Clojure",
+   "lang": "clojure",
+   "variants": [
+    "(doseq [i (range 5), j (range (inc i))]\n  (print \"*\")\n  (if (= i j) (println)))\n"
+   ]
+  },
+  "clu": {
+   "header": "CLU",
+   "lang": "clu",
+   "variants": [
+    "start_up = proc ()\n    po: stream := stream$primary_output()\n    \n    for i: int in int$from_to(1, 5) do\n        for j: int in int$from_to(1, i) do\n            stream$putc(po, '*')\n        end\n        stream$putl(po, \"\")\n    end\nend start_up\n"
+   ]
+  },
+  "cobol": {
+   "header": "COBOL",
+   "lang": "cobol",
+   "variants": [
+    "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. Display-Triangle.\n\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01  Outer-Counter PIC 9.\n       01  Inner-Counter PIC 9. \n\n       PROCEDURE DIVISION.\n       PERFORM VARYING Outer-Counter FROM 1 BY 1 UNTIL 5 < Outer-Counter\n\n           PERFORM VARYING Inner-Counter FROM 1 BY 1\n                   UNTIL Outer-Counter < Inner-Counter\n               DISPLAY \"*\" NO ADVANCING\n           END-PERFORM\n\n           DISPLAY \"\" *> Output a newline\n       END-PERFORM\n\n       GOBACK\n       .\n"
+   ]
+  },
+  "coldfusion": {
+   "header": "ColdFusion",
+   "lang": "coldfusion",
+   "variants": [
+    "<cfloop index = \"i\" from = \"1\" to = \"5\">\n  <cfloop index = \"j\" from = \"1\" to = \"#i#\">\n    *\n  </cfloop>\n  < br />\n</cfloop>\n",
+    "<cfscript>\n  for( i = 1; i <= 5; i++ )\n  {\n    for( j = 1; j <= i; j++ )\n    {\n      writeOutput( \"*\" );\n    }\n    writeOutput( \"< br />\" );\n  }\n</cfscript>\n"
+   ]
+  },
+  "common-lisp": {
+   "header": "Common Lisp",
+   "lang": "common-lisp",
+   "variants": [
+    "(loop for i from 1 upto 5 do\n  (loop for j from 1 upto i do\n    (write-char #\\*))\n  (terpri))\n",
+    "(dotimes (i 5)\n  (dotimes (j (+ i 1))\n    (write-char #\\*))\n  (terpri))\n",
+    "(do ((i 1 (+ i 1)))\n    ((> i 5))\n  (do ((j 1 (+ j 1)))\n      ((> j i))\n    (write-char #\\*))\n  (terpri))\n",
+    "(use-package :iterate)\n(iter\n  (for i from 1 to 5)\n    (iter\n      (for j from 1 to i)\n      (princ #\\*))\n    (terpri))\n"
+   ]
+  },
+  "cpp": {
+   "header": "C++",
+   "lang": "cpp",
+   "variants": [
+    "for(int i = 0; i < 5; ++i) {\n  for(int j = 0; j < i; ++j)\n    std::cout.put('*');\n\n  std::cout.put('\\n');\n}\n"
+   ]
+  },
+  "crystal": {
+   "header": "Crystal",
+   "lang": "crystal",
+   "variants": [
+    "1.upto(5) do |i|\n  1.upto(i) do |j|\n    print \"*\"\n  end\n  puts\nend\n",
+    "puts (1..5).map { |i| \"*\" * i }.join(\"\\n\")\n"
+   ]
+  },
+  "d": {
+   "header": "D",
+   "lang": "d",
+   "variants": [
+    "import std.stdio: write, writeln;\n\nvoid main() {\n    for (int i; i < 5; i++) {\n        for (int j; j <= i; j++)\n            write(\"*\");\n        writeln();\n    }\n    writeln();\n\n    foreach (i; 0 .. 5) {\n        foreach (j; 0 .. i + 1)\n            write(\"*\");\n        writeln();\n    }\n}\n"
+   ]
+  },
+  "dart": {
+   "header": "Dart",
+   "lang": "dart",
+   "variants": [
+    "import 'dart:io';\nmain() {\n    for (var i = 0; i < 5; i++) {\n        for (var j = 0; j < i + 1; j++)\n            stdout.write(\"*\");\n        print(\"\");\n    }\n}\n"
+   ]
+  },
+  "dc": {
+   "header": "dc",
+   "lang": "dc",
+   "variants": [
+    "[\n [*]P\t\t[print asterisk]sz\n lj 1 + d sj\t[increment j, leave it on stack]sz\n li !<A\t\t[continue loop if i >= j]sz\n]sA\n[\n 1 d sj\t\t[j = 1, leave it on stack]sz\n li !<A\t\t[enter loop A if i >= j]sz\n [\n]P\t\t[print newline]sz\n li 1 + d si\t[increment i, leave it on stack]sz\n 5 !<B\t\t[continue loop if 5 >= i]sz\n]sB\n1 d si\t\t[i = 1, leave it on stack]sz\n5 !<B\t\t[enter loop B if 5 >= i]sz\n"
+   ]
+  },
+  "delphi": {
+   "header": "Delphi",
+   "lang": "delphi",
+   "variants": [
+    "program LoopFor;\n\n{$APPTYPE CONSOLE}\n\nvar\n  i, j: Integer;\nbegin\n  for i := 1 to 5 do\n  begin\n    for j := 1 to i do\n      Write('*');\n    Writeln;\n  end;\nend.\n"
+   ]
+  },
+  "draco-programming-language": {
+   "header": "Draco",
+   "lang": "draco-programming-language",
+   "variants": [
+    "proc nonrec main() void:\n    byte i,j;\n    for i from 1 upto 5 do\n        for j from 1 upto i do\n            write(\"*\")\n        od;\n        writeln()\n    od \ncorp\n"
+   ]
+  },
+  "e": {
+   "header": "E",
+   "lang": "e",
+   "variants": [
+    "for width in 1..5 {\n    for _ in 1..width {\n        print(\"*\")\n    }\n    println()\n}\n"
+   ]
+  },
+  "ed-editor": {
+   "header": "Ed",
+   "lang": "ed-editor",
+   "variants": [
+    "H\na\niiiii\n.\ns/\\B/\\\n/g\na\n\n.\ny\nd\ng/i/x\\\ns/.*/&*/\\\n-1d\\\ny\n,p\nQ\n"
+   ]
+  },
+  "egl": {
+   "header": "EGL",
+   "lang": "egl",
+   "variants": [
+    "str string;\nfor ( i int to 5 )\n   str = \"\";\n   for ( j int to i )\n      str += \"*\";\n   end\n   SysLib.writeStdout(str);\nend\n"
+   ]
+  },
+  "eiffel": {
+   "header": "Eiffel",
+   "lang": "eiffel",
+   "variants": [
+    "class APPLICATION\ncreate make\nfeature\n    make local\n        i, j: INTEGER\n    do  from i := 1\n    \tuntil i > 5 loop\n    \t    from j := 1\n    \t    until j > i loop\n    \t        print(\"*\")\n    \t        j := j + 1\n    \t    end\n    \t    print(\"%N\")\n    \t    i := i + 1\n    \tend\n    end\nend\n"
+   ]
+  },
+  "elena": {
+   "header": "Elena",
+   "lang": "elena",
+   "variants": [
+    "import extensions;\n \npublic Program()\n{\n    for(int i := 0; i < 5; i += 1)\n    {\n        for(int j := 0; j <= i; j += 1)\n            { Console.write(\"*\") };\n \n        Console.writeLine()\n    }\n}\n"
+   ]
+  },
+  "elixir": {
+   "header": "Elixir",
+   "lang": "elixir",
+   "variants": [
+    "defmodule Loops do\n  def loops_for(n) do\n    Enum.each(1..n, fn i ->\n      Enum.each(1..i, fn _ -> IO.write \"*\" end)\n      IO.puts \"\"\n    end)\n  end\nend\n\nLoops.loops_for(5)\n",
+    "for i <- 1..5, do: IO.puts (for j <- 1..i, do: \"*\")\n"
+   ]
+  },
+  "emacs-lisp": {
+   "header": "Emacs Lisp",
+   "lang": "emacs-lisp",
+   "variants": [
+    ";; Lisp implementation of c-for is like:\n;; (let ((i nil))\n;;   (while (progn (setq i (if (not i) 0 (1+ i) )) ;; if value of i is nil, initialize its value to 0, if else, add 1\n;; \t\t(< i 10))                       ;; end loop when i > 10\n;;     (... body ...) ) )                          ;; loop body\n\n(let ((i nil) (str \"\"))\n  (while (progn (setq i (if (not i) 0 (1+ i) ))\n\t\t(< i 5))\n    (setq str (concat str \"*\"))\n    (message str) ) )\n"
+   ]
+  },
+  "erlang": {
+   "header": "Erlang",
+   "lang": "erlang",
+   "variants": [
+    "%% Implemented by Arjun Sunel\n-module(nested_loops).\n-export([main/0, inner_loop/0]).\n \nmain() ->\n\touter_loop(1).\n\t \ninner_loop()->\n\tinner_loop(1).\n \ninner_loop(N) when N rem 5 =:= 0 ->\n\tio:format(\"* \");\n \ninner_loop(N) ->\n\tio:fwrite(\"* \"),\n\tinner_loop(N+1).\n \nouter_loop(N) when N rem 5 =:= 0 ->\n\tio:format(\"*\");\n \nouter_loop(N) ->\n\touter_loop(N+1),\n\tio:format(\"~n\"),\n\tinner_loop(N).\n"
+   ]
+  },
+  "euphoria": {
+   "header": "Euphoria",
+   "lang": "euphoria",
+   "variants": [
+    "for i = 1 to 5 do\n    for j = 1 to i do\n        puts(1, \"*\") -- Same as \"puts(1, {'*'})\"\n    end for\n    puts(1, \"\\n\") -- Same as \"puts(1, {'\\n'})\"\nend for\n"
+   ]
+  },
+  "f-sharp": {
+   "header": "F_Sharp",
+   "lang": "f-sharp",
+   "variants": [
+    "#light\n[<EntryPoint>]\nlet main args =\n    for i = 1 to 5 do\n        for j = 1 to i do\n            printf \"*\"\n        printfn \"\"\n    0\n"
+   ]
+  },
+  "factor": {
+   "header": "Factor",
+   "lang": "factor",
+   "variants": [
+    "5 [1,b] [ [ \"*\" write ] times nl ] each\n"
+   ]
+  },
+  "false": {
+   "header": "FALSE",
+   "lang": "false",
+   "variants": [
+    "1[$6-][$[$][\"*\"1-]#%\"\n\"1+]#%\n"
+   ]
+  },
+  "fantom": {
+   "header": "Fantom",
+   "lang": "fantom",
+   "variants": [
+    "class ForLoops\n{\n  public static Void main ()\n  {\n    for (Int i := 1; i <= 5; ++i)\n    {\n      for (Int j := 1; j <= i; ++j)\n      {\n         Env.cur.out.print (\"*\")\n      }\n      Env.cur.out.printLine (\"\")\n    }\n  }\n}\n",
+    "class ForLoops\n{\n  public static Void main ()\n  {\n    (1..5).each |i|\n    {\n      (1..i).each |j|\n      {\n         Env.cur.out.print (\"*\")\n      }\n      Env.cur.out.printLine (\"\")\n    }\n  }\n}\n"
+   ]
+  },
+  "fennel": {
+   "header": "Fennel",
+   "lang": "fennel",
+   "variants": [
+    "(for [i 1 4]\n  (for [j 1 i]\n    (io.write \"*\"))\n  (print))\n"
+   ]
+  },
+  "focal": {
+   "header": "FOCAL",
+   "lang": "focal",
+   "variants": [
+    "01.10 FOR I=1,4; DO 2.0\n\n02.10 FOR J=1,I; TYPE \"*\"\n02.20 TYPE !\n"
+   ]
+  },
+  "forth": {
+   "header": "Forth",
+   "lang": "forth",
+   "variants": [
+    ": triangle ( n -- )\n  1+ 1 do\n    cr i 0 do [char] * emit loop\n  loop ;\n5 triangle\n",
+    ": limit_example\n        15 1 do r> r@ dup rot >r drop \\ Bring limit on stack\n                . \\ And print it\n        loop ;\n\\ Gforth and JSForth all work, SP-Forth brakes (different 'for' implementation?)\n"
+   ]
+  },
+  "fortran": {
+   "header": "Fortran",
+   "lang": "fortran",
+   "variants": [
+    "C     WARNING: This program is not valid ANSI FORTRAN 77 code. It uses\nC     one nonstandard character on the line labelled 5001. Many F77\nC     compilers should be okay with it, but it is *not* standard.\n      PROGRAM FORLOOP\n        INTEGER I, J\n\n        DO 20 I = 1, 5\n          DO 10 J = 1, I\nC           Print the asterisk.\n            WRITE (*,5001) '*'\n   10     CONTINUE\nC         Print a newline.\n          WRITE (*,5000) ''\n   20   CONTINUE\n\n        STOP\n\n 5000   FORMAT (A)\nC       Standard FORTRAN 77 is completely incapable of completing a\nC       WRITE statement without printing a newline. If you wanted to\nC       write this program in valid F77, you would have to come up with\nC       a creative way of printing varying numbers of asterisks in a\nC       single write statement.\nC\nC       The dollar sign at the end of the format is a nonstandard\nC       character. It tells the compiler not to print a newline. If you\nC       are actually using FORTRAN 77, you should figure out what your\nC       particular compiler accepts. If you are actually using Fortran\nC       90 or later, you should replace this line with the commented\nC       line that follows it.\n 5001   FORMAT (A, $)\nC5001   FORMAT (A, ADVANCE='NO')\n      END\n",
+    "DO i = 1, 5\n  DO j = 1, i\n    WRITE(*, \"(A)\", ADVANCE=\"NO\") \"*\"\n  END DO\n  WRITE(*,*)\nEND DO\n",
+    "integer :: i\ninteger, dimension(10) :: v\n\nforall (i=1:size(v)) v(i) = i\n",
+    "      DO 1 I = 1,5\n    1 WRITE (6,*) (\"*\", J = 1,I)\n      END\n",
+    "      DO 1 I = 1,5\n    1 WRITE (6,2) (666, J = 1,I)\n    2 FORMAT(5I1)\n      END\n"
+   ]
+  },
+  "freebasic": {
+   "header": "FreeBASIC",
+   "lang": "freebasic",
+   "variants": [
+    "' FB 1.05.0 Win64\n\nFor i As Integer = 1 To 5\n  For j As Integer = 1 To i\n    Print \"*\";\n  Next\n  Print\nNext\n\nSleep\n"
+   ]
+  },
+  "frink": {
+   "header": "Frink",
+   "lang": "frink",
+   "variants": [
+    "for n = 1 to 5\n{\n   for a = 1 to n\n      print[\"*\"]\n\n   println[]\n}\n"
+   ]
+  },
+  "futhark": {
+   "header": "Futhark",
+   "lang": "futhark",
+   "variants": [
+    "fun main(n: int): [n]int =\n  loop (a = replicate n 0) = for i < n do\n    (loop (s = 0) = for j < i+1 do\n     s + j\n     let a[i] = s\n     in a)\n  in a\n"
+   ]
+  },
+  "futurebasic": {
+   "header": "FutureBasic",
+   "lang": "futurebasic",
+   "variants": [
+    "window 1\n\nlong i, j\n\nfor i = 1 to 5\n  for j = 1 to i\n    print @\"*\";\n  next\n  print\nnext\n\nHandleEvents\n",
+    "window 1\n\nfor long i = 1 to 5\n  for long j = 1 to i\n    print @\"*\";\n  next\n  print\nnext\n\nHandleEvents\n"
+   ]
+  },
+  "gambas": {
+   "header": "Gambas",
+   "lang": "gambas",
+   "variants": [
+    "Public Sub Main()\nDim i, j As Integer\n\nFor i = 1 To 5\n   For j = 1 To i\n      Print \"*\";\n   Next\n   Print\nNext\n\nEnd\n"
+   ]
+  },
+  "gap": {
+   "header": "GAP",
+   "lang": "gap",
+   "variants": [
+    "for i in [1 .. 5] do\n    for j in [1 .. i] do\n        Print(\"*\");\n    od;\n    Print(\"\\n\");\nod;\n\n# *\n# **\n# ***\n# ****\n# *****\n"
+   ]
+  },
+  "go": {
+   "header": "Go",
+   "lang": "go",
+   "variants": [
+    "package main\n\nimport \"fmt\"\n\nfunc main() {\n    for i := 1; i <= 5; i++ {\n        for j := 1; j <= i; j++ {\n            fmt.Printf(\"*\")\n        }\n        fmt.Printf(\"\\n\")\n    }\n}\n"
+   ]
+  },
+  "groovy": {
+   "header": "Groovy",
+   "lang": "groovy",
+   "variants": [
+    "for(i in (1..6)) {\n    for(j in (1..i)) {\n        print '*'\n    }\n    println ()\n}\n"
+   ]
+  },
+  "gw-basic": {
+   "header": "GW-BASIC",
+   "lang": "gw-basic",
+   "variants": [
+    "100 FOR I=1 TO 5\n110 FOR J=1 TO I\n120 PRINT \"*\";\n130 NEXT J\n140 PRINT\n150 NEXT I\n160 END\n"
+   ]
+  },
+  "hack": {
+   "header": "Hack",
+   "lang": "hack",
+   "variants": [
+    "for($i = 0; $i < 5; $i++) {\n    for($j = 0; $j <= $i; $j++) {\n        echo '*';\n    }\n  \n    echo '\\n';\n}\n"
+   ]
+  },
+  "haskell": {
+   "header": "Haskell",
+   "lang": "haskell",
+   "variants": [
+    "import Control.Monad\n\nmain = do\n  forM_ [1..5] $ \\i -> do\n    forM_ [1..i] $ \\j -> do\n      putChar '*'\n    putChar '\\n'\n",
+    "import Data.List (inits)\n\nmain = mapM_ putStrLn $ tail $ inits $ replicate 5 '*'\n",
+    "putStrLn $ unlines [replicate n '*' | n <- [1..5]]\n",
+    "putStrLn . unlines . take 5 $ iterate ('*':) \"*\"\n"
+   ]
+  },
+  "haxe": {
+   "header": "Haxe",
+   "lang": "haxe",
+   "variants": [
+    "for (i in 1...6) {\n\tfor(j in 0...i) {\n\t\tSys.print('*');\n\t}\n\tSys.println(''); \n}\n"
+   ]
+  },
+  "holyc": {
+   "header": "HolyC",
+   "lang": "holyc",
+   "variants": [
+    "U8 i, j;\nfor (i = 1; i <= 5; i++) {\n  for (j = 1; j <= i; j++)\n    Print(\"*\");\n  Print(\"\\n\");\n}\n",
+    "procedure main()\nevery i := 1 to 5 do {\n   every 1 to i do\n      writes(\"*\")\n   write()\n   }\nend\n"
+   ]
+  },
+  "ibm-gml": {
+   "header": "GML",
+   "lang": "ibm-gml",
+   "variants": [
+    "pattern = \"\"\nfor(i = 1; i <= 5; i += 1)\n    {\n    for(j = 1; j <= i; j += 1)\n        {\n        pattern += \"*\"\n        }\n    pattern += \"#\"\n    }\nshow_message(pattern)\n"
+   ]
+  },
+  "inform": {
+   "header": "Inform 7",
+   "lang": "inform",
+   "variants": [
+    "repeat with length running from 1 to 5:\n\trepeat with N running from 1 to length:\n\t\tsay \"*\";\n\tsay line break;\n"
+   ]
+  },
+  "j": {
+   "header": "J",
+   "lang": "j",
+   "variants": [
+    "   ]\\ '*****'\n*    \n**   \n***  \n**** \n*****\n",
+    "{{\n  for_i. i. y do.\n    z=. ''\n    for. i. i do.\n      z=. z,'*'\n    end.\n    echo z\n  end.\n  EMPTY\n}}0\n"
+   ]
+  },
+  "java": {
+   "header": "Java",
+   "lang": "java",
+   "variants": [
+    "for (int i = 0; i < 5; i++) {\n   for (int j = 0; j <= i; j++) {\n      System.out.print(\"*\");\n   }\n   System.out.println();\n}\n"
+   ]
+  },
+  "javascript": {
+   "header": "JavaScript",
+   "lang": "javascript",
+   "variants": [
+    "var i, j;\nfor (i = 1; i <= 5; i += 1) {\n  s = '';\n  for (j = 0; j < i; j += 1)\n    s += '*';\n  document.write(s + '<br>');\n}\n",
+    "function range(i) {\n  return i ? range(i - 1).concat(i) : [];\n}\n\nrange(5) --> [1, 2, 3, 4, 5]\n",
+    "var s = '';\n\nrange(5).forEach(\n  function (line) {\n    range(line).forEach(\n      function () { s += '*'; }\n    );\n    s += '\\n';\n  }\n);\n\nconsole.log(s);\n",
+    "console.log(\n  range(5).reduce(\n    function (a, n) {\n      return a + Array(n + 1).join('*') + '\\n';\n    }, ''\n  )\n);\n",
+    "console.log(\n  range(5).map(function(a) {\n    return Array(a + 1).join('*');\n  }).join('\\n')\n);\n"
+   ]
+  },
+  "jinja": {
+   "header": "Jinja",
+   "lang": "jinja",
+   "variants": [
+    "print(Template(\"\"\"{% set sum = 0 %}\n                  {% for i in range(6) %}\n                        {{ sum }}{% set sum = sum + i %}\n                  {%- endfor %}\"\"\").render())\n",
+    "print(Template(\"\"\"{% set sum = namespace(value=0) %}\n                  {% for i in range(6) %}\n                        {{ sum.value }}{% set sum.value = sum.value + i %}\n                  {%- endfor %}\"\"\").render())\n"
+   ]
+  },
+  "jq": {
+   "header": "jq",
+   "lang": "jq",
+   "variants": [
+    "# Single-string version using explicit nested loops:\ndef demo(m):\n  reduce range(0;m) as $i\n    (\"\"; reduce range(0;$i) as $j\n           (.; . + \"*\" )  + \"\\n\" ) ;\n\n# Stream of strings:\ndef demo2(m):\n  range(1;m)\n  | reduce range(0;.) as $j (\"\"; . + \"*\");\n\n# Variation of demo2 using an implicit inner loop:\ndef demo3(m): range(1;m) | \"*\" * . ;\n"
+   ]
+  },
+  "julia": {
+   "header": "Julia",
+   "lang": "julia",
+   "variants": [
+    "for i in 1:5\n    for j in 1:i\n        print(\"*\")\n    end\n    println()\nend\n"
+   ]
+  },
+  "klong": {
+   "header": "Klong",
+   "lang": "klong",
+   "variants": [
+    ":\" x{p}:*y means repeat {p} x times starting at y \"\n\n5{x{.d(0c*);x}:*0;.p(\"\");x+1}:*1\n\n:\" But you would not do it like this! \"\n:\" You would reshape 0c* to the desired length \"\n:\" in a function and then iterate that function \"\n:\" over a vector of numbers: \"\n\n{.p(x:^0c*)}'1+!5\n"
+   ]
+  },
+  "kotlin": {
+   "header": "Kotlin",
+   "lang": "kotlin",
+   "variants": [
+    "fun main(args: Array<String>) {\n    (1..5).forEach {\n        (1..it).forEach { print('*') }\n        println()\n    }\n}\n"
+   ]
+  },
+  "lasso": {
+   "header": "Lasso",
+   "lang": "lasso",
+   "variants": [
+    "loop(5) => {^\n    loop(loop_count) => {^ '*' ^}\n    '\\r'\n^}\n"
+   ]
+  },
+  "ldpl": {
+   "header": "LDPL",
+   "lang": "ldpl",
+   "variants": [
+    "data:\ni is number\nj is number\n\nprocedure:\nfor i from 1 to 6 step 1 do\n    for j from 0 to i step 1 do\n        display \"*\"\n    repeat\n    display lf\nrepeat\n"
+   ]
+  },
+  "lil": {
+   "header": "LIL",
+   "lang": "lil",
+   "variants": [
+    "for {set i 1} {$i <= 5} {inc i} {\n    for {set j 1} {$j <= $i} {inc j} {\n        write \"*\"\n    }\n    print\n}\n"
+   ]
+  },
+  "lingo": {
+   "header": "Lingo",
+   "lang": "lingo",
+   "variants": [
+    "repeat with i = 1 to 5\n  str = \"\"\n  repeat with j = 1 to i\n    put \"*\" after str\n  end repeat\n  put str\nend repeat\n"
+   ]
+  },
+  "lisaac": {
+   "header": "Lisaac",
+   "lang": "lisaac",
+   "variants": [
+    "1.to 5 do { i : INTEGER;\n  1.to i do { dummy : INTEGER;\n    '*'.print;\n  };\n  '\\n'.print;\n};\n"
+   ]
+  },
+  "livecode": {
+   "header": "LiveCode",
+   "lang": "livecode",
+   "variants": [
+    "put 0 into n\nrepeat for 5 times                                                                                                   \n  add 1 to n\n  repeat for n times\n    put \"*\"\n  end repeat\n  put return\nend repeat\n"
+   ]
+  },
+  "logo": {
+   "header": "Logo",
+   "lang": "logo",
+   "variants": [
+    "for [i 1 5] [repeat :i [type \"*] (print)]\nrepeat 5 [repeat repcount [type \"*] (print)]\n"
+   ]
+  },
+  "lolcode": {
+   "header": "LOLCODE",
+   "lang": "lolcode",
+   "variants": [
+    "HAI 1.3\n\nIM IN YR LOOP UPPIN YR I TIL BOTH SAEM I AN 5\n  IM IN YR LOOP UPPIN YR J TIL BOTH SAEM SUM OF I AN 1 AN J\n    VISIBLE \"*\"!\n  IM OUTTA YR LOOP\n  VISIBLE \"\"\nIM OUTTA YR LOOP\n\nKTHXBYE\n"
+   ]
+  },
+  "lua": {
+   "header": "Lua",
+   "lang": "lua",
+   "variants": [
+    "for i=1,5 do\n  for j=1,i do\n    io.write(\"*\")\n  end\n  io.write(\"\\n\")\nend\n",
+    "for i = 1, 5 do\n  print(string.rep(\"*\", i))\nend\n",
+    "for i = 1, 5 do\n  print((\"*\"):rep(i))\nend\n"
+   ]
+  },
+  "m4": {
+   "header": "M4",
+   "lang": "m4",
+   "variants": [
+    "define(`for',\n   `ifelse($#,0,``$0'',\n   `ifelse(eval($2<=$3),1,\n   `pushdef(`$1',$2)$5`'popdef(`$1')$0(`$1',eval($2+$4),$3,$4,`$5')')')')dnl\n\nfor(`x',`1',`5',`1',\n   `for(`y',`1',x,`1',\n      `*')\n')\n"
+   ]
+  },
+  "make": {
+   "header": "make",
+   "lang": "make",
+   "variants": [
+    "all: line-5\n\nILIST != jot 5\n.for I in $(ILIST)\n\nline-$(I): asterisk-$(I)-$(I)\n\t@echo\n\nJLIST != jot $(I)\n. for J in $(JLIST)\n\n.  if \"$(J)\" == \"1\"\n.   if \"$(I)\" == \"1\"\nasterisk-1-1:\n.   else\nIM != expr $(I) - 1\nasterisk-$(I)-1: line-$(IM)\n.   endif\n.  else\nJM != expr $(J) - 1\nasterisk-$(I)-$(J): asterisk-$(I)-$(JM)\n.  endif\n\t@printf \\*\n\n. endfor\n.endfor\n"
+   ]
+  },
+  "maple": {
+   "header": "Maple",
+   "lang": "maple",
+   "variants": [
+    "> for i to 5 do to i do printf( \"*\" ) end; printf( \"\\n\" ) end;\n*\n**\n***\n****\n*****\n"
+   ]
+  },
+  "mathematica": {
+   "header": "Mathematica",
+   "lang": "mathematica",
+   "variants": [
+    "n=5;\nFor[i=1,i<=5,i++,\n string=\"\";\n For[j=1,j<=i,j++,string=string<>\"*\"];\n Print[string]\n]\n"
+   ]
+  },
+  "matlab": {
+   "header": "MATLAB",
+   "lang": "matlab",
+   "variants": [
+    "for i = (1:5)\n    output = [];\n    for j = (1:i)\n        output = [output '*'];\n    end\n    disp(output);\nend\n",
+    "for i = (1:5)\n    disp(repmat('*',1,i));\nend\n"
+   ]
+  },
+  "maxima": {
+   "header": "Maxima",
+   "lang": "maxima",
+   "variants": [
+    "for i thru 5 do (\n   s: \"\",\n   thru i do s: sconcat(s, \"*\"),\n   print(s)\n);\n"
+   ]
+  },
+  "maxscript": {
+   "header": "MAXScript",
+   "lang": "maxscript",
+   "variants": [
+    "for i in 1 to 5 do\n(\n    line = \"\"\n    for j in 1 to i do\n    (\n        line += \"*\"\n    )\n    format \"%\\n\" line\n)\n"
+   ]
+  },
+  "mercury": {
+   "header": "Mercury",
+   "lang": "mercury",
+   "variants": [
+    ":- module loops_for.\n:- interface.\n\n:- import_module io.\n:- pred main(io::di, io::uo) is det.\n\n:- implementation.\n:- import_module int.\n\nmain(!IO) :-\n   int.fold_up(outer_loop_body, 1, 5, !IO).\n\n:- pred outer_loop_body(int::in, io::di, io::uo) is det.\n\nouter_loop_body(I, !IO) :-\n   int.fold_up(inner_loop_body, 1, I, !IO),\n   io.nl(!IO).\n\n:- pred inner_loop_body(int::in, io::di, io::uo) is det.\n\ninner_loop_body(_, !IO) :-\n   io.write_char('*', !IO).\n"
+   ]
+  },
+  "miniscript": {
+   "header": "MiniScript",
+   "lang": "miniscript",
+   "variants": [
+    "for i in range(1,5)\n    s = \"\"\n    for j in range(1, i)\n        s = s + \"*\"\n    end for\n    print s\nend for\n",
+    "for i in range(1,5)\n    print \"*\" * i\nend for\n"
+   ]
+  },
+  "modula-2": {
+   "header": "Modula-2",
+   "lang": "modula-2",
+   "variants": [
+    "MODULE For;\n  IMPORT InOut;\n\n  VAR\n    i, j: INTEGER;\n\nBEGIN\n  FOR i := 1 TO 5 DO\n    FOR j := 1 TO i DO\n      InOut.Write('*');\n    END;\n    InOut.WriteLn\n  END\nEND For.\n"
+   ]
+  },
+  "modula-3": {
+   "header": "Modula-3",
+   "lang": "modula-3",
+   "variants": [
+    "MODULE Stars EXPORTS Main;\n\nIMPORT IO;\n\nBEGIN\n  FOR i := 1 TO 5 DO\n    FOR j := 1 TO i DO\n      IO.Put(\"*\");\n    END;\n    IO.Put(\"\\n\");\n  END;\nEND Stars.\n"
+   ]
+  },
+  "moo": {
+   "header": "MOO",
+   "lang": "moo",
+   "variants": [
+    "for i in [1..5]\n  s = \"\";\n  for j in [1..i]\n    s += \"*\";\n  endfor\n  player:tell(s);\nendfor\n"
+   ]
+  },
+  "morfa": {
+   "header": "Morfa",
+   "lang": "morfa",
+   "variants": [
+    "import morfa.base;\n\nfor (i in 0..5) \n{\n    for (j in 0..i+1) \n    {\n        print(\"*\");\n    }\n    println(\"\");\n}\n"
+   ]
+  },
+  "mumps": {
+   "header": "MUMPS",
+   "lang": "mumps",
+   "variants": [
+    "FORLOOP\n NEW I,J\n FOR I=1:1:5 DO\n .FOR J=1:1:I DO\n ..WRITE \"*\"\n .WRITE !\n QUIT\n",
+    "FOR I=1:1:5 FOR J=1:1:I WRITE \"*\" IF J=I W !\n"
+   ]
+  },
+  "nemerle": {
+   "header": "Nemerle",
+   "lang": "nemerle",
+   "variants": [
+    "for (int i = 0; i < 5; i++)\n{\n    for (int j = 0; j <= i; j++)\n    {\n        Write(\"*\");\n    }\n    WriteLine();\n}\n"
+   ]
+  },
+  "netrexx": {
+   "header": "NetRexx",
+   "lang": "netrexx",
+   "variants": [
+    "/* NetRexx */\noptions replace format comments java crossref savelog symbols nobinary\n\n  say\n  say 'Loops/For'\n\n  loop i_ = 1 to 5\n    loop for i_\n      say '*\\-'\n      end\n    say\n    end i_\n"
+   ]
+  },
+  "newlisp": {
+   "header": "NewLISP",
+   "lang": "newlisp",
+   "variants": [
+    "(for (i 1 5)\n  (for(j 1 i)\n    (print \"*\"))\n  (print \"\\n\"))\n"
+   ]
+  },
+  "nim": {
+   "header": "Nim",
+   "lang": "nim",
+   "variants": [
+    "for i in 1..5:\n  for j in 1..i:\n    stdout.write(\"*\")\n  echo(\"\")\n"
+   ]
+  },
+  "nlp-plus-plus": {
+   "header": "NLP++",
+   "lang": "nlp-plus-plus",
+   "variants": [
+    "# NLP++ has while loops but no for loop.\n@CODE\nL(\"i\") = 1;\nwhile (L(\"i\") <= 5) {\n    L(\"j\") = 1;\n    while (L(\"j\") <= L(\"i\")) {\n        cout() << \"*\";\n        L(\"j\")++;\n    }\n    cout() << \"\\n\";\n    L(\"i\")++;\n}\n@@CODE\n"
+   ]
+  },
+  "nu": {
+   "header": "Nu",
+   "lang": "nu",
+   "variants": [
+    "for i in 1..5 {\n\tfor j in 1..$i {\n\t\tprint -n \"*\"\n\t}\n\tprint \"\"\n}\n"
+   ]
+  },
+  "oberon-2": {
+   "header": "Oberon-2",
+   "lang": "oberon-2",
+   "variants": [
+    "MODULE LoopFor;\nIMPORT \n  Out;\nVAR\n  i, j: INTEGER;\n \nBEGIN\n  FOR i := 1 TO 5 DO\n    FOR j := 1 TO i DO\n      Out.Char(\"*\");\n    END;\n    Out.Ln\n  END\nEND LoopFor.\n"
+   ]
+  },
+  "ocaml": {
+   "header": "OCaml",
+   "lang": "ocaml",
+   "variants": [
+    "for i = 1 to 5 do\n  for j = 1 to i do\n    print_string \"*\"\n  done;\n  print_newline ()\ndone\n"
+   ]
+  },
+  "octave": {
+   "header": "Octave",
+   "lang": "octave",
+   "variants": [
+    "for i = 0:1:4\n  for j = 0:1:i\n    printf(\"*\");\n  endfor\n  printf(\"\\n\");\nendfor\n"
+   ]
+  },
+  "odin": {
+   "header": "Odin",
+   "lang": "odin",
+   "variants": [
+    "package main\n\nimport \"core:fmt\"\n\nmain :: proc() {\n    for i := 1 ; i <= 5 ; i += 1 {\n        for j := 1; j <= i; j += 1 {\n    \t\tfmt.printf(\"*\")\n        }\n        fmt.println()\n    }\n}\n"
+   ]
+  },
+  "oforth": {
+   "header": "Oforth",
+   "lang": "oforth",
+   "variants": [
+    ": loopFor(n)\n| i j |\n   n loop: i [\n      i loop: j [ \"*\" print ]\n      printcr ;\n"
+   ]
+  },
+  "onyx": {
+   "header": "Onyx",
+   "lang": "onyx",
+   "variants": [
+    "1 1 5 {dup {`*'} repeat bdup bpop ncat `\\n' cat print} for flush\n"
+   ]
+  },
+  "order": {
+   "header": "Order",
+   "lang": "order",
+   "variants": [
+    "#include <order/interpreter.h>\n\nORDER_PP(\n  8for_each_in_range(8fn(8I,\n                         8print(\n                           8for_each_in_range(8fn(8J, 8print((*))),\n                                              1, 8plus(8I, 1))\n                           8space)),\n                         1, 6)\n)\n"
+   ]
+  },
+  "oz": {
+   "header": "Oz",
+   "lang": "oz",
+   "variants": [
+    "for I in 1..5 do\n   for _ in 1..I do\n      {System.printInfo \"*\"}\n   end\n   {System.showInfo \"\"}\nend\n"
+   ]
+  },
+  "pari-gp": {
+   "header": "PARI/GP",
+   "lang": "pari-gp",
+   "variants": [
+    "for(a=1,5,for(b=1,a,print1(\"*\"));print())\n"
+   ]
+  },
+  "pascal": {
+   "header": "Pascal",
+   "lang": "pascal",
+   "variants": [
+    "program stars(output);\n\nvar\n  i, j: integer;\n\nbegin\n  for i := 1 to 5 do\n    begin\n      for j := 1 to i do\n        write('*');\n      writeln\n    end\nend.\n"
+   ]
+  },
+  "pascal-abc.net": {
+   "header": "PascalABC.NET",
+   "lang": "pascal-abc.net",
+   "variants": [
+    "##\nfor var i:=1 to 5 do\nbegin\n  for var j:=1 to i do\n    Write('*');\n  Writeln\nend;\n"
+   ]
+  },
+  "perl": {
+   "header": "Perl",
+   "lang": "perl",
+   "variants": [
+    "for(my $x = 1; $x <= 5; $x++) {\n  for(my $y = 1; $y <= $x; $y++) {\n    print \"*\";\n  } \n  print \"\\n\";\n}\n",
+    "foreach (1..5) {\n  foreach (1..$_) {\n    print '*';\n  }\n  print \"\\n\";\n}\n",
+    "print ('*' x $_ . \"\\n\") for 1..5;\n",
+    "map {print '*' x $_ . \"\\n\"} 1..5;\n"
+   ]
+  },
+  "php": {
+   "header": "PHP",
+   "lang": "php",
+   "variants": [
+    "for ($i = 1; $i <= 5; $i++) {\n  for ($j = 1; $j <= $i; $j++) {\n    echo '*';\n  }\n  echo \"\\n\";\n}\n",
+    "foreach (range(1, 5) as $i) {\n  foreach (range(1, $i) as $j) {\n    echo '*';\n  }\n  echo \"\\n\";\n}\n",
+    "foreach (range(1, 5) as $i)\n  echo str_repeat('*', $i) , PHP_EOL;\n"
+   ]
+  },
+  "picat": {
+   "header": "Picat",
+   "lang": "picat",
+   "variants": [
+    "go =>\n  N = 5,\n  foreach(I in 1..N) \n    foreach(_J in 1..I) \n      print(\"*\") \n    end, \n    nl \n  end.\n"
+   ]
+  },
+  "picolisp": {
+   "header": "PicoLisp",
+   "lang": "picolisp",
+   "variants": [
+    "(for N 5\n   (do N (prin \"*\"))\n   (prinl) )\n"
+   ]
+  },
+  "pike": {
+   "header": "Pike",
+   "lang": "pike",
+   "variants": [
+    "int main(){\n   for(int i = 1; i <= 5; i++){\n      for(int j=1; j <= i; j++){\n         write(\"*\");\n      }\n      write(\"\\n\");\n   }\n}\n"
+   ]
+  },
+  "pilot": {
+   "header": "PILOT",
+   "lang": "pilot",
+   "variants": [
+    "C  :i = 1\n*OuterLoop\nC  :j = 0\nC  :$stars =\n*InnerLoop\nC  :j = j + 1\nC  :$stars =*$stars\nJ ( j < i )          :*InnerLoop\nT  :$stars\nC  :i = i + 1\nJ ( i < 6 )          :*OuterLoop\nEND:\n"
+   ]
+  },
+  "pl-i": {
+   "header": "PL/I",
+   "lang": "pl-i",
+   "variants": [
+    "do i = 1 to 5;\n   do j = 1 to i;\n      put edit ('*') (a);\n   end;\n   put skip;\nend;\n",
+    "do i = 1 to 5;\n   put skip edit (('*' do j = 1 to i)) (a);\nend;\n",
+    "put edit ((('*' do j = 1 to i)do i=1 to 5))(a);  /* no new line */\n"
+   ]
+  },
+  "plain-english": {
+   "header": "Plain English",
+   "lang": "plain-english",
+   "variants": [
+    "To run:\nStart up.\nWrite a triangle of asterisks on the console given 5.\nWait for the escape key.\nShut down.\n\nTo write a row of asterisks on the console given a number:\nIf a counter is past the number, write \"\" on the console; exit.\nWrite \"*\" on the console without advancing.\nRepeat.\n\nTo write a triangle of asterisks on the console given a size:\nIf a counter is past the size, exit.\nWrite a row of asterisks on the console given the counter.\nRepeat.\n"
+   ]
+  },
+  "powershell": {
+   "header": "PowerShell",
+   "lang": "powershell",
+   "variants": [
+    "for ($i = 1; $i -le 5; $i++) {\n    for ($j = 1; $j -le $i; $j++) {\n        Write-Host -NoNewline *\n    }\n    Write-Host\n}\n",
+    "1..5 | ForEach-Object {\n    1..$_ | ForEach-Object {\n        Write-Host -NoNewline *\n    }\n    Write-Host\n}\n"
+   ]
+  },
+  "processing": {
+   "header": "Processing",
+   "lang": "processing",
+   "variants": [
+    "size( 105,120 );\n\nfor ( int i=20; i<=100; i+=20 )\n   for ( int j=10; j<=i; j+=20 )\n      text( \"*\", j,i );\n"
+   ]
+  },
+  "prolog": {
+   "header": "Prolog",
+   "lang": "prolog",
+   "variants": [
+    "example :- \n    between(1,5,I), nl, between(1,I,_J),\n    write('*'), fail.\nexample.\n"
+   ]
+  },
+  "python": {
+   "header": "Python",
+   "lang": "python",
+   "variants": [
+    "import sys\nfor i in range(5):\n    for _ in range(i + 1):\n        sys.stdout.write('*')\n    print()\n",
+    "for i in range(1, 6):\n    print('*' * i)\n",
+    "print('\\n'.join('*' * i for i in range(1, 6)))\n"
+   ]
+  },
+  "qb64": {
+   "header": "QB64",
+   "lang": "qb64",
+   "variants": [
+    "FOR c = 1 TO 5\n    FOR n = 1 TO c\n        PRINT \"*\";\n    NEXT\n    PRINT\nNEXT\n"
+   ]
+  },
+  "r": {
+   "header": "R",
+   "lang": "r",
+   "variants": [
+    "for(i in 0:4) {\n  s <- \"\"\n  for(j in 0:i) {\n    s <- paste(s, \"*\", sep=\"\")\n  }\n  print(s)\n}\n"
+   ]
+  },
+  "racket": {
+   "header": "Racket",
+   "lang": "racket",
+   "variants": [
+    "(for ([i (in-range 1 6)]) (for ([j i]) (display \"*\")) (newline))\n"
+   ]
+  },
+  "raku": {
+   "header": "Raku",
+   "lang": "raku",
+   "variants": [
+    "for ^5 {\n\n\tfor 0..$_ {\n\t\tprint \"*\";\n\t}\n\t\n\tprint \"\\n\";\n\n}\n",
+    "say '*' x $_ for 1..5;\n",
+    "([\\~] \"*\" xx 5).join(\"\\n\").say;\n"
+   ]
+  },
+  "rapira": {
+   "header": "Rapira",
+   "lang": "rapira",
+   "variants": [
+    "for N from 1 to 5 do\n  output: \"*\" * N\nod\n"
+   ]
+  },
+  "rebol": {
+   "header": "Rebol",
+   "lang": "rebol",
+   "variants": [
+    "; Use 'repeat' when an index required, 'loop' when repetition suffices:\n\nrepeat i 5 [\n\tloop i [prin \"*\"] \n\tprint \"\"\n]\n\n; or a more traditional for loop:\n\nfor i 1 5 1 [\n\tloop i [prin \"*\"]\n\tprint \"\"\n]\n"
+   ]
+  },
+  "red": {
+   "header": "Red",
+   "lang": "red",
+   "variants": [
+    "Red[]\n\nrepeat i 5 [\n    loop i [prin \"*\"]\n    prin newline\n]\n"
+   ]
+  },
+  "rescript": {
+   "header": "ReScript",
+   "lang": "rescript",
+   "variants": [
+    "let s = ref(\"\")\nfor i in 1 to 5 {\n  for _ in 1 to i {\n    s := Js.String2.concat(s.contents, \"*\")\n  }\n  s := Js.String2.concat(s.contents, \"\\n\")\n}\nJs.log(s.contents)\n"
+   ]
+  },
+  "rexx": {
+   "header": "REXX",
+   "lang": "rexx",
+   "variants": [
+    "-- 13 Aug 2026\ninclude Setting\n\nsay 'LOOPS/FOR'\nsay version\nsay\ndo i=1 to 5\n   s=''\n   do j=1 to i\n      s||='*'\n   end j\n   say s\nend i\nexit\n\ninclude Math\n"
+   ]
+  },
+  "ring": {
+   "header": "Ring",
+   "lang": "ring",
+   "variants": [
+    "for i = 1 to 5 for x = 1 to i see \"*\" next see nl next\n",
+    "for i = 1 to 5\n     for x = 1 to i\n         see \"*\" \n     next\n     see nl \nnext\n"
+   ]
+  },
+  "rocq-prover": {
+   "header": "Rocq",
+   "lang": "rocq-prover",
+   "variants": [
+    "Section FOR.\n  Variable T : Type.\n  Variable body : nat -> T -> T.\n  Variable start : nat.\n\n  Fixpoint for_loop n : T -> T :=\n    match n with\n    | O => fun s => s\n    | S n' => fun s => for_loop n' (body (start + n') s)\n    end.\n\nEnd FOR.\n\nEval vm_compute in\n  for_loop _\n    (fun i =>\n      cons\n        (for_loop _\n          (fun j => cons tt)\n          0 (S i) nil\n        )\n    )\n    0 5 nil.\n"
+   ]
+  },
+  "ruby": {
+   "header": "Ruby",
+   "lang": "ruby",
+   "variants": [
+    "for i in 1..5\n  for j in 1..i\n    print \"*\"\n  end\n  puts\nend\n",
+    "(1..5).each do |i|\n  (1..i).each do |j|\n    print \"*\"\n  end\n  puts\nend\n",
+    "1.upto(5) do |i|\n  1.upto(i) do |j|\n    print \"*\"\n  end\n  puts\nend\n",
+    "5.times do |i|\n  # i goes from 0 to 4\n  (i+1).times do\n    print \"*\"\n  end\n  puts\nend\n",
+    "i = 1\nloop do\n  j = 1\n  loop do\n    print \"*\"\n    break if (j += 1) > i\n  end\n  puts\n  break if (i += 1) > 5\nend\n"
+   ]
+  },
+  "rust": {
+   "header": "Rust",
+   "lang": "rust",
+   "variants": [
+    "fn main() {\n    for i in 0..5 {\n        for _ in 0..=i {\n            print!(\"*\");\n        }\n\n        println!();\n    }\n}\n"
+   ]
+  },
+  "rye": {
+   "header": "Rye",
+   "lang": "rye",
+   "variants": [
+    "loop 5 {\n    .inc .loop { prn \"*\" }\n    prn newline\n}\n"
+   ]
+  },
+  "sas": {
+   "header": "SAS",
+   "lang": "sas",
+   "variants": [
+    "data _null_;\nlength a $5;\ndo n=1 to 5;\n  a=\"*\";\n  do i=2 to n;\n    a=trim(a) !! \"*\";\n  end;\n  put a;\nend;\nrun;\n\n/* Possible without the inner loop. Notice TRIM is replaced with STRIP,\notherwise there is a blank space on the left */\n\ndata _null_;\nlength a $5;\ndo n=1 to 5;\n  a=strip(a) !! \"*\";\n  put a;\nend;\nrun;\n"
+   ]
+  },
+  "sather": {
+   "header": "Sather",
+   "lang": "sather",
+   "variants": [
+    "class MAIN is\n  -- from, to, step\n  for!(once init:INT, once to:INT, once inc:INT):INT is\n    i ::= init;\n    loop while!( i <= to );\n      yield i;\n      i := i + inc;\n    end;\n  end;\n\n  main is\n    i, j :INT;\n    loop i := for!(1, 5, 1);   -- 1.upto!(5)\n      loop j := for!(1, i, 1); -- 1.upto!(i)\n        #OUT + \"*\";\n      end;\n      #OUT + \"\\n\";\n    end;\n  end;\nend;\n"
+   ]
+  },
+  "scala": {
+   "header": "Scala",
+   "lang": "scala",
+   "variants": [
+    "for (i <- 1 to 5) {\n    for (j <- 1 to i)\n        print(\"*\")\n    println()\n}\n"
+   ]
+  },
+  "scheme": {
+   "header": "Scheme",
+   "lang": "scheme",
+   "variants": [
+    "(do ((i 1 (+ i 1)))\n    ((> i 5))\n    (do ((j 1 (+ j 1)))\n        ((> j i))\n        (display \"*\"))\n    (newline))\n"
+   ]
+  },
+  "scilab": {
+   "header": "Scilab",
+   "lang": "scilab",
+   "variants": [
+    "for i=1:5\n    s=\"\"\n    for j=1:i\n        s=s+\"*\"\n    end\n    printf(\"%s\\n\",s)\nend\n"
+   ]
+  },
+  "seed7": {
+   "header": "Seed7",
+   "lang": "seed7",
+   "variants": [
+    "$ include \"seed7_05.s7i\";\n\nconst proc: main is func\n  local\n    var integer: I is 1;\n    var integer: J is 1;\t  \n\n  begin\n   for I range 1 to 5 do\n     for J range 1 to I do\n       write(\"*\");\n     end for;\n       writeln;\n   end for;\n  end func;\n"
+   ]
+  },
+  "setl": {
+   "header": "SETL",
+   "lang": "setl",
+   "variants": [
+    "for i in {1..5} loop\n    for j in {1..i} loop\n        nprint( '*' );\n    end loop;\n    print;    -- new line\nend loop;\n"
+   ]
+  },
+  "sil": {
+   "header": "SIL",
+   "lang": "sil",
+   "variants": [
+    "i = 5\ndef : lbl\n:outer\n  j = 6 - i\n  :inner\n    print *\n    j - 1\n    if j inner\n  printLine\n  i - 1\n  if i outer\n"
+   ]
+  },
+  "simula": {
+   "header": "Simula",
+   "lang": "simula",
+   "variants": [
+    "begin\n   integer i,j;\n   for i:=1 step 1 until 5 do \n   begin \n      for j:=1 step 1 until i do \n         outtext(\"*\");\n      outimage\n   end\nend\n"
+   ]
+  },
+  "smalltalk": {
+   "header": "Smalltalk",
+   "lang": "smalltalk",
+   "variants": [
+    "1 to: 5 do: [ :aNumber |\n  aNumber timesRepeat: [ '*' display ].\n  Character nl display.\n]\n",
+    "1 to: 5 do: [ :row |\n  1 to: row do: [:col | '*' display ].\n]\n",
+    "1 to: 5 do: [ :n |\n  Stdout next: n put: $*; cr\n]\n"
+   ]
+  },
+  "snobol4": {
+   "header": "SNOBOL4",
+   "lang": "snobol4",
+   "variants": [
+    "ol\touter = ?lt(outer,5) outer + 1\t:f(end)\n\tinner = outer; stars = \"\"\nil\tstars = ?gt(inner,0) stars \"*\"\t:f(disp)\n\tinner = inner - 1\t:(il)\ndisp\toutput = stars;\t:(ol)\nend\n",
+    "outer\tb = a = ?lt(a,5) a + 1\t:f(end)\ninner\tt = t ?(b = (gt(b,0) b - 1)) \"*\"\t:s(inner)\n\tt span(\"*\") . terminal = \t:(outer)\nend\n",
+    "\ta = \"*****\"; \na\ta len(x = x + 1) . output\t:s(a)\nend\n",
+    "        \"*****\" arb $ output fail\nend\n"
+   ]
+  },
+  "spin": {
+   "header": "Spin",
+   "lang": "spin",
+   "variants": [
+    "con\n  _clkmode = xtal1 + pll16x\n  _clkfreq = 80_000_000\n\nobj\n  ser : \"FullDuplexSerial.spin\"\n\npub main | m, n\n  ser.start(31, 30, 0, 115200)\n\n  repeat n from 1 to 5\n    repeat m from 1 to n\n      ser.tx(\"*\")\n    ser.str(string(13,10))\n\n  waitcnt(_clkfreq + cnt)\n  ser.stop\n  cogstop(0)\n"
+   ]
+  },
+  "spl": {
+   "header": "SPL",
+   "lang": "spl",
+   "variants": [
+    "> i, 1..5\n  > j, 1..i\n    #.output(\"*\",#.rs)\n  <\n  #.output()\n<\n"
+   ]
+  },
+  "stata": {
+   "header": "Stata",
+   "lang": "stata",
+   "variants": [
+    "forvalues n=1/5 {\n\tlocal s \"\"\n\tforvalues i=1/`n' {\n\t\tlocal s `s'*\n\t}\n\tdisplay \"`s'\"\n}\n",
+    "for (i=1; i<=5; i++) {\n\tfor (j=1; j<=i; j++) printf(\"*\")\n\tprintf(\"\\n\")\n}\n"
+   ]
+  },
+  "suneido": {
+   "header": "Suneido",
+   "lang": "suneido",
+   "variants": [
+    "for(i = 0; i < 5; ++i)\n    {\n    str = ''\n    for (j = 0; j <= i; ++j)\n        str $= '*'\n    Print(str)\n    }\n"
+   ]
+  },
+  "swift": {
+   "header": "Swift",
+   "lang": "swift",
+   "variants": [
+    "for i in 1...5 {\n    for _ in 1...i {\n        print(\"*\", terminator: \"\")\n    }\n    print()\n}\n"
+   ]
+  },
+  "tcl": {
+   "header": "Tcl",
+   "lang": "tcl",
+   "variants": [
+    "for {set lines 1} {$lines <= 5} {incr lines} {\n    for {set i 1} {$i <= $lines} {incr i} {\n        puts -nonewline \"*\"\n    }\n    puts \"\"\n}\n",
+    "for {set i 1} {$i <= 5} {incr i} {\n    puts [string repeat \"*\" $i]\n}\n",
+    "set line \"\"\nfor { set io [open test.txt r] } { ![eof $io] } { gets $io line } {\n    if { $line != \"\" } { ...do something here... }\n}\n"
+   ]
+  },
+  "ti-89-basic": {
+   "header": "TI-89 BASIC",
+   "lang": "ti-89-basic",
+   "variants": [
+    "Local i,j\nClrIO\nFor i, 1, 5\n  For j, 1, i\n    Output i*8, j*6, \"*\"\n  EndFor\nEndFor\n"
+   ]
+  },
+  "typescript": {
+   "header": "TypeScript",
+   "lang": "typescript",
+   "variants": [
+    "for (let i: number = 0; i < 5; ++i) {\n    let line: string = \"\"\n    for(let j: number = 0; j <= i; ++j) {\n        line += \"*\"\n    }\n    console.log(line)\n}\n"
+   ]
+  },
+  "vala": {
+   "header": "Vala",
+   "lang": "vala",
+   "variants": [
+    "int main (string[] args) {\n    for (var i = 1; i <= 5; i++) {\n        for (var j = 1; j <= i; j++) {\n\t    stdout.putc ('*');\n        }\n        stdout.putc ('\\n');\n    }\n    return 0;\n}\n"
+   ]
+  },
+  "vba": {
+   "header": "VBA",
+   "lang": "vba",
+   "variants": [
+    "Option Explicit\nSub LoopEx()\n    Dim i As Long, j As Long, s As String\n    For i = 1 To 5\n        s = \"\"\n        For j = 1 To i\n            s = s + \"*\"\n        Next\n        Debug.Print s\n    Next\nEnd Sub\n"
+   ]
+  },
+  "vbscript": {
+   "header": "VBScript",
+   "lang": "vbscript",
+   "variants": [
+    "Option Explicit\nDim i, j, s\nFor i = 1 To 5\n    s = \"\"\n    For j = 1 To i\n        s = s + \"*\"\n    Next\n    WScript.Echo s\nNext\n"
+   ]
+  },
+  "verilog": {
+   "header": "Verilog",
+   "lang": "verilog",
+   "variants": [
+    "module main;\n  integer  i, j;\n  \n  initial begin\n\n    for(i = 1; i <= 5; i = i + 1) begin\n    \tfor(j = 1; j <= i; j = j + 1) $write(\"*\");\n    \t$display(\"\");\n    end\n  $finish ;\n  end\nendmodule\n"
+   ]
+  },
+  "vim-script": {
+   "header": "Vim Script",
+   "lang": "vim-script",
+   "variants": [
+    "for i in range(1, 5)\n  call append(line('$'), '')\n  for j in range(1, i)\n    call setline(line('$'), getline('$') .. '*')\n  endfor\nendfor\n",
+    "for i in range(1, 5)\n  echoc repeat('*', i)\nendfor\n"
+   ]
+  },
+  "wart": {
+   "header": "Wart",
+   "lang": "wart",
+   "variants": [
+    "for i 1 (i <= 5) ++i\n  for j 0 (j < i) ++j\n    pr \"*\"\n  (prn)\n"
+   ]
+  },
+  "wren": {
+   "header": "Wren",
+   "lang": "wren",
+   "variants": [
+    "for (i in 1..5) {\n    for (j in 1..i) System.write(\"*\")\n    System.print()\n}\n"
+   ]
+  },
+  "x86-assembly": {
+   "header": "x86 Assembly",
+   "lang": "x86-assembly",
+   "variants": [
+    "loops:      mov       bx,      1    ; outer loop counter\n\nouterloop:  mov       cx,      bx   ; inner loop counter\n            mov       dl,      42   ; '*' character\n\ninnerloop:  mov       ah,      6\n            int       21h           ; print\n\n            dec       cx\n            jcxz      innerdone\n            jmp       innerloop\n\ninnerdone:  mov       dl,      10   ; newline\n            mov       ah,      6\n            int       21h\n\n            inc       bx\n            cmp       bx,      6\n            jne       outerloop\n\n            ret\n"
+   ]
+  },
+  "xbasic": {
+   "header": "XBasic",
+   "lang": "xbasic",
+   "variants": [
+    "PROGRAM \"for\"\n\nDECLARE FUNCTION Entry()\n\nFUNCTION Entry()\n  FOR i% = 1 TO 5\n    FOR j% = 1 TO i%\n      PRINT \"*\";\n    NEXT j%\n    PRINT\n  NEXT i%\nEND FUNCTION\nEND PROGRAM\n"
+   ]
+  },
+  "xpl0": {
+   "header": "XPL0",
+   "lang": "xpl0",
+   "variants": [
+    "code ChOut=8, CrLf=9;\nint I, J;\nfor I:= 1 to 5 do\n    [for J:= 1 to I do\n        ChOut(0, ^*);\n    CrLf(0);\n    ]\n"
+   ]
+  },
+  "zig": {
+   "header": "Zig",
+   "lang": "zig",
+   "variants": [
+    "const std = @import(\"std\");\n\npub fn main() !void {\n    const stdout_wr = std.io.getStdOut().writer();\n    for (1..6) |n| {\n        for (0..n) |_| {\n            try stdout_wr.writeAll(\"*\");\n        }\n        try stdout_wr.writeAll(\"\\n\");\n    }\n}\n"
+   ]
+  }
+ },
+ "task": "Loops/For",
+ "url": "https://rosettacode.org/wiki/Loops/For?oldid=416344"
+}

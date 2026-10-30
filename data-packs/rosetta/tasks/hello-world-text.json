@@ -1,0 +1,2881 @@
+{
+ "attribution": "Rosetta Code, “Hello world/Text” (rev 417000), by Rosetta Code contributors, https://rosettacode.org/wiki/Hello_world/Text?oldid=417000 · GFDL-1.2",
+ "expected": "Hello world!",
+ "licence": "GFDL-1.2",
+ "licence_url": "https://www.gnu.org/licenses/old-licenses/fdl-1.2.html",
+ "retrieved_at": "2026-10-30T03:55:44Z",
+ "revid": 417000,
+ "solutions": {
+  "8th": {
+   "header": "8th",
+   "lang": "8th",
+   "variants": [
+    "\"Hello world!\\n\" . bye\n"
+   ]
+  },
+  "abap": {
+   "header": "ABAP",
+   "lang": "abap",
+   "variants": [
+    "REPORT zgoodbyeworld.\n  WRITE 'Hello world!'.\n"
+   ]
+  },
+  "acl2": {
+   "header": "ACL2",
+   "lang": "acl2",
+   "variants": [
+    "(cw \"Hello world!~%\")\n"
+   ]
+  },
+  "action": {
+   "header": "Action!",
+   "lang": "action",
+   "variants": [
+    "Proc Main()\n Print(\"Hello world!\")\nReturn\n"
+   ]
+  },
+  "actionscript": {
+   "header": "ActionScript",
+   "lang": "actionscript",
+   "variants": [
+    "trace(\"Hello world!\");\n"
+   ]
+  },
+  "ada": {
+   "header": "Ada",
+   "lang": "ada",
+   "variants": [
+    "with Ada.Text_IO; use Ada.Text_IO;\nprocedure Main is\nbegin\n  Put_Line (\"Hello world!\");\nend Main;\n"
+   ]
+  },
+  "agda": {
+   "header": "Agda",
+   "lang": "agda",
+   "variants": [
+    "module HelloWorld where\n\nopen import Agda.Builtin.IO using (IO)\nopen import Agda.Builtin.Unit renaming (⊤ to Unit)\nopen import Agda.Builtin.String using (String)\n\npostulate putStrLn : String -> IO Unit\n{-# FOREIGN GHC import qualified Data.Text as T #-}\n{-# COMPILE GHC putStrLn = putStrLn . T.unpack #-}\n\nmain : IO Unit\nmain = putStrLn \"Hello world!\"\n"
+   ]
+  },
+  "aime": {
+   "header": "Aime",
+   "lang": "aime",
+   "variants": [
+    "o_text(\"Hello world!\\n\");\n",
+    "integer\nmain(void)\n{\n    o_text(\"Hello world!\\n\");\n\n    return 0;\n}\n"
+   ]
+  },
+  "algae": {
+   "header": "Algae",
+   "lang": "algae",
+   "variants": [
+    "printf(\"Hello world!\\n\");\n"
+   ]
+  },
+  "algol-60": {
+   "header": "ALGOL 60",
+   "lang": "algol-60",
+   "variants": [
+    "'BEGIN'\n    OUTSTRING(1,'('Hello world!')');\n    SYSACT(1,14,1)\n'END'\n"
+   ]
+  },
+  "algol-68": {
+   "header": "ALGOL 68",
+   "lang": "algol-68",
+   "variants": [
+    "main: (\n  printf($\"Hello world!\"l$)\n)\n"
+   ]
+  },
+  "algol-w": {
+   "header": "ALGOL W",
+   "lang": "algol-w",
+   "variants": [
+    "begin\n    write( \"Hello world!\" )\nend.\n"
+   ]
+  },
+  "ambienttalk": {
+   "header": "AmbientTalk",
+   "lang": "ambienttalk",
+   "variants": [
+    "system.println(\"Hello world!\")\n"
+   ]
+  },
+  "angelscript": {
+   "header": "AngelScript",
+   "lang": "angelscript",
+   "variants": [
+    "void main() { print(\"Hello world\\n\"); }\n"
+   ]
+  },
+  "apl": {
+   "header": "APL",
+   "lang": "apl",
+   "variants": [
+    "'Hello world!'\n"
+   ]
+  },
+  "applescript": {
+   "header": "AppleScript",
+   "lang": "applescript",
+   "variants": [
+    "\"Hello world!\"\n",
+    "log \"Hello world!\"\n"
+   ]
+  },
+  "applesoft-basic": {
+   "header": "Applesoft BASIC",
+   "lang": "applesoft-basic",
+   "variants": [
+    " PRINT \"Hello world!\"\n"
+   ]
+  },
+  "arc": {
+   "header": "Arc",
+   "lang": "arc",
+   "variants": [
+    "(prn \"Hello world!\")\n"
+   ]
+  },
+  "arkscript": {
+   "header": "ArkScript",
+   "lang": "arkscript",
+   "variants": [
+    "(print \"Hello world!\")\n"
+   ]
+  },
+  "arturo": {
+   "header": "Arturo",
+   "lang": "arturo",
+   "variants": [
+    "print \"Hello world!\"\n"
+   ]
+  },
+  "asciidots": {
+   "header": "AsciiDots",
+   "lang": "asciidots",
+   "variants": [
+    ".-$'Hello, World!'\n"
+   ]
+  },
+  "astro": {
+   "header": "Astro",
+   "lang": "astro",
+   "variants": [
+    "print \"Hello world!\"\n"
+   ]
+  },
+  "asymptote": {
+   "header": "Asymptote",
+   "lang": "asymptote",
+   "variants": [
+    "write('Hello world!');\n"
+   ]
+  },
+  "atari-basic": {
+   "header": "Atari BASIC",
+   "lang": "atari-basic",
+   "variants": [
+    "10 PRINT \"Hello World\"\n"
+   ]
+  },
+  "ats": {
+   "header": "ATS",
+   "lang": "ats",
+   "variants": [
+    "implement main0 () = print \"Hello world!\\n\"\n"
+   ]
+  },
+  "autohotkey": {
+   "header": "AutoHotkey",
+   "lang": "autohotkey",
+   "variants": [
+    "DllCall(\"AllocConsole\")\nFileAppend, Goodbye`, World!, CONOUT$\nFileReadLine, _, CONIN$, 1\n",
+    "DllCall(\"AttachConsole\", \"int\", -1)\nFileAppend, Goodbye`, World!, CONOUT$\n",
+    "SendInput Hello world!{!}\n"
+   ]
+  },
+  "autoit": {
+   "header": "AutoIt",
+   "lang": "autoit",
+   "variants": [
+    "ConsoleWrite(\"Hello world!\" & @CRLF)\n"
+   ]
+  },
+  "autolisp": {
+   "header": "AutoLISP",
+   "lang": "autolisp",
+   "variants": [
+    "(print \"Hello World!\")\n"
+   ]
+  },
+  "avail": {
+   "header": "Avail",
+   "lang": "avail",
+   "variants": [
+    "Print: \"Hello World!\";\n"
+   ]
+  },
+  "awk": {
+   "header": "AWK",
+   "lang": "awk",
+   "variants": [
+    "BEGIN{print \"Hello world!\"}\n",
+    "END {\n     print \"Hello world!\"\n    }\n",
+    "//  { \n    print \"Hello world!\" \n    exit\n    }\n",
+    "//  { \n    print \"Hello world!\" \n    }\n",
+    "// \n"
+   ]
+  },
+  "b": {
+   "header": "B",
+   "lang": "b",
+   "variants": [
+    "main()\n{\n    putstr(\"Hello world!*n\");\n    return(0);\n}\n"
+   ]
+  },
+  "b4x": {
+   "header": "B4X",
+   "lang": "b4x",
+   "variants": [
+    "Log(\"Hello world!\")\n"
+   ]
+  },
+  "babel": {
+   "header": "Babel",
+   "lang": "babel",
+   "variants": [
+    "\"Hello world!\" <<\n"
+   ]
+  },
+  "ballerina": {
+   "header": "Ballerina",
+   "lang": "ballerina",
+   "variants": [
+    "import ballerina/io; \n\npublic function main() {\n    io:println(\"Hello world!\"); \n}\n"
+   ]
+  },
+  "bash": {
+   "header": "bash",
+   "lang": "bash",
+   "variants": [
+    "echo \"Hello world!\"\n"
+   ]
+  },
+  "basic": {
+   "header": "BASIC",
+   "lang": "basic",
+   "variants": [
+    "10 print \"Hello world!\"\n",
+    "PRINT \"Hello world!\"\n"
+   ]
+  },
+  "battlestar": {
+   "header": "Battlestar",
+   "lang": "battlestar",
+   "variants": [
+    "const hello = \"Hello world!\\n\"\n\nprint(hello)\n"
+   ]
+  },
+  "bbc-basic": {
+   "header": "BBC BASIC",
+   "lang": "bbc-basic",
+   "variants": [
+    "      PRINT \"Hello world!\"\n"
+   ]
+  },
+  "bc": {
+   "header": "bc",
+   "lang": "bc",
+   "variants": [
+    "\"Hello world!\n\"\n"
+   ]
+  },
+  "bcpl": {
+   "header": "BCPL",
+   "lang": "bcpl",
+   "variants": [
+    "GET \"libhdr\"\n\nLET start() = VALOF\n{ writef(\"Hello world!\")\n  RESULTIS 0\n}\n"
+   ]
+  },
+  "beef": {
+   "header": "Beef",
+   "lang": "beef",
+   "variants": [
+    "Using System;\nnamespace HelloWorld {\n  class Program\n  {\n    static void Main()\n    {\n      Console.Writeln(\"Hello World!\");\n    }\n  }\n}\n"
+   ]
+  },
+  "befunge": {
+   "header": "Befunge",
+   "lang": "befunge",
+   "variants": [
+    "52*\"!dlroW ,olleH\">:#,_@\n"
+   ]
+  },
+  "behavior-markup-language": {
+   "header": "BML",
+   "lang": "behavior-markup-language",
+   "variants": [
+    "display \"Hello world!\"\n"
+   ]
+  },
+  "bird": {
+   "header": "Bird",
+   "lang": "bird",
+   "variants": [
+    "use Console\n\ndefine Main\n    Console.Println \"Hello world\"\nend\n"
+   ]
+  },
+  "blade": {
+   "header": "Blade",
+   "lang": "blade",
+   "variants": [
+    "echo 'Hello world!'\n",
+    "print('Hello world!')\n",
+    "import io\nio.stdout.write('Hello world!')\n"
+   ]
+  },
+  "blue-programming-language": {
+   "header": "Blue",
+   "lang": "blue-programming-language",
+   "variants": [
+    "global _start\n\n: syscall ( num:eax -- result:eax ) syscall ;\n\n: exit ( status:edi -- noret ) 60 syscall ;\n: bye ( -- noret ) 0 exit ;\n\n1 const stdout\n\n: write ( buf:esi len:edx fd:edi -- ) 1 syscall drop ;\n: print ( buf len -- ) stdout write ;\n\n: greet ( -- ) s\" Hello world!\\n\" print ;\n\n: _start ( -- noret ) greet bye ;\n"
+   ]
+  },
+  "blz": {
+   "header": "blz",
+   "lang": "blz",
+   "variants": [
+    "print(\"Hello world!\")\n"
+   ]
+  },
+  "boo": {
+   "header": "Boo",
+   "lang": "boo",
+   "variants": [
+    "print \"Hello world!\"\n"
+   ]
+  },
+  "bqn": {
+   "header": "BQN",
+   "lang": "bqn",
+   "variants": [
+    "•Out \"Hello world!\"\n"
+   ]
+  },
+  "bruijn": {
+   "header": "Bruijn",
+   "lang": "bruijn",
+   "variants": [
+    "main [\"Hello world!\"]\n"
+   ]
+  },
+  "c": {
+   "header": "C",
+   "lang": "c",
+   "variants": [
+    "#include<stdio.h>\n\nint main()\n{\n  printf(\"\\nHello world!\");\n  return 0;\n}\n",
+    "#include<stdio.h>\n\nint main()\n{\n\treturn printf(\"\\nHello World!\");\n}\n",
+    "#include <stdlib.h>\n#include <stdio.h>\n\nint main(void)\n{\n  printf(\"Hello world!\\n\");\n  return EXIT_SUCCESS;\n}\n",
+    "#include <stdlib.h>\n#include <stdio.h>\n\nint main(void)\n{\n  puts(\"Hello world!\");\n  return EXIT_SUCCESS;\n}\n"
+   ]
+  },
+  "c2": {
+   "header": "C2",
+   "lang": "c2",
+   "variants": [
+    "module hello_world;\nimport stdio as io;\n\nfunc i32 main(i32 argc, char** argv) {\n    io.printf(\"Hello World!\\n\");\n    return 0;\n}\n"
+   ]
+  },
+  "c3": {
+   "header": "C3",
+   "lang": "c3",
+   "variants": [
+    "import std::io;\n\nfn void main() \n{\n    io::printn(\"Hello, World!\");\n}\n"
+   ]
+  },
+  "casio-basic": {
+   "header": "Casio BASIC",
+   "lang": "casio-basic",
+   "variants": [
+    "Locate 1,1,\"Hello World!\"\n",
+    "\"Hello World!\"\n"
+   ]
+  },
+  "cat": {
+   "header": "Cat",
+   "lang": "cat",
+   "variants": [
+    "\"Hello world!\" writeln\n"
+   ]
+  },
+  "cfengine": {
+   "header": "CFEngine",
+   "lang": "cfengine",
+   "variants": [
+    "#!/usr/bin/env cf-agent\n# without --no-lock option to cf-agent\n# this output will only occur once per minute\n# this is by design.\nbundle agent main\n{\n  reports:\n    \"Hello world!\";\n}\n"
+   ]
+  },
+  "chapel": {
+   "header": "Chapel",
+   "lang": "chapel",
+   "variants": [
+    "writeln(\"Hello world!\");\n"
+   ]
+  },
+  "chef": {
+   "header": "Chef",
+   "lang": "chef",
+   "variants": [
+    "Goodbye World Souffle.\n \nIngredients.\n71 g green beans\n111 cups oil\n98 g butter\n121 ml yogurt\n101 eggs\n44 g wheat flour\n32 zucchinis\n119 ml water\n114 g red salmon\n108 g lard\n100 g dijon mustard\n33 potatoes\n \nMethod.\nPut potatoes into the mixing bowl.\nPut dijon mustard into the mixing bowl.\nPut lard into the mixing bowl.\nPut red salmon into the mixing bowl.\nPut oil into the mixing bowl.\nPut water into the mixing bowl.\nPut zucchinis into the mixing bowl.\nPut wheat flour into the mixing bowl.\nPut eggs into the mixing bowl.\nPut yogurt into the mixing bowl.\nPut butter into the mixing bowl.\nPut dijon mustard into the mixing bowl.\nPut oil into the mixing bowl.\nPut oil into the mixing bowl.\nPut green beans into the mixing bowl.\nLiquefy contents of the mixing bowl.\nPour contents of the mixing bowl into the baking dish.\n \nServes 1.\n"
+   ]
+  },
+  "chipmunk-basic": {
+   "header": "Chipmunk Basic",
+   "lang": "chipmunk-basic",
+   "variants": [
+    "10 print \"Hello world!\"\n"
+   ]
+  },
+  "chuck": {
+   "header": "ChucK",
+   "lang": "chuck",
+   "variants": [
+    "<<< \"Hello world!\">>>;\n"
+   ]
+  },
+  "clay": {
+   "header": "Clay",
+   "lang": "clay",
+   "variants": [
+    "main() {\n    println(\"Hello world!\");\n}\n"
+   ]
+  },
+  "clean": {
+   "header": "Clean",
+   "lang": "clean",
+   "variants": [
+    "Start = \"Hello world!\"\n"
+   ]
+  },
+  "clipper": {
+   "header": "Clipper",
+   "lang": "clipper",
+   "variants": [
+    "? \"Hello world!\"\n"
+   ]
+  },
+  "clips": {
+   "header": "CLIPS",
+   "lang": "clips",
+   "variants": [
+    "(printout t \"Hello world!\" crlf)\n"
+   ]
+  },
+  "clojure": {
+   "header": "Clojure",
+   "lang": "clojure",
+   "variants": [
+    "(println \"Hello world!\")\n"
+   ]
+  },
+  "clu": {
+   "header": "CLU",
+   "lang": "clu",
+   "variants": [
+    "start_up = proc ()\n    po: stream := stream$primary_output()\n    stream$putl(po, \"Hello world!\")\nend start_up\n"
+   ]
+  },
+  "cmake": {
+   "header": "CMake",
+   "lang": "cmake",
+   "variants": [
+    "message(STATUS \"Hello world!\")\n"
+   ]
+  },
+  "cobol": {
+   "header": "COBOL",
+   "lang": "cobol",
+   "variants": [
+    "\tprogram-id. hello.\n\tprocedure division.\n\t\tdisplay \"Hello world!\".\n\t\tstop run.\n",
+    "display\"Hello, world\".\n"
+   ]
+  },
+  "cobra": {
+   "header": "Cobra",
+   "lang": "cobra",
+   "variants": [
+    "class Hello\n    def main\n        print 'Hello world!'\n"
+   ]
+  },
+  "coffeescript": {
+   "header": "CoffeeScript",
+   "lang": "coffeescript",
+   "variants": [
+    "console.log \"Hello world!\"\n",
+    "print \"Hello world!\"\n"
+   ]
+  },
+  "cognate": {
+   "header": "Cognate",
+   "lang": "cognate",
+   "variants": [
+    "Print \"Hello World!\"\n"
+   ]
+  },
+  "coldfusion": {
+   "header": "ColdFusion",
+   "lang": "coldfusion",
+   "variants": [
+    "<cfoutput>Hello world!</cfoutput>\n"
+   ]
+  },
+  "comal": {
+   "header": "Comal",
+   "lang": "comal",
+   "variants": [
+    "PRINT \"Hello world!\"\n"
+   ]
+  },
+  "commodore-basic": {
+   "header": "Commodore BASIC",
+   "lang": "commodore-basic",
+   "variants": [
+    "10 print chr$(147);chr$(14);:REM 147=clear screen, 14=switch to lowercase mode\n20 print \"Hello world!\"\n30 end\n"
+   ]
+  },
+  "common-lisp": {
+   "header": "Common Lisp",
+   "lang": "common-lisp",
+   "variants": [
+    "(format t \"Hello world!~%\")\n",
+    "(print \"Hello world!\")\n",
+    ";; Project : Hello world/Text\n\n(format t \"~a\" \"Hello world!\")\n"
+   ]
+  },
+  "component-pascal": {
+   "header": "Component Pascal",
+   "lang": "component-pascal",
+   "variants": [
+    "MODULE Hello;\n\tIMPORT Out;\n\t\n\tPROCEDURE Do*;\n\tBEGIN\n\t\tOut.String(\"Hello world!\"); Out.Ln\n\tEND Do;\nEND Hello.\n"
+   ]
+  },
+  "corescript": {
+   "header": "Corescript",
+   "lang": "corescript",
+   "variants": [
+    "print Hello world!\n"
+   ]
+  },
+  "cpp": {
+   "header": "C++",
+   "lang": "cpp",
+   "variants": [
+    "#include <iostream>\n\nint main() {\n  std::cout << \"Hello world!\\n\";\n}\n",
+    "import module std; // here does the same thing as #include <print>\n\nint main() {\n  std::print(\"Hello world!\\n\");\n}\n"
+   ]
+  },
+  "crack": {
+   "header": "Crack",
+   "lang": "crack",
+   "variants": [
+    "import crack.io cout;\ncout `Hello world!\\n`;\n"
+   ]
+  },
+  "creative-basic": {
+   "header": "Creative Basic",
+   "lang": "creative-basic",
+   "variants": [
+    "OPENCONSOLE\n\nPRINT\"Hello world!\"\n\n'This line could be left out.\nPRINT:PRINT:PRINT\"Press any key to end.\"\n\n'Keep the console from closing right away so the text can be read.\nDO:UNTIL INKEY$<>\"\"\n\nCLOSECONSOLE\n\nEND\n"
+   ]
+  },
+  "crystal": {
+   "header": "Crystal",
+   "lang": "crystal",
+   "variants": [
+    "puts \"Hello world!\"\n"
+   ]
+  },
+  "d": {
+   "header": "D",
+   "lang": "d",
+   "variants": [
+    "import std.stdio;\n\nvoid main() {\n    writeln(\"Hello world!\");\n}\n"
+   ]
+  },
+  "dafny": {
+   "header": "Dafny",
+   "lang": "dafny",
+   "variants": [
+    "method Main() {\n  print \"hello, world!\\n\";\n  assert 10 < 2;\n}\n"
+   ]
+  },
+  "dale": {
+   "header": "dt",
+   "lang": "dale",
+   "variants": [
+    "\"Hello world!\" pl\n"
+   ]
+  },
+  "dart": {
+   "header": "Dart",
+   "lang": "dart",
+   "variants": [
+    "main() {\n    var bye = 'Hello world!';\n    print(\"$bye\");\n}\n"
+   ]
+  },
+  "dataweave": {
+   "header": "DataWeave",
+   "lang": "dataweave",
+   "variants": [
+    "\"Hello world!\"\n"
+   ]
+  },
+  "dc": {
+   "header": "Dc",
+   "lang": "dc",
+   "variants": [
+    "[Hello world!]p\n",
+    "5735816763073014741799356604682 P\n"
+   ]
+  },
+  "delphi": {
+   "header": "Delphi",
+   "lang": "delphi",
+   "variants": [
+    "program ProjectGoodbye;\n{$APPTYPE CONSOLE}\nbegin\n  WriteLn('Hello world!');\nend.\n"
+   ]
+  },
+  "dialog": {
+   "header": "Dialog",
+   "lang": "dialog",
+   "variants": [
+    "(program entry point)\n\tHello, world!\n"
+   ]
+  },
+  "dm": {
+   "header": "DM",
+   "lang": "dm",
+   "variants": [
+    "/client/New()\n    ..()\n    src << \"Hello world!\"\n"
+   ]
+  },
+  "draco-programming-language": {
+   "header": "Draco",
+   "lang": "draco-programming-language",
+   "variants": [
+    "proc nonrec main() void:\n    writeln(\"Hello world!\")\ncorp\n"
+   ]
+  },
+  "dylan": {
+   "header": "Dylan",
+   "lang": "dylan",
+   "variants": [
+    "module: hello-world\n\nformat-out(\"%s\\n\", \"Hello world!\");\n"
+   ]
+  },
+  "e": {
+   "header": "E",
+   "lang": "e",
+   "variants": [
+    "println(\"Hello world!\")\n\nstdout.println(\"Hello world!\")\n"
+   ]
+  },
+  "ec": {
+   "header": "eC",
+   "lang": "ec",
+   "variants": [
+    "class GoodByeApp : Application\n{\n   void Main()\n   {\n      PrintLn(\"Hello world!\");\n   }\n}\n"
+   ]
+  },
+  "ecl": {
+   "header": "ECL",
+   "lang": "ecl",
+   "variants": [
+    "OUTPUT('Hello world!');\n"
+   ]
+  },
+  "ed-editor": {
+   "header": "Ed",
+   "lang": "ed-editor",
+   "variants": [
+    "a\nHello World!\n.\np\nQ\n"
+   ]
+  },
+  "egel": {
+   "header": "Egel",
+   "lang": "egel",
+   "variants": [
+    "def main = \"Hello World!\"\n"
+   ]
+  },
+  "egison": {
+   "header": "Egison",
+   "lang": "egison",
+   "variants": [
+    "(define $main\n  (lambda [$argv]\n    (write-string \"Hello world!\\n\")))\n"
+   ]
+  },
+  "egl": {
+   "header": "EGL",
+   "lang": "egl",
+   "variants": [
+    "program HelloWorld\n    function main()\n        SysLib.writeStdout(\"Hello world!\");\n    end\nend\n"
+   ]
+  },
+  "eiffel": {
+   "header": "Eiffel",
+   "lang": "eiffel",
+   "variants": [
+    "class\n    HELLO_WORLD\ncreate\n    make\nfeature\n    make\n        do\n            print (\"Hello world!%N\")\n        end\nend\n"
+   ]
+  },
+  "elan": {
+   "header": "Elan",
+   "lang": "elan",
+   "variants": [
+    "putline (\"Hello, world!\");\n"
+   ]
+  },
+  "elena": {
+   "header": "Elena",
+   "lang": "elena",
+   "variants": [
+    "public Program()\n{\n    Console.writeLine(\"Hello world!\")\n}\n"
+   ]
+  },
+  "elixir": {
+   "header": "Elixir",
+   "lang": "elixir",
+   "variants": [
+    "IO.puts \"Hello world!\"\n"
+   ]
+  },
+  "elm": {
+   "header": "Elm",
+   "lang": "elm",
+   "variants": [
+    "main = text \"Goodbye World!\"\n"
+   ]
+  },
+  "emacs-lisp": {
+   "header": "Emacs Lisp",
+   "lang": "emacs-lisp",
+   "variants": [
+    "(message \"Hello world!\")\n",
+    "(princ \"Hello world!\\n\")\n"
+   ]
+  },
+  "emojicode": {
+   "header": "Emojicode",
+   "lang": "emojicode",
+   "variants": [
+    "🏁 🍇\n  😀 🔤Hello world!🔤\n🍉\n"
+   ]
+  },
+  "erlang": {
+   "header": "Erlang",
+   "lang": "erlang",
+   "variants": [
+    "io:format(\"Hello world!~n\").\n"
+   ]
+  },
+  "f-sharp": {
+   "header": "F_Sharp",
+   "lang": "f-sharp",
+   "variants": [
+    "printfn \"%s\" \"Hello world!\"\n",
+    "System.Console.WriteLine(\"Hello world!\")\n"
+   ]
+  },
+  "factor": {
+   "header": "Factor",
+   "lang": "factor",
+   "variants": [
+    "\"Hello world!\" print\n"
+   ]
+  },
+  "falcon": {
+   "header": "Falcon",
+   "lang": "falcon",
+   "variants": [
+    "printl(\"Hello world!\")\n",
+    "> \"Hello world!\"\n"
+   ]
+  },
+  "false": {
+   "header": "FALSE",
+   "lang": "false",
+   "variants": [
+    "\"Hello world!\n\"\n"
+   ]
+  },
+  "fantom": {
+   "header": "Fantom",
+   "lang": "fantom",
+   "variants": [
+    "class HelloText\n{\n  public static Void main ()\n  {\n    echo (\"Hello world!\")\n  }\n}\n"
+   ]
+  },
+  "fe": {
+   "header": "Fe",
+   "lang": "fe",
+   "variants": [
+    "(print \"Hello World\")\n"
+   ]
+  },
+  "fennel": {
+   "header": "Fennel",
+   "lang": "fennel",
+   "variants": [
+    "(print \"Hello World\")\n"
+   ]
+  },
+  "ferite": {
+   "header": "ferite",
+   "lang": "ferite",
+   "variants": [
+    "uses \"console\";\nConsole.println( \"Goodby, World!\" );\n"
+   ]
+  },
+  "fish": {
+   "header": "Fish",
+   "lang": "fish",
+   "variants": [
+    "!v\"Hello world!\"r!\n >l?!;o\n"
+   ]
+  },
+  "focal": {
+   "header": "FOCAL",
+   "lang": "focal",
+   "variants": [
+    "TYPE \"Hello, world\" !\n"
+   ]
+  },
+  "forth": {
+   "header": "Forth",
+   "lang": "forth",
+   "variants": [
+    ".\" Hello world!\"\n",
+    ": goodbye ( -- )   .\" Hello world!\" CR ;\n"
+   ]
+  },
+  "fortran": {
+   "header": "Fortran",
+   "lang": "fortran",
+   "variants": [
+    "print *,\"Hello world!\"\n",
+    "100   format (5X,A,\"!\")\n      print 100,\"Hello world!\"\n",
+    "write (89,100) \"Hello world!\"\n"
+   ]
+  },
+  "fortress": {
+   "header": "Fortress",
+   "lang": "fortress",
+   "variants": [
+    "export Executable                                                                                                                       \n                                                                                                                                        \nrun() = println(\"Hello world!\")\n"
+   ]
+  },
+  "free-pascal": {
+   "header": "Free Pascal",
+   "lang": "free-pascal",
+   "variants": [
+    "PROGRAM HelloWorld ;\n\n{$APPTYPE CONSOLE}\n\n(*) \n\n        https://www.freepascal.org/advantage.var\n\n(*)\n\nUSES\n\n    crt;\n\nBEGIN\n\n  WriteLn ( 'Hello world!' ) ;\n\nEND.\n"
+   ]
+  },
+  "freebasic": {
+   "header": "FreeBASIC",
+   "lang": "freebasic",
+   "variants": [
+    "? \"Hello world!\"\nsleep\n"
+   ]
+  },
+  "frege": {
+   "header": "Frege",
+   "lang": "frege",
+   "variants": [
+    "module HelloWorld where\nmain _ = println \"Hello world!\"\n"
+   ]
+  },
+  "frink": {
+   "header": "Frink",
+   "lang": "frink",
+   "variants": [
+    "println[\"Hello world!\"]\n"
+   ]
+  },
+  "funcsug": {
+   "header": "FuncSug",
+   "lang": "funcsug",
+   "variants": [
+    "displayNewMessage('Hello, world!')\n",
+    "print('Hello, world!')\n"
+   ]
+  },
+  "funl": {
+   "header": "FunL",
+   "lang": "funl",
+   "variants": [
+    "println( 'Hello world!' )\n"
+   ]
+  },
+  "futurebasic": {
+   "header": "FutureBasic",
+   "lang": "futurebasic",
+   "variants": [
+    "window 1\nprint @\"Hello world!\"\n\nHandleEvents\n"
+   ]
+  },
+  "gambas": {
+   "header": "Gambas",
+   "lang": "gambas",
+   "variants": [
+    "Public Sub Main()\n\nPRINT \"Hello world!\"\n \nEnd\n"
+   ]
+  },
+  "gap": {
+   "header": "GAP",
+   "lang": "gap",
+   "variants": [
+    "# Several ways to do it\n\"Hello world!\";\n\nPrint(\"Hello world!\\n\"); # No EOL appended\n\nDisplay(\"Hello world!\");\n\nf := OutputTextUser();\nWriteLine(f, \"Hello world!\\n\");\nCloseStream(f);\n"
+   ]
+  },
+  "gema": {
+   "header": "Gema",
+   "lang": "gema",
+   "variants": [
+    "*= ! ignore off content of input\n\\B=Hello world!\\! ! Start output with this text.\n"
+   ]
+  },
+  "genie": {
+   "header": "Genie",
+   "lang": "genie",
+   "variants": [
+    "init\n    print \"Hello world!\"\n"
+   ]
+  },
+  "gentee": {
+   "header": "Gentee",
+   "lang": "gentee",
+   "variants": [
+    "func hello <main>\n{\n   print(\"Hello world!\")\n}\n"
+   ]
+  },
+  "gfa-basic": {
+   "header": "GFA Basic",
+   "lang": "gfa-basic",
+   "variants": [
+    "PRINT \"Hello World\"\n"
+   ]
+  },
+  "glbasic": {
+   "header": "GLBasic",
+   "lang": "glbasic",
+   "variants": [
+    "STDOUT \"Hello world!\"\n"
+   ]
+  },
+  "gleam": {
+   "header": "Gleam",
+   "lang": "gleam",
+   "variants": [
+    "import gleam/io\n\npub fn main() {\n    io.println(\"Hello world!\")\n}\n"
+   ]
+  },
+  "go": {
+   "header": "Go",
+   "lang": "go",
+   "variants": [
+    "package main\n\nimport \"fmt\"\n\nfunc main() { fmt.Println(\"Hello world!\") }\n"
+   ]
+  },
+  "golfscript": {
+   "header": "Golfscript",
+   "lang": "golfscript",
+   "variants": [
+    "\"Hello world!\"\n"
+   ]
+  },
+  "gosu": {
+   "header": "Gosu",
+   "lang": "gosu",
+   "variants": [
+    "print(\"Hello world!\")\n"
+   ]
+  },
+  "grain": {
+   "header": "Grain",
+   "lang": "grain",
+   "variants": [
+    "print(\"Hello world!\")\n"
+   ]
+  },
+  "groovy": {
+   "header": "Groovy",
+   "lang": "groovy",
+   "variants": [
+    "println \"Hello world!\"\n"
+   ]
+  },
+  "gw-basic": {
+   "header": "GW-BASIC",
+   "lang": "gw-basic",
+   "variants": [
+    "10 PRINT \"Hello world!\"\n"
+   ]
+  },
+  "hack": {
+   "header": "Hack",
+   "lang": "hack",
+   "variants": [
+    "<?hh echo 'Hello world!'; ?>\n"
+   ]
+  },
+  "harbour": {
+   "header": "Harbour",
+   "lang": "harbour",
+   "variants": [
+    "? \"Hello world!\"\n"
+   ]
+  },
+  "hare": {
+   "header": "Hare",
+   "lang": "hare",
+   "variants": [
+    "use fmt;\n\nexport fn main() void = {\n\tfmt::println(\"Hello, world!\")!;\n};\n"
+   ]
+  },
+  "haskell": {
+   "header": "Haskell",
+   "lang": "haskell",
+   "variants": [
+    "main = putStrLn \"Hello world!\"\n"
+   ]
+  },
+  "haxe": {
+   "header": "Haxe",
+   "lang": "haxe",
+   "variants": [
+    "trace(\"Hello world!\");\n"
+   ]
+  },
+  "hcl": {
+   "header": "Terraform",
+   "lang": "hcl",
+   "variants": [
+    "output \"result\" {\n  value = \"Hello world!\"\n}\n"
+   ]
+  },
+  "hla": {
+   "header": "HLA",
+   "lang": "hla",
+   "variants": [
+    "program goodbyeWorld;\n#include(\"stdlib.hhf\")\nbegin goodbyeWorld;\n\n  stdout.put( \"Hello world!\" nl );\n\nend goodbyeWorld;\n"
+   ]
+  },
+  "hobbes": {
+   "header": "Hobbes",
+   "lang": "hobbes",
+   "variants": [
+    "putStrLn(\"Hello world!\")\n"
+   ]
+  },
+  "holyc": {
+   "header": "HolyC",
+   "lang": "holyc",
+   "variants": [
+    "\"Hello world!\\n\";\n"
+   ]
+  },
+  "hoon": {
+   "header": "Hoon",
+   "lang": "hoon",
+   "variants": [
+    "~&  \"Hello world!\"  ~\n"
+   ]
+  },
+  "html": {
+   "header": "HTML",
+   "lang": "html",
+   "variants": [
+    "<!DOCTYPE html>\n<html>\n<body>\n<h1>Hello world!</h1>\n</body>\n</html>\n"
+   ]
+  },
+  "huginn": {
+   "header": "Huginn",
+   "lang": "huginn",
+   "variants": [
+    "#! /bin/sh\nexec huginn --no-argv -E \"${0}\" \"${@}\"\n#! huginn\n\nmain() {\n\tprint( \"Hello World!\\n\" );\n\treturn ( 0 );\n}\n"
+   ]
+  },
+  "hy": {
+   "header": "Hy",
+   "lang": "hy",
+   "variants": [
+    "(print \"Hello world!\")\n"
+   ]
+  },
+  "hybrix": {
+   "header": "Hybrix",
+   "lang": "hybrix",
+   "variants": [
+    "module main\n  func start()\n    # Minimal initialization of the Hybrix framework console\n    console::init(io::tilemap_a)\n    var font_layer: tile_layer\n    font_layer <- new tile_layer(io::tilemap_a, io::tileset_a_addresses)\n    font_layer.load_tileset(art::fonts[0])\n\n    console::print(\"Hello world!\")\n  end func\nend module\n"
+   ]
+  },
+  "i": {
+   "header": "i",
+   "lang": "i",
+   "variants": [
+    "software {\n    print(\"Hello world!\")\n}\n"
+   ]
+  },
+  "ibm-gml": {
+   "header": "GML",
+   "lang": "ibm-gml",
+   "variants": [
+    "show_message(\"Hello world!\"); // displays a pop-up message\nshow_debug_message(\"Hello world!\"); // sends text to the debug log or IDE\n"
+   ]
+  },
+  "icon": {
+   "header": "Icon",
+   "lang": "icon",
+   "variants": [
+    "procedure main()\n  write( \"Hello world!\" )\nend\n"
+   ]
+  },
+  "idl": {
+   "header": "IDL",
+   "lang": "idl",
+   "variants": [
+    "print,'Hello world!'\n"
+   ]
+  },
+  "idris": {
+   "header": "Idris",
+   "lang": "idris",
+   "variants": [
+    "module Main\n\nmain : IO ()\nmain = putStrLn \"Hello world!\"\n"
+   ]
+  },
+  "inko": {
+   "header": "Inko",
+   "lang": "inko",
+   "variants": [
+    "import std::stdio::stdout\n\nstdout.print('Hello, world!')\n"
+   ]
+  },
+  "insitux": {
+   "header": "Insitux",
+   "lang": "insitux",
+   "variants": [
+    "(print \"Hello, world!\")\n"
+   ]
+  },
+  "integer-basic": {
+   "header": "Integer BASIC",
+   "lang": "integer-basic",
+   "variants": [
+    "   10 PRINT \"Hello world!\"\n   20 END\n"
+   ]
+  },
+  "intercal": {
+   "header": "Intercal",
+   "lang": "intercal",
+   "variants": [
+    "DO ,1 <- #13\nPLEASE DO ,1 SUB #1 <- #238\nDO ,1 SUB #2 <- #108\nDO ,1 SUB #3 <- #112\nDO ,1 SUB #4 <- #0\nDO ,1 SUB #5 <- #64\nDO ,1 SUB #6 <- #194\nPLEASE DO ,1 SUB #7 <- #48\nDO ,1 SUB #8 <- #26\nDO ,1 SUB #9 <- #244\nPLEASE DO ,1 SUB #10 <- #168\nDO ,1 SUB #11 <- #24\nDO ,1 SUB #12 <- #16\nDO ,1 SUB #13 <- #162\nPLEASE READ OUT ,1\nPLEASE GIVE UP\n"
+   ]
+  },
+  "io": {
+   "header": "Io",
+   "lang": "io",
+   "variants": [
+    "\"Hello world!\" println\n"
+   ]
+  },
+  "ioke": {
+   "header": "Ioke",
+   "lang": "ioke",
+   "variants": [
+    "\"Hello world!\" println\n"
+   ]
+  },
+  "isabelle": {
+   "header": "Isabelle",
+   "lang": "isabelle",
+   "variants": [
+    "theory Scratch\n  imports Main\nbegin\n  value ‹''Hello world!''›\nend\n"
+   ]
+  },
+  "j": {
+   "header": "J",
+   "lang": "j",
+   "variants": [
+    "   'Hello world!'\nHello world!\n",
+    "   [data=. 'Hello world!'\nHello world!\n   data\nHello world!\n   smoutput data\nHello world!\n\n   NB. unassigned names are verbs of infinite rank awaiting definition.\n   NB. j pretty prints the train.\n   Hello World!\nHello World !\n\n\n   NB. j is glorious, and you should know this!\n\n   i. 2 3   NB. an array of integers\n0 1 2\n3 4 5\n\n   verb_with_infinite_rank =: 'Hello world!'\"_\n\n   verb_with_infinite_rank i. 2 3\nHello world!\n   \n\n   verb_with_atomic_rank =: 'Hello world!'\"0\n\n   verb_with_atomic_rank i. 2 3\nHello world!\nHello world!\nHello world!\n\nHello world!\nHello world!\nHello world!\n"
+   ]
+  },
+  "jai": {
+   "header": "Jai",
+   "lang": "jai",
+   "variants": [
+    "#import \"Basic\";\n\nmain :: () {\n    print(\"Hello, World!\\n\");\n}\n"
+   ]
+  },
+  "jakt": {
+   "header": "Jakt",
+   "lang": "jakt",
+   "variants": [
+    "fn main() {\n    println(\"Hello world!\")\n}\n"
+   ]
+  },
+  "janet": {
+   "header": "Janet",
+   "lang": "janet",
+   "variants": [
+    "(print \"Hello world!\")\n"
+   ]
+  },
+  "java": {
+   "header": "Java",
+   "lang": "java",
+   "variants": [
+    "public class HelloWorld\n{\n public static void main(String[] args)\n {\n  System.out.println(\"Hello world!\");\n }\n}\n"
+   ]
+  },
+  "javascript": {
+   "header": "JavaScript",
+   "lang": "javascript",
+   "variants": [
+    "document.write(\"Hello world!\");\n",
+    "print('Hello world!');\n",
+    "WScript.Echo(\"Hello world!\");\n",
+    "console.log(\"Hello world!\")\n"
+   ]
+  },
+  "jcl": {
+   "header": "JCL",
+   "lang": "jcl",
+   "variants": [
+    "/*MESSAGE Hello world!\n"
+   ]
+  },
+  "jinja": {
+   "header": "Jinja",
+   "lang": "jinja",
+   "variants": [
+    "from jinja2 import Template\nprint(Template(\"Hello World!\").render())\n",
+    "from jinja2 import Template\nprint(Template(\"Hello {{ something }}!\").render(something=\"World\"))\n"
+   ]
+  },
+  "jolie": {
+   "header": "Ol",
+   "lang": "jolie",
+   "variants": [
+    "(print \"Hello world!\")\n"
+   ]
+  },
+  "joy": {
+   "header": "Joy",
+   "lang": "joy",
+   "variants": [
+    "\"Hello world!\\n\" putchars.\n"
+   ]
+  },
+  "jq": {
+   "header": "jq",
+   "lang": "jq",
+   "variants": [
+    "\"Hello world!\"\n"
+   ]
+  },
+  "jscript": {
+   "header": "JSE",
+   "lang": "jscript",
+   "variants": [
+    "Print \"Hello world!\"\n"
+   ]
+  },
+  "julia": {
+   "header": "Julia",
+   "lang": "julia",
+   "variants": [
+    "println(\"Hello world!\")\n"
+   ]
+  },
+  "k": {
+   "header": "K",
+   "lang": "k",
+   "variants": [
+    "\"Hello world!\"\n",
+    "`0: \"Hello world!\\n\"\n",
+    "s: \"Hello world!\"\ns\n",
+    "\\echo \"Hello world!\"\n"
+   ]
+  },
+  "kaikai": {
+   "header": "Kaikai",
+   "lang": "kaikai",
+   "variants": [
+    "fn main() {\n  println(\"Hello world!\")\n}\n"
+   ]
+  },
+  "kitten": {
+   "header": "Kitten",
+   "lang": "kitten",
+   "variants": [
+    "\"Hello world!\" say\n"
+   ]
+  },
+  "kl1": {
+   "header": "KL1",
+   "lang": "kl1",
+   "variants": [
+    ":- module main.\n\nmain :-\n      unix:unix([stdio(normal(S))]),\n      S = [fwrite(\"Hello world\\n\")].\n"
+   ]
+  },
+  "koka": {
+   "header": "Koka",
+   "lang": "koka",
+   "variants": [
+    "fun main() {\n  println(\"Hello world!\")\n}\n",
+    "fun main()\n  \"Hello world!\".println\n"
+   ]
+  },
+  "konsolscript": {
+   "header": "KonsolScript",
+   "lang": "konsolscript",
+   "variants": [
+    "function main() {\n  Konsol:Log(\"Hello world!\")\n}\n"
+   ]
+  },
+  "kotlin": {
+   "header": "Kotlin",
+   "lang": "kotlin",
+   "variants": [
+    "fun main() {\n    println(\"Hello world!\")\n}\n"
+   ]
+  },
+  "kusto": {
+   "header": "KQL",
+   "lang": "kusto",
+   "variants": [
+    "print 'Hello world!'\n"
+   ]
+  },
+  "lasso": {
+   "header": "Lasso",
+   "lang": "lasso",
+   "variants": [
+    "'Hello world!'\n"
+   ]
+  },
+  "latex": {
+   "header": "LaTeX",
+   "lang": "latex",
+   "variants": [
+    "\\documentclass{minimal}\n\\begin{document}\nHello World!\n\\end{document}\n"
+   ]
+  },
+  "ldpl": {
+   "header": "LDPL",
+   "lang": "ldpl",
+   "variants": [
+    "procedure:\ndisplay \"Hello World!\" crlf\n"
+   ]
+  },
+  "lean": {
+   "header": "Lean",
+   "lang": "lean",
+   "variants": [
+    "#eval \"Hello world!\"\n",
+    "def main : IO Unit :=\n  IO.println (\"Hello world!\")\n\n#eval main\n"
+   ]
+  },
+  "lfe": {
+   "header": "LFE",
+   "lang": "lfe",
+   "variants": [
+    "(: io format '\"Hello world!~n\")\n"
+   ]
+  },
+  "liberty-basic": {
+   "header": "Liberty BASIC",
+   "lang": "liberty-basic",
+   "variants": [
+    "print \"Hello world!\"\n"
+   ]
+  },
+  "lil": {
+   "header": "LIL",
+   "lang": "lil",
+   "variants": [
+    "#\n# Hello world in lil\n#\n\nprint \"Hello, world!\"\n"
+   ]
+  },
+  "lily": {
+   "header": "Lily",
+   "lang": "lily",
+   "variants": [
+    "print(\"Hello world!\")\n",
+    "stdout.print(\"Hello world!\\n\")\n"
+   ]
+  },
+  "lilypond": {
+   "header": "LilyPond",
+   "lang": "lilypond",
+   "variants": [
+    "\\version \"2.18.2\"\nglobal = {\n  \\time 4/4\n  \\key c \\major\n  \\tempo 4=100\n}\n\\relative c''{ g e e( g2)\n}\n\\addlyrics {\n  Hel -- lo,   World!\n}\n"
+   ]
+  },
+  "limbo": {
+   "header": "Limbo",
+   "lang": "limbo",
+   "variants": [
+    "implement Command;\n \n include \"sys.m\";\n     sys: Sys;\n \n include \"draw.m\";\n \n include \"sh.m\";\n \n init(nil: ref Draw->Context, nil: list of string)\n {\n     sys = load Sys Sys->PATH;\n     sys->print(\"Hello world!\\n\");\n }\n"
+   ]
+  },
+  "lingo": {
+   "header": "Lingo",
+   "lang": "lingo",
+   "variants": [
+    "put \"Hello world!\"\n",
+    "trace(\"Hello world!\")\n"
+   ]
+  },
+  "lisaac": {
+   "header": "Lisaac",
+   "lang": "lisaac",
+   "variants": [
+    "Section Header          // The Header section is required.\n  + name := GOODBYE;    // Define the name of this object.\n\nSection Public\n  - main <- (\"Hello world!\\n\".print;);\n",
+    "Section Header          // The Header section is required.\n  + name := GOODBYE2;   // Define the name of this object.\n\nSection Public\n  - main <- (IO.put_string \"Hello world!\\n\";);\n"
+   ]
+  },
+  "little": {
+   "header": "Little",
+   "lang": "little",
+   "variants": [
+    "puts(\"Hello world!\");\n",
+    "puts(nonewline: \"Hello world!\");\n",
+    "puts(stderr, \"Hello world!\");\n"
+   ]
+  },
+  "livecode": {
+   "header": "LiveCode",
+   "lang": "livecode",
+   "variants": [
+    "put \"Hello World!\"\n",
+    "Answer \"Hello World!\"\n",
+    "#! /usr/local/bin/livecode-server\nset the outputLineEndings to \"lf\"\nput \"Hello world!\" & return\n",
+    "write \"Hello world!\" & return to stdout\n"
+   ]
+  },
+  "llvmir": {
+   "header": "LLVM",
+   "lang": "llvmir",
+   "variants": [
+    "; const char str[14] = \"Hello World!\\00\"\n@str = private unnamed_addr constant  [14 x i8] c\"Hello, world!\\00\"\n\n; declare extern `puts` method\ndeclare i32 @puts(i8*) nounwind\n\ndefine i32 @main()\n{\n  call i32 @puts( i8* getelementptr ([14 x i8], [14 x i8]* @str, i32 0,i32 0))\n  ret i32 0\n}\n"
+   ]
+  },
+  "lobster": {
+   "header": "Lobster",
+   "lang": "lobster",
+   "variants": [
+    "print \"Hello world!\"\n"
+   ]
+  },
+  "logo": {
+   "header": "Logo",
+   "lang": "logo",
+   "variants": [
+    "print [Hello world!]\n",
+    "type [Hello world!]\n"
+   ]
+  },
+  "logtalk": {
+   "header": "Logtalk",
+   "lang": "logtalk",
+   "variants": [
+    ":- object(hello_world).\n\n    % the initialization/1 directive argument is automatically executed\n    % when the object is loaded into memory:\n    :- initialization(write('Hello world!\\n')).\n\n:- end_object.\n"
+   ]
+  },
+  "lolcode": {
+   "header": "LOLCODE",
+   "lang": "lolcode",
+   "variants": [
+    "HAI\nCAN HAS STDIO?\nVISIBLE \"Hello world!\"\nKTHXBYE\n"
+   ]
+  },
+  "lotusscript": {
+   "header": "LotusScript",
+   "lang": "lotusscript",
+   "variants": [
+    ":- object(hello_world).\n    'This will send the output to the status bar at the bottom of the Notes client screen\n    print \"Hello world!\"\n\n:- end_object.\n"
+   ]
+  },
+  "lse": {
+   "header": "LSE",
+   "lang": "lse",
+   "variants": [
+    "AFFICHER [U, /] 'Hello world!'\n"
+   ]
+  },
+  "lua": {
+   "header": "Lua",
+   "lang": "lua",
+   "variants": [
+    "print \"Hello world!\"\n",
+    " \nlocal chars = {\"G\",\"o\",\"o\",\"d\",\"b\",\"y\",\"e\",\",\",\" \",\"W\",\"o\",\"r\",\"l\",\"d\",\"!\"}\nfor i = 1, #chars do\n  io.write(chars[i])\nend\n-- or:\nprint(table.concat(chars))\n"
+   ]
+  },
+  "luna": {
+   "header": "Luna",
+   "lang": "luna",
+   "variants": [
+    "def main:\n    hello = \"Hello, World!\"\n    print hello\n"
+   ]
+  },
+  "m4": {
+   "header": "M4",
+   "lang": "m4",
+   "variants": [
+    "`Hello world!'\n"
+   ]
+  },
+  "maclisp": {
+   "header": "Maclisp",
+   "lang": "maclisp",
+   "variants": [
+    "(format t \"Hello world!~%\")\n",
+    "(print \"Hello world!\")\n"
+   ]
+  },
+  "macro-10": {
+   "header": "MACRO-10",
+   "lang": "macro-10",
+   "variants": [
+    "        TITLE HELLO\n\nCOMMENT !\n  Hello-World program, PDP-10 assembly language, written by kjx, 2022.\n           Assembler: MACRO-10    Operating system: TOPS-20\n!\n\n        SEARCH MONSYM                      ;Get symbolic names for system-calls.\n\nGO::    RESET%                             ;System call: Initialize process.\n\n        HRROI 1,[ASCIZ /Hello World!/]     ;Put pointer to string into register 1.\n        PSOUT%                             ;System call: Print string.\n        HALTF%                             ;System call: Halt program.\n\n        JRST GO                            ;Unconditional jump to GO (in case the\n                                           ;user uses the CONTINUE-command while this\n                                           ;program is still loaded).\n\n        END GO\n"
+   ]
+  },
+  "macro-11": {
+   "header": "MACRO-11",
+   "lang": "macro-11",
+   "variants": [
+    ";\n;          TEXT BASED HELLO WORLD\n;          WRITTEN  BY:  BILL GUNSHANNON\n;\n \n           .MCALL  .PRINT .EXIT \n           .RADIX  10\n \n \n \nMESG1:     .ASCII  \"  \"\n           .ASCII  \" HELLO WORLD \"\n           .EVEN\n \nSTART:\n           .PRINT  #MESG1\n \nDONE:\n \n;   CLEAN UP AND GO BACK TO KMON\n \n           .EXIT\n \n \n           .END     START\n"
+   ]
+  },
+  "mad": {
+   "header": "MAD",
+   "lang": "mad",
+   "variants": [
+    "           VECTOR VALUES HELLO = $11HHELLO WORLD*$\n           PRINT FORMAT HELLO\n           END OF PROGRAM\n"
+   ]
+  },
+  "make": {
+   "header": "make",
+   "lang": "make",
+   "variants": [
+    "all:\n$(info Hello world!)\n"
+   ]
+  },
+  "malbolge": {
+   "header": "Malbolge",
+   "lang": "malbolge",
+   "variants": [
+    "('&%:9]!~}|z2Vxwv-,POqponl$Hjig%eB@@>}=<M:9wv6WsU2T|nm-,jcL(I&%$#\"\n`CB]V?Tx<uVtT`Rpo3NlF.Jh++FdbCBA@?]!~|4XzyTT43Qsqq(Lnmkj\"Fhg${z@>\n",
+    "(=<`#9]~6ZY32Vx/4Rs+0No-&Jk)\"Fh}|Bcy?`=*z]Kw%oG4UUS0/@-ejc(:'8dc\n"
+   ]
+  },
+  "manool": {
+   "header": "MANOOL",
+   "lang": "manool",
+   "variants": [
+    "{{extern \"manool.org.18/std/0.3/all\"} in WriteLine[Out; \"Hello world!\"]}\n",
+    "{{extern \"manool.org.18/std/0.3/all\"} in Out.WriteLine[\"Hello world!\"]}\n",
+    "{{extern \"manool.org.18/std/0.3/all\"} in {WriteLine Out \"Hello world!\"}}\n",
+    "{{extern \"manool.org.18/std/0.3/all\"} in: WriteLine Out \"Hello world!\"}\n",
+    "{{extern; \"manool.org.18/std/0.3/all\"} in: WriteLine; Out; \"Hello world!\"}\n"
+   ]
+  },
+  "maple": {
+   "header": "Maple",
+   "lang": "maple",
+   "variants": [
+    "> printf( \"Hello world!\\n\" ): # print without quotes\nHello world!\n"
+   ]
+  },
+  "mariadb": {
+   "header": "MariaDB",
+   "lang": "mariadb",
+   "variants": [
+    "SELECT 'Hello world!' AS greeting;\nVALUES ('Hello world!');\n"
+   ]
+  },
+  "mathcad": {
+   "header": "Mathcad",
+   "lang": "mathcad",
+   "variants": [
+    "\"Hello, World!\"\n"
+   ]
+  },
+  "mathematica": {
+   "header": "Mathematica",
+   "lang": "mathematica",
+   "variants": [
+    "Print[\"Hello world!\"]\n"
+   ]
+  },
+  "matlab": {
+   "header": "MATLAB",
+   "lang": "matlab",
+   "variants": [
+    ">> disp('Hello world!')\n"
+   ]
+  },
+  "maude": {
+   "header": "Maude",
+   "lang": "maude",
+   "variants": [
+    "fmod BYE-WORLD is\n\n\tprotecting STRING .\n\t\n\top sayBye : -> String .\n\t\n\teq sayBye = \"Hello world!\" .\n\t\nendfm\n\nred sayBye .\n"
+   ]
+  },
+  "maxima": {
+   "header": "Maxima",
+   "lang": "maxima",
+   "variants": [
+    "print(\"Hello world!\");\n"
+   ]
+  },
+  "maxscript": {
+   "header": "MAXScript",
+   "lang": "maxscript",
+   "variants": [
+    "print \"Hello world!\"\n",
+    "format \"%\" \"Hello world!\"\n"
+   ]
+  },
+  "mercury": {
+   "header": "Mercury",
+   "lang": "mercury",
+   "variants": [
+    ":- module hello.\n:- interface.\n:- import_module io.\n:- pred main(io::di, io::uo) is det.\n\n:- implementation.\nmain(!IO) :-\n    io.write_string(\"Hello world!\\n\", !IO).\n"
+   ]
+  },
+  "metafont": {
+   "header": "Metafont",
+   "lang": "metafont",
+   "variants": [
+    "message \"Hello world!\"; end\n"
+   ]
+  },
+  "microarchitecture-description-language": {
+   "header": "MDL",
+   "lang": "microarchitecture-description-language",
+   "variants": [
+    "<PRINC \"Hello world!\">\n<CRLF>\n"
+   ]
+  },
+  "microsoft-small-basic": {
+   "header": "Microsoft Small Basic",
+   "lang": "microsoft-small-basic",
+   "variants": [
+    "TextWindow.WriteLine(\"Hello world!\")\n"
+   ]
+  },
+  "min": {
+   "header": "min",
+   "lang": "min",
+   "variants": [
+    "\"Hello world!\" puts\n"
+   ]
+  },
+  "miniscript": {
+   "header": "MiniScript",
+   "lang": "miniscript",
+   "variants": [
+    "print \"Hello world!\"\n"
+   ]
+  },
+  "minizinc": {
+   "header": "MiniZinc",
+   "lang": "minizinc",
+   "variants": [
+    "output [\"Hello World\"];\n"
+   ]
+  },
+  "miranda": {
+   "header": "Miranda",
+   "lang": "miranda",
+   "variants": [
+    "main :: [sys_message]\nmain = [Stdout \"Hello, world!\\n\"]\n"
+   ]
+  },
+  "mirc": {
+   "header": "mIRC Scripting Language",
+   "lang": "mirc",
+   "variants": [
+    "echo -ag Hello world!\n"
+   ]
+  },
+  "modula-2": {
+   "header": "Modula-2",
+   "lang": "modula-2",
+   "variants": [
+    "MODULE Hello;\nIMPORT InOut;\n\nBEGIN\n  InOut.WriteString('Hello world!');\n  InOut.WriteLn\nEND Hello.\n",
+    "MODULE Hello;\nIMPORT IO;\n\nBEGIN\n  IO.WrStr('Hello world!'); IO.WrLn;\n\n(* Another way, showing some features of Modula-2 *)\n  IO.WrStr(\"Hello\");  (* either single or double quotes can be used *)\n  IO.WrChar(40C);     (* character whose ASCII code is 40 octal *)\n  IO.WrStr('world!');\n  IO.WrLn();          (* procedure with no arguments: () is optional *)\nEND Hello.\n"
+   ]
+  },
+  "modula-3": {
+   "header": "Modula-3",
+   "lang": "modula-3",
+   "variants": [
+    "MODULE Goodbye EXPORTS Main;\n\nIMPORT IO;\n\nBEGIN\n  IO.Put(\"Hello world!\\n\");\nEND Goodbye.\n"
+   ]
+  },
+  "moonbit": {
+   "header": "MoonBit",
+   "lang": "moonbit",
+   "variants": [
+    "///|\nfn main {\n  println(\"Hello world!\")\n}\n"
+   ]
+  },
+  "morfa": {
+   "header": "Morfa",
+   "lang": "morfa",
+   "variants": [
+    "import morfa.io.print;\nfunc main(): void\n{\n    println(\"Hello world!\");\n}\n"
+   ]
+  },
+  "mosaic": {
+   "header": "Mosaic",
+   "lang": "mosaic",
+   "variants": [
+    "proc main =\n    println \"Hello, world\"\nend\n",
+    "println \"Hello, world\"\n"
+   ]
+  },
+  "msx-basic": {
+   "header": "MSX Basic",
+   "lang": "msx-basic",
+   "variants": [
+    "10 PRINT \"Hello world!\"\n"
+   ]
+  },
+  "muf": {
+   "header": "MUF",
+   "lang": "muf",
+   "variants": [
+    ": main[ -- ]\nme @ \"Hello world!\" notify\nexit\n;\n"
+   ]
+  },
+  "mumps": {
+   "header": "MUMPS",
+   "lang": "mumps",
+   "variants": [
+    "Write \"Hello world!\",!\n"
+   ]
+  },
+  "mysql": {
+   "header": "MySQL",
+   "lang": "mysql",
+   "variants": [
+    "SELECT 'Hello world!';\n"
+   ]
+  },
+  "mythryl": {
+   "header": "Mythryl",
+   "lang": "mythryl",
+   "variants": [
+    "print \"Hello world!\";\n"
+   ]
+  },
+  "neko": {
+   "header": "Neko",
+   "lang": "neko",
+   "variants": [
+    "$print(\"Hello world!\");\n"
+   ]
+  },
+  "nemerle": {
+   "header": "Nemerle",
+   "lang": "nemerle",
+   "variants": [
+    "class Hello\n{\n  static Main () : void\n  {\n    System.Console.WriteLine (\"Hello world!\");\n  }\n}\n",
+    "System.Console.WriteLine(\"Hello world!\");\n"
+   ]
+  },
+  "netrexx": {
+   "header": "NetRexx",
+   "lang": "netrexx",
+   "variants": [
+    "say  'Hello world!'\n"
+   ]
+  },
+  "never": {
+   "header": "Never",
+   "lang": "never",
+   "variants": [
+    "func main() -> int {\n    prints(\"Hello world!\\n\");\n    0\n}\n"
+   ]
+  },
+  "newlisp": {
+   "header": "newLISP",
+   "lang": "newlisp",
+   "variants": [
+    "(println \"Hello world!\")\n"
+   ]
+  },
+  "nickle": {
+   "header": "Nickle",
+   "lang": "nickle",
+   "variants": [
+    "printf(\"Hello world!\\n\")\n"
+   ]
+  },
+  "nim": {
+   "header": "Nim",
+   "lang": "nim",
+   "variants": [
+    "echo(\"Hello world!\")\n",
+    "stdout.writeLine(\"Hello World!\")\n"
+   ]
+  },
+  "nit": {
+   "header": "Nit",
+   "lang": "nit",
+   "variants": [
+    "print \"Hello world!\"\n"
+   ]
+  },
+  "nix": {
+   "header": "Nix",
+   "lang": "nix",
+   "variants": [
+    "\"Hello world!\"\n"
+   ]
+  },
+  "nlp-plus-plus": {
+   "header": "NLP++",
+   "lang": "nlp-plus-plus",
+   "variants": [
+    "@CODE\ncout() << \"Hello world!\\n\";\n@@CODE\n"
+   ]
+  },
+  "nu": {
+   "header": "Nu",
+   "lang": "nu",
+   "variants": [
+    "print \"Hello world!\"\n"
+   ]
+  },
+  "nyquist": {
+   "header": "Nyquist",
+   "lang": "nyquist",
+   "variants": [
+    "(format t \"Hello world!\")\n",
+    "(print \"Hello world!\")\n",
+    "print \"Hello World!\"\n",
+    "exec format(t, \"Hello World!\")\n"
+   ]
+  },
+  "oberon-2": {
+   "header": "Oberon-2",
+   "lang": "oberon-2",
+   "variants": [
+    "MODULE Goodbye;\nIMPORT Out;\n  PROCEDURE World*;\n  BEGIN\n    Out.String(\"Hello world!\");Out.Ln\n  END World;\nBEGIN\n  World;\nEND Goodbye.\n"
+   ]
+  },
+  "objective-c": {
+   "header": "Objective-C",
+   "lang": "objective-c",
+   "variants": [
+    "#import <Foundation/Foundation.h>\n\nint main() {\n    @autoreleasepool {\n        NSLog(@\"Hello, World!\");\n    }\n}\n",
+    "#import <Foundation/Foundation.h>\n\nint main() {\n    @autoreleasepool {\n        NSFileHandle *standardOutput = [NSFileHandle fileHandleWithStandardOutput];\n        NSString *message = @\"Hello, World!\\n\";\n        [standardOutput writeData:[message dataUsingEncoding:NSUTF8StringEncoding]];\n    }\n}\n",
+    "#import <Foundation/Foundation.h>\n\nint main() {\n    @autoreleasepool {\n        NSString *message = @\"Hello, World!\\n\";\n        printf(\"%s\", message.UTF8String);\n    }\n}\n"
+   ]
+  },
+  "ocaml": {
+   "header": "OCaml",
+   "lang": "ocaml",
+   "variants": [
+    "print_endline \"Hello world!\"\n"
+   ]
+  },
+  "occam": {
+   "header": "Occam",
+   "lang": "occam",
+   "variants": [
+    "#USE \"course.lib\"\nPROC main (CHAN BYTE screen!)\n  out.string(\"Hello world!*c*n\", 0, screen)\n:\n"
+   ]
+  },
+  "octave": {
+   "header": "Octave",
+   "lang": "octave",
+   "variants": [
+    "disp(\"Hello world!\");\n",
+    "printf(\"Hello world!\");\n"
+   ]
+  },
+  "odin": {
+   "header": "Odin",
+   "lang": "odin",
+   "variants": [
+    "package main\nimport \"core:fmt\"\n\nmain :: proc() {\n  fmt.println(\"Hellope!\");\n}\n"
+   ]
+  },
+  "oforth": {
+   "header": "Oforth",
+   "lang": "oforth",
+   "variants": [
+    "\"Hello world!\" .\n"
+   ]
+  },
+  "oli": {
+   "header": "Oli",
+   "lang": "oli",
+   "variants": [
+    "echo \"Hello world!\"\n"
+   ]
+  },
+  "onyx": {
+   "header": "Onyx",
+   "lang": "onyx",
+   "variants": [
+    "`Hello world!\\n' print flush\n"
+   ]
+  },
+  "ooc": {
+   "header": "OOC",
+   "lang": "ooc",
+   "variants": [
+    "main: func {\n  \"Hello world!\" println()\n}\n",
+    "main: func {\n  println(\"Hello world!\")\n}\n"
+   ]
+  },
+  "openlisp": {
+   "header": "OpenLisp",
+   "lang": "openlisp",
+   "variants": [
+    "#!/openlisp/uxlisp -shell\n(format t \"Hello world!~%\")\n(print \"Hello world!\")\n"
+   ]
+  },
+  "openscad": {
+   "header": "Openscad",
+   "lang": "openscad",
+   "variants": [
+    "echo(\"Hello world!\");  // writes to the console\ntext(\"Hello world!\");  // creates 2D text in the object space\nlinear_extrude(height=10) text(\"Hello world!\"); // creates 3D text in the object space\n"
+   ]
+  },
+  "opl": {
+   "header": "OPL",
+   "lang": "opl",
+   "variants": [
+    "PROC main:\n    PRINT \"Hello, world!\"\n    GET\nENDP\n"
+   ]
+  },
+  "oxygene": {
+   "header": "Oxygene",
+   "lang": "oxygene",
+   "variants": [
+    "namespace HelloWorld;\n \ninterface\n \ntype\n  HelloClass = class\n  public\n    class method Main; \n  end;\n \nimplementation\n \nclass method HelloClass.Main;\nbegin\n  writeLn('Hello world!');\nend;\n \nend.\n"
+   ]
+  },
+  "oz": {
+   "header": "Oz",
+   "lang": "oz",
+   "variants": [
+    "{Show \"Hello world!\"}\n"
+   ]
+  },
+  "pari-gp": {
+   "header": "PARI/GP",
+   "lang": "pari-gp",
+   "variants": [
+    "print(\"Hello world!\")\n"
+   ]
+  },
+  "parrot-assembly": {
+   "header": "PASM",
+   "lang": "parrot-assembly",
+   "variants": [
+    "print \"Hello world!\\n\"\nend\n"
+   ]
+  },
+  "parrot-internal-representation": {
+   "header": "PIR",
+   "lang": "parrot-internal-representation",
+   "variants": [
+    ".sub hello_world_text :main\n\tprint \"Hello world!\\n\"\n.end\n"
+   ]
+  },
+  "pascal": {
+   "header": "Pascal",
+   "lang": "pascal",
+   "variants": [
+    "program byeworld;\nbegin\n writeln('Hello world!');\nend.\n"
+   ]
+  },
+  "pascal-abc.net": {
+   "header": "PascalABC.NET",
+   "lang": "pascal-abc.net",
+   "variants": [
+    "// Hello world/Text. Nigel Galloway: January 25th., 2023\nbegin\n  System.Console.WriteLine('Hello World!');\nend.\n",
+    "program HelloWorld;\nbegin\n  writeln('Hello World!');\nend.\n",
+    "##\nprintln('Hello World!');\n"
+   ]
+  },
+  "pebble": {
+   "header": "Pebble",
+   "lang": "pebble",
+   "variants": [
+    ";Hello world example program\n;for x86 DOS\n;compile with Pebble\n\n;compiled com program is 51 bytes\n\nprogram examples\\hello\n\nbegin\n\n\techo \"Hello, world!\"\n\tpause\n\tkill\n\nend\n"
+   ]
+  },
+  "perl": {
+   "header": "Perl",
+   "lang": "perl",
+   "variants": [
+    "print \"Hello world!\\n\";\n",
+    "use feature 'say';\nsay 'Hello world!';\n",
+    "use 5.010;\nsay 'Hello world!';\n"
+   ]
+  },
+  "pharo": {
+   "header": "Pharo",
+   "lang": "pharo",
+   "variants": [
+    "\"Comments are in double quotes\"\n\"Sending message printString to 'Hello World' string\"\n\n'Hello World' printString\n"
+   ]
+  },
+  "php": {
+   "header": "PHP",
+   "lang": "php",
+   "variants": [
+    "<?php\necho \"Hello world!\\n\";\n?>\n",
+    "Hello world!\n"
+   ]
+  },
+  "picat": {
+   "header": "Picat",
+   "lang": "picat",
+   "variants": [
+    "println(\"Hello, world!\")\n"
+   ]
+  },
+  "picolisp": {
+   "header": "PicoLisp",
+   "lang": "picolisp",
+   "variants": [
+    "(prinl \"Hello world!\")\n"
+   ]
+  },
+  "pict": {
+   "header": "Pict",
+   "lang": "pict",
+   "variants": [
+    "(prNL \"Hello World!\");\n",
+    "new done: ^[]\nrun ( prNL![\"Hello World!\" (rchan done)]\n    | done?_ = () )\n"
+   ]
+  },
+  "pikachu": {
+   "header": "Pikachu",
+   "lang": "pikachu",
+   "variants": [
+    "pikachu pika pikachu pika pika pi pi pika pikachu pika pikachu pi pikachu pi pikachu pi pika pi pikachu pikachu pi pi pika pika pikachu pika pikachu pikachu pi pika pi pika pika pi pikachu pikachu pi pikachu pi pika pikachu pi pikachu pika pikachu pi pikachu pikachu pi pikachu pika pika pikachu pi pikachu pi pi pikachu pikachu pika pikachu pi pika pi pi pika pika pikachu pikachu pi pi pikachu pi pikachu\npikachu pikachu pi pikachu\npikachu pika pika pikachu pika pikachu pikachu pika pika pikachu pikachu pi pi pikachu pika pikachu pika pika pi pika pikachu pikachu pi pika pika pikachu pi pika pi pika pi pikachu pi pikachu pika pika pi pi pika pi pika pika pikachu pikachu pika pikachu pikachu pika pi pikachu pika pi pikachu pi pika pika pi pikachu pika pi pika pikachu pi pi pikachu pika pika pi pika pi pikachu\npikachu pikachu pi pikachu\npikachu pika pi pika pika pikachu pika pikachu pi pikachu pi pi pika pi pikachu pika pi pi pika pikachu pi pikachu pi pi pikachu pikachu pika pikachu pikachu pika pi pikachu pi pika pikachu pi pikachu pika pika pikachu pika pi pi pikachu pikachu pika pika pikachu pi pika pikachu pikachu pi pika pikachu pikachu pika pi pi pikachu pikachu pi pikachu pi pikachu pi pikachu pi pika pikachu pi pikachu pika pikachu pi pika pi pikachu\npi pika\npikachu pikachu pi pikachu\npika pi\npikachu pikachu pi pikachu\npikachu pi pikachu pi pi pikachu pi pikachu pika pikachu pikachu pi pikachu pikachu pika pi pi pika pikachu pika pikachu pi pi pikachu pika pi pi pikachu pika pika pi pika pika pikachu pika pikachu pi pi pika pikachu pika pi pikachu pikachu pi pikachu pika pikachu pikachu pika pi pi pikachu pikachu pi pika pikachu pi pikachu pika pikachu pikachu pika pi pikachu pikachu pika pikachu pi pikachu pika pika pi pikachu pi pika pi pikachu pikachu pi pikachu\npi pika\npikachu pikachu pi pikachu\npikachu pikachu pi pika pikachu pi pika pika pi pi pika pi pikachu pi pika pi pika pi pika pikachu pika pi pi pikachu pi pikachu pi pika pi pika pika pikachu pi pikachu\npikachu pikachu pi pikachu\npikachu pi pikachu pika pikachu pi pika pi pikachu pikachu pika pika pi pi pikachu pi pika pi pikachu pi pika pikachu pi pika pi pi pikachu pikachu pika pika pikachu pikachu pi pi pikachu pi pikachu pi pikachu pi pi pikachu pikachu pi pikachu pi pikachu pi pika pika pikachu pikachu pika pi pika pikachu pi pikachu pi pi pika pikachu pika pi pikachu pi pika pi pi pikachu pikachu pika pika pikachu pika pika pikachu pi pika pi pika pikachu pi pika pikachu pika pi pika pikachu\npikachu pikachu pika pikachu\npikachu pikachu pika pikachu\npi pi pikachu pi pikachu pika pika pi pikachu pika pika pi pi pika pika pikachu pi pi pikachu pi pika pi pika pikachu pi pikachu pi pikachu pikachu pi pi pika pika pi pika pika pi pika pikachu pikachu pi pikachu pika pi pi pika pi pi pikachu pikachu pika pi pi pika pika pi pika pikachu pi pikachu pi pi pika pi pika pika pikachu pika pi pika pikachu pi pikachu pikachu pi pi pika pi pika pika pikachu pikachu pi pikachu\npikachu pikachu pi pikachu\npikachu pi pikachu pikachu pika pikachu pikachu pika pika pikachu pikachu pika pikachu pi pika pikachu pika pika pi pikachu pi pi pika pi pi pikachu pika pika pikachu pikachu pika pikachu pikachu pi pika pi pi pikachu pikachu pika pi pi pikachu pikachu pika pikachu pika pi pikachu pi pika pi pika pikachu pika pi pikachu pi pikachu pikachu pi pika pikachu pi pikachu pikachu pi pika pi pikachu pikachu pi pikachu pika pika pi pi pikachu\npikachu pi pi pika pi pi pikachu pika pikachu pikachu pika pika pi pi pika pikachu pi pikachu pi pi pika pi pika pi pi pika pikachu pi pika pi pikachu pika pikachu pika pi pi pika pi pi pikachu pi pikachu pikachu pika pi pikachu pi pi pika pi pikachu pi pi pika pi pi pikachu pika pikachu pika pikachu pika pi pikachu pikachu pi pi pika pika pikachu\npikachu pikachu pi pikachu\npikachu pikachu pika pikachu\n"
+   ]
+  },
+  "pike": {
+   "header": "Pike",
+   "lang": "pike",
+   "variants": [
+    "int main(){\n   write(\"Hello world!\\n\");\n}\n"
+   ]
+  },
+  "pilot": {
+   "header": "PILOT",
+   "lang": "pilot",
+   "variants": [
+    "T:Hello world!\n"
+   ]
+  },
+  "pl-i": {
+   "header": "PL/I",
+   "lang": "pl-i",
+   "variants": [
+    "goodbye:proc options(main);\n     put list('Hello world!');\nend goodbye;\n"
+   ]
+  },
+  "pl-m": {
+   "header": "PL/M",
+   "lang": "pl-m",
+   "variants": [
+    "100H:\n   /* CP/M BDOS SYSTEM CALL */\n   BDOS: PROCEDURE( FN, ARG ); DECLARE FN BYTE, ARG ADDRESS; GOTO 5; END;\n   /* PRINT A $ TERMINATED STRING */\n   PRINT$STRING: PROCEDURE( S ); DECLARE S ADDRESS; CALL BDOS( 9, S ); END;\n   /* HELLO, WORLD! IN MIXED CASE */\n   DECLARE HELLO$WORLD ( 14 ) BYTE\n           INITIAL( 'H', 65H, 6CH, 6CH, 6FH, ',', ' '\n                  , 'W', 6FH, 72H, 6CH, 64H, 21H, '$'\n                  );\n   CALL PRINT$STRING( .HELLO$WORLD );\nEOF\n"
+   ]
+  },
+  "pl-sql": {
+   "header": "PL/SQL",
+   "lang": "pl-sql",
+   "variants": [
+    "set serveroutput on\n\nBEGIN\n  DBMS_OUTPUT.PUT_LINE('Hello world!');\nEND;\n/\n"
+   ]
+  },
+  "plain-english": {
+   "header": "Plain English",
+   "lang": "plain-english",
+   "variants": [
+    "\\This prints Hello World within the CAL-4700 IDE.\n\\...and backslashes are comments!\nTo run:\nStart up.\nWrite \"Hello World!\" to the console.\nWait for the escape key.\nShut down.\n"
+   ]
+  },
+  "pointless": {
+   "header": "Pointless",
+   "lang": "pointless",
+   "variants": [
+    "output = println(\"Hello world!\")\n"
+   ]
+  },
+  "pony": {
+   "header": "Pony",
+   "lang": "pony",
+   "variants": [
+    "actor Main\n  new create(env: Env) =>\n    env.out.print(\"Hello world!\")\n"
+   ]
+  },
+  "portugol": {
+   "header": "Portugol",
+   "lang": "portugol",
+   "variants": [
+    "programa {\n// funcao defines a new function\n// inicio is the entry point of the program, like main in C\n    funcao inicio() {\n        // escreva is used to print stuff to the screen\n        escreva(\"Hello, world!\\n\") // no ';' needed\n    }\n}\n"
+   ]
+  },
+  "postscript": {
+   "header": "PostScript",
+   "lang": "postscript",
+   "variants": [
+    "%!PS\n/Helvetica 20 selectfont\n70 700 moveto\n(Hello world!) show\nshowpage\n",
+    "(Hello world!) ==\n",
+    "(Hello world!) =\n",
+    "(Hello world!) print\n",
+    "%!PS\n/Helvetica 20 selectfont\n70 700 moveto\n(Hello world!) dup dup dup\n= print == % prints three times to the console\nshow % prints to document\n1 0 div % provokes error message\nshowpage\n"
+   ]
+  },
+  "potion": {
+   "header": "Potion",
+   "lang": "potion",
+   "variants": [
+    "\"Hello world!\\n\" print\n"
+   ]
+  },
+  "powerbasic": {
+   "header": "PowerBASIC",
+   "lang": "powerbasic",
+   "variants": [
+    "#COMPILE EXE\n#COMPILER PBCC 6\n\nFUNCTION PBMAIN () AS LONG\n  CON.PRINT \"Hello world!\"\n  CON.WAITKEY$\nEND FUNCTION\n"
+   ]
+  },
+  "powershell": {
+   "header": "PowerShell",
+   "lang": "powershell",
+   "variants": [
+    "'Hello world!'\n"
+   ]
+  },
+  "processing": {
+   "header": "Processing",
+   "lang": "processing",
+   "variants": [
+    "println(\"Hello world!\");\n"
+   ]
+  },
+  "prolog": {
+   "header": "Prolog",
+   "lang": "prolog",
+   "variants": [
+    ":- write('Hello world!'), nl.\n"
+   ]
+  },
+  "promal": {
+   "header": "PROMAL",
+   "lang": "promal",
+   "variants": [
+    "program hello\ninclude library\nbegin\noutput \"Hello world!\"\nend\n"
+   ]
+  },
+  "pure": {
+   "header": "Pure",
+   "lang": "pure",
+   "variants": [
+    "using system;\n\nputs \"Hello world!\\n\" ;\n"
+   ]
+  },
+  "purebasic": {
+   "header": "PureBasic",
+   "lang": "purebasic",
+   "variants": [
+    "OpenConsole()\nPrintN(\"Hello world!\")\nInput() ; Wait for enter\n",
+    "Debug(\"Hello world!\")\n"
+   ]
+  },
+  "python": {
+   "header": "Python",
+   "lang": "python",
+   "variants": [
+    "print \"Hello world!\"\n",
+    "import sys\nsys.stdout.write(\"Hello world!\\n\")\n",
+    "print(\"Hello world!\")\n",
+    "import __hello__\n",
+    "import __phello__\n"
+   ]
+  },
+  "qb64": {
+   "header": "QB64",
+   "lang": "qb64",
+   "variants": [
+    "PRINT \"Hello world!\"\n"
+   ]
+  },
+  "r": {
+   "header": "R",
+   "lang": "r",
+   "variants": [
+    " cat(\"Hello world!\\n\")\n",
+    " message(\"Hello world!\")\n",
+    " print(\"Hello world!\")\n"
+   ]
+  },
+  "ra": {
+   "header": "Ra",
+   "lang": "ra",
+   "variants": [
+    "class HelloWorld\n\t**Prints \"Hello world!\"**\n\n\ton start\n\n\t\tprint \"Hello world!\"\n"
+   ]
+  },
+  "racket": {
+   "header": "Racket",
+   "lang": "racket",
+   "variants": [
+    "(printf \"Hello world!\\n\")\n"
+   ]
+  },
+  "raku": {
+   "header": "Raku",
+   "lang": "raku",
+   "variants": [
+    "say 'Hello world!';\n",
+    "\"Hello, World!\".say();\n"
+   ]
+  },
+  "ratfor": {
+   "header": "RATFOR",
+   "lang": "ratfor",
+   "variants": [
+    "program hello\n\nwrite(*,101)\"Hello World\"\n101 format(A)\n\nend\n"
+   ]
+  },
+  "realbasic": {
+   "header": "REALbasic",
+   "lang": "realbasic",
+   "variants": [
+    "Function Run(args() as String) As Integer\n  Print \"Hello world!\"\n  Quit\nEnd Function\n"
+   ]
+  },
+  "rebol": {
+   "header": "Rebol",
+   "lang": "rebol",
+   "variants": [
+    "print \"Hello world!\"\n"
+   ]
+  },
+  "red": {
+   "header": "Red",
+   "lang": "red",
+   "variants": [
+    "print \"Hello world!\"\n"
+   ]
+  },
+  "refal": {
+   "header": "Refal",
+   "lang": "refal",
+   "variants": [
+    "$ENTRY Go {\n    = <Prout 'Hello, world!'>;\n};\n"
+   ]
+  },
+  "rescript": {
+   "header": "ReScript",
+   "lang": "rescript",
+   "variants": [
+    "Js.log(\"Hello world!\")\n"
+   ]
+  },
+  "rexx": {
+   "header": "REXX",
+   "lang": "rexx",
+   "variants": [
+    "/*REXX program to show a line of text.  */\nsay 'Hello world!'\n",
+    "/*REXX program to show a line of text.  */\nyyy = 'Hello world!'\nsay yyy\n",
+    "/*REXX program to show a line of text.  */\n\ncall lineout ,\"Hello world!\"\n"
+   ]
+  },
+  "rhombus": {
+   "header": "Rhombus",
+   "lang": "rhombus",
+   "variants": [
+    "print(\"Hello world!\")\n"
+   ]
+  },
+  "ring": {
+   "header": "Ring",
+   "lang": "ring",
+   "variants": [
+    "See \"Hello world!\"\n"
+   ]
+  },
+  "roc": {
+   "header": "Roc",
+   "lang": "roc",
+   "variants": [
+    "app \"hello\"\n    packages { pf: \"https://github.com/roc-lang/basic-cli/releases/download/0.1.1/zAoiC9xtQPHywYk350_b7ust04BmWLW00sjb9ZPtSQk.tar.br\" }\n    imports [pf.Stdout]\n    provides [main] to pf\n\nmain =\n    Stdout.line \"I'm a Roc application!\"\n"
+   ]
+  },
+  "rockstar": {
+   "header": "Rockstar",
+   "lang": "rockstar",
+   "variants": [
+    "Shout \"Hello world!\"\n"
+   ]
+  },
+  "rocq-prover": {
+   "header": "Rocq",
+   "lang": "rocq-prover",
+   "variants": [
+    "Require Import Coq.Strings.String.\n\nEval compute in (\"Hello world!\"%string).\n"
+   ]
+  },
+  "rtl-2": {
+   "header": "RTL/2",
+   "lang": "rtl-2",
+   "variants": [
+    "TITLE Goodbye World;\n\nLET NL=10;\n\nEXT PROC(REF ARRAY BYTE) TWRT;\n\nENT PROC RRJOB()INT;\n\n    TWRT(\"Hello world!#NL#\");\n    RETURN(1);\n\nENDPROC;\n"
+   ]
+  },
+  "ruby": {
+   "header": "Ruby",
+   "lang": "ruby",
+   "variants": [
+    "puts \"Hello world!\"\n",
+    "$stdout.puts \"Hello world!\"\n",
+    " STDOUT.write \"Hello world!\\n\"\n",
+    "$>.puts \"Hello world!\"\n",
+    "$>.write \"Hello world!\\n\"\n"
+   ]
+  },
+  "run-basic": {
+   "header": "Run BASIC",
+   "lang": "run-basic",
+   "variants": [
+    "print \"Hello world!\"\n"
+   ]
+  },
+  "rust": {
+   "header": "Rust",
+   "lang": "rust",
+   "variants": [
+    "fn main() {\n   print!(\"Hello world!\");\n}\n",
+    "fn main() {\n   println!(\"Hello world!\");\n}\n"
+   ]
+  },
+  "rye": {
+   "header": "Rye",
+   "lang": "rye",
+   "variants": [
+    "print \"Hello world!\"\n"
+   ]
+  },
+  "sas": {
+   "header": "SAS",
+   "lang": "sas",
+   "variants": [
+    "/* Using a data step. Will print the string in the log window */\ndata _null_;\nput \"Hello world!\";\nrun;\n"
+   ]
+  },
+  "sasl": {
+   "header": "SASL",
+   "lang": "sasl",
+   "variants": [
+    "'Hello World!\",nl\n"
+   ]
+  },
+  "sather": {
+   "header": "Sather",
+   "lang": "sather",
+   "variants": [
+    "class GOODBYE_WORLD is\n main is \n  #OUT+\"Hello world!\\n\"; \n end; \nend;\n"
+   ]
+  },
+  "scala": {
+   "header": "Scala",
+   "lang": "scala",
+   "variants": [
+    "println(\"Hello world!\")\n",
+    "System.out.println(\"Hello world!\")\n",
+    "println(\"Hello world!\")\n",
+    "Console.withErr(Console.out) { Console.err.println(\"This goes to default _out_\") }\n",
+    "  Console.err.println (\"Err not deviated\")\n  Console.setErr(Console.out)\n  Console.err.println (\"Err deviated\")\n  Console.setErr(Console.err) // Reset to normal\n"
+   ]
+  },
+  "scheme": {
+   "header": "Scheme",
+   "lang": "scheme",
+   "variants": [
+    "\"Hello world!\"\n",
+    "(display \"Hello world!\")\n(newline)\n",
+    "(import (rnrs base (6))\n        (rnrs io simple (6)))\n(display \"Hello world!\")\n(newline)\n",
+    "(import (scheme base)\n        (scheme write))\n(display \"Hello world!\")\n(newline)\n"
+   ]
+  },
+  "scilab": {
+   "header": "Scilab",
+   "lang": "scilab",
+   "variants": [
+    "disp(\"Hello world!\");\n"
+   ]
+  },
+  "sed": {
+   "header": "sed",
+   "lang": "sed",
+   "variants": [
+    "i\\\nHello world!\nq\n"
+   ]
+  },
+  "seed7": {
+   "header": "Seed7",
+   "lang": "seed7",
+   "variants": [
+    "$ include \"seed7_05.s7i\";\n\nconst proc: main is func\n  begin\n    writeln(\"Hello world!\");\n  end func;\n"
+   ]
+  },
+  "self": {
+   "header": "Self",
+   "lang": "self",
+   "variants": [
+    "'Hello world!' printLine.\n"
+   ]
+  },
+  "sensetalk": {
+   "header": "SenseTalk",
+   "lang": "sensetalk",
+   "variants": [
+    "put \"Hello world!\"\n"
+   ]
+  },
+  "setl": {
+   "header": "SETL",
+   "lang": "setl",
+   "variants": [
+    "print(\"Hello world!\");\n"
+   ]
+  },
+  "shen": {
+   "header": "Shen",
+   "lang": "shen",
+   "variants": [
+    "(output \"Hello world!~%\")\n"
+   ]
+  },
+  "sil": {
+   "header": "SIL",
+   "lang": "sil",
+   "variants": [
+    "printLine Hello world!\n"
+   ]
+  },
+  "simula": {
+   "header": "Simula",
+   "lang": "simula",
+   "variants": [
+    "BEGIN\n   OUTTEXT(\"Hello world!\");\n   OUTIMAGE\nEND\n"
+   ]
+  },
+  "sisal": {
+   "header": "Sisal",
+   "lang": "sisal",
+   "variants": [
+    "define main\n\n% Sisal doesn't yet have a string built-in.\n% Let's define one as an array of characters.\n\ntype string = array[character];\n\nfunction main(returns string)\n  \"Hello world!\"\nend function\n"
+   ]
+  },
+  "skew": {
+   "header": "Skew",
+   "lang": "skew",
+   "variants": [
+    "@entry\ndef main {\n  dynamic.console.log(\"Hello world!\")\n}\n"
+   ]
+  },
+  "skookumscript": {
+   "header": "SkookumScript",
+   "lang": "skookumscript",
+   "variants": [
+    "print(\"Hello world!\")\n",
+    "\"Hello world!\"\n"
+   ]
+  },
+  "slope": {
+   "header": "Slope",
+   "lang": "slope",
+   "variants": [
+    "(write \"Hello, world!\")\n"
+   ]
+  },
+  "smallbasic": {
+   "header": "SmallBASIC",
+   "lang": "smallbasic",
+   "variants": [
+    "PRINT \"Hello world!\"\n"
+   ]
+  },
+  "smalltalk": {
+   "header": "Smalltalk",
+   "lang": "smalltalk",
+   "variants": [
+    "Transcript show: 'Hello world!'; cr.\n",
+    "'Hello world!' printNl.\n"
+   ]
+  },
+  "snobol4": {
+   "header": "SNOBOL4",
+   "lang": "snobol4",
+   "variants": [
+    "    OUTPUT = \"Hello world!\"\nEND\n"
+   ]
+  },
+  "spl": {
+   "header": "SPL",
+   "lang": "spl",
+   "variants": [
+    "#.output(\"Hello world!\")\n"
+   ]
+  },
+  "sql": {
+   "header": "SQL",
+   "lang": "sql",
+   "variants": [
+    "select 'Hello world!' text from dual;\n"
+   ]
+  },
+  "standard-ml": {
+   "header": "Standard ML",
+   "lang": "standard-ml",
+   "variants": [
+    "print \"Hello world!\\n\"\n"
+   ]
+  },
+  "stata": {
+   "header": "Stata",
+   "lang": "stata",
+   "variants": [
+    "display \"Hello world!\"\n"
+   ]
+  },
+  "suneido": {
+   "header": "Suneido",
+   "lang": "suneido",
+   "variants": [
+    "Print(\"Hello world!\")\n"
+   ]
+  },
+  "swift": {
+   "header": "Swift",
+   "lang": "swift",
+   "variants": [
+    "print(\"Hello world!\")\n",
+    "println(\"Hello world!\")\n"
+   ]
+  },
+  "tcl": {
+   "header": "Tcl",
+   "lang": "tcl",
+   "variants": [
+    "puts stdout {Hello world!}\n",
+    "puts $fileID {Hello world!}\n"
+   ]
+  },
+  "teco": {
+   "header": "Teco",
+   "lang": "teco",
+   "variants": [
+    "^AHello world!^A$$\n"
+   ]
+  },
+  "tern": {
+   "header": "Tern",
+   "lang": "tern",
+   "variants": [
+    "println(\"Hello world!\");\n"
+   ]
+  },
+  "terra": {
+   "header": "Terra",
+   "lang": "terra",
+   "variants": [
+    "C = terralib.includec(\"stdio.h\")\n\nterra hello(argc : int, argv : &rawstring)\n  C.printf(\"Hello world!\\n\")\n  return 0\nend\n"
+   ]
+  },
+  "testml": {
+   "header": "TestML",
+   "lang": "testml",
+   "variants": [
+    "%TestML 0.1.0\nPrint(\"Hello world!\")\n"
+   ]
+  },
+  "ti-89-basic": {
+   "header": "TI-89 BASIC",
+   "lang": "ti-89-basic",
+   "variants": [
+    "Disp \"Hello world!\"\n"
+   ]
+  },
+  "tiny-basic": {
+   "header": "Tiny BASIC",
+   "lang": "tiny-basic",
+   "variants": [
+    "10 PRINT \"Hello, World!\"\n20 END\n"
+   ]
+  },
+  "tmg": {
+   "header": "TMG",
+   "lang": "tmg",
+   "variants": [
+    "begin: parse(( = { <Hello, World!> * } ));\n"
+   ]
+  },
+  "transact-sql": {
+   "header": "Transact-SQL",
+   "lang": "transact-sql",
+   "variants": [
+    "PRINT \"Hello world!\"\n"
+   ]
+  },
+  "true-basic": {
+   "header": "True BASIC",
+   "lang": "true-basic",
+   "variants": [
+    "! In True BASIC all programs run in their own window. So this is almost a graphical version.\nPRINT \"Hello world!\"\nEND\n"
+   ]
+  },
+  "uniface": {
+   "header": "Uniface",
+   "lang": "uniface",
+   "variants": [
+    "message \"Hello world!\"\n"
+   ]
+  },
+  "unison": {
+   "header": "Unison",
+   "lang": "unison",
+   "variants": [
+    "main = '(printLine \"Hello world!\")\n"
+   ]
+  },
+  "unlambda": {
+   "header": "Unlambda",
+   "lang": "unlambda",
+   "variants": [
+    "`r```````````````.G.o.o.d.b.y.e.,. .W.o.r.l.d.!i\n"
+   ]
+  },
+  "ussr": {
+   "header": "USSR",
+   "lang": "ussr",
+   "variants": [
+    "print(ret): \"Hello, world!\"\n"
+   ]
+  },
+  "v": {
+   "header": "V",
+   "lang": "v",
+   "variants": [
+    "\"Hello world!\" puts\n"
+   ]
+  },
+  "vala": {
+   "header": "Vala",
+   "lang": "vala",
+   "variants": [
+    "void main(){\n\tstdout.printf(\"Hello world!\\n\");\n}\n"
+   ]
+  },
+  "vale": {
+   "header": "Vale",
+   "lang": "vale",
+   "variants": [
+    "import stdlib.*;\n\nexported func main() {\n\tprintln(\"Hello world!\");\n}\n"
+   ]
+  },
+  "vba": {
+   "header": "VBA",
+   "lang": "vba",
+   "variants": [
+    "Public Sub hello_world_text\n    Debug.Print \"Hello World!\"\nEnd Sub\n"
+   ]
+  },
+  "vbscript": {
+   "header": "VBScript",
+   "lang": "vbscript",
+   "variants": [
+    "WScript.Echo \"Hello world!\"\n"
+   ]
+  },
+  "verilog": {
+   "header": "Verilog",
+   "lang": "verilog",
+   "variants": [
+    "module main;\n  initial begin\n      $display(\"Hello world!\");\n      $finish ;\n    end\nendmodule\n"
+   ]
+  },
+  "vhdl": {
+   "header": "VHDL",
+   "lang": "vhdl",
+   "variants": [
+    "LIBRARY std;\nUSE std.TEXTIO.all;\n\nentity test is\nend entity test;\n\narchitecture beh of test is\nbegin\n  process\n    variable line_out : line;\n  begin\n    write(line_out, string'(\"Hello world!\"));\n    writeline(OUTPUT, line_out);\n    wait; -- needed to stop the execution\n  end process;\nend architecture beh;\n"
+   ]
+  },
+  "vim-script": {
+   "header": "Vim Script",
+   "lang": "vim-script",
+   "variants": [
+    "echo \"Hello world!\\n\"\n"
+   ]
+  },
+  "visual-basic": {
+   "header": "Visual Basic",
+   "lang": "visual-basic",
+   "variants": [
+    "Option Explicit\n\nPrivate Declare Function AllocConsole Lib \"kernel32.dll\" () As Long\nPrivate Declare Function FreeConsole Lib \"kernel32.dll\" () As Long\n'needs a reference set to \"Microsoft Scripting Runtime\" (scrrun.dll)\n\nSub Main()\n  Call AllocConsole\n  Dim mFSO As Scripting.FileSystemObject\n  Dim mStdIn As Scripting.TextStream\n  Dim mStdOut As Scripting.TextStream\n  Set mFSO = New Scripting.FileSystemObject\n  Set mStdIn = mFSO.GetStandardStream(StdIn)\n  Set mStdOut = mFSO.GetStandardStream(StdOut)\n  mStdOut.Write \"Hello world!\" & vbNewLine\n  mStdOut.Write \"press enter to quit program.\"\n  mStdIn.Read 1\n  Call FreeConsole\nEnd Sub\n"
+   ]
+  },
+  "vtl": {
+   "header": "VTL-2",
+   "lang": "vtl",
+   "variants": [
+    "10 ?=\"Hello world!\"\n"
+   ]
+  },
+  "wart": {
+   "header": "Wart",
+   "lang": "wart",
+   "variants": [
+    "prn \"Hello world!\"\n"
+   ]
+  },
+  "wasm": {
+   "header": "WebAssembly",
+   "lang": "wasm",
+   "variants": [
+    "(module $helloworld\n\n    ;;Import fd_write from WASI, declaring that it takes 4 i32 inputs and returns 1 i32 value\n    (import \"wasi_unstable\" \"fd_write\"\n        (func $fd_write (param i32 i32 i32 i32) (result i32))\n    )\n\n    ;;Declare initial memory size of 32 bytes\n    (memory 32)\n\n    ;;Export memory so external functions can see it\n    (export \"memory\" (memory 0))\n \n    ;;Declare test data starting at address 8\n    (data (i32.const 8) \"Hello world!\\n\")\n \n    ;;The entry point for WASI is called _start\n    (func $main (export \"_start\")\n        \n        ;;Write the start address of the string to address 0\n        (i32.store (i32.const 0) (i32.const 8)) \n \n        ;;Write the length of the string to address 4\n        (i32.store (i32.const 4) (i32.const 13))\n\n        ;;Call fd_write to print to console\n        (call $fd_write\n            (i32.const 1) ;;Value of 1 corresponds to stdout\n            (i32.const 0) ;;The location in memory of the string pointer\n            (i32.const 1) ;;Number of strings to output\n            (i32.const 24) ;;Address to write number of bytes written\n        )\n        drop ;;Ignore return code\n    )\n)\n"
+   ]
+  },
+  "whiley": {
+   "header": "Whiley",
+   "lang": "whiley",
+   "variants": [
+    "import whiley.lang.System\n\nmethod main(System.Console console):\n    console.out.println(\"Hello world!\")\n"
+   ]
+  },
+  "wisp": {
+   "header": "Wisp",
+   "lang": "wisp",
+   "variants": [
+    "import : scheme base\n         scheme write\ndisplay \"Hello world!\"\nnewline\n"
+   ]
+  },
+  "wolfram": {
+   "header": "Wolfram Language",
+   "lang": "wolfram",
+   "variants": [
+    "Print[\"Hello world!\"]\n"
+   ]
+  },
+  "wren": {
+   "header": "Wren",
+   "lang": "wren",
+   "variants": [
+    "System.print(\"Hello world!\")\n"
+   ]
+  },
+  "x10": {
+   "header": "X10",
+   "lang": "x10",
+   "variants": [
+    "class HelloWorld {\n  public static def main(args:Rail[String]):void {\n    if (args.size < 1) {\n        Console.OUT.println(\"Hello world!\");\n        return;\n    }\n  }\n}\n"
+   ]
+  },
+  "x86-assembly": {
+   "header": "X86 Assembly",
+   "lang": "x86-assembly",
+   "variants": [
+    "section .data\nmsg     db      'Hello world!', 0AH\nlen     equ     $-msg\n\nsection .text\nglobal  _start\n_start: mov     edx, len\n        mov     ecx, msg\n        mov     ebx, 1\n        mov     eax, 4\n        int     80h\n\n        mov     ebx, 0\n        mov     eax, 1\n        int     80h\n",
+    ".section .text\n\n.globl main\n\nmain:\n\tmovl $4,%eax\t#syscall number 4\n\tmovl $1,%ebx\t#number 1 for stdout\n\tmovl $str,%ecx\t#string pointer\n\tmovl $16,%edx\t#number of bytes\n\tint $0x80\t#syscall interrupt\n\tret\n\n.section .data\nstr: .ascii \"Hello world!\\12\"\n"
+   ]
+  },
+  "xbasic": {
+   "header": "XBasic",
+   "lang": "xbasic",
+   "variants": [
+    "PROGRAM \"hello\"\nVERSION \"0.0003\"\n\nDECLARE FUNCTION Entry()\n\nFUNCTION Entry()\n  PRINT \"Hello World\"\nEND FUNCTION\nEND PROGRAM\n"
+   ]
+  },
+  "xl-lang": {
+   "header": "XL",
+   "lang": "xl-lang",
+   "variants": [
+    "use XL.UI.CONSOLE\nWriteLn \"Hello world!\"\n"
+   ]
+  },
+  "xpath": {
+   "header": "XPath",
+   "lang": "xpath",
+   "variants": [
+    "'Hello world\n'\n"
+   ]
+  },
+  "xpl0": {
+   "header": "XPL0",
+   "lang": "xpl0",
+   "variants": [
+    "code Text=12;\nText(0, \"Hello world!\n\")\n"
+   ]
+  },
+  "xslt": {
+   "header": "XSLT",
+   "lang": "xslt",
+   "variants": [
+    "<xsl:text>Hello world!\n</xsl:text>\n",
+    "<xsl:text>Hello world!\n</xsl:text>\n"
+   ]
+  },
+  "xtclang": {
+   "header": "Ecstasy",
+   "lang": "xtclang",
+   "variants": [
+    "module HelloWorld {\n    void run() {\n        @Inject Console console;\n        console.print(\"Hello, World!\");\n    }\n}\n"
+   ]
+  },
+  "yabasic": {
+   "header": "Yabasic",
+   "lang": "yabasic",
+   "variants": [
+    "print \"Hello world!\"\n"
+   ]
+  },
+  "yorick": {
+   "header": "Yorick",
+   "lang": "yorick",
+   "variants": [
+    "write, \"Hello world!\"\n"
+   ]
+  },
+  "zig": {
+   "header": "Zig",
+   "lang": "zig",
+   "variants": [
+    "const std = @import(\"std\");\n\npub fn main(init: std.process.Init) !void {\n    try std.Io.File.stdout().writeStreamingAll(init.io, \"Hello world!\\n\");\n}\n"
+   ]
+  }
+ },
+ "task": "Hello world/Text",
+ "url": "https://rosettacode.org/wiki/Hello_world/Text?oldid=417000"
+}
