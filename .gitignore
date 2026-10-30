@@ -1,0 +1,7 @@
+.venv/
+dist/
+planted/
+__pycache__/
+.*_cache/
+.coverage
+*.egg-info/
