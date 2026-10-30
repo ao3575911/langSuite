@@ -13,6 +13,14 @@ from typing import Any
 from langsuite.bot.core import BOT_COMMANDS, BOT_ONLY, Bot, Chat, Reply
 from langsuite.core.errors import AuthError
 
+DESCRIPTION = (
+    "langsuite: a research knowledge base of programming languages, with evidence. "
+    "Query 5,000+ languages, compare features, find similar languages, read verified "
+    "Rosetta Code snippets, and save findings to your own workspace. Tap Start to pick "
+    "a handle; add me to a group and an admin runs /start to set the group up."
+)
+SHORT_DESCRIPTION = "Programming languages, with evidence: query, compare, cite."
+log = logging.getLogger("langsuite.bot")
 TOKEN_ENV = "LANGSUITE_TELEGRAM_TOKEN"  # noqa: S105 - the variable name, not a token
 
 
@@ -59,11 +67,13 @@ async def _is_admin(bot: Any, chat_id: int, user_id: int) -> bool:
     return str(getattr(member, "status", "")) in ("administrator", "creator")
 
 
-async def chat_from_update(update: Any, bot: Any) -> Chat | None:
+async def chat_from_update(update: Any, bot: Any, text: str = "") -> Chat | None:
     msg = update.effective_message
     user = update.effective_user
     chat = update.effective_chat
-    if msg is None or user is None or chat is None or not msg.text:
+    if msg is None or user is None or chat is None:
+        return None
+    if not msg.text and not text:
         return None
     group = chat.type in ("group", "supergroup")
     reply_to = None
@@ -71,14 +81,21 @@ async def chat_from_update(update: Any, bot: Any) -> Chat | None:
         target = msg.reply_to_message.from_user
         reply_to = (target.id, target.full_name)
     admin = await _is_admin(bot, chat.id, user.id) if group else False
-    return Chat(chat.id, user.id, user.full_name, group, admin, reply_to)
+    username = getattr(user, "username", None) or ""
+    title = getattr(chat, "title", None) or ""
+    return Chat(chat.id, user.id, user.full_name, group, admin, reply_to, username, title)
 
 
 async def send_reply(msg: Any, reply: Reply) -> None:
-    from telegram import InputFile
+    from telegram import InlineKeyboardButton, InlineKeyboardMarkup, InputFile
     from telegram.constants import ParseMode
 
-    await msg.reply_text(reply.text, parse_mode=ParseMode.MARKDOWN_V2)
+    markup = None
+    if reply.buttons:
+        markup = InlineKeyboardMarkup(
+            [[InlineKeyboardButton(label, callback_data=cmd[:64])] for label, cmd in reply.buttons]
+        )
+    await msg.reply_text(reply.text, parse_mode=ParseMode.MARKDOWN_V2, reply_markup=markup)
     if reply.document is not None:
         name, data = reply.document
         await msg.reply_document(InputFile(data, filename=name))
@@ -89,27 +106,56 @@ def make_handler(core: Bot) -> Any:
         chat = await chat_from_update(update, context.bot)
         if chat is None:
             return
-        reply = await asyncio.to_thread(core.handle, update.effective_message.text, chat)
+        text = update.effective_message.text
+        log.info("chat %s user %s: %s", chat.chat_id, chat.user_id, text.split(None, 1)[0][:32])
+        reply = await asyncio.to_thread(core.handle, text, chat)
         if reply is not None:
             await send_reply(update.effective_message, reply)
 
     return on_command
 
 
+def make_button_handler(core: Bot) -> Any:
+    """A tapped suggestion button runs its command as the person who tapped it."""
+
+    async def on_button(update: Any, context: Any) -> None:
+        query = update.callback_query
+        if query is None or not query.data:
+            return
+        await query.answer()
+        chat = await chat_from_update(update, context.bot, text=query.data)
+        if chat is None or query.message is None:
+            return
+        reply = await asyncio.to_thread(core.handle, query.data, chat)
+        if reply is not None:
+            await send_reply(query.message, reply)
+
+    return on_button
+
+
 def build_application(token: str, core: Bot | None = None) -> Any:
     """The PTB Application; building it makes no network calls."""
     from telegram import BotCommand as TgCommand
-    from telegram.ext import Application, MessageHandler, filters
+    from telegram.ext import Application, CallbackQueryHandler, MessageHandler, filters
 
     async def post_init(app: Any) -> None:
         await app.bot.set_my_commands([TgCommand(n, h) for n, h in menu()])
+        await app.bot.set_my_description(DESCRIPTION)
+        await app.bot.set_my_short_description(SHORT_DESCRIPTION)
+        me = await app.bot.get_me()
+        logging.getLogger("langsuite.bot").warning("langsuite bot started as @%s", me.username)
 
     logging.getLogger("httpx").setLevel(logging.WARNING)
     logging.getLogger("httpx").addFilter(_Redact(token))
     app = Application.builder().token(token).post_init(post_init).build()
-    app.add_handler(MessageHandler(filters.COMMAND, make_handler(core or Bot())))
+    core = core or Bot()
+    app.add_handler(MessageHandler(filters.COMMAND, make_handler(core)))
+    app.add_handler(CallbackQueryHandler(make_button_handler(core)))
     return app
 
 
 def run_polling(token: str) -> None:  # pragma: no cover - needs a live token
-    build_application(token).run_polling(allowed_updates=["message"])
+    logging.basicConfig(format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+                        level=logging.INFO)  # fmt: skip
+    logging.getLogger().addFilter(_Redact(token))
+    build_application(token).run_polling(allowed_updates=["message", "callback_query"])
