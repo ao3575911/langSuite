@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Keep the langsuite Telegram bot running: restart on exit with backoff.
 # The token comes only from LANGSUITE_TELEGRAM_TOKEN in the environment; it is never written here.
-# Usage: nohup scripts/run_bot_forever.sh >/dev/null 2>&1 &   Stop: kill the PID in $PIDFILE.
+# Usage: nohup bash scripts/run_bot_forever.sh >/dev/null 2>&1 &   Stop: kill the PID in $PIDFILE.
 set -u
 LOG="${LANGSUITE_BOT_LOG:-$HOME/langsuite_bot.log}"
 PIDFILE="${LANGSUITE_BOT_PIDFILE:-${LOG%.log}.pid}"
